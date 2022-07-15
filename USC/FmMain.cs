@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Modle.DeviceCfg;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,17 @@ namespace USC
         public FmMain()
         {
             InitializeComponent();
+        }
+
+        private void FmMain_Load(object sender, EventArgs e)
+        {
+            InitializationBase ib = new InitializationBase();
+            ib.CreateSysFile();
+            ib.ReadDbIni();
+            ib.ReadDeviceCfg<SerialPortCfg>(Modle.DeviceType.Serial);
+            ib.ReadDeviceCfg<PLCCfg>(Modle.DeviceType.PLC);
+            ib.ReadDeviceCfg<TCPCfgBase>(Modle.DeviceType.TCP);
+            
         }
     }
 }

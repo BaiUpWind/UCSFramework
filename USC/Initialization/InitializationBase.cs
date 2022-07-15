@@ -1,6 +1,7 @@
 ﻿using CommonApi;
 using CommonApi.DBHelper;
 using CommonApi.FileOperate;
+using Modle.DeviceCfg;
 using Modle;
 using System;
 using System.Collections.Generic;
@@ -9,26 +10,54 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace USC.Initialization
+namespace USC
 {
     /// <summary>
     /// 初始化基类
     /// </summary>
-    public   class InitializationBase
+    public class InitializationBase
     {
         /// <summary>
         /// 当前系统的工作路径
         /// </summary>
-        public readonly static string SysPath = System.IO.Directory.GetCurrentDirectory().ToString();
+        public readonly static string SysPath = Directory.GetCurrentDirectory().ToString();
+        /// <summary>
+        /// 系统文件夹路径
+        /// <para>包含基础的配置文件</para>
+        /// </summary>
+        public readonly static string SysFilePath = SysPath + "\\SystemFile"; 
+        #region  配置文件路径
+        /// <summary>
+        /// 数据库配置文件
+        /// </summary>
+        public readonly static string DbCfgPath = SysFilePath + "\\DBCfg.ini";
+         
+        /// <summary>
+        /// 串口通信的配置路径
+        /// </summary>
+        public readonly static string SerialPortCfgPath = SysFilePath + "\\SerialPortCfg.ini";
+     
+        /// <summary>
+        /// PLC 通信配置路径
+        /// </summary>
+        public readonly static string PLCCfgPath = SysFilePath + "\\PLCCfg.ini";
 
+        /// <summary>
+        /// Tcp客户端配置路径
+        /// </summary>
+        public readonly static string TCPCfgPath = SysFilePath + "\\TCPClientCfg.ini";
+        #endregion
+
+        private readonly RWIniFile rw = new RWIniFile();
+ 
         /// <summary>
         /// 创建系统文件
         /// </summary>
-        public static void CreateSysFile()
+        public void CreateSysFile()
         {
-            if (!Directory.Exists(SysPath + "\\SystemFile"))
+            if (!Directory.Exists(SysFilePath))
             {
-                Directory.CreateDirectory(SysPath + "\\SystemFile");
+                Directory.CreateDirectory(SysFilePath);
             } 
         }
 
@@ -38,12 +67,12 @@ namespace USC.Initialization
         /// </summary>
         /// <param name="tag"></param>
         /// <returns></returns>
-        public   OperateResult WriteDbIni(DataBasePara tag)
+        public   OperateResult WriteDbIni(DataBaseCfg tag)
         {
             OperateResult or = new OperateResult();
             try
             {
-                RWIniFile rw = new RWIniFile(SysPath + "\\SystemFile\\DB.ini");
+                rw.SetPath(DbCfgPath); 
                 rw.WriteIni("DataBasePara", tag);
                 or.Message = "写入成功！";
                 or.IsSuccess = true;
@@ -63,18 +92,19 @@ namespace USC.Initialization
         /// <para>并且缓存到程序中<see cref="SysParaBase"/></para>
         /// </summary>
         /// <returns>数据库连接参数</returns>
-        public OperateResult<DataBasePara> ReadDbIni()
+        public OperateResult<DataBaseCfg> ReadDbIni()
         {
-            OperateResult<DataBasePara> or = new OperateResult<DataBasePara>();
+            OperateResult<DataBaseCfg> or = new OperateResult<DataBaseCfg>();
             try
             {
-                RWIniFile rw = new RWIniFile(SysPath + "\\SystemFile\\DB.ini");
-                FileInfo fileInfo = new FileInfo(SysPath + "\\SystemFile\\DB.ini"); 
+                
+                FileInfo fileInfo = new FileInfo(DbCfgPath);
+                rw.SetPath(DbCfgPath);
                 if (!fileInfo.Exists)
                 {
-                    WriteDbIni(new DataBasePara());
+                    WriteDbIni(new DataBaseCfg());
                 }
-                DataBasePara tag = new DataBasePara();
+                DataBaseCfg tag = new DataBaseCfg();
                 tag = rw.ReadIni("DataBasePara", tag);
                 switch (tag.DbType)
                 {
@@ -97,7 +127,7 @@ namespace USC.Initialization
                     default:
                         or.Message = ExceptionOperater.GetSaveStringFromException("读取数据库配置文件错误", new Exception("数据库类型错误:" + tag.DbType));
                         or.IsSuccess = false;
-                        or.Content = new DataBasePara();
+                        or.Content = new DataBaseCfg();
                         return or;
 
                 }
@@ -110,9 +140,94 @@ namespace USC.Initialization
 
                 or.Message = ExceptionOperater.GetSaveStringFromException("读取数据库配置文件错误", ex);
                 or.IsSuccess = false;
-                or.Content = new DataBasePara();
+                or.Content = new DataBaseCfg();
                 return or;
             }
         }
+
+        /// <summary>
+        /// 读取对应设备类型的配置文件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="deviceType"></param>
+        /// <returns></returns>
+        public OperateResult<List<T>> ReadDeviceCfg<T>(DeviceType deviceType) 
+        {
+            OperateResult<List<T>> or = new OperateResult<List<T>>();
+            try
+            {
+        
+                switch (deviceType)
+                {
+                    case DeviceType.None:
+                        rw.SetPath(SysPath);
+                        break;
+                    case DeviceType.Serial:
+                        rw.SetPath( SerialPortCfgPath);
+                        break;
+                    case DeviceType.PLC:
+                        rw.SetPath(PLCCfgPath);
+                        break;
+                    case DeviceType.TCP:
+                        rw.SetPath( TCPCfgPath);
+                        break;
+                    default:
+                        or.Content = null;
+                        or.IsSuccess = false;
+                        or.Message = $"读取失败，未找到对应的设备[{deviceType}]配置文件读取!";
+                        return or;
+                }
+                return rw.ReadIniList<T>();
+            }
+            catch (Exception ex)
+            {
+                or.Content = null;
+                or.IsSuccess = false;
+                or.Message = ExceptionOperater.GetSaveStringFromException($"读取{typeof(T).GetType().Name}配置文件出错!", ex);
+                return or;
+            }
+        }
+        
+        /// <summary>
+        /// 写入对应设备类型的配置文件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="tar"></param>
+        /// <param name="deviceType"></param>
+        /// <returns></returns>
+        public OperateResult WriteDeviceCfg<T>(List<T> tar, DeviceType deviceType)
+        {
+            OperateResult or = new OperateResult();
+            try
+            { 
+                switch (deviceType)
+                {
+                    case DeviceType.None:
+                        rw.SetPath(SysPath);
+                        break;
+                    case DeviceType.Serial:
+                        rw.SetPath(SerialPortCfgPath);
+                        break;
+                    case DeviceType.PLC:
+                        rw.SetPath(PLCCfgPath);
+                        break;
+                    case DeviceType.TCP:
+                        rw.SetPath(TCPCfgPath);
+                        break;
+                    default:
+                        or.IsSuccess = false;
+                        or.Message = $"写入失败，未找到对应的设备[{deviceType}]配置文件写入!";
+                        return or;
+                } 
+                return rw.WriteIniList(tar);
+            }
+            catch (Exception ex)
+            {
+                or.IsSuccess = false;
+                or.Message = ExceptionOperater.GetSaveStringFromException($"读取{typeof(T).GetType().Name}配置文件出错!", ex);
+                return or;
+            }
+        }
+         
     }
 }

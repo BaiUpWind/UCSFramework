@@ -5,7 +5,7 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Net;
 
-namespace WchCommon.PLC
+namespace CommonApi.PLC
 {
     public class SocketClient
     {

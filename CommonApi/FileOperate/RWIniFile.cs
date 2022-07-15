@@ -12,7 +12,11 @@ namespace CommonApi.FileOperate
     /// </summary>
     public class RWIniFile
     {
-        static string path;
+         private string path;
+        public RWIniFile( )
+        {
+        
+        }
         public RWIniFile(string Path)
         {
             path = Path;
@@ -24,6 +28,13 @@ namespace CommonApi.FileOperate
 
         [System.Runtime.InteropServices.DllImport("kernel32")]
         private static extern int GetPrivateProfileString(string section, string key, string def, StringBuilder retVal, int size, string filePath);
+
+        /// <summary>
+        /// 设置新的路径
+        /// </summary>
+        /// <param name="path"></param>
+        public void SetPath(string path) => this.path = path;
+
         /// <summary>
         /// 写入ini文件
         /// </summary>
@@ -133,6 +144,7 @@ namespace CommonApi.FileOperate
         }
         /// <summary>
         /// 写入一个ini泛型集合文件
+        /// <para>写入之前会进行删除操作</para>
         /// </summary>
         /// <typeparam name="T">泛型类(传入无参数的实体)</typeparam> 
         /// <param name="list">实体集合</param>
@@ -145,33 +157,36 @@ namespace CommonApi.FileOperate
             try
             {
                 FileInfo fileInfo = new FileInfo(path);
-                RWIniFile rw = new RWIniFile(path);
+                //RWIniFile rw = new RWIniFile(path);
                 if (!fileInfo.Exists)
                 {
-                    rw.IniWriteValue(tar.ToString(), "ListCount", "0");
+                    //rw.
+                        IniWriteValue(tar.ToString(), "ListCount", "0");
                     if (list.Any())
                     {
                         WriteIniList(list);
                     }
                     or.IsSuccess = true;
-                    or.Message = $"初始化{tar.ToString()}";
+                    or.Message = $"初始化{tar}";
                     return or;
                 }
                 fileInfo.Delete();//删除文件
-                rw.IniWriteValue(tar.ToString(), "ListCount", list.Count.ToString());
+                //rw.
+                    IniWriteValue(tar.ToString(), "ListCount", list.Count.ToString());
                 for (int i = 0; i < list.Count; i++)
                 {
-                    rw.WriteIni((i + 1).ToString(), list[i]);
+                    //rw.
+                        WriteIni((i + 1).ToString(), list[i]);
                 }
 
                 or.IsSuccess = true;
-                or.Message = $"写入{tar.ToString()}成功";
+                or.Message = $"写入{tar}成功";
                 return or;
             }
             catch (Exception ex)
             {
 
-                or.Message = ExceptionOperater.GetSaveStringFromException($"写入{tar.ToString()}文件错误", ex);
+                or.Message = ExceptionOperater.GetSaveStringFromException($"写入{tar}文件错误", ex);
                 or.IsSuccess = false;
                 return or;
             }
@@ -190,28 +205,33 @@ namespace CommonApi.FileOperate
             try
             {
                 FileInfo fileInfo = new FileInfo(path);
-                RWIniFile rw = new RWIniFile(path);
+                //RWIniFile rw = new RWIniFile(path);
                 if (!fileInfo.Exists)
                 {
-                    rw.IniWriteValue(tar.ToString(), "ListCount", "0");
+                    //rw.
+                        IniWriteValue(tar.ToString(), "ListCount", "0");
                     or.IsSuccess = true;
-                    or.Message = $"未找到该文件，{tar.ToString()}.ini，但是进行了初始化";
+                    or.Message = $"未找到该文件，{tar}.ini，但是进行了初始化";
                     return or;
                 }
                 List<T> list = new List<T>();
-                int count = Convert.ToInt32(rw.IniReadValue(tar.ToString(), "ListCount"));
+                int count = Convert.ToInt32(
+                    //rw.
+                    IniReadValue(tar.ToString(), "ListCount"));
                 for (int i = 0; i < count; i++)
                 {
-                    list.Add(rw.ReadIni((i + 1).ToString(), tar));
+                    list.Add(
+                        //rw.
+                        ReadIni((i + 1).ToString(), tar));
                 }
                 or.Content = list;
                 or.IsSuccess = true;
-                or.Message = $"读取{tar.ToString()}.ini,文件成功！ ";
+                or.Message = $"读取{tar}.ini,文件成功！ ";
                 return or;
             }
             catch (Exception ex)
             {
-                or.Message = ExceptionOperater.GetSaveStringFromException($"写入{tar.ToString()}文件错误", ex);
+                or.Message = ExceptionOperater.GetSaveStringFromException($"读取{tar }文件错误", ex);
                 or.IsSuccess = false;
                 or.Content = new List<T>();
                 return or;

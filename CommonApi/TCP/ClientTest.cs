@@ -31,13 +31,8 @@ namespace CommonApi.TCP
                 throw ex;
             }
         }
-        public bool IsConnected
-        {
-            get
-            {
-                return mClient.Connected;
-            }
-        }
+        public bool IsConnected =>  mClient.Connected;
+         
         public void DisConnection()
         {
             try
