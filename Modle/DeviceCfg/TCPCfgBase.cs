@@ -9,6 +9,7 @@ namespace Modle.DeviceCfg
     /// <summary>
     /// 基于TCP/IP访问的配置基类
     /// </summary>
+    [DeviceConnectedType("TcpClient")]
     public class TCPCfgBase : IDeviceConfig
     {
         /// <summary>
@@ -20,6 +21,6 @@ namespace Modle.DeviceCfg
         /// </summary>
         public string Prot { get; set; }
 
-        public virtual DeviceType DevType =>  DeviceType.TCP;
+        public virtual DeviceConnectedType DevType =>  DeviceConnectedType.TcpClient;
     }
 }

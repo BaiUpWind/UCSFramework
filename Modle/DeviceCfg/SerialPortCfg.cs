@@ -9,6 +9,7 @@ namespace Modle.DeviceCfg
     /// <summary>
     /// 串口通信配置
     /// </summary>
+    [DeviceConnectedType("SerialPort")]
     public class SerialPortCfg: IDeviceConfig
     {
         /// <summary>
@@ -25,6 +26,6 @@ namespace Modle.DeviceCfg
         /// </summary>
         public int BaudRate { get; set; }
 
-        public DeviceType DevType =>  DeviceType.Serial;
+        public DeviceConnectedType DevType =>  DeviceConnectedType.Serial;
     }
 }

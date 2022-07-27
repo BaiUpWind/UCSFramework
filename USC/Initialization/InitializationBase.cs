@@ -151,7 +151,7 @@ namespace USC
         /// <typeparam name="T"></typeparam>
         /// <param name="deviceType"></param>
         /// <returns></returns>
-        public OperateResult<List<T>> ReadDeviceCfg<T>(DeviceType deviceType) 
+        public OperateResult<List<T>> ReadDeviceCfg<T>(DeviceConnectedType deviceType) 
         {
             OperateResult<List<T>> or = new OperateResult<List<T>>();
             try
@@ -159,16 +159,16 @@ namespace USC
         
                 switch (deviceType)
                 {
-                    case DeviceType.None:
+                    case DeviceConnectedType.None:
                         rw.SetPath(SysPath);
                         break;
-                    case DeviceType.Serial:
+                    case DeviceConnectedType.Serial:
                         rw.SetPath( SerialPortCfgPath);
                         break;
-                    case DeviceType.PLC:
+                    case DeviceConnectedType.PLC:
                         rw.SetPath(PLCCfgPath);
                         break;
-                    case DeviceType.TCP:
+                    case DeviceConnectedType.TcpClient:
                         rw.SetPath( TCPCfgPath);
                         break;
                     default:
@@ -195,23 +195,23 @@ namespace USC
         /// <param name="tar"></param>
         /// <param name="deviceType"></param>
         /// <returns></returns>
-        public OperateResult WriteDeviceCfg<T>(List<T> tar, DeviceType deviceType)
+        public OperateResult WriteDeviceCfg<T>(List<T> tar, DeviceConnectedType deviceType)
         {
             OperateResult or = new OperateResult();
             try
             { 
                 switch (deviceType)
                 {
-                    case DeviceType.None:
+                    case DeviceConnectedType.None:
                         rw.SetPath(SysPath);
                         break;
-                    case DeviceType.Serial:
+                    case DeviceConnectedType.Serial:
                         rw.SetPath(SerialPortCfgPath);
                         break;
-                    case DeviceType.PLC:
+                    case DeviceConnectedType.PLC:
                         rw.SetPath(PLCCfgPath);
                         break;
-                    case DeviceType.TCP:
+                    case DeviceConnectedType.TcpClient:
                         rw.SetPath(TCPCfgPath);
                         break;
                     default:

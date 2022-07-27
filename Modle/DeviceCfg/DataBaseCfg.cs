@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace Modle
 {
-    public class DataBaseCfg
-    { 
+    [DeviceConnectedType("DataBase")]
+    public class DataBaseCfg : IDeviceConfig
+    {
+        public DeviceConnectedType DevType => DeviceConnectedType.DataBase;
         /// <summary>
         /// 数据库的ip
         /// </summary>
-        public string DbIp { get; set; } = "127.0.01";
+        public string DbIp { get; set; } = "127.0.0.1";
         /// <summary>
         /// 数据库类型 0 oracle 1 sqlserver 2 mysql
         /// </summary>
@@ -19,7 +21,7 @@ namespace Modle
         /// <summary>
         /// 数据库实例名
         /// </summary>
-        public string DbName { get; set; } = "rgvline"; 
+        public string DbName { get; set; } = "rgvline";
         /// <summary>
         /// 数据库端口
         /// </summary>
@@ -46,6 +48,8 @@ namespace Modle
         public string Sql3 { get; set; } = "select * from";
 
         public string Sql4 { get; set; } = "select * from";
+
+
     }
      
 }

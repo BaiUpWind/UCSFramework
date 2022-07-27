@@ -4,7 +4,8 @@ namespace Modle.DeviceCfg
 
     /// <summary>
     /// 西门子PLC访问数据配置
-    /// </summary>
+    /// </summary> 
+    [SiemensCfg]
     public class SiemensCfg : PLCCfg
     { 
         /// <summary>

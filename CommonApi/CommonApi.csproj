@@ -53,29 +53,49 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConverHelper\StringFormatUtil.cs" />
+    <Compile Include="Base\EventPool\EventPool.cs" />
+    <Compile Include="Base\EventPool\EventPool.Event.cs" />
+    <Compile Include="Base\EventPool\EventPoolMode.cs" />
+    <Compile Include="Base\CommonApiLinkedList.cs" />
+    <Compile Include="Base\CommonApiLinkedListRange.cs" />
+    <Compile Include="Base\CommonApiMultiDictionary.cs" />
+    <Compile Include="Base\ReferencePool\IReference.cs" />
+    <Compile Include="Base\ReferencePool\ReferencePool.cs" />
+    <Compile Include="Base\ReferencePool\ReferencePool.ReferenceCollection.cs" />
+    <Compile Include="Base\ReferencePool\ReferencePoolInfo.cs" />
+    <Compile Include="Class.cs" />
     <Compile Include="DBHelper\DBUnitiyBase.cs" />
     <Compile Include="DBHelper\MySqlHelp.cs" />
     <Compile Include="DBHelper\OracleHelp.cs" />
     <Compile Include="DBHelper\SQLServerHelp.cs" />
+    <Compile Include="Base\EventPool\BaseEventArgs.cs" />
+    <Compile Include="Event\EventManager.cs" />
     <Compile Include="FileOperate\ILog.cs" />
     <Compile Include="FileOperate\RWIniFile.cs" />
     <Compile Include="FileOperate\TxtHelp.cs" />
     <Compile Include="FileOperate\WriteLog.cs" />
     <Compile Include="OperateResult.cs" />
-    <Compile Include="PLC\IPLCInterface.cs" />
-    <Compile Include="PLC\SiemensBase.cs" />
+    <Compile Include="PLC\Old\IPLCInterface.cs" />
+    <Compile Include="PLC\Old\SiemensBase.cs" />
+    <Compile Include="PLC\Old\SiemensPlc.cs" />
+    <Compile Include="PLC\Old\SocketClient.cs" />
     <Compile Include="PLC\SiemensPlc.cs" />
-    <Compile Include="PLC\SocketClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringResources.cs" />
     <Compile Include="TCP\ClientTest.cs" />
+    <Compile Include="Utility\Utility.Marshal.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Lib\HslCommunication.dll" />
     <Content Include="Lib\HslCommunication.xml" />
     <Content Include="Lib\MySql.Data.dll" />
     <Content Include="Lib\Oracle.ManagedDataAccess.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Define\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Utility\Utility.StringFormat.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

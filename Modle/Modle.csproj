@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataBasePara.cs" />
+    <Compile Include="Attribute\ConfigBaseAttribute.cs" />
+    <Compile Include="Attribute\DeviceConnectedTypeAttribute.cs" />
+    <Compile Include="Attribute\PLC\SiemensCfgAttribute.cs" />
+    <Compile Include="DeviceCfg\DataBaseCfg.cs" />
     <Compile Include="DeviceCfg\PLC\PLCCfg.cs" />
     <Compile Include="DeviceCfg\TCPCfgBase.cs" />
     <Compile Include="DeviceCfg\PLC\SiemensCfg.cs" />
