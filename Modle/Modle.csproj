@@ -41,18 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attribute\ClassNameAttribute.cs" />
     <Compile Include="Attribute\ConfigBaseAttribute.cs" />
     <Compile Include="Attribute\DeviceConnectedTypeAttribute.cs" />
-    <Compile Include="Attribute\PLC\SiemensCfgAttribute.cs" />
+    <Compile Include="Attribute\PLC\PLCConfigAttribute.cs" />
+    <Compile Include="Define\PublicEnum.cs" />
     <Compile Include="DeviceCfg\DataBaseCfg.cs" />
     <Compile Include="DeviceCfg\PLC\PLCCfg.cs" />
     <Compile Include="DeviceCfg\TCPCfgBase.cs" />
     <Compile Include="DeviceCfg\PLC\SiemensCfg.cs" />
     <Compile Include="DeviceCfg\SerialPortCfg.cs" />
     <Compile Include="IDeviceConfig.cs" />
-    <Compile Include="OCV\OCVModel.cs" />
     <Compile Include="SysParaBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="test.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonApi\CommonApi.csproj">

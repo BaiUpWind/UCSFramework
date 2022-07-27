@@ -1,17 +1,13 @@
 ﻿ 
 namespace Modle.DeviceCfg
 {
-    /// <summary>
-    /// 目前支持的PLC连接类型
-    /// </summary>
-    public enum PLCKind
-    {
-        Siemens,
-    }
+   /// <summary>
+   /// PLC配置基类
+   /// </summary>
     [DeviceConnectedType("PLC")]
     public abstract class PLCCfg : TCPCfgBase 
     {
-        public PLCKind PLCType { get; set; } = PLCKind.Siemens;
+        public virtual PLCKind PLCType { get; set; } = PLCKind.Siemens;
 
         /// <summary>
         /// 设备连接类型

@@ -5,7 +5,7 @@ namespace Modle.DeviceCfg
     /// <summary>
     /// 西门子PLC访问数据配置
     /// </summary> 
-    [SiemensCfg]
+    [PLCConfig("西门子PLC")]
     public class SiemensCfg : PLCCfg
     { 
         /// <summary>
@@ -26,6 +26,11 @@ namespace Modle.DeviceCfg
         /// <summary>
         /// 槽号
         /// </summary>
-        public byte Slot { get; set; }
+        public byte Slot { get; set; }  
+    }
+    [PLCConfig("施耐德PLC")]
+    public class Shinaide : PLCCfg
+    {
+        public string otherName { get; set; }
     }
 }

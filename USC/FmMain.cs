@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CommonApi.Event;
 using CommonApi;
+using Modle;
 
 namespace USC
 {
@@ -46,6 +47,30 @@ namespace USC
         private void btnSend_Click(object sender, EventArgs e)
         {
             eventManager.Fire(this, OnClickEventArgs.Create("你好"));
+        }
+        test t = new test();
+        private void button1_Click(object sender, EventArgs e)
+        {
+    
+            var result = t.GetCfgNames<IDeviceConfig,PLCConfigAttribute>(); //t.GetDeviceConfigs<SiemensCfgAttribute>(); 
+
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in result)
+            {
+                sb.Append(item + ",");
+            }
+            MessageBox.Show(sb.ToString());
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+          var data =   t.CreateInstance<DataBaseCfg, IDeviceConfig, DeviceConnectedTypeAttribute>("DataBase");
+            if(data != null)
+            {
+                data.DbName = "我是数据库";
+                data.DbIp = "192.168.0.1";
+            MessageBox.Show( data.DbName +"" + data.DbIp);
+            }
         }
     }
 
