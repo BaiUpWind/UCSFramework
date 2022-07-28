@@ -5,6 +5,7 @@
     /// </summary>
     public enum PLCKind
     {
+        None,
         /// <summary>
         /// 西门子
         /// </summary>
@@ -36,6 +37,24 @@
         /// 数据库方式
         /// </summary>
         DataBase
+    }
+
+    public enum ControlType { 
+    
+        Label,
+        TextBox,
+        /// <summary>
+        /// 组合框
+        /// </summary>
+        ComboBox,
+        /// <summary>
+        /// 串口组合框（自动获取电脑串口）
+        /// </summary>
+        ComboBoxSerialPort,
+        /// <summary>
+        /// 枚举组合框
+        /// </summary>
+        ComboBoxEnum,
     }
 
 }

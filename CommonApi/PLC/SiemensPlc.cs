@@ -11,12 +11,13 @@ namespace CommonApi.PLC
     public class SiemensPlc
     {
 
-        public SiemensPlc(int plcs ,string ip, byte Rack = 0, byte Slot = 0)
+        public SiemensPlc(int plcs ,string ip,int port = 102, byte Rack = 0, byte Slot = 0)
         {
             s7Net?.ConnectClose(); 
             s7Net = new SiemensS7Net(GetPlCS(plcs))
             {
                 IpAddress = ip,
+                Port = port,
                 Rack = Rack,
                 Slot = Slot
             };
@@ -24,9 +25,22 @@ namespace CommonApi.PLC
            
         }
        
-        private SiemensS7Net s7Net;
+        private  readonly SiemensS7Net s7Net;
 
-        public SiemensS7Net  PlcS7 => s7Net;
+        /// <summary>
+        /// 读取西门子实例
+        /// </summary>
+        public SiemensS7Net PlcS7
+        {
+            get
+            {
+                if (!IsConnected)
+                {
+                    Connection();
+                }
+               return  s7Net;
+            }
+        }
         /// <summary>
         /// 是否连接成功
         /// </summary>
@@ -52,7 +66,7 @@ namespace CommonApi.PLC
             IsConnected = false;
         }
 
-
+       
         private SiemensPLCS GetPlCS(int value)
         {
             switch (value)

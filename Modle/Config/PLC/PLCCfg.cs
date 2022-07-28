@@ -5,8 +5,8 @@ namespace Modle.DeviceCfg
    /// PLC配置基类
    /// </summary>
     [DeviceConnectedType("PLC")]
-    public abstract class PLCCfg : TCPCfgBase 
-    {
+    public  class PLCCfg : TCPCfgBase 
+    { 
         public virtual PLCKind PLCType { get; set; } = PLCKind.Siemens;
 
         /// <summary>

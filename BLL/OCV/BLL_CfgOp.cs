@@ -16,7 +16,7 @@ namespace BLL.OCV
     {
         public OperateResult<List<Test_Now_Table>> GetReslut()
         {
-            OperateResult<List<Test_Now_Table>> or = new OperateResult<List<Test_Now_Table>>();
+        
             try
             {
                 using(DAL_GetCfg dal = new DAL_GetCfg())

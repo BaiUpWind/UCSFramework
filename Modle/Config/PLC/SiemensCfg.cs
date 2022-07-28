@@ -1,4 +1,6 @@
-﻿  
+﻿
+using HslCommunication.Profinet.Siemens;
+
 namespace Modle.DeviceCfg
 {
 
@@ -7,7 +9,7 @@ namespace Modle.DeviceCfg
     /// </summary> 
     [PLCConfig("西门子PLC")]
     public class SiemensCfg : PLCCfg
-    { 
+    {
         /// <summary>
         /// 西门子型号
         /// <para>区间[1-6]</para>
@@ -17,20 +19,19 @@ namespace Modle.DeviceCfg
         /// <para> 4 : S1500 </para>
         /// <para> 5 : S200Smart</para>
         /// <para> 6 : S200</para>
-        /// </summary>  
+        /// </summary>    
+        [Control("SiemensSelected",ControlType.ComboBoxEnum,EnumType: typeof(SiemensPLCS))]
         public int SiemensSelected { get; set; } = 5;
         /// <summary>
         /// 机架号
         /// </summary>
+        [Control("Rack",ControlType.TextBox)]
         public byte Rack { get; set; }
         /// <summary>
         /// 槽号
         /// </summary>
+        [Control("Slot",ControlType.TextBox)]
         public byte Slot { get; set; }  
     }
-    [PLCConfig("施耐德PLC")]
-    public class Shinaide : PLCCfg
-    {
-        public string otherName { get; set; }
-    }
+  
 }

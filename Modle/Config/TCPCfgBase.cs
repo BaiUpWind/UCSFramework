@@ -15,11 +15,13 @@ namespace Modle.DeviceCfg
         /// <summary>
         /// 访问地址
         /// </summary>
+        [Control("IP",ControlType.TextBox)]
         public string IP { get; set; }
         /// <summary>
         /// 端口
         /// </summary>
-        public string Prot { get; set; }
+        [Control("Port", ControlType.TextBox)]
+        public int Port { get; set; }
 
         public virtual DeviceConnectedType DevType =>  DeviceConnectedType.TcpClient;
     }

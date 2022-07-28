@@ -15,9 +15,12 @@ namespace Modle
     {
 
         /// <summary>
-        /// 设备类型
+        /// 设备连接的类型
+        /// <para>默认的连接方式</para>
         /// </summary>
         DeviceConnectedType DevType { get;   }
+         
+      
     }
 
  
