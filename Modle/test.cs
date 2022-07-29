@@ -24,8 +24,21 @@ namespace Modle
                 .Select(a => a.GetCustomAttribute<T2>().Name);
         }
 
+        public IEnumerable<string> GetChildenNames<T>() where T : class
+        {
+            return typeof(T).Assembly.GetTypes()
+                .Where(a => !a.IsAbstract && typeof(T).IsAssignableFrom(a))
+                .Select(a => a.Name);
+        }
+        public IEnumerable<string> GetChildenFullNames<T>() where T : class
+        {
+            return typeof(T).Assembly.GetTypes()
+                .Where(a => !a.IsAbstract && typeof(T).IsAssignableFrom(a))
+                .Select(a => a.FullName);
+        }
+
         /// <summary>
-        /// 创建指定类型,并且规定类型继承于 T1,且有添加对应的特性T2.
+        /// 创建指定类型实例,并且规定类型继承于 T1,且有添加对应的特性T2.
         /// </summary>
         /// <typeparam name="T"> 创建的类型</typeparam>
         /// <typeparam name="T1">超类(父类,接口,抽象类)</typeparam>

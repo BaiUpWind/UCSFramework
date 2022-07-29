@@ -1,0 +1,300 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using CommonApi.Attributes;
+
+namespace CommonApi
+{
+    public static partial class Utility
+    {
+        public static class Reflection
+        {
+            /// <summary>
+            /// 获取超类下所有不包含抽象类的子类名称
+            /// </summary>
+            /// <typeparam name="T">超类</typeparam>
+            /// <returns></returns>
+            public static IEnumerable<string> GetChildrenNames<T>() where T : class
+            {
+                return typeof(T).Assembly.GetTypes()
+                    .Where(a => !a.IsAbstract && typeof(T).IsAssignableFrom(a))
+                    .Select(a => a.Name);
+            }
+            /// <summary>
+            /// 获取超类下所有不包含抽象类的子类全部名称，包括命名空间，不包括程序集名称
+            /// </summary>
+            /// <typeparam name="T"></typeparam>
+            /// <returns></returns>
+            public static IEnumerable<string> GetChildrenFullNames<T>() where T : class
+            {
+                return typeof(T).Assembly.GetTypes()
+                    .Where(a => !a.IsAbstract && typeof(T).IsAssignableFrom(a))
+                    .Select(a => a.FullName);
+            }
+
+            /// <summary>
+            /// 创建实例
+            /// </summary>
+            /// <typeparam name="T">实例类型</typeparam>
+            /// <param name="fullName">实例的全名称</param>
+            /// <param name="para">对象实例参数</param>
+            /// <returns></returns>
+            public static T CreateObject<T>(string fullName, params object[] para) where T : class
+            {
+                try
+                {
+                    var te = typeof(T).Assembly.GetTypes().Where(a => a.FullName == fullName).FirstOrDefault(); //反射入口
+                   if(te == null)
+                    {
+                        throw new ArgumentNullException($" '{fullName}' 未找到实例！");
+                    }
+                    //Type type = Type.GetType(name);
+                    return Activator.CreateInstance(te, para) as T;//创建实例
+                }
+                catch  
+                {
+
+                    return default;
+                }
+             
+            }
+
+            /// <summary>
+            /// 创建实例
+            /// </summary> 
+            /// <typeparam name="T">实例类型</typeparam>
+            /// <param name="assemblyName">程序集名称</param>
+            /// <param name="name">实例的全名称</param>
+            /// <param name="para">对象实例参数</param>
+            /// <returns></returns>
+            private static T CreateObject<T>(string assemblyName, string name, params object[] para) where T : class
+            {
+                try
+                {
+                    Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();　
+                    Assembly assembly = assemblies.Where(p => p.FullName.Contains(assemblyName)).FirstOrDefault();  
+                    Type type = assembly.GetType(name);//反射入口 
+                    return Activator.CreateInstance(type, para) as T;//创建实例
+                }
+                catch  
+                { 
+                    return default;
+                } 
+            }
+
+            /// <summary>
+            /// 创建实例 简单查找命名空间
+            /// </summary> 
+            /// <typeparam name="T">实例类型</typeparam> 
+            /// <param name="fullName">实例的全名称</param>
+            /// <param name="para">对象实例参数</param>
+            /// <returns></returns>
+            private static T CreateObjectSimple<T>(string fullName, params object[] para) where T : class
+            {
+                try
+                {
+                    string assemblyName = fullName.Split('.')[0];
+                    Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                    Assembly assembly = assemblies.Where(p => p.FullName.Contains(assemblyName)).FirstOrDefault();
+                    Type type = assembly.GetType(fullName);//反射入口 
+                    return Activator.CreateInstance(type, para) as T;//创建实例
+                }
+                catch
+                {
+                    return default;
+                }
+            }
+
+            /// <summary>
+            /// 创建对象实例
+            /// </summary>
+            /// <typeparam name="T">要创建对象的类型</typeparam>
+            /// <param name="nameSpace">类型所在命名空间</param>
+            /// <param name="className">类型名</param>
+            /// <param name="parameters">构造函数参数</param>
+            /// <returns></returns>
+            internal static T CreateInstance<T>(string nameSpace, string className, params object[] parameters)
+            => CreateInstance<T>(nameSpace + "." + className, parameters);
+
+            /// <summary>
+            /// 创建对象实例
+            /// </summary>
+            /// <typeparam name="T">要创建对象的类型</typeparam>
+            /// <param name="nameSpace">类型所在命名空间</param>
+            /// <param name="className">类型名</param>
+            /// <param name="parameters">构造函数参数</param>
+            /// <returns></returns>
+            internal static T CreateInstance<T>(string fullName ,params object[] parameters)
+            {
+                try
+                { 
+                    object ect = Assembly.GetExecutingAssembly().CreateInstance(fullName, true, System.Reflection.BindingFlags.Default, null, parameters, null, null);//加载程序集，创建程序集里面的 命名空间.类型名 实例
+                    return (T)ect;//类型转换并返回
+                }
+                catch
+                {
+                    //发生异常，返回类型的默认值
+                    return default(T);
+                }
+            }
+
+
+            /// <summary>
+            /// 创建指定类型实例,并且规定类型继承于 T1,且有添加对应的特性T2.
+            /// </summary>
+            /// <typeparam name="T"> 创建的类型</typeparam>
+            /// <typeparam name="T1">超类(父类,接口,抽象类)</typeparam>
+            /// <typeparam name="T2">继承于<see cref="ConfigBaseAttribute"/>的特性</typeparam>
+            /// <param name="className">名称与属性'<see cref="BaseAttribute.Name"/>'一致</param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentNullException"> </exception>
+            public static T CreateInstance<T, T1, T2>(string className) where T : class, new() where T2 : BaseAttribute
+            {
+                if (string.IsNullOrEmpty(className))
+                {
+                    throw new ArgumentNullException($"传入空的对应  className  '{className}'");
+                }
+                var result = typeof(T1).Assembly.GetTypes()
+                     .Where(a => !a.IsAbstract)
+                     .Where(a => typeof(T1).IsAssignableFrom(a))
+                     .Where(a => a.GetCustomAttribute<T2>() != null)
+                     .Where(a => a.GetCustomAttribute<T2>().Name == className)
+                     .FirstOrDefault();
+                if (result == null)
+                {
+                    throw new Exception($"未找到对应的类型  'T:{typeof(T).Name}' 'T1:{typeof(T1).Name}' 'T2:{typeof(T2).Name}' ");
+                }
+                return Activator.CreateInstance(result) as T;
+            }
+            /// <summary>
+            /// 获取对应超类继承的对象和添加的对应特性的所有类型名称 
+            /// </summary>
+            /// <typeparam name="T1">超类(父类,接口,抽象类)</typeparam>
+            /// <typeparam name="T2">继承于<see cref="BaseAttribute"/>的特性</typeparam>
+            /// <returns>返回所有子类的标签的名称'<see cref="BaseAttribute.Name"/>'</returns>
+            internal static IEnumerable<string> GetCfgNames<T1, T2>() where T2 : BaseAttribute
+            {
+                return typeof(T1).Assembly.GetTypes()
+                    .Where(a => typeof(T1).IsAssignableFrom(a)).
+                    Where(a => a.GetCustomAttribute<T2>() != null)
+                    .Select(a => a.GetCustomAttribute<T2>().Name);
+            }
+
+
+
+            /// <summary>
+            ///  获取指定类型所有继承者
+            ///  <para>这里用了递归，按照父类再进行递归创建对应的控件</para>
+            /// </summary>
+            /// <param name="target">对象类型</param>
+            /// <param name="inList">存入的集合</param>
+            /// <param name="father"></param>
+            public static void GetInheritors(Type target, ref List<ClassData> inList, ClassData father = null)
+            {
+                if (inList == null)
+                {
+                    inList = new List<ClassData>();
+                }
+
+                var orgin = Type.GetType(target.FullName);
+                //获取所有target的继承者,且只获取直接继承的类型
+                var types = orgin.Assembly.GetTypes()
+                    .Where(a => orgin.IsAssignableFrom(a)
+                                && a != target
+                                && a.BaseType == orgin).ToList();
+
+                ClassData ac = new ClassData();
+                ac.ClassType = orgin;
+                ac.Father = father;
+                ac.ChildrenTypes = types.Where(a => !a.IsAbstract).ToList(); //获取所有非继承抽象  
+                inList.Add(ac);
+                //获取所有抽象的继承类型
+                var childrenType = types.Where(a => a.IsAbstract && a != orgin).ToList();
+                if (childrenType.Count == 0)
+                {
+                    return;
+                }
+                else
+                {
+                    foreach (var type in childrenType)
+                    {
+                        ClassData children = new ClassData()
+                        {
+                            Father = ac,
+                            ClassType = type,
+                        };
+                        GetInheritors(type, ref inList, ac);
+                    }
+                }
+            }
+
+            /// <summary>
+            /// 获取类型所有的直接继承的类型，对[抽象类]再递归获取
+            /// <para>这里使用了递归，遍历<see cref="ClassData.ChildrenTypes"/> 判断<see cref="Type.IsAbstract"/>进行递归</para>
+            /// </summary>
+            /// <param name="target">目标对象</param>
+            /// <param name="inData"></param>
+            public static void GetInheritors(Type target, ref  ClassData inData  )
+            {
+                if (inData == null) return;
+              
+                //获取所有target的继承者,且只获取直接继承的类型
+                var types = target.Assembly.GetTypes()
+                    .Where(a => target.IsAssignableFrom(a)
+                                && a != target
+                                && a.BaseType == target).ToList();
+
+                inData.ClassType = target;
+                inData.Father = inData;
+                //获取直接继承的类
+                inData.ChildrenTypes = types.ToList(); 
+           
+                //获取所有抽象的继承类型
+                var childrenType = types.Where(a => a.IsAbstract && a != target).ToList();
+                if (childrenType.Count == 0)
+                {
+                    return;
+                }
+                else
+                {
+                    foreach (var type in childrenType)
+                    {
+                        ClassData children = new ClassData()
+                        {
+                            Father = inData,
+                            ClassType = type,
+                        }; 
+                        GetInheritors(type, ref children);
+                        inData.Children.Add(children);
+                    }
+                }
+            }
+        }
+
+       
+    }
+    /// <summary>
+    /// 类的数据
+    /// </summary>
+    public class ClassData
+    {
+        /// <summary>
+        /// 当前类的类型
+        /// </summary>
+        public Type ClassType { get; set; } 
+        /// <summary>
+        /// 当前类的父类
+        /// </summary>
+        public ClassData Father { get; set; }
+
+        /// <summary>
+        /// 所有再次抽象的类
+        /// </summary>
+        public List<ClassData> Children { get; set; } = new List<ClassData>();
+        /// <summary>
+        /// 当前类被直接继承的子类集合
+        /// </summary>
+        public List<Type> ChildrenTypes { get; set; }
+    }
+}

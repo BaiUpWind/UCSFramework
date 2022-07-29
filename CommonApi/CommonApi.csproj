@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\BaseAttribute.cs" />
     <Compile Include="Base\EventPool\EventPool.cs" />
     <Compile Include="Base\EventPool\EventPool.Event.cs" />
     <Compile Include="Base\EventPool\EventPoolMode.cs" />
@@ -63,7 +64,6 @@
     <Compile Include="Base\ReferencePool\ReferencePool.cs" />
     <Compile Include="Base\ReferencePool\ReferencePool.ReferenceCollection.cs" />
     <Compile Include="Base\ReferencePool\ReferencePoolInfo.cs" />
-    <Compile Include="Class.cs" />
     <Compile Include="DBHelper\DBUnitiyBase.cs" />
     <Compile Include="DBHelper\MySqlHelp.cs" />
     <Compile Include="DBHelper\OracleHelp.cs" />
@@ -96,6 +96,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Utility\Utility.StringFormat.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Utility\Utility.Reflection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

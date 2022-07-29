@@ -4,14 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CommonApi
+namespace  DeviceConfig.Core 
 {
-    internal class Class
-    {
-    }
-
-
-    public interface IDataInfo
+    public class SQLCmd : CommandBase
     {
 
     }

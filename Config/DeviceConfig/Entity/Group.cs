@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Modle.Config
+namespace DeviceConfig.Core
 {
     /// <summary>
     /// 组的配置
     /// </summary>
-    public class GroupCfg
+    public class Group
     {
         /// <summary>
         /// 组编号

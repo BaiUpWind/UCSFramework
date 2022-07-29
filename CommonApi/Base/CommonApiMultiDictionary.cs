@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace CommonApi
 {
     /// <summary>
-    /// 游戏框架多值字典类。
+    /// 框架多值字典类。
     /// </summary>
     /// <typeparam name="TKey">指定多值字典的主键类型。</typeparam>
     /// <typeparam name="TValue">指定多值字典的值类型。</typeparam>
@@ -15,7 +15,7 @@ namespace CommonApi
         private readonly Dictionary<TKey, CommonApiLinkedListRange<TValue>> m_Dictionary;
 
         /// <summary>
-        /// 初始化游戏框架多值字典类的新实例。
+        /// 初始化框架多值字典类的新实例。
         /// </summary>
         public CommonApiMultiDictionary()
         {

@@ -70,6 +70,12 @@
     <Compile Include="FmSetting.Designer.cs">
       <DependentUpon>FmSetting.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTest.Designer.cs">
+      <DependentUpon>FormTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Initialization\InitializationBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,6 +87,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FmSetting.resx">
       <DependentUpon>FmSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTest.resx">
+      <DependentUpon>FormTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -108,6 +117,10 @@
     <ProjectReference Include="..\CommonApi\CommonApi.csproj">
       <Project>{66852C25-75F4-40EF-93DE-A0E1DEE46324}</Project>
       <Name>CommonApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Config\Config.csproj">
+      <Project>{BD924948-6B92-4517-B504-08695586D011}</Project>
+      <Name>Config</Name>
     </ProjectReference>
     <ProjectReference Include="..\Modle\Modle.csproj">
       <Project>{AD6905AE-EE45-46D2-9699-6E2C69678D67}</Project>

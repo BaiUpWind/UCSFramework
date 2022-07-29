@@ -169,7 +169,7 @@ namespace Modle
             {
                 splc = new SiemensPlc(siemens.SiemensSelected, siemens.IP, siemens.Port, siemens.Rack, siemens.Slot);
             }
-            throw new Exception("错误的类型");
+            throw new Exception("错误的PLC配置类型");
         }
         private SiemensPlc splc;
 
