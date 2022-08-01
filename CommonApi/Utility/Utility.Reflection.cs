@@ -34,7 +34,7 @@ namespace CommonApi
             }
 
             /// <summary>
-            /// 创建实例
+            /// 创建实例(FullName) 包括命名空间,但不包括程序集名称.
             /// </summary>
             /// <typeparam name="T">实例类型</typeparam>
             /// <param name="fullName">实例的全名称</param>
@@ -45,21 +45,45 @@ namespace CommonApi
                 try
                 {
                     var te = typeof(T).Assembly.GetTypes().Where(a => a.FullName == fullName).FirstOrDefault(); //反射入口
-                   if(te == null)
+                    if (te == null)
                     {
                         throw new ArgumentNullException($" '{fullName}' 未找到实例！");
                     }
-                    //Type type = Type.GetType(name);
                     return Activator.CreateInstance(te, para) as T;//创建实例
                 }
-                catch  
+                catch
                 {
-
                     return default;
                 }
              
             }
+            /// <summary>
+            /// 创建实例, 类名(shortName),但是是T类型的子类,不包括抽象类
+            /// <para>建议使用这个<see cref="CreateObject"/></para>
+            /// </summary>
+            /// <typeparam name="T">超类</typeparam>
+            /// <param name="shortName">子类的类名(不包括抽象类)</param>
+            /// <param name="objects">构造参数</param>
+            /// <returns></returns>
+            public static T CreateObjectShortName<T>(string shortName, params object[] objects) where T : class
+            {
+                try
+                {
+                    var result = typeof(T).Assembly.GetTypes()
+                      .Where(a => !a.IsAbstract && a.Name == shortName).FirstOrDefault();
+                    if (result == null)
+                    {
+                        throw new ArgumentNullException($"'{typeof(T).FullName}'未找到对应的名称'{shortName}'实现,实现是不包括抽象!");
+                    }
+                    return CreateObject<T>(result.FullName, objects); 
+                }
+                catch
+                {
+                    return default;
+                }
+            }
 
+       
             /// <summary>
             /// 创建实例
             /// </summary> 
@@ -190,48 +214,61 @@ namespace CommonApi
             /// <param name="target">对象类型</param>
             /// <param name="inList">存入的集合</param>
             /// <param name="father"></param>
-            public static void GetInheritors(Type target, ref List<ClassData> inList, ClassData father = null)
-            {
-                if (inList == null)
-                {
-                    inList = new List<ClassData>();
-                }
+            //public static void GetInheritors(Type target, ref List<ClassData> inList, ClassData father = null)
+            //{
+            //    if (inList == null)
+            //    {
+            //        inList = new List<ClassData>();
+            //    }
 
-                var orgin = Type.GetType(target.FullName);
-                //获取所有target的继承者,且只获取直接继承的类型
-                var types = orgin.Assembly.GetTypes()
-                    .Where(a => orgin.IsAssignableFrom(a)
-                                && a != target
-                                && a.BaseType == orgin).ToList();
+            //    var orgin = Type.GetType(target.FullName);
+            //    //获取所有target的继承者,且只获取直接继承的类型
+            //    var types = orgin.Assembly.GetTypes()
+            //        .Where(a => orgin.IsAssignableFrom(a)
+            //                    && a != target
+            //                    && a.BaseType == orgin).ToList();
 
-                ClassData ac = new ClassData();
-                ac.ClassType = orgin;
-                ac.Father = father;
-                ac.ChildrenTypes = types.Where(a => !a.IsAbstract).ToList(); //获取所有非继承抽象  
-                inList.Add(ac);
-                //获取所有抽象的继承类型
-                var childrenType = types.Where(a => a.IsAbstract && a != orgin).ToList();
-                if (childrenType.Count == 0)
-                {
-                    return;
-                }
-                else
-                {
-                    foreach (var type in childrenType)
-                    {
-                        ClassData children = new ClassData()
-                        {
-                            Father = ac,
-                            ClassType = type,
-                        };
-                        GetInheritors(type, ref inList, ac);
-                    }
-                }
-            }
+            //    ClassData ac = new ClassData();
+            //    ac.ClassType = orgin;
+            //    ac.Father = father;
+            //    ac.ChildrenTypes = types.Where(a => !a.IsAbstract).ToList(); //获取所有非继承抽象  
+            //    inList.Add(ac);
+            //    //获取所有抽象的继承类型
+            //    var childrenType = types.Where(a => a.IsAbstract && a != orgin).ToList();
+            //    if (childrenType.Count == 0)
+            //    {
+            //        return;
+            //    }
+            //    else
+            //    {
+            //        foreach (var type in childrenType)
+            //        {
+            //            ClassData children = new ClassData()
+            //            {
+            //                Father = ac,
+            //                ClassType = type,
+            //            };
+            //            GetInheritors(type, ref inList, ac);
+            //        }
+            //    }
+            //}
+
 
             /// <summary>
             /// 获取类型所有的直接继承的类型，对[抽象类]再递归获取
-            /// <para>这里使用了递归，遍历<see cref="ClassData.ChildrenTypes"/> 判断<see cref="Type.IsAbstract"/>进行递归</para>
+            /// <para>使用的话:用递归，遍历<see cref="ClassData.ChildrenTypes"/> 判断<see cref="Type.IsAbstract"/>进行递归</para>
+            /// </summary>
+            /// <param name="target">目标对象</param>
+            /// <param name="inData"></param>
+            public static ClassData GetClassData<T>() where T : class
+            {
+                ClassData cd = new ClassData();
+                GetInheritors(typeof(T), ref cd);
+                return cd;
+            }
+            /// <summary>
+            /// 获取类型所有的直接继承的类型，对[抽象类]再递归获取
+            /// <para>使用的话:用递归，遍历<see cref="ClassData.ChildrenTypes"/> 判断<see cref="Type.IsAbstract"/>进行递归</para>
             /// </summary>
             /// <param name="target">目标对象</param>
             /// <param name="inData"></param>
@@ -276,8 +313,10 @@ namespace CommonApi
     }
     /// <summary>
     /// 类的数据
+    /// <para>存入的是这个超类的下所有子类的类型数据</para>
+    /// <para>以直接继承为条件,抽象类再分一次</para>
     /// </summary>
-    public class ClassData
+    public sealed  class ClassData
     {
         /// <summary>
         /// 当前类的类型

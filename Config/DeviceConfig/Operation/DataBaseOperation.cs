@@ -5,12 +5,12 @@ using System;
 namespace DeviceConfig
 {
 
-    internal sealed class DataBaseOperation : OperationBase
+    public sealed class DataBaseOperation : OperationBase
     {
-        DBUnitiyBase db;
-        public DataBaseOperation(IDeviceConfig config) : base(config)
+      
+        public DataBaseOperation(ConnectionConfigBase defaultConn) : base(defaultConn)
         {
-            if (config is DataBaseCfg dataBase)
+            if (defaultConn is DataBaseConnectCfg dataBase)
             {
                 switch (int.Parse(dataBase.DbType))
                 {
@@ -26,8 +26,8 @@ namespace DeviceConfig
                 }
             }
         }
-
-        public override bool Connection()
+       private readonly  DBUnitiyBase db;
+        public override bool Connect()
         {
             try
             {
@@ -49,10 +49,7 @@ namespace DeviceConfig
             db.CurrentConnection.Close();
         }
 
-        public override Reuslt Read<Command, Reuslt>(Command cmd)
-        {
-            throw new NotImplementedException();
-        }
+ 
 
         public override ResultBase Read(CommandBase command)
         {

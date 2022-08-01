@@ -13,13 +13,13 @@ namespace DeviceConfig.Core
     {
         /// <summary>
         /// 组编号
-        /// </summary> 
-        [Control("GroupNo", ControlType.TextBox)]
+        /// </summary>  
+        [TextBox("GroupNo","组编号","组编号:")]
         public int GroupNo { get; set; }
         /// <summary>
-        /// 组的名称
+        /// 组名称
         /// </summary>
-        [Control("GroupName",ControlType.TextBox)]
+        [TextBox("GroupName", "组名称", "组名称:")]
         public string GroupName { get; set; }
 
          

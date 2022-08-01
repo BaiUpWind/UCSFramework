@@ -7,11 +7,11 @@ namespace DeviceConfig
     /// <summary>
     /// 西门子读取指令
     /// </summary>
-    internal sealed class SeimensOperation : OperationBase
+    public sealed class SeimensOperation : PLCOperation
     {
-        public SeimensOperation(IDeviceConfig config) : base(config)
+        public SeimensOperation(ConnectionConfigBase config) : base(config)
         {
-            if (config is SiemensCfg siemens)
+            if (config is SiemensConnectCfg siemens)
             {
                 splc = new SiemensPlc(siemens.SiemensSelected, siemens.IP, siemens.Port, siemens.Rack, siemens.Slot);
             }
@@ -20,7 +20,7 @@ namespace DeviceConfig
         private SiemensPlc splc;
 
 
-        public override bool Connection()
+        public override bool Connect()
         {
             return splc != null && splc.Connection();
         }
@@ -29,12 +29,7 @@ namespace DeviceConfig
         {
             splc?.DisConnected();
         }
-
-        public override Reuslt Read<Command, Reuslt>(Command cmd)
-        {
-            throw new NotImplementedException();
-        }
-
+         
         public override ResultBase Read(CommandBase command)
         {
             throw new NotImplementedException();

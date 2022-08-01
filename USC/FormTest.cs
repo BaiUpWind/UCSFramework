@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using CommonApi;
 using CommonApi.Event;
+using DeviceConfig;
 using DeviceConfig.Core;
+ 
 
 namespace USC
 {
@@ -30,7 +32,7 @@ namespace USC
             //------------------ 继承多级联动测试
 
             cd = new ClassData();
-            Utility.Reflection.GetInheritors(typeof(ConnectionBase), ref cd);
+            Utility.Reflection.GetInheritors(typeof(OperationBase), ref cd);
             Console.WriteLine("Holle world!");
             //-------------------
 
