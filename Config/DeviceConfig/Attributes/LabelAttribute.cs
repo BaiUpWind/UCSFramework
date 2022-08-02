@@ -1,5 +1,6 @@
 ﻿using CommonApi.Attributes;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace DeviceConfig
 {
@@ -16,6 +17,8 @@ namespace DeviceConfig
         {
             this.text = text;
         }
+
+   
 
         private readonly string text;
         /// <summary>
@@ -84,16 +87,37 @@ namespace DeviceConfig
         public object[] Items => items; 
         public string LabelText => labelText;
     }
+    [Serializable]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, Inherited = false, AllowMultiple = false)] 
+    public sealed class ButtonAttribute : ControlBaseAttribute
+    {
+        public ButtonAttribute(string name,string text, Action action) : base(name)
+        {
+            this.text = text;
+            this.action = action;
+        }
 
+        public ButtonAttribute(string name, string text, Action action, bool enable = true, bool readOnly = false) : base(name, enable, readOnly)
+        {
+            this.text = text;
+            this.action = action;
+        }
+        private readonly string text;
+        private readonly Action action; 
+
+        public string Text => text;
+
+        public Action Action => action;
+    }
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, Inherited = false, AllowMultiple = false)] 
     public abstract class ControlBaseAttribute : BaseAttribute
     {
-        public ControlBaseAttribute(string name) : base(name)
+        public ControlBaseAttribute([CallerMemberName] string name = null) : base(name)
         {
             this.enable = true;
             this.readOnly = false;
         }
-        public ControlBaseAttribute(string name, bool enable = true, bool readOnly = false) : base(name)
+        public ControlBaseAttribute([CallerMemberName] string name = null, bool enable = true, bool readOnly = false) : base(name)
         {
             this.enable = enable;
             this.readOnly = readOnly;

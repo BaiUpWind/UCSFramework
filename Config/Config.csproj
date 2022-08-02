@@ -62,11 +62,11 @@
     <Compile Include="DeviceConfig\Core\Connection\TcpConnectCfg.cs" />
     <Compile Include="DeviceConfig\Core\Result\ResultBase.cs" />
     <Compile Include="DeviceConfig\Core\Result\SQLResult.cs" />
-    <Compile Include="DeviceConfig\Entity\DeviceInfo.cs" />
-    <Compile Include="DeviceConfig\Entity\Group.cs" />
+    <Compile Include="DeviceConfig\Model\DeviceInfo.cs" />
+    <Compile Include="DeviceConfig\Model\Fram.cs" />
+    <Compile Include="DeviceConfig\Model\Group.cs" />
     <Compile Include="DeviceConfig\Define\PublicEnum.cs" />
-    <Compile Include="DeviceConfig\Entity\Device.cs" />
-    <Compile Include="DeviceConfig\Interface\IDeviceConfig.cs" />
+    <Compile Include="DeviceConfig\Model\Device.cs" />
     <Compile Include="DeviceConfig\Operation\OperationBase.cs" />
     <Compile Include="DeviceConfig\Operation\DataBaseOperation.cs" />
     <Compile Include="DeviceConfig\CreateFactory.cs" />
