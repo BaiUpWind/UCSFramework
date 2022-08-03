@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommonApi;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +13,7 @@ namespace DeviceConfig.Core
     /// </summary>
     public abstract   class CommandBase
     {
-        public ResultBase Result { get; set; }
+        [JsonConverter(typeof(PolyConverter))]
+        public virtual ResultBase Result { get; set; }
     } 
 }

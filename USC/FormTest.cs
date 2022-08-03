@@ -94,11 +94,7 @@ namespace USC
             location.Y += box1.Height; 
             pAll.Controls.Add(box1);
 
-        }
-
-     
-        
-
+        }  
     }
 
 

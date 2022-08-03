@@ -72,13 +72,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\DeviceModle.cs" />
+    <Compile Include="Controls\ComboBoxLinked.xaml.cs">
+      <DependentUpon>ComboBoxLinked.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\DeviceViewModel.cs" />
+    <Compile Include="ViewModel\GroupsViewModel.cs" />
     <Compile Include="ViewModel\GroupViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Controls\GroupControl.xaml.cs">
+      <DependentUpon>GroupControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\WindowConfig.xaml.cs">
       <DependentUpon>WindowConfig.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\WindowTest.xaml.cs">
+      <DependentUpon>WindowTest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WindowHelper.cs" />
+    <Page Include="Controls\ComboBoxLinked.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -91,7 +105,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Controls\GroupControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\WindowConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WindowTest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -124,6 +146,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CommonApi\CommonApi.csproj">
+      <Project>{66852C25-75F4-40EF-93DE-A0E1DEE46324}</Project>
+      <Name>CommonApi</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Config\Config.csproj">
       <Project>{bd924948-6b92-4517-b504-08695586d011}</Project>
       <Name>Config</Name>

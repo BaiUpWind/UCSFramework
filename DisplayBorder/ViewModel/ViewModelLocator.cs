@@ -43,22 +43,25 @@ namespace DisplayBorder.ViewModel
             ////    SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
 
-            SimpleIoc.Default.Register<MainViewModel>();
+
             SimpleIoc.Default.Register<GroupViewModel>();
+            SimpleIoc.Default.Register<GroupsViewModel>();
         }
 
-        public MainViewModel Main
-        {
-            get
-            {
-                return ServiceLocator.Current.GetInstance<MainViewModel>();
-            }
-        }
+
         public GroupViewModel Group
         {
             get
             {
                 return ServiceLocator.Current.GetInstance<GroupViewModel>();
+            }
+        }
+
+        public GroupsViewModel GroupsViewModel 
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<GroupsViewModel>();
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using CommonApi;
 using DeviceConfig.Core;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 namespace DeviceConfig
 {
     /// <summary>
-    /// 设备需要读取的值所需要的信息 
+    /// 设备需要读取的信息所需要的配置 
     /// </summary>
     public class DeviceInfo
     { 
@@ -32,19 +33,24 @@ namespace DeviceConfig
         /// <summary>
         /// 设备信息名称
         /// </summary>
-        public int DeviceInfoName { get; set; } 
+        public int DeviceInfoName { get; set; }
         /// <summary>
         /// 获取信息的连接方式
         /// </summary> 
+        [JsonConverter(typeof(PolyConverter))]
         public ConnectionConfigBase ConnConfig
         {
             get
             {  
-                return operation?.ConnectConfig;
+                return Operation?.ConnectConfig;
             }
             //set => connConfig = value;
-        } 
-
+        }
+        /// <summary>
+        /// 对设备的操作类型
+        /// </summary>
+        [JsonConverter(typeof(PolyConverter))]
+        public OperationBase Operation { get => operation; set => operation = value; }
         /// <summary>
         /// 刷新数据间隔  单位:毫秒 
         /// </summary>
@@ -67,8 +73,8 @@ namespace DeviceConfig
         /// <exception cref="Exception"></exception>
         public void CreateOpertaion(string name)
         { 
-            operation = Utility.Reflection.CreateObjectShortName<OperationBase>(name, defaultConn);
-            if (operation == null)
+            Operation = Utility.Reflection.CreateObjectShortName<OperationBase>(name, defaultConn);
+            if (Operation == null)
             {
                 throw new Exception($"{info} 创建失败！");
             } 
@@ -79,18 +85,18 @@ namespace DeviceConfig
 
         public async void Start()
         {
-            if (operation == null)
+            if (Operation == null)
             {
-                throw new NullReferenceException($"{info} 操作'{nameof(operation)}'未建立! 开启失败 ");
+                throw new NullReferenceException($"{info} 操作'{nameof(Operation)}'未建立! 开启失败 ");
             }
-            if (!operation.Connect())
+            if (!Operation.Connect())
             {
                 throw new Exception($" {info} 连接失败！");
             }
             start = true;
             while (start)
             {
-                operation.Read(operation.Command);
+                Operation.Read(Operation.Command);
                 await Task.Delay(RefreshInterval);
             }
         }
@@ -98,15 +104,16 @@ namespace DeviceConfig
         public void Stop()
         {
             start = false; 
-            if(operation != null && ConnConfig != null)
+            if(Operation != null && ConnConfig != null)
             {
-                operation.Disconnected();
-                operation = null;
+                Operation.Disconnected();
+                Operation = null;
             }
-        } 
+        }
 
-
+        [JsonIgnore]
         private  string info => $"设备编号'{DeviceID}' 设备信息编号'{DeviceInfoID}' 设备信息名称'{DeviceInfoName}';";
+
 
     } 
 }

@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -63,7 +66,6 @@
     <Compile Include="DeviceConfig\Core\Result\ResultBase.cs" />
     <Compile Include="DeviceConfig\Core\Result\SQLResult.cs" />
     <Compile Include="DeviceConfig\Model\DeviceInfo.cs" />
-    <Compile Include="DeviceConfig\Model\Fram.cs" />
     <Compile Include="DeviceConfig\Model\Group.cs" />
     <Compile Include="DeviceConfig\Define\PublicEnum.cs" />
     <Compile Include="DeviceConfig\Model\Device.cs" />
@@ -74,7 +76,10 @@
     <Compile Include="DeviceConfig\Operation\SeimensOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommonApi\CommonApi.csproj">
       <Project>{66852c25-75f4-40ef-93de-a0e1dee46324}</Project>

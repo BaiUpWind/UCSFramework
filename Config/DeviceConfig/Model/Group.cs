@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeviceConfig.Core
+namespace DeviceConfig
 {
     /// <summary>
     /// 组/车间 的配置 最顶级的单位
@@ -26,7 +26,9 @@ namespace DeviceConfig.Core
         /// <summary>
         /// 组内包含的设备类型
         /// </summary>
-        public List<Device> DeviceConfigs { get; set; }
+        //public List<Device> DeviceConfigs { get; set; }
+
+        public IList<Device> DeviceConfigs { get; set; }
         
     }
 }

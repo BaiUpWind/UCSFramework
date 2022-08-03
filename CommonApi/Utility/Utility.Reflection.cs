@@ -51,12 +51,14 @@ namespace CommonApi
                     }
                     return Activator.CreateInstance(te, para) as T;//创建实例
                 }
-                catch
+                catch(Exception ex)
                 {
-                    return default;
-                }
-             
+                    throw ex;
+                } 
             }
+
+            
+
             /// <summary>
             /// 创建实例, 类名(shortName),但是是T类型的子类,不包括抽象类
             /// <para>建议使用这个<see cref="CreateObject"/></para>
@@ -77,9 +79,9 @@ namespace CommonApi
                     }
                     return CreateObject<T>(result.FullName, objects); 
                 }
-                catch
+                catch (Exception ex)
                 {
-                    return default;
+                    throw ex;
                 }
             }
 
@@ -272,7 +274,7 @@ namespace CommonApi
             /// </summary>
             /// <param name="target">目标对象</param>
             /// <param name="inData"></param>
-            public static void GetInheritors(Type target, ref  ClassData inData  )
+            public static void GetInheritors(Type target, ref  ClassData inData  ,int layerindex =0)
             {
                 if (inData == null) return;
               
@@ -281,7 +283,7 @@ namespace CommonApi
                     .Where(a => target.IsAssignableFrom(a)
                                 && a != target
                                 && a.BaseType == target).ToList();
-
+                inData.LayerIndex += layerindex == 0 ? 1: layerindex;
                 inData.ClassType = target;
                 inData.Father = inData;
                 //获取直接继承的类
@@ -302,7 +304,7 @@ namespace CommonApi
                             Father = inData,
                             ClassType = type,
                         }; 
-                        GetInheritors(type, ref children);
+                        GetInheritors(type, ref children, inData.LayerIndex+1);
                         inData.Children.Add(children);
                     }
                 }
@@ -318,6 +320,10 @@ namespace CommonApi
     /// </summary>
     public sealed  class ClassData
     {
+        /// <summary>
+        /// 层级索引
+        /// </summary>
+        public int LayerIndex { get; set; }
         /// <summary>
         /// 当前类的类型
         /// </summary>

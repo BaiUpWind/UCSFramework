@@ -1,0 +1,55 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DisplayBorder.Controls"
+             xmlns:hc="https://handyorg.github.io/handycontrol" 
+             x:Class="DisplayBorder.Controls.ComboBoxLinked"
+             mc:Ignorable="d"   >
+
+
+    <Grid Background="Transparent">
+        <!--<Border Background="#0000cd" Margin="50,20,50,20">
+            <Border.Effect>
+                <DropShadowEffect Color="#0000cd" ShadowDepth="30" BlurRadius="50" Opacity="0.8" Direction="270"/>
+            </Border.Effect>
+        </Border>-->
+        <Border CornerRadius="10" Margin="10 0 10 0" Background="CornflowerBlue">
+            <Grid Margin="0,10,0,0" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="210"/>
+                    <ColumnDefinition Width="210"/>
+                    <ColumnDefinition Width="210"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="65"/>
+                    <RowDefinition Height="65"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Grid.Column="0">
+                    <TextBlock x:Name="t1" Foreground="White" TextAlignment="Left" Margin="15,0">第一组</TextBlock>
+                    <hc:ComboBox Name="c1" HorizontalAlignment="Left" Margin="5,0"  VerticalAlignment="Center" Width="175" TabIndex="1"/>
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="1">
+                    <TextBlock x:Name="t2" Foreground="White" TextAlignment="Left" Margin="15,0">第二组</TextBlock>
+                    <hc:ComboBox Name="c2" HorizontalAlignment="Left"  Margin="5,0" VerticalAlignment="Center" Width="175" TabIndex="2"/>
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="2">
+                    <TextBlock x:Name="t3" Foreground="White" TextAlignment="Left" Margin="15,0">第三组</TextBlock>
+                    <hc:ComboBox x:Name="c3"  HorizontalAlignment="Left" Margin="5,0"  VerticalAlignment="Center" Width="175" TabIndex="3"/>
+                </Grid>
+
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Button Content="取消"   HorizontalAlignment="Right" Click="Btn_Click_Canecl" Foreground="Black" Background="White" Grid.Row="0" VerticalAlignment="Bottom" Width="91" ToolTip="关闭窗口" Margin="0,0,119,10" />
+
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="1">
+                    <Button Content="确认" Foreground="White" Background="#87cefa" Click="Btn_Click_Canecl" Grid.Row="0" VerticalAlignment="Top" Width="90" ToolTip="创建对应实例" Margin="120,25,0,0" HorizontalAlignment="Left"/>
+
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+
+</UserControl>

@@ -1,105 +1,134 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommonApi;
+using DeviceConfig;
+using DeviceConfig.Core;
+using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using HandyControl.Controls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DeviceConfig;
-using DeviceConfig.Core;
-using HandyControl.Controls;
-using DisplayBorder.Model;
-using System.Collections.ObjectModel;
 
 namespace DisplayBorder.ViewModel
 {
     public class GroupViewModel : ViewModelBase
     {
-        public GroupViewModel()
+        public GroupViewModel(Group group)
         {
-            addGroup = new RelayCommand(AddGroup); 
+            this.currentGroup = group;
+            devices =  new ObservableCollection<Device>(group.DeviceConfigs);
+            addDevice = new RelayCommand(AddDevice);
         }
 
-        public RelayCommand addGroup { get; set; } 
-  
-        private int groupID =1001; 
-        private string groupName="第1001组"; 
-        private ObservableCollection<Group> groups = new ObservableCollection<Group>()
-        {
-            //new Group()
-            //{
-            //     GroupID = 1001,
-            //     GroupName="第一组"
-            //},
-            //new Group()
-            //{
-            //     GroupID = 1002,
-            //     GroupName="第二组"
-            //},
-        };
+        private Group currentGroup;
+        private ObservableCollection<Device> devices;
 
-        public int GroupID
+        public RelayCommand addDevice { get; set; }
+
+        public Group CurrentGroup
         {
-            get => groupID; set
+            get => currentGroup; set
             {
-                groupID = value;
+                currentGroup = value;
                 RaisePropertyChanged();
             }
         }
-        public string GroupName
+        #region device model
+
+        private int deviceId;
+        private string deviceName;
+        private double stayTime =5d;
+        private ConnectionConfigBase defaultConn =null; 
+
+        #endregion
+        public ObservableCollection<Device> Devices
         {
-            get => groupName; set
+            get => devices; set
             {
-                groupName = value;
+                devices = value;
+                RaisePropertyChanged();
+             
+            }
+        }
+
+
+
+        public int DeviceId
+        {
+            get => deviceId; set
+            {
+                deviceId = value;
                 RaisePropertyChanged();
             }
-        } 
-        public ObservableCollection<Group> Groups
+        }
+        public string DeviceName
         {
-            get => groups; set
+            get => deviceName; set
             {
-                groups = value;
-                RaisePropertyChanged(()=> Groups);
+                deviceName = value;
+                RaisePropertyChanged();
             }
         }
-         
-        public void AddGroup()
+        public double StayTime
         {
-            var result = Groups.Where(a => a.GroupID == GroupID).FirstOrDefault();
-            if (result == null)
+            get => stayTime; set
             {
-                //if (string.IsNullOrEmpty(GroupName))
-                //{
-                //    GroupName = "";
-                //}
-                Group group = new Group();
-                group.GroupID = GroupID;
-                group.GroupName = GroupName   ;
-                groups.Add(group); 
-                Growl.Info($"添加'{GroupID}'组成功");
+                stayTime = value;
+                RaisePropertyChanged();
             }
-            else
+        }
+        public ConnectionConfigBase DefaultConn
+        {
+            get => defaultConn; set
             {
-                Growl.Error($"已经包含对应的组'{GroupID}',请勿重复添加");
+                defaultConn = value;
+                RaisePropertyChanged(nameof(ConnName));
             }
-            GroupID +=1;
-            GroupName = $"第{GroupID}组";
         }
 
-        //public bool RemoveGroup(int groupId)
-        //{
-        //    var result = Groups.Where(a => a.GroupID == groupId).FirstOrDefault();
-        //    if (result != null)
-        //    {
-              
-        //        Groups.Remove(result);
-        //        return true;
-        //    }
-        //    else
-        //    { 
-        //        return false;
+        public string ConnName
+        {
+            get => DefaultConn== null ? "点击创建": DefaultConn.GetType().Name; 
+        }
 
-        //    }
-        //}
+
+        public void AddDevice()
+        {
+            if (defaultConn == null)
+            {
+                Growl.Error("添加失败,请创建默认连接方式");
+                return;
+            }
+            if( CurrentGroup.DeviceConfigs.Where(a => a.DeviceId == DeviceId).Count() >0)
+            {
+                Growl.Error($"'{DeviceId}'设备编号已经存在!");
+                return;
+            }
+
+            Device device = new Device()
+            {
+                DeviceId = DeviceId,
+                DeviceName = DeviceName,
+                StayTime = StayTime,
+                DefaultConn = DefaultConn,
+                DeviceInfos = new List<DeviceInfo>()
+            };
+            Devices.Add(device); 
+            if (currentGroup != null)
+            {
+                currentGroup.DeviceConfigs = Devices.ToList(); 
+            }
+            Growl.Success($"添加'{device}'设备成功!");
+        }
+
+
+        private void RestartValue()
+        {
+            DefaultConn = null;
+            DeviceId = 0;
+            DeviceName = null;
+        }
     }
 }
