@@ -92,6 +92,11 @@ namespace DisplayBorder.View
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Group mys = (Group)dgv.SelectedItem;
+            if (mys == null)
+            {
+                g1.Close();
+                return;
+            }
             g1.Ini(mys); 
         }
     }

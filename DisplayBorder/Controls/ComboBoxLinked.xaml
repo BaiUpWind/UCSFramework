@@ -45,7 +45,7 @@
 
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="1">
-                    <Button Content="确认" Foreground="White" Background="#87cefa" Click="Btn_Click_Canecl" Grid.Row="0" VerticalAlignment="Top" Width="90" ToolTip="创建对应实例" Margin="120,25,0,0" HorizontalAlignment="Left"/>
+                    <Button Content="确认" Foreground="White" Background="Green" Click="Btn_Click_Canecl" Grid.Row="0" VerticalAlignment="Top" Width="90" ToolTip="创建对应实例" Margin="120,25,0,0" HorizontalAlignment="Left"/>
 
                 </Grid>
             </Grid>

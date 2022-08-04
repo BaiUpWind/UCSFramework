@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeviceConfig.Core 
 {
-    public class SQLResult:ResultBase
+    public class SQLResult : ResultBase
     {
 
     }

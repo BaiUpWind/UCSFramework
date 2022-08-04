@@ -12,12 +12,16 @@ namespace DeviceConfig
     /// 设备需要读取的信息所需要的配置 
     /// </summary>
     public class DeviceInfo
-    { 
-        public DeviceInfo(ConnectionConfigBase defaultConn)
+    {
+        public DeviceInfo( )
         {
-            this.defaultConn = defaultConn ?? throw new Exception("初始化设备信息配置，未能获取到默认的连接方式！");
+            
         }
-        private readonly ConnectionConfigBase defaultConn;// 默认的连接方式 来源于设备
+        //public DeviceInfo(ConnectionConfigBase defaultConn)
+        //{
+        //    this.defaultConn = defaultConn ?? throw new Exception("初始化设备信息配置，未能获取到默认的连接方式！");
+        //}
+        //private readonly ConnectionConfigBase defaultConn;// 默认的连接方式 来源于设备
         private OperationBase operation;//对设备的操作 读取之类的 
         private bool start;//是否开始获取信息
  
@@ -33,7 +37,7 @@ namespace DeviceConfig
         /// <summary>
         /// 设备信息名称
         /// </summary>
-        public int DeviceInfoName { get; set; }
+        public string DeviceInfoName { get; set; }
         /// <summary>
         /// 获取信息的连接方式
         /// </summary> 
@@ -73,7 +77,7 @@ namespace DeviceConfig
         /// <exception cref="Exception"></exception>
         public void CreateOpertaion(string name)
         { 
-            Operation = Utility.Reflection.CreateObjectShortName<OperationBase>(name, defaultConn);
+            Operation = Utility.Reflection.CreateObjectShortName<OperationBase>(name);
             if (Operation == null)
             {
                 throw new Exception($"{info} 创建失败！");

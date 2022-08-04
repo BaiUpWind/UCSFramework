@@ -1,16 +1,15 @@
 ﻿using CommonApi.DBHelper;
-using DeviceConfig.Core;
 using System;
 
-namespace DeviceConfig
+namespace DeviceConfig.Core
 {
 
     public sealed class DataBaseOperation : OperationBase
     {
       
-        public DataBaseOperation(ConnectionConfigBase defaultConn) : base(defaultConn)
+        public DataBaseOperation( )  
         {
-            if (defaultConn is DataBaseConnectCfg dataBase)
+            if (ConnectConfig is DataBaseConnectCfg dataBase)
             {
                 switch (int.Parse(dataBase.DbType))
                 {
@@ -24,7 +23,9 @@ namespace DeviceConfig
                         db = new MySqlHelp(dataBase.GetConnStr());
                         break;
                 }
+                return;
             }
+            //throw new ArgumentException("创建数据库操作实例失败!");
         }
        private readonly  DBUnitiyBase db;
         public override bool Connect()
@@ -53,7 +54,9 @@ namespace DeviceConfig
 
         public override ResultBase Read(CommandBase command)
         {
-            throw new NotImplementedException();
+            db.GetDataTable(command.CommandStr, System.Data.CommandType.Text);
+
+            return command.Result;
         }
     }
 }

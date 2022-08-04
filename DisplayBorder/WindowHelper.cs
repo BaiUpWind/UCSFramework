@@ -40,19 +40,19 @@ namespace DisplayBorder
                     var result = cbw.GetType<T>(para);
                     if (result != null)
                     {
-                        Growl.InfoGlobal($"创建对象实例成功'{result.GetType().Name}'");
+                        Growl.Info ($"创建对象实例成功'{result.GetType().Name}'");
                 
                         OnScusses?.Invoke(result);
                     }
                     else
                     {
-                        Growl.ErrorGlobal("创建对象实例 失败 未知原因?");
+                        Growl.Error ("创建对象实例 失败 未知原因?");
                     }
                     window.Close();
                 }
                 catch (Exception ex)
                 {
-                    Growl.ErrorGlobal( $"创建对象实例 失败 未知原因'{ex.InnerException}'" );
+                    Growl.Error ( $"创建对象实例 失败 未知原因'{ex.InnerException}'" );
                 }
             };
             cbw.OnCancel += () =>

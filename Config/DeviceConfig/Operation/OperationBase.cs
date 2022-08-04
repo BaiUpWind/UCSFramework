@@ -1,10 +1,7 @@
 ﻿using CommonApi;
-using DeviceConfig.Core;
 using Newtonsoft.Json;
-using System;
-using System.Linq;
 
-namespace DeviceConfig
+namespace DeviceConfig.Core
 {
     /// <summary>
     /// 读取设备信息的指令基类
@@ -17,13 +14,13 @@ namespace DeviceConfig
     {
         public OperationBase()
         {
-            defaultConn = null;
+            //defaultConn = null;
         }
-        public OperationBase(ConnectionConfigBase defaultConn)
-        {
-            this.defaultConn = defaultConn ?? throw new Exception("初始化操作配置失败，未能获取到默认的连接方式！");
-        }
-        private readonly ConnectionConfigBase defaultConn;// 默认的连接方式 来源于设备
+        //public OperationBase(ConnectionConfigBase defaultConn)
+        //{
+        //    this.defaultConn = defaultConn ?? throw new Exception("初始化操作配置失败，未能获取到默认的连接方式！");
+        //}
+        //private readonly ConnectionConfigBase defaultConn;// 默认的连接方式 来源于设备
         private ConnectionConfigBase connectConfig;
 
         /// <summary>
@@ -34,10 +31,10 @@ namespace DeviceConfig
         {
             get
             {
-                if (UseDefaultConn)
-                {
-                    return defaultConn;
-                }
+                //if (UseDefaultConn)
+                //{
+                //    return defaultConn;
+                //}
                 return connectConfig;
             }
             //set => connConfig = value;
@@ -58,7 +55,7 @@ namespace DeviceConfig
         /// <summary>
         /// 使用默认的连接方式
         /// </summary>
-        public bool UseDefaultConn { get; set; }
+        //public bool UseDefaultConn { get; set; }
         /// <summary>
         /// 使用跟随配置
         /// </summary>

@@ -12,7 +12,8 @@ namespace DeviceConfig.Core
     /// 读取指令基类
     /// </summary>
     public abstract   class CommandBase
-    {
+    { 
+        public virtual string CommandStr { get; set; }
         [JsonConverter(typeof(PolyConverter))]
         public virtual ResultBase Result { get; set; }
     } 

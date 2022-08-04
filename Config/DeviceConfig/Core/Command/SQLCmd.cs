@@ -9,5 +9,6 @@ namespace  DeviceConfig.Core
     public class SQLCmd : CommandBase
     {
 
+        public string Sql { get; set; } = "select * from";
     }
 }

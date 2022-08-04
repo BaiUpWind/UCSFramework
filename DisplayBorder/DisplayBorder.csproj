@@ -75,9 +75,17 @@
     <Compile Include="Controls\ComboBoxLinked.xaml.cs">
       <DependentUpon>ComboBoxLinked.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DeviceControl.xaml.cs">
+      <DependentUpon>DeviceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OperationControl.xaml.cs">
+      <DependentUpon>OperationControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\DeviceInfoVewModel.cs" />
     <Compile Include="ViewModel\DeviceViewModel.cs" />
     <Compile Include="ViewModel\GroupsViewModel.cs" />
     <Compile Include="ViewModel\GroupViewModel.cs" />
+    <Compile Include="ViewModel\OperationViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="Controls\GroupControl.xaml.cs">
       <DependentUpon>GroupControl.xaml</DependentUpon>
@@ -90,6 +98,14 @@
     </Compile>
     <Compile Include="WindowHelper.cs" />
     <Page Include="Controls\ComboBoxLinked.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DeviceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\OperationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

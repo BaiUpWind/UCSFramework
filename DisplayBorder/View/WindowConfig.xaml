@@ -7,7 +7,7 @@
         xmlns:viewmodel="clr-namespace:DisplayBorder.ViewModel"  
         d:DataContext="{d:DesignInstance Type=viewmodel:GroupsViewModel}"
         mc:Ignorable="d"
-        Title="WindowConfig" Height="464" Width="1030"  >
+        Title="WindowConfig"  Width="800"  Height="600" >
 
     <Grid >
         <Grid.Background>
@@ -19,25 +19,26 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"></ColumnDefinition>
-            <ColumnDefinition Width="336*"   ></ColumnDefinition>
-            <ColumnDefinition Width="55*"/>
-            <ColumnDefinition Width="62*"  />
-            <ColumnDefinition Width="328*"/>
+            <ColumnDefinition Width="733*"   ></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="145"></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="125"></RowDefinition>
+            <RowDefinition Height="270*" ></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Grid.Column="0">
             <Border Background="#ffffff"   Margin="5,5,5,5" CornerRadius="15" Opacity="0.1"/>
-            <Grid Height="53" Width="225"  Margin="15,10,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" >
+            <Grid     >
 
+                <TextBlock Text="组编号" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="22,17,0,0"   />
+                <TextBox Text="{Binding GroupID}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="66,10,0,0"  Grid.Row="0" IsReadOnly="True"   />
+                <!--<TextBox Text="{Binding GroupID}" hc:TitleElement.Foreground="White" Margin="5,0,5,0" hc:InfoElement.TitleWidth="70"    hc:InfoElement.TitlePlacement="Left"    hc:InfoElement.Title="设备编号"   hc:InfoElement.ContentHeight="14"   hc:InfoElement.Necessary="True"   Style="{StaticResource TextBoxExtend}"    />-->
+                <TextBlock Text="组名称" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="22,52,0,0"  Grid.Row="0"   />
+                <TextBox Text="{Binding GroupName}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="66,45,0,0"  Grid.Row="0"  />
 
-                <TextBox Text="{Binding GroupID}" Margin="5,0,5,0" hc:InfoElement.TitleWidth="70"    hc:InfoElement.TitlePlacement="Left"    hc:InfoElement.Title="设备编号"   hc:InfoElement.ContentHeight="14"   hc:InfoElement.Necessary="True"   Style="{StaticResource TextBoxExtend}"    />
-
+                <Button Content="添加" Width="80"   HorizontalAlignment="Left" Height="30" Margin="160,85,0,0" Command="{Binding addGroup}" VerticalAlignment="Top"/>
             </Grid>
-            <Grid Height="48" Width="225"    Margin="15,65,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <!--<Grid Height="48" Width="225"    Margin="15,65,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
 
                 <TextBox Text="{Binding GroupName}"  
                     Margin="5,0,5,0"
@@ -47,28 +48,26 @@
                     hc:InfoElement.ContentHeight="14" 
                     hc:InfoElement.Necessary="True" 
                     Style="{StaticResource TextBoxExtend}"    />
-            </Grid>
-            <Grid  Margin="28,85,2,-7" >
-
-                <Button Content="添加" Width="80"   HorizontalAlignment="Left" Height="30" Margin="115,26,0,0" Command="{Binding addGroup}" VerticalAlignment="Top"/>
-            </Grid>
+            </Grid>-->
         </Grid>
 
 
-        <Grid Grid.Row="1" Grid.Column="0">
+        <Grid Grid.Row="1" Grid.Column="0" >
+            <Border Background="#ffffff"   Margin="5,5,5,5" CornerRadius="15" Opacity="0.1" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"/>
+
             <DataGrid x:Name="dgv" Style="{StaticResource DataGrid.Small}" 
                     hc:DataGridAttach.CanUnselectAllWithBlankArea="True" 
-                    AutoGenerateColumns="False"  hc:DataGridAttach.ShowRowNumber="True" SelectionMode="Single" 
+                    AutoGenerateColumns="False"  SelectionMode="Single" 
                     SelectionChanged="DataGrid_SelectionChanged"
-                    ItemsSource="{Binding Groups}" >
+                    ItemsSource="{Binding Groups}" Margin="12" Background="CornflowerBlue" >
                 <DataGrid.Columns>
-                    <DataGridTextColumn x:Name="cGroupId"  IsReadOnly="True"  CanUserResize="False" Binding="{Binding GroupID}" Header="组编号" /> 
+                    <DataGridTextColumn x:Name="cGroupId"  IsReadOnly="True"  CanUserResize="False" Binding="{Binding GroupID}" Header="组编号" />
                     <DataGridTextColumn IsReadOnly="True"   Binding="{Binding GroupName}"  Header="组名称"    />
                     <DataGridTemplateColumn Header="配置信息" Width="120"    >
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Button Tag="{Binding GroupID}" Content="编辑" Click="Button_Click_Delete"></Button>
+                                    <!--<Button Tag="{Binding GroupID}" Content="编辑" Click="Button_Click_Delete"></Button>-->
                                     <Button Tag="{Binding GroupID}" Content="删除" Click="Button_Click_Delete"  ></Button>
                                 </StackPanel>
                             </DataTemplate>
@@ -80,10 +79,13 @@
 
             </DataGrid>
         </Grid>
-        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"  >
+        <Grid Grid.Row="1" Grid.Column="1"     >
 
-            <local:GroupControl x:Name="g1" HorizontalAlignment="Center"   VerticalAlignment="Top" Margin="0,15,0,0" Height="665" />
+            <Border Background="#ffffff"   Margin="5,5,5,5" CornerRadius="15" Opacity="0.1" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"/>
+            <local:GroupControl  HorizontalAlignment="Stretch"  x:Name="g1"  VerticalAlignment="Stretch" Margin="5,20,5,20"  />
+
         </Grid>
+
 
 
     </Grid>

@@ -79,28 +79,28 @@ namespace DisplayBorder.ViewModel
                 RaisePropertyChanged();
             }
         }
-        public ConnectionConfigBase DefaultConn
-        {
-            get => defaultConn; set
-            {
-                defaultConn = value;
-                RaisePropertyChanged(nameof(ConnName));
-            }
-        }
+        //public ConnectionConfigBase DefaultConn
+        //{
+        //    get => defaultConn; set
+        //    {
+        //        defaultConn = value;
+        //        RaisePropertyChanged(nameof(ConnName));
+        //    }
+        //}
 
-        public string ConnName
-        {
-            get => DefaultConn== null ? "点击创建": DefaultConn.GetType().Name; 
-        }
+        //public string ConnName
+        //{
+        //    get => DefaultConn== null ? "点击创建": DefaultConn.GetType().Name; 
+        //}
 
 
         public void AddDevice()
         {
-            if (defaultConn == null)
-            {
-                Growl.Error("添加失败,请创建默认连接方式");
-                return;
-            }
+            //if (defaultConn == null)
+            //{
+            //    Growl.Error("添加失败,请创建默认连接方式");
+            //    return;
+            //}
             if( CurrentGroup.DeviceConfigs.Where(a => a.DeviceId == DeviceId).Count() >0)
             {
                 Growl.Error($"'{DeviceId}'设备编号已经存在!");
@@ -112,7 +112,7 @@ namespace DisplayBorder.ViewModel
                 DeviceId = DeviceId,
                 DeviceName = DeviceName,
                 StayTime = StayTime,
-                DefaultConn = DefaultConn,
+                //DefaultConn = DefaultConn,
                 DeviceInfos = new List<DeviceInfo>()
             };
             Devices.Add(device); 
@@ -120,13 +120,13 @@ namespace DisplayBorder.ViewModel
             {
                 currentGroup.DeviceConfigs = Devices.ToList(); 
             }
-            Growl.Success($"添加'{device}'设备成功!");
+            Growl.Success($"添加'{device.DeviceId}','{device.DeviceName}'设备成功!");
         }
 
 
         private void RestartValue()
         {
-            DefaultConn = null;
+            //DefaultConn = null;
             DeviceId = 0;
             DeviceName = null;
         }

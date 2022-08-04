@@ -168,7 +168,7 @@ namespace DisplayBorder.Controls
                     currenData = GetLastData();
                     if (currenData != null   &&  currenData.Combo.SelectedIndex <= -1)
                     {
-                        Growl.ErrorGlobal("请选择类型进行创建!");
+                        Growl.WarningGlobal("请选择类型进行创建!");
                         return ;
                     }
                     OnEnter?.Invoke();
