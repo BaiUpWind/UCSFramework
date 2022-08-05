@@ -1,7 +1,9 @@
 ﻿using DeviceConfig;
 using DeviceConfig.Core;
+using DisplayBorder.View;
 using DisplayBorder.ViewModel;
 using HandyControl.Controls;
+using HandyControl.Tools;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -56,17 +58,40 @@ namespace DisplayBorder.Controls
 
         private void Dgv_Selection_Changed(object sender, SelectionChangedEventArgs e)
         {
-             DeviceInfo  deviceinfo = (DeviceInfo)dgv.SelectedItem;
+            DeviceInfo deviceinfo = (DeviceInfo)dgv.SelectedItem;
             if (deviceinfo == null)
             {
                 t2.Visibility = Visibility.Visible;
                 tc.Visibility = Visibility.Hidden;
-                deviceView.CurrenDeviceInfo = null;
+                if (deviceView != null) deviceView.CurrenDeviceInfo = null;
+                //op1.Close();
                 return;
             }
-            t2.Visibility = Visibility.Hidden;
-            tc.Visibility = Visibility.Visible;
-            deviceView.CurrenDeviceInfo = deviceinfo;
+            else
+            {
+                var cbw = new WindowOperation();
+                cbw.WindowStyle = WindowStyle.SingleBorderWindow;
+                cbw.ResizeMode = ResizeMode.NoResize;
+                cbw.WindowState = WindowState.Maximized;
+                t2.Visibility = Visibility.Hidden;
+                tc.Visibility = Visibility.Visible;
+                deviceView.CurrenDeviceInfo = deviceinfo;
+                cbw.Init(deviceView.CurrenDeviceInfo.Operation, deviceView.CurrenDeviceInfo);
+
+                cbw.OnEnter += () =>
+                {
+                    deviceView.CurrenDeviceInfo.Operation = cbw.GetResult(); 
+                    cbw.Close() ;
+                   
+                };
+
+                cbw.OnCancel += () =>
+                {
+                    cbw.Close();
+                };
+
+                cbw.ShowDialog();
+            } 
         }
 
         private void Btn_Click_DelteInfo(object sender, RoutedEventArgs e)
@@ -84,6 +109,7 @@ namespace DisplayBorder.Controls
                         if (result == MessageBoxResult.OK)
                         {
                             deviceView.CurrentDevice.DeviceInfos.Remove(info);
+                            deviceView.Infos.Remove(info);
                             Growl.Success($"'{deviceID}'删除成功");
                         }
                         else

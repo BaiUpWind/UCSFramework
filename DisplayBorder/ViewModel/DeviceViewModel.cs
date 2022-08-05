@@ -170,6 +170,11 @@ namespace DisplayBorder.ViewModel
                 Growl.Error("添加失败,请创建读取指令");
                 return;
             }
+            if(string.IsNullOrEmpty(DeviceInfoName))
+            {
+                Growl.Warning("输入信息名称");
+                return;
+            }
             if (CurrentDevice == null)
             {
                 Growl.Error($"未找到当前设备数据");
@@ -182,7 +187,7 @@ namespace DisplayBorder.ViewModel
             } 
             deviceInfo = new DeviceInfo( )
             {
-                DeviceID = DeviceId,
+                DeviceID = CurrentDevice.DeviceId,
                 Operation = operation,
                 DeviceInfoID = DeviceInfoId,
                 DeviceInfoName = DeviceInfoName,
@@ -194,6 +199,11 @@ namespace DisplayBorder.ViewModel
                 CurrentDevice.DeviceInfos = Infos.ToList();
             }
             Growl.Success($"添加'{deviceInfo.DeviceInfoID}','{deviceInfo.DeviceInfoName}'设备信息成功!");
+
+            Operation = null;
+            RefreshInterval= DeviceInfoId =DeviceId = 0;
+            DeviceInfoName = string.Empty;
+
         }
     }
 }

@@ -41,7 +41,7 @@ namespace DeviceConfig
         /// <summary>
         /// 获取信息的连接方式
         /// </summary> 
-        [JsonConverter(typeof(PolyConverter))]
+        [JsonIgnore]
         public ConnectionConfigBase ConnConfig
         {
             get

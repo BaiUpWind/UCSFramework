@@ -22,7 +22,7 @@ namespace CommonApi.DBHelper
             { 
                 if (_DBConnectionObj == null)
                 {
-                    _DBConnectionObj = new OracleConnection(_ConnStr);
+                    _DBConnectionObj = new OracleConnection(ConnStr);
                 }
                 return _DBConnectionObj;
             }
@@ -56,7 +56,7 @@ namespace CommonApi.DBHelper
         { 
             string sql = string.Format("select * from {0}", ds.Tables[0].TableName); //必须与ds中的一致
             System.Data.DataTable dt = ds.Tables[0];
-            OracleConnection conn = new OracleConnection(_ConnStr);
+            OracleConnection conn = new OracleConnection(ConnStr);
             OracleCommand cmd = new OracleCommand(sql, conn);
             conn.Open();
             OracleDataAdapter da = new OracleDataAdapter(cmd);

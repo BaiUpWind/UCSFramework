@@ -21,9 +21,9 @@ namespace CommonApi.DBHelper
     {
         public DBUnitiyBase(string connStr)
         {
-            _ConnStr = connStr;
+            ConnStr = connStr;
         }
-        protected string _ConnStr { get; set; }
+        public string ConnStr { get; set; }
         protected abstract DbConnection DBConnectionObj { get; }
         protected abstract DbCommand DbCommandObj { get; }
         protected abstract DbDataAdapter DbDataAdapterObj { get; }
@@ -52,7 +52,7 @@ namespace CommonApi.DBHelper
         {
             if (DBConnectionObj.State != ConnectionState.Open)
             {
-                DBConnectionObj.ConnectionString = _ConnStr;
+                DBConnectionObj.ConnectionString = ConnStr;
                 DBConnectionObj.Open();
             }
         }
@@ -266,6 +266,28 @@ namespace CommonApi.DBHelper
         #endregion
 
         #region DataSetToEntity&List
+
+
+        /// <summary>
+        /// dataTable 转list
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public List<Dictionary<string, object>> DatatoTable(DataTable dt)
+        {
+
+            List<Dictionary<string, object>> list = new List<Dictionary<string, object>>();
+            foreach (DataRow dr in dt.Rows)//每一行信息，新建一个Dictionary<string,object>,将该行的每列信息加入到字典
+            {
+                Dictionary<string, object> result = new Dictionary<string, object>();
+                foreach (DataColumn dc in dt.Columns)
+                {
+                    result.Add(dc.ColumnName, dr[dc].ToString());
+                }
+                list.Add(result);
+            }
+            return list;
+        }
         /// <summary>
         /// DataSet转换为实体类
         /// </summary>

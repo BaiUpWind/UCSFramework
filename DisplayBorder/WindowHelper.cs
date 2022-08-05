@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Window = System.Windows.Window;
 
 namespace DisplayBorder
 {
@@ -18,7 +19,7 @@ namespace DisplayBorder
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="OnScusses"></param>
-        public static void GetObject<T>(Action<T> OnScusses,params object[] para) where T : class
+        public static void GetObject<T>(Action<T> OnScusses,Window owner= null,params object[] para) where T : class
         {
 
             var cbw = SingleOpenHelper.CreateControl<ComboBoxLinked>();
@@ -28,6 +29,7 @@ namespace DisplayBorder
                 AllowsTransparency = true,
                 WindowStyle = WindowStyle.None,
                 ResizeMode = ResizeMode.NoResize,
+                Owner = owner,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 MinWidth = 0,
                 MinHeight = 0,

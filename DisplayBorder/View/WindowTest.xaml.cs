@@ -29,6 +29,7 @@ namespace DisplayBorder.View
         public WindowTest()
         {
             InitializeComponent();
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -46,7 +47,7 @@ namespace DisplayBorder.View
             WindowHelper.GetObject<OperationBase>((obj) =>
             {
                 Growl.Info($"创建成功!{obj.GetType().Name}");
-            }, new DataBaseConnectCfg());
+            }, para: new DataBaseConnectCfg());
         }
     }
 }

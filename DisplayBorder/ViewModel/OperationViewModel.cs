@@ -13,25 +13,29 @@ namespace DisplayBorder.ViewModel
 {
     public class OperationViewModel : ViewModelBase
     {
-        public OperationViewModel(OperationBase operation)
+        public OperationViewModel(OperationBase operation,  DeviceInfo info )
         {
-            this.operation = operation;
+            this.operation = operation; 
+            this.info = info;
         }
         private OperationBase operation;
-        private ConnectionConfigBase conn = null; 
+        private ConnectionConfigBase conn = null;
         private CommandBase command;
-
-
+        private DeviceInfo info; 
         public OperationBase Operation
         {
-            get => operation; set { operation = value;
+            get => operation; set
+            {
+                operation = value;
                 RaisePropertyChanged(nameof(OpertaionName));
             }
 
         }
         public CommandBase Command
         {
-            get => command; set { command = value;
+            get => command; set
+            {
+                command = value;
                 RaisePropertyChanged(nameof(CommandName));
             }
 
@@ -45,10 +49,19 @@ namespace DisplayBorder.ViewModel
             }
         }
 
-        public string ConnName  => Conn == null ? "点击创建" : Conn.GetType().Name; 
-        public string OpertaionName =>   Operation == null ? "点击创建": Operation.GetType().Name;
+        public int RefreshInterval
+        {
+            get => info.RefreshInterval; set
+            {
+                info.RefreshInterval = value; 
+                RaisePropertyChanged();
+            }
+        }
+
+        public string ConnName => Conn == null ? "点击创建" : Conn.GetType().Name;
+        public string OpertaionName => Operation == null ? "点击创建" : Operation.GetType().Name;
         public string CommandName => Command == null ? "点击创建" : Command.GetType().Name;
-         
+
 
     }
 }

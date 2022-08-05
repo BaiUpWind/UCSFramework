@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace DeviceConfig
 {
+    /*
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, Inherited = false, AllowMultiple = false)]
     public sealed class LabelAttribute : ControlBaseAttribute
@@ -126,5 +127,5 @@ namespace DeviceConfig
         public readonly bool enable;
         public readonly bool readOnly;
     }
-
+    */
 }

@@ -44,13 +44,7 @@ namespace DisplayBorder.View
                 {
                     if (btn.Content.ToString() == "删除")
                     {
-                        int groupID = group.GroupID;
-                        //MessageBox.Show(new MessageBoxInfo()
-                        //{
-                        //    Button = MessageBoxButton.YesNo,
-                        //    Caption = "警告",
-                        //    StyleKey = "确定删除?", 
-                        //}) ;
+                        int groupID = group.GroupID; 
                         var result = MessageBox.Ask($"确定删除'{groupID}'?", "警告");
                         if (result == MessageBoxResult.OK)
                         {
@@ -61,26 +55,8 @@ namespace DisplayBorder.View
                         else
                         {
                             Growl.Warning($"取消删除");
-                        }
-                        //var picker = SingleOpenHelper.CreateControl<ColorPicker>();
-                        //var window = new PopupWindow
-                        //{
-                        //    PopupElement = picker,
-                        //    WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                        //    AllowsTransparency = true,
-                        //    WindowStyle = WindowStyle.None,
-                        //    MinWidth = 0,
-                        //    MinHeight = 0,
-                        //    Title ="提示"
-                        //};
-                        //picker.SelectedColorChanged += delegate { window.Close(); };
-                        //picker.Canceled += delegate { window.Close(); };
-                        //window.Show(); 
-                    }
-                    else if (btn.Content.ToString() == "编辑")
-                    { 
-                     
-                    }
+                        } 
+                    } 
                 } 
                 else
                 {

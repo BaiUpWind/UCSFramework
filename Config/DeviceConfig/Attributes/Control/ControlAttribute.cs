@@ -22,7 +22,7 @@ namespace DeviceConfig
         /// <param name="ReadOnly"></param>
         /// <param name="Visable"></param>
         /// <param name="Items">当选择类型'<see cref="ControlType.ComboBox"/>'时，传入对应的项集合</param>
-        public ControlAttribute(string Name, ControlType ControlType, bool Enable =true, bool ReadOnly =false, bool Visable = true,object[] Items = null,Type EnumType = null) : base(Name)
+        public ControlAttribute(string Name,string LabelName, ControlType ControlType, bool Enable =true, bool ReadOnly =false, bool Visable = true,object[] Items = null,Type EnumType = null) : base(Name)
         {
             this.controlType = ControlType;
             this.visable = Visable;
@@ -31,6 +31,7 @@ namespace DeviceConfig
             readOnly = ReadOnly;
             items = Items;
             enumType = EnumType;
+            labelName = LabelName;
         }
 
         private readonly ControlType controlType;
@@ -39,6 +40,7 @@ namespace DeviceConfig
         private readonly bool readOnly;
         private readonly object[] items;
         private readonly Type enumType;
+        private readonly string labelName;
         public ControlType ControlType { get => controlType; } 
         /// <summary>
         /// 是否可见的 
@@ -56,5 +58,7 @@ namespace DeviceConfig
         public object[] Items => items;
 
         public Type EnumType => enumType;
+
+        public string LabelName => labelName;
     }
 }

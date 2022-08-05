@@ -1,5 +1,6 @@
 ﻿using CommonApi;
 using Newtonsoft.Json;
+using System;
 
 namespace DeviceConfig.Core
 {
@@ -15,6 +16,7 @@ namespace DeviceConfig.Core
         public OperationBase()
         {
             //defaultConn = null;
+            CreateConn();
         }
         //public OperationBase(ConnectionConfigBase defaultConn)
         //{
@@ -22,6 +24,7 @@ namespace DeviceConfig.Core
         //}
         //private readonly ConnectionConfigBase defaultConn;// 默认的连接方式 来源于设备
         private ConnectionConfigBase connectConfig;
+        private CommandBase command;
 
         /// <summary>
         /// 连接配置的基类
@@ -45,7 +48,7 @@ namespace DeviceConfig.Core
         /// <para>这里根据对应类型进行解析的指令</para>
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
-        public CommandBase Command { get; set; }
+        public CommandBase Command { get => command;  }
 
         /// <summary>
         ///  当前指令读取后返回的结果(缓存)
@@ -66,7 +69,7 @@ namespace DeviceConfig.Core
         /// </summary>
         /// <param name="command"></param>
         /// <returns></returns>
-         public abstract ResultBase Read(CommandBase command); 
+        public abstract ResultBase Read(CommandBase command);
         /// <summary>
         /// 连接
         /// </summary>
@@ -83,40 +86,71 @@ namespace DeviceConfig.Core
         /// <returns></returns>
         public virtual bool CheckConn() => true;
 
-        #region 创建连接
-        /// <summary>
-        /// 获取所有连接
-        /// <para></para>
-        /// <see cref=" Utility.Reflection.GetInheritors"/>
-        /// </summary>
-        /// <returns></returns>
-        public ClassData GetConnections() => Utility.Reflection.GetClassData<ConnectionConfigBase>();
-        /// <summary>
-        ///  创建一个连接
-        /// </summary>
-        /// <param name="name"></param> 
-        public void CreataConnection(string name) => connectConfig = Utility.Reflection.CreateObjectShortName<ConnectionConfigBase>(name);
+        public virtual void SetConn(ConnectionConfigBase conn) => connectConfig =conn;
+        private void CreateConn()
+        {
+            try
+            { 
+                object[] objAttrs = GetType().GetCustomAttributes(typeof(DependOnAttribute), true);
+                foreach (var att in objAttrs)
+                {
+                    if (att is DependOnAttribute depend)
+                    {
+                        //创建连接
+                        connectConfig = Activator.CreateInstance(depend.Conn) as ConnectionConfigBase;
+                        //创建指令
+                        command = Activator.CreateInstance(depend.Command) as CommandBase; ;
+                    }
+                }
+                if (objAttrs.Length == 0)
+                {
+                    throw new Exception($"'{GetType().FullName}'未找到依赖于标签,创建连接配置和读取配置失败!");
+                }
+            }
+            catch (Exception ex)
+            { 
+                throw  ex;
+            }
+        }
+
+     
+        #region 暂时弃用 2022年8月5日 07:49:50
+
+
+        //#region 创建连接
+        ///// <summary>
+        ///// 获取所有连接
+        ///// <para></para>
+        ///// <see cref=" Utility.Reflection.GetInheritors"/>
+        ///// </summary>
+        ///// <returns></returns>
+        //public ClassData GetConnections() => Utility.Reflection.GetClassData<ConnectionConfigBase>();
+        ///// <summary>
+        /////  创建一个连接
+        ///// </summary>
+        ///// <param name="name"></param> 
+        //public void CreataConnection(string name) => connectConfig = Utility.Reflection.CreateObjectShortName<ConnectionConfigBase>(name);
+
+        //#endregion
+
+        //#region 指令创建 
+        ///// <summary>
+        ///// 获取所有指令
+        ///// <para></para>
+        ///// <see cref=" Utility.Reflection.GetInheritors"/>
+        ///// </summary>
+        ///// <returns></returns>
+        //public ClassData GetCommands() => Utility.Reflection.GetClassData<CommandBase>( ); 
+
+        ///// <summary>
+        ///// 创建读取指令
+        ///// </summary>
+        ///// <param name="name"></param>
+        //public void CreateCommand(string name) =>  Command = Utility.Reflection.CreateObjectShortName<CommandBase>(name); 
+        //#endregion
+
 
         #endregion
-
-        #region 指令创建 
-        /// <summary>
-        /// 获取所有指令
-        /// <para></para>
-        /// <see cref=" Utility.Reflection.GetInheritors"/>
-        /// </summary>
-        /// <returns></returns>
-        public ClassData GetCommands() => Utility.Reflection.GetClassData<CommandBase>( ); 
-         
-        /// <summary>
-        /// 创建读取指令
-        /// </summary>
-        /// <param name="name"></param>
-        public void CreateCommand(string name) =>  Command = Utility.Reflection.CreateObjectShortName<CommandBase>(name); 
-        #endregion
-
- 
-
 
     }
 }

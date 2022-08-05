@@ -21,7 +21,7 @@ namespace CommonApi.DBHelper
             {
                 if(_dbConnection == null)
                 {
-                    _dbConnection = new MySqlConnection(_ConnStr);
+                    _dbConnection = new MySqlConnection(ConnStr);
                 }
                 return _dbConnection;
             }
@@ -57,7 +57,7 @@ namespace CommonApi.DBHelper
       
             string sql = string.Format("select * from {0}", ds.Tables[0].TableName); //必须与ds中的一致
             System.Data.DataTable dt = ds.Tables[0];
-            MySqlConnection conn = new MySqlConnection(_ConnStr);
+            MySqlConnection conn = new MySqlConnection(ConnStr);
             MySqlCommand cmd = new MySqlCommand(sql, conn);
             conn.Open();
             MySqlDataAdapter da = new MySqlDataAdapter(cmd); 

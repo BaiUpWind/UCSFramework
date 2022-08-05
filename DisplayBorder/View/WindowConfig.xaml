@@ -22,7 +22,7 @@
             <ColumnDefinition Width="733*"   ></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="125"></RowDefinition>
+            <RowDefinition Height="85"></RowDefinition>
             <RowDefinition Height="270*" ></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -30,13 +30,13 @@
             <Border Background="#ffffff"   Margin="5,5,5,5" CornerRadius="15" Opacity="0.1"/>
             <Grid     >
 
-                <TextBlock Text="组编号" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="22,17,0,0"   />
-                <TextBox Text="{Binding GroupID}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="66,10,0,0"  Grid.Row="0" IsReadOnly="True"   />
+                <TextBlock Text="组编号" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,17,0,0"   />
+                <TextBox Text="{Binding GroupID}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="99" Margin="51,10,0,0"  Grid.Row="0" IsReadOnly="True"   />
                 <!--<TextBox Text="{Binding GroupID}" hc:TitleElement.Foreground="White" Margin="5,0,5,0" hc:InfoElement.TitleWidth="70"    hc:InfoElement.TitlePlacement="Left"    hc:InfoElement.Title="设备编号"   hc:InfoElement.ContentHeight="14"   hc:InfoElement.Necessary="True"   Style="{StaticResource TextBoxExtend}"    />-->
-                <TextBlock Text="组名称" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="22,52,0,0"  Grid.Row="0"   />
-                <TextBox Text="{Binding GroupName}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" Margin="66,45,0,0"  Grid.Row="0"  />
+                <TextBlock Text="组名称" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,52,0,0"  Grid.Row="0" RenderTransformOrigin="0.105,0.487"   />
+                <TextBox Text="{Binding GroupName}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="99" Margin="51,45,0,0"  Grid.Row="0"  />
+                <Button Content="添加" Width="80"   HorizontalAlignment="Left" Height="30" Margin="158,45,0,0" Command="{Binding addGroup}" VerticalAlignment="Top"/>
 
-                <Button Content="添加" Width="80"   HorizontalAlignment="Left" Height="30" Margin="160,85,0,0" Command="{Binding addGroup}" VerticalAlignment="Top"/>
             </Grid>
             <!--<Grid Height="48" Width="225"    Margin="15,65,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
 
@@ -51,6 +51,14 @@
             </Grid>-->
         </Grid>
 
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Border Background="#ffffff"   Margin="5,5,5,5" CornerRadius="15" Opacity="0.1"/>
+            <Grid>
+                
+                <Button Content="保存" Width="80"  Command="{Binding saveGroup}"  HorizontalAlignment="Right" Height="30" Margin="0,0,25,0"    />
+
+            </Grid>
+        </Grid>
 
         <Grid Grid.Row="1" Grid.Column="0" >
             <Border Background="#ffffff"   Margin="5,5,5,5" CornerRadius="15" Opacity="0.1" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"/>
@@ -79,7 +87,7 @@
 
             </DataGrid>
         </Grid>
-        <Grid Grid.Row="1" Grid.Column="1"     >
+        <Grid Grid.Row="1" Grid.Column="1"  >
 
             <Border Background="#ffffff"   Margin="5,5,5,5" CornerRadius="15" Opacity="0.1" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"/>
             <local:GroupControl  HorizontalAlignment="Stretch"  x:Name="g1"  VerticalAlignment="Stretch" Margin="5,20,5,20"  />

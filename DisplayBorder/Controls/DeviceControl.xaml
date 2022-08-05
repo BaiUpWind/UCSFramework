@@ -24,7 +24,7 @@
                 <ColumnDefinition ></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="225"></RowDefinition>
+                <RowDefinition Height="135"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
 
@@ -37,22 +37,26 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Row="0"  TextAlignment="Center" Foreground="White" FontSize="15">设备信息</TextBlock>
+
                 <Grid Grid.Row="1">
                     <Border Background="#ffffff"   Margin="15,5,5,5" CornerRadius="15" Opacity="0.1"/>
-                    <StackPanel Margin="20,10,10,0" >
+                    <hc:ScrollViewer IsInertiaEnabled="True" Margin="15,10,10,10" >
+                     
+                        <StackPanel Margin="20,10,10,0" >
 
-                        <TextBlock Text="设备编号" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"    Grid.Row="0"  IsEnabled="False" />
-                        <TextBox Text="{Binding CurrentDevice.DeviceId}" IsReadOnly="True"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"    Grid.Row="0"   />
+                            <TextBlock Text="设备编号" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"    Grid.Row="0"  IsEnabled="False" />
+                            <TextBox Text="{Binding CurrentDevice.DeviceId}" IsReadOnly="True"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"    Grid.Row="0"   />
 
-                        <TextBlock Text="设备名称" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"   Grid.Row="0"  />
-                        <TextBox Text="{Binding CurrentDevice.DeviceName}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"    Grid.Row="0"   />
+                            <TextBlock Text="设备名称" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"   Grid.Row="0"  />
+                            <TextBox Text="{Binding CurrentDevice.DeviceName}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"    Grid.Row="0"   />
 
-                        <TextBlock Text="停留时间" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"   Grid.Row="0"  />
-                        <TextBox Text="{Binding CurrentDevice.StayTime}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"   Grid.Row="0"  ToolTip="信息在这个设备停留的时间"  />
+                            <TextBlock Text="停留时间" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"   Grid.Row="0"  />
+                            <TextBox Text="{Binding CurrentDevice.StayTime}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"   Grid.Row="0"  ToolTip="信息在这个设备停留的时间"  />
 
-                        <!--<TextBlock Text="默认连接方式" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0"   />
+                            <!--<TextBlock Text="默认连接方式" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0"   />
                         <Button  HorizontalAlignment="Left"   Width="182" Content="{Binding ConnName}"  Click="Btn_Click_CreateConn"   />-->
-                    </StackPanel>
+                        </StackPanel>
+                    </hc:ScrollViewer>
                 </Grid>
 
             </Grid>
@@ -86,16 +90,18 @@
 
                                     <TextBlock Text="设备信息名称" Foreground="White"  HorizontalAlignment="Left" VerticalAlignment="Center"    Grid.Row="0"  IsEnabled="False" />
                                     <TextBox Text="{Binding DeviceInfoName}"   HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"    Grid.Row="0"   />
-
-                                    <TextBlock Text="数据刷新间隔时间" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center"    Grid.Row="0"  IsEnabled="False" />
-                                    <TextBox Text="{Binding RefreshInterval}"    HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"    Grid.Row="0"   />
-
-                                    <TextBlock Text="读取指令" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"    Grid.Row="0"  IsEnabled="False" />
-                                    <Button Content="{Binding  OperationName}"  Click="Btn_Click_CreateOperation"   HorizontalAlignment="Left" VerticalAlignment="Top" Width="182"    Grid.Row="0"   />
+ 
                                 </StackPanel>
                             </Grid>
                             <Grid Grid.Column="1" Margin="15,10,0,10">
-                                
+                                <StackPanel>
+                                    <TextBlock Text="数据刷新间隔时间" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center"    Grid.Row="0"  IsEnabled="False" />
+                                    <TextBox Text="{Binding RefreshInterval}"    HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"    Grid.Row="0"   />
+
+                                    <TextBlock Text="读取操作" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"    Grid.Row="0"  IsEnabled="False" />
+                                    <Button Content="{Binding  OperationName}"  Click="Btn_Click_CreateOperation"   HorizontalAlignment="Left" VerticalAlignment="Top" Width="182"    Grid.Row="0"   />
+                                </StackPanel>
+                             
                             </Grid>
 
                             <Grid Grid.Column="2" Margin="15,10,0,10"> 
@@ -120,14 +126,19 @@
                 <Grid Grid.Row="1">
                     <Border Background="#ffffff"  Margin="5,5,15,5" CornerRadius="15" Opacity="0.1"/>
 
-                    <TextBlock x:Name="t2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Foreground="White">选择需要修改的信息</TextBlock>
+                    <TextBlock x:Name="t2" Visibility="Hidden" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Foreground="White">
+                        选择需要修改的信息配置</TextBlock>
                     <hc:TransitioningContentControl x:Name="tc">
-                        <StackPanel Margin="15,15,0,0">
+                        <Grid Margin="20">
+                            
+                            <!--<local:OperationControl x:Name="op1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>-->
+                        </Grid>
+                        <!--<StackPanel Margin="15,15,0,0">
 
-                            <!--<TextBlock Text="设备编号" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"    Grid.Row="0"  IsEnabled="False" />
+                            --><!--<TextBlock Text="设备编号" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"    Grid.Row="0"  IsEnabled="False" />
                                     <TextBox Text="{Binding CurrentDevice.DeviceId}" IsReadOnly="True"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"    Grid.Row="0"   />-->
 
-                            <TextBlock Text="设备信息编号" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center"    Grid.Row="0"  IsEnabled="False" />
+                            <!--<TextBlock Text="设备信息编号" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center"    Grid.Row="0"  IsEnabled="False" />
                             <TextBox Text="{Binding CurrenDeviceInfo.DeviceInfoID}"    HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"    Grid.Row="0"   />
 
                             <TextBlock Text="设备信息名称" Foreground="White"  HorizontalAlignment="Left" VerticalAlignment="Center"    Grid.Row="0"  IsEnabled="False" />
@@ -137,8 +148,8 @@
                             <TextBox Text="{Binding CurrenDeviceInfo.RefreshInterval}"    HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"    Grid.Row="0"   />
 
                             <TextBlock Text="读取指令" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top"    Grid.Row="0"  IsEnabled="False" />
-                            <Button Content="{Binding  CurrenDeviceInfo.Operation}"  Click="Btn_Click_CreateOperation"   HorizontalAlignment="Left" VerticalAlignment="Top" Width="240"    Grid.Row="0"   />
-                        </StackPanel>
+                            <Button Content="{Binding  CurrenDeviceInfo.Operation}"  Click="Btn_Click_CreateOperation"   HorizontalAlignment="Left" VerticalAlignment="Top" Width="240"    Grid.Row="0"   />--><!--
+                        </StackPanel>-->
                     </hc:TransitioningContentControl>
                 </Grid>
 

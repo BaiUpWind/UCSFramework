@@ -22,7 +22,7 @@
         <Grid Grid.Column="1">
 
 
-            <Controls:OperationControl HorizontalAlignment="Stretch"   VerticalAlignment="Stretch"  />
+       
 
         </Grid>
     

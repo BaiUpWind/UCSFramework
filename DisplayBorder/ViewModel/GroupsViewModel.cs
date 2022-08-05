@@ -9,18 +9,40 @@ using DeviceConfig;
 using DeviceConfig.Core;
 using HandyControl.Controls; 
 using System.Collections.ObjectModel;
+using CommonApi;
+using System.IO;
 
 namespace DisplayBorder.ViewModel
 {
     public class GroupsViewModel : ViewModelBase
     {
+
         public GroupsViewModel()
         {
-            addGroup = new RelayCommand(AddGroup); 
+            addGroup = new RelayCommand(AddGroup);
+            saveGroup = new RelayCommand(SaveGroup);
+
+
+            InitializationBase.CheckPath(InitializationBase.ConfigPath);
+            if (!File.Exists(InitializationBase.JsonFilePath))
+            {
+                File.Create(InitializationBase.JsonFilePath);
+            }
+            var result = InitializationBase.Groups;// JsonHelper.ReadJson<Group>(InitializationBase.JsonFilePath);
+            if (result != null)
+            { 
+                groups = new ObservableCollection<Group>(result);
+            }
         }
+ 
 
         public RelayCommand addGroup { get; set; } 
-  
+        
+        public RelayCommand saveGroup { get; set; }
+
+        
+
+
         private int groupID =1001; 
         private string groupName="第1001组"; 
         private ObservableCollection<Group> groups = new ObservableCollection<Group>()
@@ -86,12 +108,21 @@ namespace DisplayBorder.ViewModel
             GroupName = $"第{GroupID}组";
         }
 
+
+        private void SaveGroup()
+        {  
+            
+           //JsonHelper.WriteJson(groups, InitializationBase.JsonFilePath);
+            InitializationBase.Groups = groups;
+            Growl.Success("保存成功!");
+             
+        }
         //public bool RemoveGroup(int groupId)
         //{
         //    var result = Groups.Where(a => a.GroupID == groupId).FirstOrDefault();
         //    if (result != null)
         //    {
-              
+
         //        Groups.Remove(result);
         //        return true;
         //    }

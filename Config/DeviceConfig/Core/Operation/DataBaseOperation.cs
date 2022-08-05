@@ -1,9 +1,12 @@
 ﻿using CommonApi.DBHelper;
 using System;
+using System.Collections.Generic;
 
 namespace DeviceConfig.Core
 {
 
+
+    [DependOn(typeof(DataBaseConnectCfg) ,typeof(SQLCmd))]
     public sealed class DataBaseOperation : OperationBase
     {
       
@@ -11,7 +14,7 @@ namespace DeviceConfig.Core
         {
             if (ConnectConfig is DataBaseConnectCfg dataBase)
             {
-                switch (int.Parse(dataBase.DbType))
+                switch ( dataBase.DbType )
                 {
                     case 0:
                         db = new OracleHelp(dataBase.GetConnStr());
@@ -25,7 +28,7 @@ namespace DeviceConfig.Core
                 }
                 return;
             }
-            //throw new ArgumentException("创建数据库操作实例失败!");
+           throw new ArgumentException("创建数据库操作实例失败!");
         }
        private readonly  DBUnitiyBase db;
         public override bool Connect()
@@ -54,9 +57,28 @@ namespace DeviceConfig.Core
 
         public override ResultBase Read(CommandBase command)
         {
-            db.GetDataTable(command.CommandStr, System.Data.CommandType.Text);
+            if (command is SQLCmd cmd)
+            {
+
+                var data = db.DatatoTable(db.GetDataTable(cmd.Sql, System.Data.CommandType.Text));
+                //var  data1 = db.GetDataSet(cmd.Sql, System.Data.CommandType.Text);
+                //var data2 = db.GetDataReader(cmd.Sql, System.Data.CommandType.Text); 
+                command.Result.Tables = data;
+                command.Result.Data = db.GetDataTable(cmd.Sql, System.Data.CommandType.Text);
+            }
 
             return command.Result;
         }
+
+        public override void SetConn(ConnectionConfigBase conn)
+        {
+            base.SetConn(conn);
+            if (conn is DataBaseConnectCfg dbconn)
+            { 
+                db.ConnStr = dbconn.GetConnStr();
+            }
+        }
+
+      
     }
 }

@@ -80,6 +80,7 @@ namespace DisplayBorder.View
                         if (result == MessageBoxResult.OK)
                         {
                             groupViewModel.CurrentGroup.DeviceConfigs.Remove(device);
+                            groupViewModel.Devices.Remove(device);
                             Growl.Success($"'{deviceID}'删除成功"); 
                         }
                         else

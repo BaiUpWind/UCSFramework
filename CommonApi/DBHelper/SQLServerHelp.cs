@@ -19,7 +19,7 @@ namespace CommonApi.DBHelper
             {
                 if(_sqlConnection == null)
                 {
-                    _sqlConnection = new SqlConnection(_ConnStr);
+                    _sqlConnection = new SqlConnection(ConnStr);
                 }
                 return _sqlConnection;
             }
@@ -53,7 +53,7 @@ namespace CommonApi.DBHelper
         { 
             string sql = string.Format("select * from {0}", ds.Tables[0].TableName); //必须与ds中的一致
             DataTable dt = ds.Tables[0];
-            SqlConnection conn = new SqlConnection(_ConnStr);
+            SqlConnection conn = new SqlConnection(ConnStr);
             SqlCommand cmd = new SqlCommand(sql, conn);
             conn.Open();
             SqlDataAdapter da = new SqlDataAdapter(cmd);

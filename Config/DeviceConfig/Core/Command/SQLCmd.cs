@@ -8,7 +8,11 @@ namespace  DeviceConfig.Core
 {
     public class SQLCmd : CommandBase
     {
-
-        public string Sql { get; set; } = "select * from";
+        public SQLCmd()
+        {
+            Result = new SQLResult();
+        }
+        [Control("Sql","SQL", ControlType.TextBox)]
+        public string Sql { get; set; } = "select * from controluser";
     }
 }

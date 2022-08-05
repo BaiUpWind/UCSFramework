@@ -6,13 +6,15 @@ namespace DeviceConfig.Core
     /// <summary>
     /// 西门子读取指令
     /// </summary>
-    public sealed class SeimensOperation : PLCOperation
+    [DependOn(typeof(SiemensConnectCfg),typeof(SiemensCmd))]
+    public sealed class SiemensOperation : PLCOperation
     {
-        public SeimensOperation()  
+        public SiemensOperation()  
         {
             if (ConnectConfig is SiemensConnectCfg siemens)
             {
                 splc = new SiemensPlc(siemens.SiemensSelected, siemens.IP, siemens.Port, siemens.Rack, siemens.Slot);
+                return;
             }
             throw new Exception("错误的PLC配置类型");
         }

@@ -48,8 +48,8 @@
     <Compile Include="DeviceConfig\Attributes\ConfigBaseAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\Control\ControlAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\ConnectedTypeAttribute.cs" />
+    <Compile Include="DeviceConfig\Attributes\DependOnAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\LabelAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\PLC\PLCTypeAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\Control\ReadOnlyAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\Control\ShowIfAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\ShowWindowAttribute.cs" />
@@ -69,11 +69,11 @@
     <Compile Include="DeviceConfig\Model\Group.cs" />
     <Compile Include="DeviceConfig\Define\PublicEnum.cs" />
     <Compile Include="DeviceConfig\Model\Device.cs" />
-    <Compile Include="DeviceConfig\Operation\OperationBase.cs" />
-    <Compile Include="DeviceConfig\Operation\DataBaseOperation.cs" />
+    <Compile Include="DeviceConfig\Core\Operation\OperationBase.cs" />
+    <Compile Include="DeviceConfig\Core\Operation\DataBaseOperation.cs" />
     <Compile Include="DeviceConfig\CreateFactory.cs" />
-    <Compile Include="DeviceConfig\Operation\PLCOperation.cs" />
-    <Compile Include="DeviceConfig\Operation\SeimensOperation.cs" />
+    <Compile Include="DeviceConfig\Core\Operation\PLCOperation.cs" />
+    <Compile Include="DeviceConfig\Core\Operation\SiemensOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
