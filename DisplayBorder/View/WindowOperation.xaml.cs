@@ -2,6 +2,7 @@
 using DeviceConfig.Core;
 using DisplayBorder.ViewModel;
 using HandyControl.Controls;
+using HandyControl.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -33,7 +34,7 @@ namespace DisplayBorder.View
             InitializeComponent();
             uniforms[0] = sv1;
             uniforms[1] = sv2;
-            gogogog = TryConn;
+            Growl.SetGrowlParent(this, true);
         }
 
         private OperationViewModel operationView;
@@ -84,19 +85,15 @@ namespace DisplayBorder.View
        
         //测试连接
         private void Btn_Click_TestConn(object sender, RoutedEventArgs e)
-        {
-
-            Dispatcher.BeginInvoke( System.Windows.Threading.DispatcherPriority.ContextIdle, gogogog);
-
-        }
-
-        private Action gogogog;
+        { 
+            TryConn(); 
+        } 
 
         private void TryConn()
         {
             if (operationView.Operation.ConnectConfig == null)
             {
-                Growl.WarningGlobal("创建连接先!");
+                Growl.Warning("创建连接先!");
                 return;
             }
 
@@ -105,12 +102,14 @@ namespace DisplayBorder.View
                 operationView.Operation.SetConn(operationView.Operation.ConnectConfig);
                 var result = operationView.Operation.Connect();
 
-                Growl.InfoGlobal($"连接{(result ? "成功" : "失败")}");
+                Growl.Info($"连接{(result ? "成功" : "失败")}");
+
+             
 
             }
             catch (Exception ex)
             {
-                Growl.ErrorGlobal($"连接失败,出现错误'{ex.Message}'");
+                Growl.Error($"连接失败,出现错误'{ex.Message}'");
             }
             finally
             {
@@ -168,7 +167,7 @@ namespace DisplayBorder.View
                         if (att is ControlAttribute conattr)
                         {
                             TextBlock textBlock = new TextBlock();
-                            textBlock.Text = conattr.Name;
+                            textBlock.Text = conattr.LabelName;
 
                             switch (conattr.ControlType)
                             {
