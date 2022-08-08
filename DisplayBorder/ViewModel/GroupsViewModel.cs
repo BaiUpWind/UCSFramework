@@ -23,12 +23,12 @@ namespace DisplayBorder.ViewModel
             saveGroup = new RelayCommand(SaveGroup);
 
 
-            InitializationBase.CheckPath(InitializationBase.ConfigPath);
-            if (!File.Exists(InitializationBase.JsonFilePath))
+            GlobalPara.CheckPath(GlobalPara.ConfigPath);
+            if (!File.Exists(GlobalPara.GroupsFilePath))
             {
-                File.Create(InitializationBase.JsonFilePath);
+                File.Create(GlobalPara.GroupsFilePath);
             }
-            var result = InitializationBase.Groups;// JsonHelper.ReadJson<Group>(InitializationBase.JsonFilePath);
+            var result = GlobalPara.Groups;// JsonHelper.ReadJson<Group>(InitializationBase.JsonFilePath);
             if (result != null)
             { 
                 groups = new ObservableCollection<Group>(result);
@@ -113,7 +113,7 @@ namespace DisplayBorder.ViewModel
         {  
             
            //JsonHelper.WriteJson(groups, InitializationBase.JsonFilePath);
-            InitializationBase.Groups = groups;
+            GlobalPara.Groups = groups;
             Growl.Success("保存成功!");
              
         }

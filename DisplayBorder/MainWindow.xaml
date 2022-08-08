@@ -6,103 +6,617 @@
         xmlns:local="clr-namespace:DisplayBorder"
         xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="DisplayBorder.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1080" Width="1920">
+        d:DesignHeight="1080" d:DesignWidth="1920"  
+        MinWidth="800" MinHeight="600"
+        Title="MainWindow" Height="600" Width="800" SizeChanged="Window_SizeChanged">
+
+    <Window.Resources>
+        <!--静态资源-->
+        <ImageBrush x:Key="leftImage" ImageSource="images/leftImage.png"/>
+        <ImageBrush x:Key="leftImageSub" ImageSource=" images/leftImageSub.png"/>
+        <ImageBrush x:Key="topImage" ImageSource=" images/topImage.png"/>
+
+        <!--下拉列表样式-->
+        <Style x:Key="ToggleButtonStyle" TargetType="{x:Type ToggleButton}">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="Height" Value="80" />
+            <Setter Property="HorizontalContentAlignment" Value="Right"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="10 10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Grid>
+                            <Border x:Name="border2"   Background="{TemplateBinding Background}"  
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                     Margin="{TemplateBinding Padding}" 
+                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                     Margin="{TemplateBinding Padding}" 
+                     RecognizesAccessKey="True" 
+                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                     VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" Value="#FFd2e7f4" />
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Background" TargetName="border2" Value="{StaticResource ResourceKey=leftImage}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="false">
+                                <Setter Property="Background" TargetName="border2" Value="#191E36"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ExpanderStyle" TargetType="{x:Type Expander}">
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Expander}">
+                        <DockPanel>
+                            <ToggleButton x:Name="HeaderSite" ContentTemplate="{TemplateBinding HeaderTemplate}" 
+                                              ContentTemplateSelector="{TemplateBinding HeaderTemplateSelector}" 
+                                              Content="{TemplateBinding Header}" DockPanel.Dock="Top" 
+                                              Foreground="{TemplateBinding Foreground}" 
+                                              FontWeight="{TemplateBinding FontWeight}" 
+                                              FontStyle="{TemplateBinding FontStyle}" FontStretch="{TemplateBinding FontStretch}" 
+                                              FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}" 
+                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource 
+                                    TemplatedParent}}" Margin="1" MinWidth="0" MinHeight="0" Padding="{TemplateBinding Padding}"
+                                              Style="{StaticResource ToggleButtonStyle}"
+                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            <ContentPresenter x:Name="ExpandSite" DockPanel.Dock="Left" Focusable="false" 
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                                  Margin="{TemplateBinding Padding}" Visibility="Collapsed" 
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </DockPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsExpanded" Value="true">
+                                <Setter Property="Visibility" TargetName="ExpandSite" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--顶部单选按钮样式-->
+        <Style x:Key="RadioButtonStyle" TargetType="{x:Type RadioButton}">
+            <Setter Property="Width" Value="180"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Foreground" Value="#4B8EC4"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="MinHeight" Value="50"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
+                            <Border x:Name="border2"/>
+                            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              Content="{TemplateBinding Content}" Grid.Column="1" 
+                                              ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasContent" Value="True">
+                                <Setter Property="FocusVisualStyle">
+                                    <Setter.Value>
+                                        <Style>
+                                            <Setter Property="Control.Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+                                                        <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="True" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Padding" Value="4,-1,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}"/>
+
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Background" TargetName="border2" Value="{StaticResource ResourceKey=topImage}">
+                                    <!--<Setter.Value>
+                                        <ImageBrush ImageSource="./images/back.png" />
+                                    </Setter.Value>-->
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="false">
+                                <Setter Property="Background" TargetName="border2" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#4B8EC4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
+            <Setter Property="Background" Value="#FF0D1128"></Setter>
+            <Setter Property="Opacity" Value="1"/>
+            <Setter Property="CornerRadius"  Value="25"/>
+            <Setter Property="BorderBrush" Value="#144aad"/>
+            <Setter Property="BorderThickness" Value="2"/>
+        </Style>
+
+        <!--左侧下拉列表明细单选按钮样式-->
+        <Style x:Key="RadioMiniButtonStyle" TargetType="{x:Type RadioButton}">
+            <Setter Property="Margin" Value="5 5 1 5"/>
+            <Setter Property="FontSize" Value="22"/>
+            <Setter Property="Foreground" Value="#4B8EC4"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="#101F3F"/>
+            <Setter Property="MinHeight" Value="50"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RadioButton}">
+                        <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
+                            <Border x:Name="border2"/>
+                            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              Content="{TemplateBinding Content}" 
+                                              ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasContent" Value="True">
+                                <Setter Property="FocusVisualStyle">
+                                    <Setter.Value>
+                                        <Style>
+                                            <Setter Property="Control.Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate>
+                                                        <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="True" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Padding" Value="4,-1,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}"/>
+
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="Background" TargetName="border2" Value="{StaticResource ResourceKey=leftImageSub}">
+                                    <!--<Setter.Value>
+                                        <ImageBrush ImageSource="./images/back.png" />
+                                    </Setter.Value>-->
+                                </Setter>
+                            </Trigger>
+
+                            <Trigger Property="IsChecked" Value="false">
+                                <Setter Property="Background" TargetName="border2" Value="#101F3F"/>
+                                <Setter Property="Foreground" Value="#4B8EC4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
     <Grid>
         <Canvas Grid.ColumnSpan="2">
             <Canvas.Background>
                 <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                    <GradientStop Offset="0" Color="#232882"/>
-                    <GradientStop Offset="1" Color="#FF004E83"/>
+                    <GradientStop Offset="0" Color="#FF102130"/>
+                    <GradientStop Offset="1" Color="#FF141364"/>
                 </LinearGradientBrush>
             </Canvas.Background>
         </Canvas>
+
         <hc:TransitioningContentControl>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="175"></RowDefinition>
+                    <RowDefinition Height="80"></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <!--导航条-->
                 <Grid Grid.Row="0">
-                    <!--<Grid.ColumnDefinitions>
+                    <Grid.ColumnDefinitions>
                         <ColumnDefinition ></ColumnDefinition>
-                        <ColumnDefinition Width="3*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>-->
-                    <Image Source="/头部.png" />
-                    <Button Height="24" Width="118" HorizontalAlignment="Left" Margin="698,119,0,0" VerticalAlignment="Top"></Button>
-                    <!--<Border   Margin="5" Background="#FF35C7E9" Opacity="0.25" Grid.Column="1"/>-->
+                        <ColumnDefinition Width="2.5*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
 
+                    <!--标题处-->
+                    <Border Grid.Row="1" BorderThickness="1"  BorderBrush="#121F40">
+                        <Border.Background>
+                            <ImageBrush ImageSource="images/leftback.png"/>
+                        </Border.Background>
+                    </Border>
+                    <!--导航栏背景图片-->
+                    <Border Grid.Column="1" Grid.ColumnSpan="2" BorderBrush="#121F40" BorderThickness="1 0 1 1">
+                        <Border.Background>
+                            <ImageBrush ImageSource="images/topback.png"/>
+                        </Border.Background>
+                    </Border>
+                    <Border BorderThickness="1 1 1 0"  BorderBrush="#121F40"/>
+
+                    <!--标题-->
+                    <TextBlock Text="数据监控" Foreground="White" 
+                       FontFamily="fonts/#iconfont"
+                       FontSize="26" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Color="#7EFFFF"  Direction="0" ShadowDepth="0"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+
+                    <!--顶部导航栏-->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <RadioButton  Style="{StaticResource RadioButtonStyle}" Click="RadioButton_Click">
+                            <TextBlock Text="监控中心"  />
+                        </RadioButton>
+                        <RadioButton  Style="{StaticResource RadioButtonStyle}">
+                            <TextBlock Text="系统配置"  />
+                        </RadioButton>
+                    </StackPanel>
+
+                    <!--按钮-->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right"   >
+                        <!--<Button  Foreground="#9A9CA7" FontSize="18" Width="120" Height="50" 
+                             Margin="10 0 10 0"  BorderThickness="0">
+                            <Button.Background>
+                                <ImageBrush ImageSource="images/buttonImage.png"/>
+                            </Button.Background>
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    -->
+                        <!--<TextBlock Text="&#xe61a;" VerticalAlignment="Center" FontFamily="fonts/#iconfont"/>-->
+                        <!--
+                                    <TextBlock Text="口" Margin="5 0 0 0"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>-->
+                        <Button  Foreground="#9A9CA7" FontSize="18" 
+                    Width="120" Height="50" BorderThickness="0">
+                            <Button.Background>
+                                <ImageBrush ImageSource="images/buttonImage.png"/>
+                            </Button.Background>
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#xe618;" VerticalAlignment="Center" FontFamily="fonts/#iconfont"/>
+                                    <TextBlock Text="退出" Margin="5 0 0 0"/>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
                 </Grid>
-
                 <!--显示界面-->
                 <Grid Grid.Row="1"  >
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="145"></RowDefinition>
+                        <RowDefinition Height="1*" ></RowDefinition>
                         <RowDefinition ></RowDefinition>
-                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition ></RowDefinition>
                     </Grid.RowDefinitions>
+
+
 
                     <!--组信息显示-->
                     <Grid Grid.Row="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition ></ColumnDefinition>
-                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                            <ColumnDefinition  ></ColumnDefinition>
+                            <ColumnDefinition  ></ColumnDefinition>
+                            <ColumnDefinition  ></ColumnDefinition>
                         </Grid.ColumnDefinitions>
 
-                        <hc:ScrollViewer Orientation="Horizontal" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"  IsInertiaEnabled="True" Margin="15" Grid.Column="0">
 
-                            <StackPanel Orientation="Horizontal"  >
-                                <Button Width="80" Height="80" Margin="5">组1</Button>
-                                <Button Width="80" Height="80" Margin="5">组1</Button>
-                                <Button Width="80" Height="80" Margin="5">组1</Button>
-                                <Button Width="80" Height="80" Margin="5">组1</Button>
-                                <Button Width="80" Height="80" Margin="5">组1</Button>
-                                <Button Width="80" Height="80" Margin="5">组1</Button>
-                                <Button Width="80" Height="80" Margin="5">组1</Button>
-                                <Button Width="80" Height="80" Margin="5">组1</Button>
-                                <Button Width="80" Height="80" Margin="5">组1</Button>
-                                <Button Width="80" Height="80" Margin="5">组1</Button>
-                                <Button Width="80" Height="80" Margin="5">组1</Button>
-                                <Button Width="80" Height="80">组2</Button>
-                            </StackPanel>
-                        </hc:ScrollViewer>
+                        <!--系统信息-->
+                        <Border Background="#5b8dec" Margin="50 20 50 20" Opacity="1">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#5b8dec" ShadowDepth="10" BlurRadius="50" Opacity="0.8" Direction="270"/>
+                            </Border.Effect>
+                        </Border>
+                        <Border   Margin="14"    Style="{StaticResource  BorderStyle}"  />
+                        <TextBlock  Foreground="#2d6ee6" Text="系统信息"  FontSize="{ DynamicResource TitleFontSize}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,25,0,0"></TextBlock>
+                        <Grid Grid.Row="0">
 
-                        <Grid Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
 
+                            <Grid Grid.Column="0">
+                                <StackPanel Margin="15" VerticalAlignment="Stretch" Grid.Column="0">
+                                    <TextBlock  Foreground="#2d6ee6"   FontSize="{ DynamicResource TitleFontSize}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,25,0,0"></TextBlock>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >组总数量</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >3</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >设备总数</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >14</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >当前状态</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >运行中</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >设备总数</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >6</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >其他信息</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >采集中</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >设备总数</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >244</TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
 
-                            <Border   Margin="10 0 10 0" Background="#FF35C7E9" Opacity="0.25">
-                                <Grid>
-
-
-                                </Grid>
-                            </Border>
+                            <Grid Grid.Column="1">
+                                <StackPanel Margin="15"    >
+                                    <TextBlock  Foreground="#2d6ee6"   FontSize="{ DynamicResource TitleFontSize}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,25,0,0"></TextBlock>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >总数量1</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >3</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >设备总数1</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >14</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >当前状态1</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >运行中</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >设备总数1</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >6</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >其他信息1</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >采集中</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >设备总数1</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >244</TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
                         </Grid>
 
+
+
+                        <!--组的轮询-->
+                        <Border Background="#5b8dec" Margin="50 20 50 20" Opacity="1" Grid.Column="1">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#5b8dec" ShadowDepth="10" BlurRadius="50" Opacity="0.8" Direction="270"/>
+                            </Border.Effect>
+                        </Border>
+                        <Border   Margin="14"    Style="{StaticResource  BorderStyle}" Grid.Column="1" />
+                        <TextBlock Grid.Column="1"  Foreground="#2d6ee6" Text="组信息轮询"  FontSize="{ DynamicResource TitleFontSize}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,25,0,0"></TextBlock>
+
+                        <Grid Grid.Column="1"  >
+                            <StackPanel Margin="35"   HorizontalAlignment="Stretch" VerticalAlignment="Stretch"   >
+                                <TextBlock Grid.Column="1"  Foreground="#2d6ee6"   FontSize="{ DynamicResource TitleFontSize}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,25,0,0"></TextBlock>
+
+                                <hc:ScrollViewer  Orientation="Horizontal" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Hidden" IsInertiaEnabled="True">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Border Style="{StaticResource BorderRegion}" Width="100" Height="100" Margin="10,10,32,10">
+                                            <Border Background="{DynamicResource PrimaryBrush}">
+                                                <TextBlock Text="组1" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                                            </Border>
+                                        </Border>
+                                        <Border Style="{StaticResource BorderRegion}" Width="100" Height="100" Margin="10,10,32,10">
+                                            <Border Background="{DynamicResource PrimaryBrush}">
+                                                <TextBlock Text=" 组2" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                                            </Border>
+                                        </Border>
+                                        <Border Style="{StaticResource BorderRegion}" Width="100" Height="100" Margin="10,10,32,10">
+                                            <Border Background="{DynamicResource PrimaryBrush}">
+                                                <TextBlock Text=" 组3" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                                            </Border>
+                                        </Border>
+                                        <Border Style="{StaticResource BorderRegion}" Width="100" Height="100" Margin="10,10,32,10">
+                                            <Border Background="{DynamicResource PrimaryBrush}">
+                                                <TextBlock Text=" 组4" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                                            </Border>
+                                        </Border>
+                                        <Border Style="{StaticResource BorderRegion}" Width="100" Height="100" Margin="10,10,32,10">
+                                            <Border Background="{DynamicResource PrimaryBrush}">
+                                                <TextBlock Text=" 组5" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                                            </Border>
+                                        </Border>
+
+                                    </StackPanel>
+                                </hc:ScrollViewer>
+                                <!--<hc:ScrollViewer  VerticalAlignment="Stretch"   HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible"  IsInertiaEnabled="True" Margin="15"  >
+
+                                    <StackPanel Orientation="vertical" > 
+                                        <StackPanel Orientation="Horizontal" >
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" >
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                            <Button Width="80" Height="80" Margin="5">组1</Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </hc:ScrollViewer>-->
+                            </StackPanel>
+                        </Grid>
+
+                        <Border Background="#5b8dec" Margin="50 20 50 20" Opacity="1" Grid.Column="2">
+                            <Border.Effect>
+                                <DropShadowEffect Color="#5b8dec" ShadowDepth="10" BlurRadius="50" Opacity="0.8" Direction="270"/>
+                            </Border.Effect>
+                        </Border>
+                        <Border   Margin="14"    Style="{StaticResource  BorderStyle}" Grid.Column="2" />
+                        <TextBlock Grid.Column="2"  Foreground="#2d6ee6" Text="当前组信息"  FontSize="{ DynamicResource TitleFontSize}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,25,0,0"></TextBlock>
+                        <!--当前组信息-->
+                        <Grid Grid.Column="2">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <Grid Grid.Column="0">
+                                <StackPanel Margin="15" VerticalAlignment="Stretch" Grid.Column="0">
+                                    <TextBlock  Foreground="#2d6ee6"   FontSize="{ DynamicResource TitleFontSize}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,25,0,0"></TextBlock>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >组编号</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >1001</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >组名称</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >第一小组</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >设备总数</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >25</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >当前正在采集</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >6号设备</TextBlock>
+                                    </StackPanel>
+                                    <!--<StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >其他信息</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >采集中</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >设备总数</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >244</TextBlock>
+                                    </StackPanel>-->
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid Grid.Column="1">
+                                <StackPanel Margin="15"    >
+                                    <TextBlock  Foreground="#2d6ee6"   FontSize="{ DynamicResource TitleFontSize}" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,25,0,0"></TextBlock>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >总数量1</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >3</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >设备总数1</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >14</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >当前状态1</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >运行中</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >设备总数1</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >6</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >其他信息1</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >采集中</TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="15,5,0,0">
+                                        <TextBlock  Foreground="#c4d6f8" VerticalAlignment="Center" FontSize="{ DynamicResource GridFontSize}" >设备总数1</TextBlock>
+                                        <TextBlock  Foreground="#d1dffa" Margin="15,0,0,0"   FontSize="{ DynamicResource GridFontSize}"  VerticalAlignment="Center" >244</TextBlock>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+
+                        </Grid>
                     </Grid>
 
                     <!--组内设备-->
-                    <Border   Margin="5" Background="#FF35C7E9" Opacity="0.25" Grid.Row="1" />
-                    <Grid Grid.Row="1" ShowGridLines="True">
+                    <Grid Grid.Row="1" ShowGridLines="True"  >
+
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition   Width="2*"></ColumnDefinition>
                             <ColumnDefinition></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                            <RowDefinition></RowDefinition>
-                        </Grid.RowDefinitions>
+
+                        <!--当前设备信息-->
+                        <Border   Margin="15" Style="{StaticResource  BorderStyle}"  Grid.Column="1" />
+                        <Grid Grid.Column="1">
+
+
+                        </Grid>
+
+                        <!--当前组的设备总数-->
+                        <Grid>
+                            <Border  Margin="14"    Style="{StaticResource  BorderStyle}"   />
+                            <StackPanel>
+                                <TextBlock Grid.Column="2"  Foreground="#2d6ee6" Text="当前组所有设备"  FontSize="{ DynamicResource TitleFontSize}" VerticalAlignment="Stretch" HorizontalAlignment="Center" Margin="0,25,0,0"></TextBlock>
+
+                                <Grid HorizontalAlignment="Stretch"  ShowGridLines="True"  VerticalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                        <ColumnDefinition></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                </Grid>
+
+                            </StackPanel>
+
+
+                        </Grid>
+
+
+
 
                     </Grid>
 
                     <!--设备显示信息-->
                     <Grid Grid.Row="2">
-                        <Border   Margin="5" Background="#FF35C7E9" Opacity="0.25" />
+                        <Border   Margin="15"  Style="{StaticResource BorderStyle}"/>
 
 
                     </Grid>

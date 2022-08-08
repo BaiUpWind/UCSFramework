@@ -20,13 +20,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ComboBox = System.Windows.Controls.ComboBox;
 using TextBox = System.Windows.Controls.TextBox;
+using Window = HandyControl.Controls.Window;
 
 namespace DisplayBorder.View
 {
     /// <summary>
     /// OperationControl.xaml 的交互逻辑
     /// </summary>
-    public partial class WindowOperation :System.Windows. Window 
+    public partial class WindowOperation : Window 
  
     {
         public WindowOperation()
@@ -34,7 +35,8 @@ namespace DisplayBorder.View
             InitializeComponent();
             uniforms[0] = sv1;
             uniforms[1] = sv2;
-            Growl.SetGrowlParent(this, true);
+            //Growl.SetGrowlParent(this,true);
+          
         }
 
         private OperationViewModel operationView;
@@ -103,13 +105,15 @@ namespace DisplayBorder.View
                 var result = operationView.Operation.Connect();
 
                 Growl.Info($"连接{(result ? "成功" : "失败")}");
+ 
 
+               
              
 
             }
             catch (Exception ex)
             {
-                Growl.Error($"连接失败,出现错误'{ex.Message}'");
+                Growl.Error($"连接失败,出现错误'{ex.Message}'" );
             }
             finally
             {
@@ -189,7 +193,9 @@ namespace DisplayBorder.View
                                             {
                                                 propInfo.SetValue(target, t.Text);
                                                 var value = objType.GetProperty(propInfo.Name).GetValue(target, null)?.ToString();
-                                                Growl.Info($"名称{propInfo.Name},值:{value}");
+                                                Growl.Info($"名称{propInfo.Name},值:{value}" );
+                                           
+                                           
                                             }
                                         }
                                     };
@@ -209,7 +215,7 @@ namespace DisplayBorder.View
                                             {
                                                 propInfo.SetValue(target, c.SelectedIndex);
                                                 var value = objType.GetProperty(propInfo.Name).GetValue(target, null)?.ToString();
-                                                Growl.Info($"名称{propInfo.Name},值:{value}");
+                                                Growl.Info($"名称{propInfo.Name},值:{value}" );
                                             }
                                         }
                                     };

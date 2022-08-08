@@ -78,10 +78,14 @@
     <Compile Include="Controls\DeviceControl.xaml.cs">
       <DependentUpon>DeviceControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Events\OnOpenNewWindowArgs.cs" />
+    <Compile Include="GlobalPara.cs" />
+    <Compile Include="View\Window1.xaml.cs">
+      <DependentUpon>Window1.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\WindowOperation.xaml.cs">
       <DependentUpon>WindowOperation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="InitializationBase.cs" />
     <Compile Include="ViewModel\DeviceInfoVewModel.cs" />
     <Compile Include="ViewModel\DeviceViewModel.cs" />
     <Compile Include="ViewModel\GroupsViewModel.cs" />
@@ -105,6 +109,10 @@
     <Page Include="Controls\DeviceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Window1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\WindowOperation.xaml">
       <SubType>Designer</SubType>
@@ -153,6 +161,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="fonts\iconfont.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -173,7 +182,28 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="头部.png" />
+    <Resource Include="images\头部.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\框框.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\buttonImage.png" />
+    <Resource Include="images\centerImage.png" />
+    <Resource Include="images\drop.png" />
+    <Resource Include="images\img3d.png" />
+    <Resource Include="images\leftback.png" />
+    <Resource Include="images\leftImage.png" />
+    <Resource Include="images\leftImageSub.png" />
+    <Resource Include="images\rightImage.png" />
+    <Resource Include="images\timeback.png" />
+    <Resource Include="images\topback.png" />
+    <Resource Include="images\topImage.png" />
+    <Resource Include="images\vs.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="images\中部选择栏选中-1.png" />
+    <Resource Include="images\中部选择栏选中-2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
