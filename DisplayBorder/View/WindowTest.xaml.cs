@@ -49,5 +49,15 @@ namespace DisplayBorder.View
                 Growl.Info($"创建成功!{obj.GetType().Name}");
             }, para: new DataBaseConnectCfg());
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            WindowOperation window = new WindowOperation();
+            window.Init(new DataBaseOperation(), new DeviceInfo()
+            {
+              RefreshInterval = 50,
+            });
+            window.Show();
+        }
     }
 }

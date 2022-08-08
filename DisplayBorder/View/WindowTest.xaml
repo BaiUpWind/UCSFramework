@@ -17,12 +17,14 @@
                 
             <Button Content="打开组合窗口" HorizontalAlignment="Left"   VerticalAlignment="Top" Click="Button_Click"/>
             <Button Content="打开组合窗口2" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Button_Click2"/>
+                <Button Content="打开操作" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click_1"/>
             </StackPanel>
         </Grid>
         <Grid Grid.Column="1">
+        
 
 
-       
+
 
         </Grid>
     

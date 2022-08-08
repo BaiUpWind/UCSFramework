@@ -30,7 +30,7 @@ namespace DeviceConfig.Core
             }
            throw new ArgumentException("创建数据库操作实例失败!");
         }
-       private readonly  DBUnitiyBase db;
+        private    DBUnitiyBase db;
         public override bool Connect()
         {
             try
@@ -51,15 +51,11 @@ namespace DeviceConfig.Core
         public override void Disconnected()
         {
             db.CurrentConnection.Close();
-        }
-
- 
-
+        } 
         public override ResultBase Read(CommandBase command)
         {
             if (command is SQLCmd cmd)
-            {
-
+            { 
                 var data = db.DatatoTable(db.GetDataTable(cmd.Sql, System.Data.CommandType.Text));
                 //var  data1 = db.GetDataSet(cmd.Sql, System.Data.CommandType.Text);
                 //var data2 = db.GetDataReader(cmd.Sql, System.Data.CommandType.Text); 
@@ -73,10 +69,33 @@ namespace DeviceConfig.Core
         public override void SetConn(ConnectionConfigBase conn)
         {
             base.SetConn(conn);
+             
             if (conn is DataBaseConnectCfg dbconn)
-            { 
-                db.ConnStr = dbconn.GetConnStr();
+            {
+                CreateType(conn);
+                //db.ConnStr = dbconn.GetConnStr();
             }
+        }
+
+        private void CreateType(ConnectionConfigBase type)
+        {  
+            if (type is DataBaseConnectCfg dataBase)
+            {
+                switch (dataBase.DbType)
+                {
+                    case 0:
+                        db = new OracleHelp(dataBase.GetConnStr());
+                        break;
+                    case 1:
+                        db = new SQLServerHelp(dataBase.GetConnStr());
+                        break;
+                    case 2:
+                        db = new MySqlHelp(dataBase.GetConnStr());
+                        break;
+                }
+                return;
+            }
+            throw new ArgumentException("创建数据库操作实例失败!"); 
         }
 
       

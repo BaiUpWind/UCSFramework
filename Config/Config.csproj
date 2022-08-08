@@ -44,10 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeviceConfig\Attributes\ClassNameAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\ConfigBaseAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\Control\ControlAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\ConnectedTypeAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\DependOnAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\LabelAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\Control\ReadOnlyAttribute.cs" />

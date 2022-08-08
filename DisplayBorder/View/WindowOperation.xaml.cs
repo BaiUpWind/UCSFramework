@@ -32,7 +32,8 @@ namespace DisplayBorder.View
         {
             InitializeComponent();
             uniforms[0] = sv1;
-            uniforms[1] = sv2; 
+            uniforms[1] = sv2;
+            gogogog = TryConn;
         }
 
         private OperationViewModel operationView;
@@ -84,6 +85,15 @@ namespace DisplayBorder.View
         //测试连接
         private void Btn_Click_TestConn(object sender, RoutedEventArgs e)
         {
+
+            Dispatcher.BeginInvoke( System.Windows.Threading.DispatcherPriority.ContextIdle, gogogog);
+
+        }
+
+        private Action gogogog;
+
+        private void TryConn()
+        {
             if (operationView.Operation.ConnectConfig == null)
             {
                 Growl.WarningGlobal("创建连接先!");
@@ -92,10 +102,10 @@ namespace DisplayBorder.View
 
             try
             {
-              operationView.Operation.SetConn(operationView.Operation.ConnectConfig);
+                operationView.Operation.SetConn(operationView.Operation.ConnectConfig);
                 var result = operationView.Operation.Connect();
 
-                Growl.InfoGlobal($"连接{(result ? "成功" : "失败")}" );
+                Growl.InfoGlobal($"连接{(result ? "成功" : "失败")}");
 
             }
             catch (Exception ex)

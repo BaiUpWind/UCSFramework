@@ -45,24 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\ClassNameAttribute.cs" />
-    <Compile Include="Attributes\ConfigBaseAttribute.cs" />
-    <Compile Include="Attributes\ControlAttribute.cs" />
-    <Compile Include="Attributes\DeviceConnectedTypeAttribute.cs" />
-    <Compile Include="Attributes\PLC\PLCConfigAttribute.cs" />
-    <Compile Include="Attributes\ReadOnlyAttribute.cs" />
-    <Compile Include="Attributes\ShowIfAttribute.cs" />
-    <Compile Include="Attributes\ShowWindowAttribute.cs" />
-    <Compile Include="Config\GroupCfg.cs" />
-    <Compile Include="Define\PublicEnum.cs" />
-    <Compile Include="Config\DataBaseCfg.cs" />
-    <Compile Include="Config\PLC\PLCCfg.cs" />
-    <Compile Include="Config\TCPCfgBase.cs" />
-    <Compile Include="Config\PLC\SiemensCfg.cs" />
-    <Compile Include="Config\SerialPortCfg.cs" />
-    <Compile Include="Device.cs" />
-    <Compile Include="Entity\DeviceInfoCfg.cs" />
-    <Compile Include="IDeviceConfig.cs" />
     <Compile Include="SysParaBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="test.cs" />
