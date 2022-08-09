@@ -28,6 +28,40 @@ namespace DeviceConfig
         /// </summary>
         //public List<Device> DeviceConfigs { get; set; }
 
+        public int DeviceCount
+        {
+            get
+            {
+                if(DeviceConfigs != null)
+                {
+                    return DeviceConfigs.Count;
+                }
+                return 0;
+            }
+        }
+        /// <summary>
+        /// 当前正在扫描的设备名称
+        /// </summary>
+        public string IsRunningDeviceName
+        {
+            get
+            {
+                if (DeviceConfigs == null)
+                {
+                    return "没有设备";
+                }
+                var result = DeviceConfigs.Where(a => a.IsRunning).FirstOrDefault();
+                if(result == null)
+                {
+                    return "无";
+                }
+                return $"[{result.DeviceId}]{result.DeviceName}";
+            }
+
+        }
+
+
+
         public IList<Device> DeviceConfigs { get; set; }
         
     }

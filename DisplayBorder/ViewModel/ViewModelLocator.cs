@@ -46,6 +46,7 @@ namespace DisplayBorder.ViewModel
 
             SimpleIoc.Default.Register<GroupViewModel>();
             SimpleIoc.Default.Register<GroupsViewModel>();
+        
         }
 
 
@@ -56,6 +57,7 @@ namespace DisplayBorder.ViewModel
                 return ServiceLocator.Current.GetInstance<GroupViewModel>();
             }
         }
+     
 
         public GroupsViewModel GroupsViewModel 
         {

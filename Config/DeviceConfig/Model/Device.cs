@@ -15,6 +15,10 @@ namespace DeviceConfig
         public int DeviceId { get; set; }
 
         /// <summary>
+        /// 当前这个这边正在运行信息采集中
+        /// </summary>
+        public  bool IsRunning { get; set; }
+        /// <summary>
         /// 设备名称
         /// </summary> 
         public string DeviceName { get; set; }
@@ -31,6 +35,19 @@ namespace DeviceConfig
         [JsonIgnore]
         public ConnectionConfigBase DefaultConn { get; set; }
          
+
+        public int DeviceInfoCount
+        {
+            get
+            {
+                if(DeviceInfos == null)
+                {
+                    return 0;
+                }
+                return DeviceInfos.Count;
+            }
+        }
+
         /// <summary>
         /// 这个设备需要显示的信息数据
         /// </summary>

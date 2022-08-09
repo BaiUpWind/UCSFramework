@@ -12,7 +12,7 @@ namespace DisplayBorder.Events
     /// <summary>
     /// 当打开新的窗体时
     /// </summary>
-    public class OnOpenNewWindowArgs : BaseEventArgs
+    internal class OnOpenNewWindowArgs : BaseEventArgs
     {
         public static int EventID = typeof(OnOpenNewWindowArgs).GetHashCode();
 

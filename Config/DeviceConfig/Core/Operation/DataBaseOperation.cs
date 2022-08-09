@@ -56,10 +56,10 @@ namespace DeviceConfig.Core
         {
             if (command is SQLCmd cmd)
             { 
-                var data = db.DatatoTable(db.GetDataTable(cmd.Sql, System.Data.CommandType.Text));
-                //var  data1 = db.GetDataSet(cmd.Sql, System.Data.CommandType.Text);
-                //var data2 = db.GetDataReader(cmd.Sql, System.Data.CommandType.Text); 
-                command.Result.Tables = data;
+                //var data = db.DatatoTable(db.GetDataTable(cmd.Sql, System.Data.CommandType.Text));
+                ////var  data1 = db.GetDataSet(cmd.Sql, System.Data.CommandType.Text);
+                ////var data2 = db.GetDataReader(cmd.Sql, System.Data.CommandType.Text); 
+                //command.Result.Tables = data;
                 command.Result.Data = db.GetDataTable(cmd.Sql, System.Data.CommandType.Text);
             }
 

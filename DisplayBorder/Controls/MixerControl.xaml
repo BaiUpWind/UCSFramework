@@ -1,0 +1,51 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DisplayBorder.Controls"
+             xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:viewmodel="clr-namespace:DisplayBorder.ViewModel" 
+             d:DataContext="{d:DesignInstance Type=viewmodel:MixerViewModel}" x:Class="DisplayBorder.Controls.MixerControl"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="180"  >
+    <!--Height="100"  Width="180" MaxHeight="100" MaxWidth="180" MinHeight="100" MinWidth="180"-->
+     
+    <hc:TransitioningContentControl >
+     
+        <Border  BorderBrush="Transparent" BorderThickness="2" CornerRadius="10" x:Name="choose">
+            <Grid  MouseDown="Grid_MouseDown"> 
+                <Border Background="#5c5cff" CornerRadius="10" x:Name="bgc"  >
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="20" Color="#d6d6ff" Opacity="0.4" Direction="280" ShadowDepth="0" />
+                    </Border.Effect>
+                </Border>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition  />
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+            
+                    <!--第一行-->
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" >
+                        <TextBlock Text="编号" VerticalAlignment="Center" Foreground="#c4d6f8" Margin="10 0 0 0"/>
+
+                        <TextBlock Text="{Binding Id}"     VerticalAlignment="Center" Margin="10 0 0 0"  />
+                    </StackPanel>
+
+                    <!--第二行-->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" >
+                        <TextBlock Text="名称"  VerticalAlignment="Center" Margin="10 0 0 0" Foreground="#c4d6f8" FontSize="{DynamicResource TabFontSize}"/>
+                        <TextBlock Text="{Binding Name}" Margin="10 0 0 0"  VerticalAlignment="Center"   FontSize="{DynamicResource TabFontSize}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2" VerticalAlignment="Center" Margin="10 0 0 0" Orientation="Horizontal">
+                        <TextBlock Text="状态" Foreground="#c4d6f8"  />
+                        <!--<TextBlock Text="5.27%" Foreground="#59E6B5" />-->
+                        <TextBlock Margin="10 0 0 0" Text="正常运行"  Foreground="#00ff00" />
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+    </hc:TransitioningContentControl>
+</UserControl>

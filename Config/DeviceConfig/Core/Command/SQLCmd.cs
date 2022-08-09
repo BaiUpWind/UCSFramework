@@ -13,6 +13,6 @@ namespace  DeviceConfig.Core
             Result = new SQLResult();
         }
         [Control("Sql","SQL", ControlType.TextBox)]
-        public string Sql { get; set; } = "select * from controluser";
+        public string Sql { get; set; } = "";
     }
 }

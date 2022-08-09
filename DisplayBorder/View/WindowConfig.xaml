@@ -31,7 +31,7 @@
             <Grid     >
 
                 <TextBlock Text="组编号" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,17,0,0"   />
-                <TextBox Text="{Binding GroupID}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="99" Margin="51,10,0,0"  Grid.Row="0" IsReadOnly="True"   />
+                <TextBox Text="{Binding GroupID}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="99" Margin="51,10,0,0"  Grid.Row="0"    />
                 <!--<TextBox Text="{Binding GroupID}" hc:TitleElement.Foreground="White" Margin="5,0,5,0" hc:InfoElement.TitleWidth="70"    hc:InfoElement.TitlePlacement="Left"    hc:InfoElement.Title="设备编号"   hc:InfoElement.ContentHeight="14"   hc:InfoElement.Necessary="True"   Style="{StaticResource TextBoxExtend}"    />-->
                 <TextBlock Text="组名称" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,52,0,0"  Grid.Row="0" RenderTransformOrigin="0.105,0.487"   />
                 <TextBox Text="{Binding GroupName}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="99" Margin="51,45,0,0"  Grid.Row="0"  />

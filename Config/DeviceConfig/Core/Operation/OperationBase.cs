@@ -22,8 +22,8 @@ namespace DeviceConfig.Core
         //{
         //    this.defaultConn = defaultConn ?? throw new Exception("初始化操作配置失败，未能获取到默认的连接方式！");
         //}
-        //private readonly ConnectionConfigBase defaultConn;// 默认的连接方式 来源于设备
-        private ConnectionConfigBase connectConfig;
+        //private readonly ConnectionConfigBase defaultConn;// 默认的连接方式 来源于设备 
+        private ConnectionConfigBase connectConfig; 
         private CommandBase command;
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace DeviceConfig.Core
                 //}
                 return connectConfig;
             }
-            //set => connConfig = value;
+           set => connectConfig = value;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace DeviceConfig.Core
         /// <para>这里根据对应类型进行解析的指令</para>
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
-        public CommandBase Command { get => command;  }
+        public CommandBase Command { get => command; set => command = value; }
 
         /// <summary>
         ///  当前指令读取后返回的结果(缓存)

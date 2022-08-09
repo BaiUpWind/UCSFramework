@@ -19,6 +19,7 @@ using DeviceConfig;
 using DisplayBorder.Events;
 using System.Windows;
 using Window = HandyControl.Controls.Window;
+using DisplayBorder.ViewModel;
 
 namespace DisplayBorder.View
 {
@@ -33,29 +34,61 @@ namespace DisplayBorder.View
             //--------------------事件系统测试
 
             GlobalPara.EventManager.Subscribe(OnOpenNewWindowArgs.EventID, OnOpenNewWindow);
+        
+            GlobalPara.EventManager.Subscribe(OnGroupChooseArgs.EventID, OnGroupChoose);
             //-----------------------
 
             Growl.SetToken(this, "wode");
+
+            for (int i = 0; i < 20; i++)
+            {
+                MixerControl mc = new MixerControl(new GroupViewModel(new Group()
+                {
+                    GroupID = 100 + i,
+                    GroupName = $"第{i}台",
+                    DeviceConfigs = new List<Device>()
+                })) ;
+                mc.BorderThickness = new Thickness(5);
+                if (i == 0) mc.IsChoose = true;
+                wpGroups.Children.Add(mc);
+            }
+
+
+           
+        }
+ 
+        private Group currentGroup;
+        private MixerControl groupMixer; 
+        /// <summary>
+        /// 当前在读取的组
+        /// </summary>
+        public Group CurrentGroup
+        {
+            get => currentGroup; set
+            {
+                currentGroup = value; 
+            }
         }
 
+        public MixerControl GroupMixer
+        {
+            get => groupMixer; set
+            {
+
+                if (groupMixer != null)
+                {
+                    groupMixer.IsChoose = false;
+                }
+                groupMixer = value;
+
+            }
+        }
         private void OnOpenNewWindow(object sender, BaseEventArgs e)
         {
             if (e is OnOpenNewWindowArgs args && args.NewWindow != null)
             {
                 //设置弹窗新的父类容器
-                Growl.SetGrowlParent(args.NewWindow, true);
-                //Growl.SetToken(args.NewWindow, args.NewWindow.GetType().GetHashCode().ToString());
-
-                //if (args.ParentWindow != null)
-                //{
-                //    var cache = args.ParentWindow;
-                //    //当关闭时
-                //    args.NewWindow.Closing += (s, ee) =>
-                //    {
-                //        Growl.SetGrowlParent(cache, false);
-
-                //    };
-                //}
+                Growl.SetGrowlParent(args.NewWindow, true); 
             }
         }
 
@@ -89,6 +122,15 @@ namespace DisplayBorder.View
             //    RefreshInterval = 50,
             //});
             window.Show();
+        }
+
+        private void OnGroupChoose(object sender, BaseEventArgs e)
+        {
+            if (e is OnGroupChooseArgs args)
+            {
+                CurrentGroup = args.Group;
+                GroupMixer = args.GroupMixer; 
+            }
         }
     }
 }

@@ -26,13 +26,8 @@ namespace CommonApi
             if (!File.Exists(path))
             {
                 File.Create(path);
-            }
-            StringBuilder sb = new StringBuilder();
-            //foreach (var target in targets)
-            //{
-                sb.Append(JsonConvert.SerializeObject(targets, Formatting.Indented));
-            //}
-            File.WriteAllText(path,sb.ToString());
+            } 
+            File.WriteAllText(path, JsonConvert.SerializeObject(targets, Formatting.Indented));
         }
 
         //public static T ReadJson<T>(string path  )
