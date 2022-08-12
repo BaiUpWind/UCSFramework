@@ -32,7 +32,7 @@ namespace USC
             //------------------ 继承多级联动测试
 
             cd = new ClassData();
-            Utility.Reflection.GetInheritors(typeof(OperationBase), ref cd);
+            Utility.Reflection.GetInheritors(typeof(Animal), ref cd);
             Console.WriteLine("Holle world!");
             //-------------------
 
@@ -64,6 +64,7 @@ namespace USC
         private void button2_Click(object sender, EventArgs e)
         {
             pAll.Controls.Clear();
+             var cd=  Utility.Reflection.GetClassData<Animal>();
             Create(cd);
         }
 
@@ -73,9 +74,9 @@ namespace USC
         {
             if (data == null) return;
             if (data.ChildrenTypes.Count == 0) return; 
-            ComboBox box1 = new ComboBox();
+            ListBox box1 = new ListBox();
             box1.Name = data.ClassType.Name;
-            box1.DropDownStyle = ComboBoxStyle.DropDownList;
+            //box1.DropDownStyle = ComboBoxStyle.DropDownList;
             box1.Location = location;
             //创建这个类的所有直接实现的类型
             foreach (var item in data.ChildrenTypes)

@@ -18,6 +18,10 @@ namespace DisplayBorder.ViewModel
         public GroupViewModel(Group group)
         {
             this.currentGroup = group;
+            if (group.DeviceConfigs == null)
+            {
+                group.DeviceConfigs = new List<Device>();
+            }
             devices =  new ObservableCollection<Device>(group.DeviceConfigs);
             addDevice = new RelayCommand(AddDevice);
         }

@@ -1,0 +1,32 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DisplayBorder.Controls"
+             xmlns:hc="https://handyorg.github.io/handycontrol" xmlns:viewmodel="clr-namespace:DisplayBorder.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:GroupViewModel}" x:Class="DisplayBorder.Controls.TitleControl"
+              mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="100" Cursor="Hand"   >
+    <Grid x:Name="gMain" Background="Transparent"   >
+        <TextBlock  x:Name="txb1" Text="{Binding CurrentGroup.GroupName}" Foreground="White"  HorizontalAlignment="Left" VerticalAlignment="Top"  MouseDown="txb1_MouseDown" Cursor="Hand" />
+
+        <!--<TextBlock Text="111111111111" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 17" />-->
+        
+        
+        <Path Stroke="Blue" x:Name="linePath">
+            <Path.Data>
+                <GeometryGroup>
+                    <LineGeometry x:Name="line1" />
+                    <LineGeometry x:Name="line2" /> 
+                </GeometryGroup> 
+            </Path.Data>
+        </Path>
+
+
+        <local:Dot   HorizontalAlignment="Right" VerticalAlignment="Bottom"  x:Name="d1"  Width="5" Height="5" Background="Blue" Margin="0 0 15 15"></local:Dot>
+        <local:Dot  HorizontalAlignment="Right" VerticalAlignment="Top" x:Name="d2" Margin="0,16,25,0" Width="5" Height="5" Background="Blue"></local:Dot>
+        <local:Dot  HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="d3" Margin="0,16,0,0" Width="5" Height="5" Background="Blue"></local:Dot>
+        
+         
+    </Grid>
+</UserControl>

@@ -20,6 +20,7 @@ using DisplayBorder.Events;
 using System.Windows;
 using Window = HandyControl.Controls.Window;
 using DisplayBorder.ViewModel;
+using System.Windows.Threading;
 
 namespace DisplayBorder.View
 {
@@ -51,12 +52,16 @@ namespace DisplayBorder.View
                 mc.BorderThickness = new Thickness(5);
                 if (i == 0) mc.IsChoose = true;
                 wpGroups.Children.Add(mc);
+                groupMixers.Add(mc);
             }
-
-
-           
+            InitTimer();
         }
- 
+
+        private List<MixerControl> groupMixers = new List<MixerControl>();
+
+        private DispatcherTimer mDataTimer = null; //定时器
+        private long timerExeCount = 0; //定时器执行次数
+
         private Group currentGroup;
         private MixerControl groupMixer; 
         /// <summary>
@@ -83,6 +88,40 @@ namespace DisplayBorder.View
 
             }
         }
+
+        private int gmIndex = 0;
+
+
+        private void InitTimer()
+        {
+            if (mDataTimer == null)
+            {
+                mDataTimer = new DispatcherTimer();
+                mDataTimer.Tick += MDataTimer_Tick; ;
+                mDataTimer.Interval = TimeSpan.FromSeconds(1);
+            }
+        }
+
+        private void MDataTimer_Tick(object sender, EventArgs e)
+        {
+            if(gmIndex < 0) gmIndex = 0;
+            if (gmIndex >= groupMixers.Count)
+            {
+                gmIndex = 0;
+            }
+            var target = groupMixers[gmIndex++];
+            target.IsChoose = true;
+
+            var currentScrollPosition = sv.VerticalOffset;
+            //获取目标控件相对scrollViewer位置
+            var point = new Point(0, currentScrollPosition);
+
+            var tarPos = target.TransformToVisual(sv).Transform(point);
+
+            //垂直方向上的定位
+            sv.ScrollToVerticalOffset(tarPos.Y);
+        }
+
         private void OnOpenNewWindow(object sender, BaseEventArgs e)
         {
             if (e is OnOpenNewWindowArgs args && args.NewWindow != null)
@@ -130,6 +169,23 @@ namespace DisplayBorder.View
             {
                 CurrentGroup = args.Group;
                 GroupMixer = args.GroupMixer; 
+            }
+        }
+
+        private void Button_Start(object sender, RoutedEventArgs e)
+        {
+            if(sender is Button btn)
+            {
+                if(btn.Content.ToString() == "开始")
+                {
+                    btn.Content = "停止"; 
+                    mDataTimer.Start();
+                }
+                else if(btn.Content.ToString() == "停止")
+                { 
+                    mDataTimer.Stop(); 
+                    btn.Content = "开始";
+                }
             }
         }
     }

@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         Title="Window1" Height="450" Width="800">
     <hc:TransitioningContentControl>
-        <Button HorizontalAlignment="Left"  VerticalAlignment="Top" Content="text" Click="Button_Click"/>
+        <Button HorizontalAlignment="Left"  VerticalAlignment="Top" Content="text" Click="Button_Click" Margin="267,116,0,0" Height="54" Width="67"/>
 
     </hc:TransitioningContentControl>
 </hc:Window>

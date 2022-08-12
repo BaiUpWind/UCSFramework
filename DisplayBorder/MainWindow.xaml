@@ -642,20 +642,22 @@
                             </Grid.ColumnDefinitions>
 
                             <Grid Grid.Column="0" Margin="10">
-                                <Border Background="Red"></Border>
+                                <Border Background="#FFC4D6F0" CornerRadius="15"></Border>
                             </Grid>
 
                             <Grid Grid.Column="1" Margin="10">
-                                <Border Background="Orange"></Border>
+                                <Border Background="#FFC4D6F0" CornerRadius="15"></Border>
                             </Grid>
+
+
                             <Grid Grid.Column="2" Margin="10">
-                                <Border Background="Yellow"></Border>
+                                <Border Background="#FFC4D6F0" CornerRadius="15"></Border>
                             </Grid>
                             <Grid Grid.Column="3" Margin="10">
-                                <Border Background="Green"></Border>
+                                <Border Background="#FFC4D6F0" CornerRadius="15"></Border>
                             </Grid>
                             <Grid Grid.Column="4" Margin="10">
-                                <Border Background="Blue"></Border>
+                                <Border Background="#FFC4D6F0" CornerRadius="15"></Border>
                             </Grid>
                         </Grid>  
                     </Grid>

@@ -12,6 +12,7 @@ namespace DeviceConfig
         /// <summary>
         /// 设备编号
         /// </summary> 
+        [Control("DeviceId", "设备编号", ControlType.TextBox)]
         public int DeviceId { get; set; }
 
         /// <summary>
@@ -21,11 +22,13 @@ namespace DeviceConfig
         /// <summary>
         /// 设备名称
         /// </summary> 
+        [Control("DeviceName", "设备名称", ControlType.TextBox)]
         public string DeviceName { get; set; }
 
         /// <summary>
         /// 信息在这个设备停留的时间
         /// </summary> 
+        [Control("StayTime", "停留的时间", ControlType.TextBox)]
         public double StayTime { get; set; } = 5;
 
         /// <summary>

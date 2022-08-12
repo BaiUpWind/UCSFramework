@@ -13,6 +13,7 @@
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -76,19 +77,40 @@
     <Compile Include="Controls\ComboBoxLinked.xaml.cs">
       <DependentUpon>ComboBoxLinked.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DataControl.xaml.cs">
+      <DependentUpon>DataControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DeviceControl.xaml.cs">
       <DependentUpon>DeviceControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Dot.xaml.cs">
+      <DependentUpon>Dot.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MixerControl.xaml.cs">
       <DependentUpon>MixerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TitleControl.xaml.cs">
+      <DependentUpon>TitleControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ElementAdorner\CanvasHelper.cs" />
+    <Compile Include="ElementAdorner\ElementAdorner.cs" />
+    <Compile Include="ElementAdorner\ThumbAngle.cs" />
+    <Compile Include="Events\OnCanvasChildrenClickArgs.cs" />
     <Compile Include="Events\OnDeviceChooseArgs.cs" />
     <Compile Include="Events\OnGroupChooseArgs.cs" />
     <Compile Include="Events\OnOpenNewWindowArgs.cs" />
+    <Compile Include="Events\OnUserInputArgs.cs" />
     <Compile Include="GlobalPara.cs" />
+    <Compile Include="RGVDataWindow.xaml.cs">
+      <DependentUpon>RGVDataWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\MixerViewModel.cs" />
+    <Compile Include="ViewModel\TitleViewModel.cs" />
     <Compile Include="View\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\WindowGroupsConfig.xaml.cs">
+      <DependentUpon>WindowGroupsConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\WindowOperation.xaml.cs">
       <DependentUpon>WindowOperation.xaml</DependentUpon>
@@ -113,7 +135,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\DataControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\DeviceControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Dot.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -121,9 +151,21 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\TitleControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RGVDataWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\Window1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\WindowGroupsConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\WindowOperation.xaml">
       <SubType>Designer</SubType>
@@ -215,6 +257,10 @@
   <ItemGroup>
     <Resource Include="images\中部选择栏选中-1.png" />
     <Resource Include="images\中部选择栏选中-2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Lib\UICommon.dll" />
+    <Content Include="Lib\UICommon.pdb" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

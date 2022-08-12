@@ -76,7 +76,6 @@
     <Compile Include="FormTest.Designer.cs">
       <DependentUpon>FormTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="Initialization\InitializationBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FmLogDetail.resx">
@@ -128,6 +127,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Initialization\" />
     <Folder Include="Lib\" />
     <Folder Include="Resources\" />
   </ItemGroup>

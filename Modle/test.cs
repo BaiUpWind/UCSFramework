@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommonApi.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -16,7 +17,7 @@ namespace Modle
         /// <typeparam name="T1">超类(父类,接口,抽象类)</typeparam>
         /// <typeparam name="T2">继承于<see cref="ConfigBaseAttribute"/>的特性</typeparam>
         /// <returns></returns>
-        public IEnumerable<string > GetCfgNames<T1,T2>()  where T2 : ConfigBaseAttribute
+        public IEnumerable<string > GetCfgNames<T1,T2>()  where T2 : BaseAttribute
         {
             return typeof(T1).Assembly.GetTypes()
                 .Where(a => typeof(T1).IsAssignableFrom(a)).
@@ -46,7 +47,7 @@ namespace Modle
         /// <param name="className"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"> </exception>
-        public T CreateInstance<T,T1,T2>(string className) where T: class ,new() where T2 : ConfigBaseAttribute
+        public T CreateInstance<T,T1,T2>(string className) where T: class ,new() where T2 : BaseAttribute
         {
             if (string.IsNullOrEmpty(className))
             {
@@ -71,9 +72,9 @@ namespace Modle
         /// </summary>
         /// <typeparam name="T">继承于<see cref="ConfigBaseAttribute"/>的特性</typeparam>
         /// <returns></returns>
-        public IEnumerable<string> GetDeviceConfigs<T>() where T : ConfigBaseAttribute
-        { 
-           return GetCfgNames<IDeviceConfig, T>();
-        }
+        //public IEnumerable<string> GetDeviceConfigs<T>() where T : BaseAttribute
+        //{ 
+        //   return GetCfgNames<IDeviceConfig, T>();
+        //}
     }
 }

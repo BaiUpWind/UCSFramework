@@ -14,12 +14,12 @@ namespace DeviceConfig
         /// <summary>
         /// 组编号
         /// </summary>  
-        //[TextBox("GroupNo","组编号","组编号:")]
+        [Control("GroupID","组编号", ControlType.TextBox)]
         public int GroupID { get; set; }
         /// <summary>
         /// 组名称
         /// </summary>
-        //[TextBox("GroupName", "组名称", "组名称:")]
+        [Control("GroupName", "组名称", ControlType.TextBox)] 
         public string GroupName { get; set; }
 
          
@@ -62,7 +62,7 @@ namespace DeviceConfig
 
 
 
-        public IList<Device> DeviceConfigs { get; set; }
+        public IList<Device> DeviceConfigs { get; set; }  
         
     }
 }

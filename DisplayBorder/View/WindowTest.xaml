@@ -18,11 +18,12 @@
                 <Button Content="打开组合窗口" HorizontalAlignment="Left"   VerticalAlignment="Top" Click="Button_Click"/>
                 <Button Content="打开组合窗口2" HorizontalAlignment="Left"  VerticalAlignment="Top" Click="Button_Click2"/>
                 <Button Content="打开操作" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Click_1"/>
+                <Button Content="开始" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Button_Start"/>
             </StackPanel>
         </Grid>
         <Grid Grid.Column="1" Margin="0,0,141,132">
             
-            <hc:ScrollViewer Orientation="Vertical"   Margin="15" Grid.Row="1"  Background="Aqua" Width=" 300" Height="200">
+            <hc:ScrollViewer Orientation="Vertical"   Margin="15" Grid.Row="1"  Background="Aqua" Width=" 300" Height="200" x:Name="sv">
                 <hc:WaterfallPanel  Groups="3"    Margin="15"  x:Name="wpGroups"    >
                 
 

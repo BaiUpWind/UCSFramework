@@ -19,6 +19,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace DisplayBorder
 {
@@ -39,6 +40,22 @@ namespace DisplayBorder
         private MixerControl deviceMixer;
         private Device currenDevice;
         private bool auto = false;
+
+        private List<MixerControl> groupMixers = new List<MixerControl>();
+        private List<MixerControl> deviceMixers = new List<MixerControl>();
+
+        //------------- 定时器之类的
+
+        /// <summary>
+        /// 组轮询定时器
+        /// </summary>
+        private DispatcherTimer groupDataTimer = null; //定时器
+       
+        private DispatcherTimer deviceDataTimer = null;
+
+        //----------------
+
+
         /// <summary>
         /// 当前在读取的组
         /// </summary>
@@ -95,7 +112,7 @@ namespace DisplayBorder
             //---------------事件注册
             GlobalPara.EventManager.Subscribe(OnGroupChooseArgs.EventID, OnGroupChoose);
             GlobalPara.EventManager.Subscribe(OnDeviceChooseArgs.EventID, OnDeviceChoose);
-
+            GlobalPara.EventManager.Subscribe(OnUserInputArgss.EventID, OnUserInput);
 
             //--------------- 
             wpGroups.Children.Clear();
@@ -110,7 +127,7 @@ namespace DisplayBorder
             }
         }
 
-      
+     
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -185,11 +202,15 @@ namespace DisplayBorder
             {
                 CurrenDevice = args.Device;
                 DeviceMixer = args.DeviceMixer ;
-            }
-
-
+            } 
         }
 
+        private void OnUserInput(object sender, BaseEventArgs e)
+        {
+          if( e is OnUserInputArgss args)
+            {
 
+            }
+        }
     }
 }
