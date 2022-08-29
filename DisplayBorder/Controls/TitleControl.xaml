@@ -23,7 +23,7 @@
         </Path>
 
 
-        <local:Dot   HorizontalAlignment="Right" VerticalAlignment="Bottom"  x:Name="d1"  Width="5" Height="5" Background="Blue" Margin="0 0 15 15"></local:Dot>
+        <local:Dot  HorizontalAlignment="Right" VerticalAlignment="Bottom"  x:Name="d1"  Width="5" Height="5" Background="Blue" Margin="0 0 0 0"></local:Dot>
         <local:Dot  HorizontalAlignment="Right" VerticalAlignment="Top" x:Name="d2" Margin="0,16,25,0" Width="5" Height="5" Background="Blue"></local:Dot>
         <local:Dot  HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="d3" Margin="0,16,0,0" Width="5" Height="5" Background="Blue"></local:Dot>
         

@@ -22,7 +22,7 @@ namespace DisplayBorder.Controls
     /// <summary>
     /// DataControl.xaml 的交互逻辑
     /// </summary>
-    public partial class DataControl : UserControl, ISingleOpen , IControHelper
+    public partial class DataControl : UserControl, ISingleOpen, IControlHelper
     {
 
 
@@ -39,7 +39,7 @@ namespace DisplayBorder.Controls
         public event Action<object> OnEnter;
         public event Action OnCancel;
 
-  
+
         public void Dispose()
         {
 
@@ -68,18 +68,43 @@ namespace DisplayBorder.Controls
         }
 
         public T GetType<T>(params object[] paras) where T : class => (T)Ttype;
-  
+
     }
 
-    public interface IControHelper 
+    /// <summary>
+    /// 控件帮助接口
+    /// 创建对应的控件,和创建对应实例
+    /// </summary>
+    public interface IControlHelper
     {
-     
+
         void CreateType<T>(T target) where T : class;
 
         T GetType<T>(params object[] paras) where T : class;
 
         event Action<object> OnEnter;
         event Action OnCancel;
-            
-     }
+
+    }
+    /// <summary>
+    /// 控件数据接口
+    /// </summary>
+    public interface IControlData
+    {
+        /// <summary>
+        /// 设置控件的数据
+        /// </summary>
+        /// <param name="data"></param>
+        void SetData(object data);
+
+        /// <summary>
+        /// 获取数据
+        /// </summary>
+        /// <returns></returns>
+        object GetData();
+
+        event Action<object> OnSet;
+        event Action OnClose;
+    }
+
 }

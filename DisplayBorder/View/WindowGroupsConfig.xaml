@@ -12,45 +12,82 @@
         Title="WindowGroupsConfig" Height="450" Width="800">
     <hc:TransitioningContentControl>
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="8*" />
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"></RowDefinition> 
+                <RowDefinition Height="10*"></RowDefinition>
+                <RowDefinition Height="45"></RowDefinition>
+            </Grid.RowDefinitions>
 
-            <Grid Grid.Column="0">
-                <StackPanel Orientation="Vertical">
-                    <Button  Content="切换位置" Margin="15,15,0,0" Click="Btn_SwitchDirection"></Button>
-                    
-                    <Button  Content="添加" Margin="15,15,0,0" Click="Btn_ClickAddGroup"></Button>
-
-                    <TextBox x:Name="txtLeft" Margin="5"></TextBox>
-                    <TextBox x:Name="txtRight" Margin="5"></TextBox>
+            <Grid Grid.Row="0" Margin="5,1,5,1">
+                <Border BorderThickness="1" BorderBrush="Aqua"  CornerRadius="5"></Border>
+                <StackPanel Orientation="Horizontal"> 
+                    <Button Content="打开" Margin="15,0,0,0" Click="Btn_OpenGroupsData" ToolTip="打开配置中的文件路径"></Button>
+                    <Button Content="保存" Margin="15,0,0,0" Click="Btn_SaveGroupsData"></Button>
+                    <Button Content="组详情" Margin="15,0,0,0" Click="Btn_GroupsDetails" ></Button>
+                    <Button Content="配置文件"  Margin="15,0,0,0" Click="Btn_OpenConfig" ></Button>
                 </StackPanel>
+            </Grid>
+           
+            <Grid Grid.Row="1" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="8*" />
+                    <ColumnDefinition Width="2*" />
+                </Grid.ColumnDefinitions>
                 
+
+                <Grid Grid.Column="0">
+                    <Border BorderThickness="1" Margin="5" BorderBrush="Aqua"  CornerRadius="5"></Border>
+                    <StackPanel Orientation="Vertical">
+                        <!--<Button  Content="切换位置" Margin="15,15,0,0" Click="Btn_SwitchDirection"></Button>-->
+
+                        <Button  Content="添加" Margin="15,15,0,0" Click="Btn_ClickAddGroup"></Button>
+                        <Button  Content="删除" Margin="15,5,0,0" Click="Btn_DeleteGroup"></Button>
+                        <Border Margin="15" BorderBrush="SeaGreen" BorderThickness="1"/>
+                        <Button Content="生成这个点位 " Click="Btn_CreatePoint"></Button>
+                    </StackPanel>
+
+                </Grid>
+
+                <Grid Grid.Column="1" x:Name="g2" Margin="5">
+                    <Border BorderThickness="1" Margin="0" BorderBrush="Aqua"  CornerRadius="5"></Border>
+                    <ScrollViewer   HorizontalScrollBarVisibility="Auto"  Margin="5" Background="Gray"  >
+                        <Canvas  x:Name="C1"  Background="Gray" Focusable="True" 
+                                       HorizontalAlignment="Left"  VerticalAlignment="Top"  
+                                 Height="{Binding ElementName=img,Path=ActualHeight}"
+                                 Width="{Binding ElementName=img,Path=ActualWidth}">
+                                <elementadorner:CanvasHelper/>
+                                <Grid    x:Name="g3"  > 
+                                    <Image  x:Name="img" MouseMove="Image_MouseMove" 
+                                            MouseLeave="img_MouseLeave"  
+                                            Stretch="Fill"  > 
+                                    </Image> 
+                                </Grid>
+                            </Canvas> 
+                    </ScrollViewer>
+
+
+                </Grid>
+
+                <Grid Grid.Column="2">
+                    <Border BorderThickness="1" Margin="5" BorderBrush="Aqua"  CornerRadius="5"></Border>
+                </Grid>
             </Grid>
 
-            <Grid Grid.Column="1" x:Name="g2">
-                <!--<Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>-->
-                <!--<Grid Grid.Row="0"> 
-                    <Line  x:Name="lineA" Stroke="Red" StrokeThickness="5"></Line>
-                    <RadioButton Content="P1" x:Name="p1" HorizontalAlignment="Left" Margin="112,284,0,0" VerticalAlignment="Top" Height="17" ></RadioButton>
-                    <RadioButton Content="P2    " x:Name="p2" HorizontalAlignment="Left"  VerticalAlignment="Top" Margin="76,38,0,0" ></RadioButton>
-                </Grid>-->
+            <Grid Grid.Row="2">
+                <Border BorderThickness="1" Margin="5" BorderBrush="Aqua"  CornerRadius="5"></Border>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Label x:Name="lblxy" Margin="5">鼠标位置X,Y</Label>
+                    <Border Margin="15" BorderBrush="SeaGreen" BorderThickness="1"/>
+                    <Label x:Name="lblTpos" Content="窗体X:Y:" Margin="5"/>
+                    <Label x:Name="lblTimgpos" Content="图像X:Y:" />
+                    <Border Margin="15" BorderBrush="SeaGreen" BorderThickness="1"/>
+                    <Label x:Name="lblresolution"  Margin="5,0,15,0">分辨率</Label>
 
-                <Canvas Grid.Row="0"  Background="Gray" Focusable="True" x:Name="C1" >
-                    <elementadorner:CanvasHelper/> 
-                    <!--<Border x:Name="my" Width="100"  Height="100" Canvas.Left="320" Canvas.Top="20"   > 
-                        <Controls:TitleControl   elementadorner:CanvasHelper.IsSelectable="True"  /> 
-                    </Border>--> 
-                </Canvas>
-
-
+                </StackPanel>
+         
 
             </Grid>
-
         </Grid>
     </hc:TransitioningContentControl>
 </hc:Window>

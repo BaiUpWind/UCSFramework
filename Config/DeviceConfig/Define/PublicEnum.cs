@@ -41,20 +41,17 @@
 
     public enum ControlType { 
     
-        Label,
+        //Label,
         TextBox,
         /// <summary>
         /// 组合框
         /// </summary>
         ComboBox,
         /// <summary>
-        /// 串口组合框（自动获取电脑串口）
+        /// 文件选择器
         /// </summary>
-        ComboBoxSerialPort,
-        /// <summary>
-        /// 枚举组合框
-        /// </summary>
-        ComboBoxEnum,
+        FilePathSelector,
+      
     }
 
     /// <summary>

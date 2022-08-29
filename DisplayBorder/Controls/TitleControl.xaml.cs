@@ -22,10 +22,24 @@ namespace DisplayBorder.Controls
     /// </summary>
     public partial class TitleControl : UserControl
     { 
-        public enum DirectionArrow
+        public enum DirectionArrow:byte
         {
-            Up,
-            Down,
+            /// <summary>
+            /// 左上
+            /// </summary>
+            LeftUp,
+            /// <summary>
+            /// 左下
+            /// </summary>
+            LeftDown,
+            /// <summary>
+            /// 右上
+            /// </summary>
+            RightUp,
+            /// <summary>
+            /// 右下
+            /// </summary>
+            RightDown,
         }
         public TitleControl()
         {
@@ -39,10 +53,38 @@ namespace DisplayBorder.Controls
             Init();
           DataContext =   groupViewModel = new GroupViewModel(group);
         }
-        GroupViewModel groupViewModel;
+        public GroupViewModel groupViewModel;
         public event Action<object,Group> OnClick;
          
         public DirectionArrow Direction { get; private set; }
+
+        public Point OnCanvsLocation { get; set; }
+
+
+        private Point location;
+        public Point Location
+        {
+            get
+            {
+                return  ((Visual)Parent).TransformToAncestor( (Visual)(((FrameworkElement)Parent).Parent)).Transform(new Point(0, 0));
+
+            }
+            set => location = value;
+        }
+
+        /// <summary>
+        /// 当前控件在图像上的位置
+        /// </summary>
+        public Point ImagePixelPoint { get; set; }
+
+        public string LocationStr
+        {
+            get
+            {
+                return $"X:{Location.X:0}Y:{Location.Y:0}";
+            }
+        }
+
         private void Init()
         {
             SizeChanged += (s, e) =>
@@ -68,7 +110,7 @@ namespace DisplayBorder.Controls
                 line2.EndPoint = d3.Location;
             };
             HideDot();
-            SwitchDricetion(DirectionArrow.Up);
+            SwitchDricetion(DirectionArrow.LeftUp);
         }
  
 
@@ -76,10 +118,10 @@ namespace DisplayBorder.Controls
         {
             switch (dir)
             {
-                case DirectionArrow.Up:
+                case DirectionArrow.LeftUp:
                     d1.HorizontalAlignment = HorizontalAlignment.Right;
                     d1.VerticalAlignment = VerticalAlignment.Bottom;
-                    d1.Margin = new Thickness(0, 0, 15, 15);
+                    d1.Margin = new Thickness(0, 0, 0, 0);
 
                     d2.HorizontalAlignment = HorizontalAlignment.Right;
                     d2.VerticalAlignment = VerticalAlignment.Top;
@@ -96,24 +138,23 @@ namespace DisplayBorder.Controls
 
 
                     break;
-                case DirectionArrow.Down:
+                case DirectionArrow.LeftDown:
 
                     d2.HorizontalAlignment = HorizontalAlignment.Left;
                     d2.VerticalAlignment = VerticalAlignment.Bottom;
-                    d2.Margin = new Thickness(15, 0, 0, 15);
+                    d2.Margin = new Thickness(0, 0, 0, 0);
+
 
                     txb1.HorizontalAlignment = HorizontalAlignment.Left;
                     txb1.VerticalAlignment = VerticalAlignment.Bottom;
-                    txb1.Margin = new Thickness(20, 0, 0, 25);
+                    txb1.Margin = new Thickness(6, 0, 0, 6);
 
                     break;
             }
             Direction = dir;
 
-            //linePath.Visibility = Visibility.Hidden;
-            //linePath.Visibility = Visibility.Visible;
-
-
+            //这里位置切换以后,path路径的不会重绘,没找到原因
+         
         }
          
         public void HideDot()

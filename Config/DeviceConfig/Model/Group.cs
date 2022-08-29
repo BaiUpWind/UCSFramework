@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,12 +23,36 @@ namespace DeviceConfig
         [Control("GroupName", "组名称", ControlType.TextBox)] 
         public string GroupName { get; set; }
 
-         
+        #region 控件位置属性 
         /// <summary>
-        /// 组内包含的设备类型
+        /// 位置x 对应在图像像素的x位置
         /// </summary>
-        //public List<Device> DeviceConfigs { get; set; }
+        //[Control("PosX", "位置X", ControlType.TextBox)]
+        public double PosX { get; set; } =-1;
+        /// <summary>
+        /// 位置y 对应在图像像素的y位置
+        /// </summary>
+        //[Control("PosY", "位置Y", ControlType.TextBox)]
+        public double PosY { get; set; }=-1;
 
+        /// <summary>
+        /// 控件的宽度
+        /// </summary>
+        public double CWidth { get; set; } = 100;
+
+        /// <summary>
+        /// 控件的高度
+        /// </summary>
+        public double CHeight { get; set; } = 100;
+
+        /// <summary>
+        /// 方向
+        /// <para>上下左右 分别是0,1,2,3</para>
+        /// </summary>
+        public int Direction { get; set; } = 0;
+        #endregion
+
+        [JsonIgnore]
         public int DeviceCount
         {
             get
@@ -39,6 +64,7 @@ namespace DeviceConfig
                 return 0;
             }
         }
+        [JsonIgnore]
         /// <summary>
         /// 当前正在扫描的设备名称
         /// </summary>
@@ -59,9 +85,7 @@ namespace DeviceConfig
             }
 
         }
-
-
-
+         
         public IList<Device> DeviceConfigs { get; set; }  
         
     }

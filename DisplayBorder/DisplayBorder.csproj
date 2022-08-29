@@ -80,6 +80,9 @@
     <Compile Include="Controls\DataControl.xaml.cs">
       <DependentUpon>DataControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DataGridControl.xaml.cs">
+      <DependentUpon>DataGridControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DeviceControl.xaml.cs">
       <DependentUpon>DeviceControl.xaml</DependentUpon>
     </Compile>
@@ -136,6 +139,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\DataControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\DataGridControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -214,7 +221,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Resource Include="fonts\iconfont.ttf" />
+    <Resource Include="Fonts\iconfont.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -235,30 +242,31 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\头部.png" />
+    <Resource Include="Images\头部.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\框框.png" />
+    <Resource Include="Images\框框.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\buttonImage.png" />
-    <Resource Include="images\centerImage.png" />
-    <Resource Include="images\drop.png" />
-    <Resource Include="images\img3d.png" />
-    <Resource Include="images\leftback.png" />
-    <Resource Include="images\leftImage.png" />
-    <Resource Include="images\leftImageSub.png" />
-    <Resource Include="images\rightImage.png" />
-    <Resource Include="images\timeback.png" />
-    <Resource Include="images\topback.png" />
-    <Resource Include="images\topImage.png" />
-    <Resource Include="images\vs.jpg" />
+    <Resource Include="Images\buttonImage.png" />
+    <Resource Include="Images\centerImage.png" />
+    <Resource Include="Images\drop.png" />
+    <Resource Include="Images\img3d.png" />
+    <Resource Include="Images\leftback.png" />
+    <Resource Include="Images\leftImage.png" />
+    <Resource Include="Images\leftImageSub.png" />
+    <Resource Include="Images\rightImage.png" />
+    <Resource Include="Images\timeback.png" />
+    <Resource Include="Images\topback.png" />
+    <Resource Include="Images\topImage.png" />
+    <Resource Include="Images\vs.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="images\中部选择栏选中-1.png" />
-    <Resource Include="images\中部选择栏选中-2.png" />
+    <Resource Include="Images\中部选择栏选中-1.png" />
+    <Resource Include="Images\中部选择栏选中-2.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\背景图片.jpeg" />
     <Content Include="Lib\UICommon.dll" />
     <Content Include="Lib\UICommon.pdb" />
   </ItemGroup>

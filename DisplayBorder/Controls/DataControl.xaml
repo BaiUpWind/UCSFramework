@@ -9,15 +9,17 @@
     <hc:TransitioningContentControl>
         <Grid Background="Transparent" >
             <Border BorderThickness="1" BorderBrush="CornflowerBlue" Background="CornflowerBlue" CornerRadius="15"></Border>
-            <Grid ShowGridLines="True"> 
+            <Grid  > 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="6*"/> 
                 </Grid.RowDefinitions> 
                 <Grid Grid.Row =" 0">
+                    <!--<Border BorderThickness="2" BorderBrush="White" CornerRadius="15"  Margin="15,5,15,0"/>-->
+
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="关闭" Margin="15,0,15,0" HorizontalAlignment="Right" Click="Btn_Click" />
-                        <Button Content="确认" Margin="15,0,15,0" HorizontalAlignment="Right" Click="Btn_Click"/>
+                        <Button Content="关闭" Margin="15,0,25,0" HorizontalAlignment="Right" Click="Btn_Click" />
+                        <Button Content="确认" Margin="15,0,25,0" HorizontalAlignment="Right" Click="Btn_Click"/>
 
                     </StackPanel>
                 </Grid>

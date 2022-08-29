@@ -175,8 +175,8 @@ namespace DisplayBorder.View
 
                             switch (conattr.ControlType)
                             {
-                                case ControlType.Label:
-                                    break;
+                                //case ControlType.Label:
+                                //    break;
                                 case ControlType.TextBox:
 
                                     TextBox txtBox = new TextBox();
@@ -193,9 +193,7 @@ namespace DisplayBorder.View
                                             {
                                                 propInfo.SetValue(target, t.Text);
                                                 var value = objType.GetProperty(propInfo.Name).GetValue(target, null)?.ToString();
-                                                Growl.Info($"名称{propInfo.Name},值:{value}" );
-                                           
-                                           
+                                                Growl.Info($"名称{propInfo.Name},值:{value}" ); 
                                             }
                                         }
                                     };
@@ -227,9 +225,9 @@ namespace DisplayBorder.View
                                     container.Children.Add(textBlock);
                                     container.Children.Add(cmb);
                                     break;
-                                case ControlType.ComboBoxSerialPort:
-                                    break;
-                                case ControlType.ComboBoxEnum:
+                                case ControlType.FilePathSelector:
+
+
 
                                     break;
                                 default:

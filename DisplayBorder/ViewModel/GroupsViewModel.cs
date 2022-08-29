@@ -24,10 +24,10 @@ namespace DisplayBorder.ViewModel
 
 
             GlobalPara.CheckPath(GlobalPara.ConfigPath);
-            if (!File.Exists(GlobalPara.GroupsFilePath))
-            {
-                File.Create(GlobalPara.GroupsFilePath);
-            }
+            //if (!File.Exists(GlobalPara.GroupsFilePath))
+            //{
+            //    File.Create(GlobalPara.GroupsFilePath);
+            //}
             var result = GlobalPara.Groups;// JsonHelper.ReadJson<Group>(InitializationBase.JsonFilePath);
             if (result != null)
             {

@@ -19,8 +19,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Config", "Config\Config.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayBorder", "DisplayBorder\DisplayBorder.csproj", "{BCCF1C19-951C-4CBB-A007-038F6C02AA63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApp1", "WpfApp1\WpfApp1.csproj", "{F48416CB-A370-42AF-AF0B-639FAB0F9737}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,10 +57,6 @@ Global
 		{BCCF1C19-951C-4CBB-A007-038F6C02AA63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCCF1C19-951C-4CBB-A007-038F6C02AA63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCCF1C19-951C-4CBB-A007-038F6C02AA63}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F48416CB-A370-42AF-AF0B-639FAB0F9737}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F48416CB-A370-42AF-AF0B-639FAB0F9737}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F48416CB-A370-42AF-AF0B-639FAB0F9737}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F48416CB-A370-42AF-AF0B-639FAB0F9737}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

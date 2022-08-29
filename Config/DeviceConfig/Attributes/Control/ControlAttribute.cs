@@ -11,19 +11,12 @@ namespace DeviceConfig
     /// 使用哪种控件
     /// <para>Name 不能重复</para>
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = false)] 
+    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)] 
     public class ControlAttribute : BaseAttribute
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="Name"></param>
-        /// <param name="ControlType"></param>
-        /// <param name="Enable"></param>
-        /// <param name="ReadOnly"></param>
-        /// <param name="Visable"></param>
-        /// <param name="Items">当选择类型'<see cref="ControlType.ComboBox"/>'时，传入对应的项集合</param>
-        public ControlAttribute(string Name,string LabelName, ControlType ControlType, bool Enable =true, bool ReadOnly =false, bool Visable = true,object[] Items = null,Type EnumType = null) : base(Name)
+      
+        public ControlAttribute(string Name, string LabelName, ControlType ControlType, bool Enable = true, bool ReadOnly = false, bool Visable = true
+            , object[] Items = null, Type EnumType = null, string FieldName = null, string FileType = null) : base(Name)
         {
             this.controlType = ControlType;
             this.visable = Visable;
@@ -33,6 +26,8 @@ namespace DeviceConfig
             items = Items;
             enumType = EnumType;
             labelName = LabelName;
+            fieldName = FieldName;
+            fileType = FileType;
         }
 
         private readonly ControlType controlType;
@@ -42,6 +37,9 @@ namespace DeviceConfig
         private readonly object[] items;
         private readonly Type enumType;
         private readonly string labelName;
+        private readonly string fieldName;
+        private readonly string fileType;
+
         public ControlType ControlType { get => controlType; } 
         /// <summary>
         /// 是否可见的 
@@ -61,5 +59,15 @@ namespace DeviceConfig
         public Type EnumType => enumType;
 
         public string LabelName => labelName;
+
+        /// <summary>
+        /// 如果类型是按钮文件,返回值所对应的属性名称
+        /// </summary>
+        public string FieldName => fieldName;
+        /// <summary>
+        /// 如果类型是按钮文件,选择对应的文件类型
+        /// <para>只支持一种</para>
+        /// </summary>
+        public string FileType => fileType;
     }
 }
