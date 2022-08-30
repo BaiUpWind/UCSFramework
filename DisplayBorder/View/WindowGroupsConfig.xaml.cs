@@ -11,8 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using CommonApi;
 using DeviceConfig;
+using DeviceConfig.Core;
 using DisplayBorder.Controls;
 using DisplayBorder.Events;
 using HandyControl.Controls;
@@ -21,13 +23,7 @@ using Window = HandyControl.Controls.Window;
 
 namespace DisplayBorder.View
 {
-    public class CreatePoint
-    {
-        [Control("X", "图像X坐标", ControlType.TextBox)]
-        public double X { get; set; }
-        [Control("Y", "图像Y坐标", ControlType.TextBox)]
-        public double Y { get; set; }
-    }
+ 
     /// <summary>
     /// WindowGroupsConfig.xaml 的交互逻辑
     /// </summary>
@@ -71,7 +67,8 @@ namespace DisplayBorder.View
      
         public WindowGroupsConfig()
         {
-            InitializeComponent(); 
+            InitializeComponent();
+            SetControlEnable(false);
              Loaded += (s, e) =>
             {
                  
@@ -88,7 +85,7 @@ namespace DisplayBorder.View
 
                 if(img.Source is BitmapSource bitmap)
                 {
-                    lblresolution.Content = $"分辨率{bitmap.PixelWidth}*{bitmap.PixelHeight}";
+                    lblresolution.Text = $"分辨率{bitmap.PixelWidth}*{bitmap.PixelHeight}";
                     img.Width = bitmap.Width;
                     img.Height = bitmap.Height;
                 }
@@ -151,12 +148,13 @@ namespace DisplayBorder.View
 
 
             //        var pos = parent.TransformToAncestor(C1).Transform(new Point(0, 0));
-            //        lblTpos.Content = $"窗体 X:{pos.X:0} Y:{pos.Y:0}   ";
+            //        lblTpos.Text = $"窗体 X:{pos.X:0} Y:{pos.Y:0}   ";
             //        Console.WriteLine($"x{CacheTc.ImagePixelPoint.X:0}  y{CacheTc.ImagePixelPoint.Y:0}");
             //    }
             //};
             #endregion
             GlobalPara.Init();
+    
         }
         /// <summary>
         /// 当前选中的可拖拽border装饰器
@@ -174,7 +172,17 @@ namespace DisplayBorder.View
 
         private List<Group> groups = new List<Group>();
         private List<Border> cacheBorder = new List<Border>();
-        
+
+        private void SetControlEnable(bool value)
+        {
+            foreach (var item in opSP.Children)
+            {
+                if(item is UIElement uielement)
+                {
+                    uielement.IsEnabled = value;
+                }
+            } 
+        }
         /// <summary>
         /// 创建组的标题
         /// </summary>
@@ -205,10 +213,10 @@ namespace DisplayBorder.View
             C1.Children.Add(border);
             var al = AdornerLayer.GetAdornerLayer(border);
             var adorner = new ElementAdorner(border);
-            al.Add(adorner);
-
+            al.Add(adorner); 
+            g.GroupID = groups.Count + 1; 
             //添加到组的缓存
-     
+            
             groups.Add(g);
             cacheBorder.Add(border);
             #region 事件 
@@ -223,17 +231,18 @@ namespace DisplayBorder.View
             {
                 if (CacheTc != null)
                 {
-                    var dir = TitleControl.DirectionArrow.LeftUp;
-                    if (CacheTc.Direction == TitleControl.DirectionArrow.LeftUp)
+                  
+                    int dir = (int)CacheTc.Direction;
+                    if(dir +1 <= 4)
                     {
-                        dir = TitleControl.DirectionArrow.LeftDown;
+                        dir++;
                     }
                     else
                     {
-                        dir = TitleControl.DirectionArrow.LeftUp;
-                    }
-                    CacheTc.SwitchDricetion(dir);
-                    g.Direction = (int)CacheTc.Direction;
+                        dir = 0;
+                    } 
+                    CacheTc.SwitchDricetion((TitleControl.DirectionArrow)dir);
+                    g.Direction = dir;
                 }
             };
             //拖放事件
@@ -247,13 +256,13 @@ namespace DisplayBorder.View
                     var x = pos2.X * BackImage.PixelWidth / img.Width;
                     var y = pos2.Y * BackImage.PixelHeight / img.Height;
                     CacheTc.ImagePixelPoint = new Point(x, y);
-                    lblTimgpos.Content = $"图像 X:{x:0} Y:{y:0}";
+                    lblTimgpos.Text = $"图像 X:{x:0} Y:{y:0}";
                     //保存所在的图像位置
                     g.PosX = x;
                     g.PosY = y;
                 }
                 //相对于父元素的位置
-                lblTpos.Content = $"窗体 X:{pos.X:0} Y:{pos.Y:0}   ";
+                lblTpos.Text = $"窗体 X:{pos.X:0} Y:{pos.Y:0}   ";
             };
             #endregion
         }
@@ -266,8 +275,14 @@ namespace DisplayBorder.View
                 try
                 {
                     img.Source = new BitmapImage(new Uri(GlobalPara.SysConfig.BackImagPath, UriKind.Absolute));
-                    img.Width = img.Source.Width;
-                    img.Height = img.Source.Height;
+                    if (img.Source is BitmapSource bitmap)
+                    {
+                        lblresolution.Text = $"分辨率{bitmap.PixelWidth}*{bitmap.PixelHeight}";
+                        img.Width = bitmap.Width;
+                        img.Height = bitmap.Height;
+  
+                    }
+                    SetControlEnable(true);
                 }
                 catch (Exception ex)
                 {
@@ -330,10 +345,10 @@ namespace DisplayBorder.View
         //当添加一个组时
         private void Btn_ClickAddGroup(object sender, RoutedEventArgs e)
         {
-            WindowHelper.Create<Group, DataControl>((g) =>
+            WindowHelper.CreateWindow<Group, DataWindow>((g) =>
             {
                 CreateTitle(g);
-            }, null, this);
+            }  );
         }
 
         //当删除一个组时
@@ -343,6 +358,10 @@ namespace DisplayBorder.View
             {
                 groups.Remove(cacheTc.groupViewModel.CurrentGroup);
                 C1.Children.Remove((UIElement)CacheTc.Parent);
+            }
+            else
+            {
+                Growl.Info("选择一个组!");
             }
         }
         //当点击切换方向时
@@ -372,45 +391,15 @@ namespace DisplayBorder.View
                 System.Windows.Point p = e.GetPosition(((IInputElement)e.Source));
                 var x = e.GetPosition(img).X * image.PixelWidth / img.Width;
                 var y = e.GetPosition(img).Y * image.PixelHeight / img.Height;
-                lblxy.Content = $"鼠标位置:图像:X:{x:#0} Y:{y:#0)} || 画布: X:{p.X:0}Y:{p.Y:0}  ";
+                lblxy.Text = $"鼠标位置:图像:X:{x:#0} Y:{y:#0)} || 画布: X:{p.X:0}Y:{p.Y:0}  ";
             } 
         }
 
         private void img_MouseLeave(object sender, MouseEventArgs e)
         {
-            lblxy.Content = $"X:{0} Y:{0}";
+            lblxy.Text = $"X:{0} Y:{0}";
         }
-
-        //测试
-        private void Btn_CreatePoint(object sender, RoutedEventArgs e)
-        {
-            WindowHelper.Create<CreatePoint, DataControl>((obj) =>
-            {
-                if (obj is CreatePoint cp)
-                {
-                    Dot dot = new Dot();
-                    dot.Width = 2;
-                    dot.Height = 2;
-                    dot.Background = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
-              
-                    var x = cp.X /(BackImage.PixelWidth / img.Width);
-                    var y =  cp.Y /(BackImage.PixelHeight / img.Height);
-                    dot.SetValue(Canvas.LeftProperty, x  );
-                    dot.SetValue(Canvas.TopProperty, y  );
-                    C1.Children.Add(dot);
-                    dot.MouseDown += (s, args) =>
-                    {
-                        C1.Children.Remove(dot);
-                      
-                    };
-
-                } 
-                //var x = pos.X * image.PixelWidth / img.Width;
-                //var y = pos.Y * image.PixelHeight / img.Height;
-
-            },null,this);
-        }
-
+ 
      
 
 
@@ -420,7 +409,7 @@ namespace DisplayBorder.View
         {
             if (groups.Count > 0)
             {
-                WindowHelper.Create<DataGridControl>(groups, ownerWindow: this);
+                WindowHelper.CreateDataGirdWindow<DataGirdWindow>(groups ,titleName:"组的详细信息");
             }
             else
             {
@@ -478,20 +467,52 @@ namespace DisplayBorder.View
 
         private void Btn_SaveGroupsData(object sender, RoutedEventArgs e)
         {
-            GlobalPara.Groups = groups;
-            Growl.Info("保存成功!");
+            if(groups.Count > 0)
+            { 
+                GlobalPara.Groups = groups;
+                Growl.Info("保存成功!");
+            }
         }
 
         private void Btn_OpenConfig(object sender, RoutedEventArgs e)
         {
-            WindowHelper.Create<SysConfigPara, DataControl>((a) =>
+            WindowHelper.CreateWindow<SysConfigPara, DataWindow>((a) =>
             {
                 GlobalPara.SysConfig = a;
                 Growl.InfoGlobal("保存成功!");
                 SetImgSource();
-            }, GlobalPara.SysConfig, this);
+            }, GlobalPara.SysConfig,"系统配置");
         }
+
+        private void Btn_ModifyGroup(object sender, RoutedEventArgs e)
+        {
+            if (CacheTc != null && CacheTc.groupViewModel != null && CacheTc.groupViewModel.CurrentGroup != null)
+            {
+
+                WindowHelper.CreateWindow<Group, DataWindow>((g) =>
+                {
+                    CacheTc.groupViewModel.CurrentGroup = g;
+                }, CacheTc.groupViewModel.CurrentGroup,"修改组信息" );
+            }
+            else
+            {
+                Growl.Info("选择一个组!");
+            }
+
+        }
+
         #endregion
+        DeviceInfo testinfo;
+
+     
+        private void Btn_Test(object sender, RoutedEventArgs e)
+        {
+
+            WindowHelper.CreateWindow<DataBaseOperation, DataWindow>((a) =>
+            {
+
+            }, null, "数据库连接");
+        }
     }
 
 

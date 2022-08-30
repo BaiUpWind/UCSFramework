@@ -12,11 +12,7 @@ namespace DeviceConfig
     /// 设备需要读取的信息所需要的配置 
     /// </summary>
     public class DeviceInfo
-    {
-        public DeviceInfo( )
-        {
-            
-        }
+    { 
         //public DeviceInfo(ConnectionConfigBase defaultConn)
         //{
         //    this.defaultConn = defaultConn ?? throw new Exception("初始化设备信息配置，未能获取到默认的连接方式！");
@@ -37,11 +33,13 @@ namespace DeviceConfig
         /// <summary>
         /// 设备信息名称
         /// </summary>
+        [Control("DeviceInfoName", "设备信息名称" ,ControlType.TextBox)]
         public string DeviceInfoName { get; set; }
         /// <summary>
         /// 获取信息的连接方式
         /// </summary> 
         [JsonIgnore]
+        //[Control("Operation", "连接类型", ControlType.Genericity, GenerictyType: typeof(ConnectionConfigBase), FieldName: nameof(ConnConfig))]
         public ConnectionConfigBase ConnConfig
         {
             get
@@ -54,38 +52,40 @@ namespace DeviceConfig
         /// 对设备的操作类型
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
+        [Control("Operation","操作类型",ControlType.Genericity, GenerictyType:typeof(OperationBase), FieldName:nameof(Operation))]
         public OperationBase Operation { get => operation; set => operation = value; }
         /// <summary>
         /// 刷新数据间隔  单位:毫秒 
         /// </summary>
+        [Control("DeviceInfoName", "数据刷新间隔(毫秒)", ControlType.TextBox)]
         public int RefreshInterval { get; set; }
 
-        #region 操作的创建
-         
+        #region 操作的创建(弃用 20220830)
+
         /// <summary>
         /// 获取所有操作类型
         /// <para></para>
         /// <see cref=" Utility.Reflection.GetInheritors"/>
         /// </summary>
         /// <returns></returns>
-        public ClassData GetOperations() => Utility.Reflection.GetClassData<OperationBase>();
-        
+        //public ClassData GetOperations() => Utility.Reflection.GetClassData<OperationBase>();
+
         /// <summary>
         /// 创建一个操作类型
         /// </summary>
         /// <param name="name"></param>
         /// <exception cref="Exception"></exception>
-        public void CreateOpertaion(string name)
-        { 
-            Operation = Utility.Reflection.CreateObjectShortName<OperationBase>(name);
-            if (Operation == null)
-            {
-                throw new Exception($"{info} 创建失败！");
-            } 
-        }
+        //public void CreateOpertaion(string name)
+        //{ 
+        //    Operation = Utility.Reflection.CreateObjectShortName<OperationBase>(name);
+        //    if (Operation == null)
+        //    {
+        //        throw new Exception($"{info} 创建失败！");
+        //    } 
+        //}
 
         #endregion
-         
+
 
         public async void Start()
         {

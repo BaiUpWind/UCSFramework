@@ -31,8 +31,11 @@ namespace DeviceConfig.Core
            throw new ArgumentException("创建数据库操作实例失败!");
         }
         private    DBUnitiyBase db;
+         
+         
         public override bool Connect()
         {
+        
             try
             {
                 db.CurrentConnection.Open();

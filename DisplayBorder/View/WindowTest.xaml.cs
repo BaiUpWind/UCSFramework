@@ -144,7 +144,7 @@ namespace DisplayBorder.View
 
         private void Button_Click2(object sender, RoutedEventArgs e)
         {
-            WindowHelper.GetObject<OperationBase>((obj) =>
+            WindowHelper.CreateComboBox<OperationBase>((obj) =>
             {
                 Growl.Info($"创建成功!{obj.GetType().Name}");
             }, para: new DataBaseConnectCfg());

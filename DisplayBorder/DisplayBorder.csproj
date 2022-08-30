@@ -109,6 +109,12 @@
     </Compile>
     <Compile Include="ViewModel\MixerViewModel.cs" />
     <Compile Include="ViewModel\TitleViewModel.cs" />
+    <Compile Include="View\DataGirdWindow.xaml.cs">
+      <DependentUpon>DataGirdWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DataWindow.xaml.cs">
+      <DependentUpon>DataWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
@@ -163,6 +169,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RGVDataWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DataGirdWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DataWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

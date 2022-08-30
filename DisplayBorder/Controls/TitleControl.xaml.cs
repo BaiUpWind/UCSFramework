@@ -72,6 +72,8 @@ namespace DisplayBorder.Controls
             set => location = value;
         }
 
+        public Path LinePath => linePath;
+
         /// <summary>
         /// 当前控件在图像上的位置
         /// </summary>
@@ -87,6 +89,7 @@ namespace DisplayBorder.Controls
 
         private void Init()
         {
+         
             SizeChanged += (s, e) =>
             {
                 line1.StartPoint = d1.Location;
@@ -142,12 +145,55 @@ namespace DisplayBorder.Controls
 
                     d2.HorizontalAlignment = HorizontalAlignment.Left;
                     d2.VerticalAlignment = VerticalAlignment.Bottom;
-                    d2.Margin = new Thickness(0, 0, 0, 0);
+                    d2.Margin = new Thickness(15, 0, 0, 0);
 
 
                     txb1.HorizontalAlignment = HorizontalAlignment.Left;
                     txb1.VerticalAlignment = VerticalAlignment.Bottom;
-                    txb1.Margin = new Thickness(6, 0, 0, 6);
+                    txb1.Margin = new Thickness(21, 0, 0, 6);
+
+                    break;
+
+                case DirectionArrow.RightUp:
+                    d1.HorizontalAlignment = HorizontalAlignment.Left;
+                    d1.VerticalAlignment = VerticalAlignment.Bottom;
+                    d1.Margin = new Thickness(0, 0, 0, 0);
+
+                    d2.HorizontalAlignment = HorizontalAlignment.Left;
+                    d2.VerticalAlignment = VerticalAlignment.Top;
+                    d2.Margin = new Thickness(25,16,0,0);
+
+                    d3.HorizontalAlignment = HorizontalAlignment.Right;
+                    d3.VerticalAlignment = VerticalAlignment.Top;
+                    d3.Margin = new Thickness(0, 16, 0, 0);
+
+
+                    txb1.HorizontalAlignment = HorizontalAlignment.Right;
+                    txb1.VerticalAlignment = VerticalAlignment.Top;
+                    txb1.Margin = new Thickness(0,0,0,0);
+                     
+
+                    break;
+                case DirectionArrow.RightDown:
+
+                    d1.HorizontalAlignment = HorizontalAlignment.Left;
+                    d1.VerticalAlignment = VerticalAlignment.Bottom;
+                    d1.Margin = new Thickness(0, 0, 0, 0);
+
+
+
+                    d2.HorizontalAlignment = HorizontalAlignment.Right;
+                    d2.VerticalAlignment = VerticalAlignment.Bottom;
+                    d2.Margin = new Thickness(0, 0, 15, 0);
+
+                    d3.HorizontalAlignment = HorizontalAlignment.Right;
+                    d3.VerticalAlignment = VerticalAlignment.Top;
+                    d3.Margin = new Thickness(0, 16, 0, 0);
+
+
+                    txb1.HorizontalAlignment = HorizontalAlignment.Right;
+                    txb1.VerticalAlignment = VerticalAlignment.Bottom;
+                    txb1.Margin = new Thickness(0, 0, 21, 6);
 
                     break;
             }

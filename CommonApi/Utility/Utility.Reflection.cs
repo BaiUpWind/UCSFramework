@@ -51,10 +51,28 @@ namespace CommonApi
                     }
                     return Activator.CreateInstance(te, para) as T;//创建实例
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw ex;
-                } 
+                }
+            }
+
+            public static object CreateObject(Type type, string fullName, params object[] para)
+            {
+                try
+                {
+                    var te = type.Assembly.GetTypes().Where(a => a.FullName == fullName).FirstOrDefault();
+                    if (te == null)
+                    {
+                        throw new ArgumentNullException($" '{fullName}' 未找到实例！"); 
+                    }
+                    return Activator.CreateInstance(te, para);
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
             }
 
             
@@ -85,87 +103,25 @@ namespace CommonApi
                 }
             }
 
-       
-            /// <summary>
-            /// 创建实例
-            /// </summary> 
-            /// <typeparam name="T">实例类型</typeparam>
-            /// <param name="assemblyName">程序集名称</param>
-            /// <param name="name">实例的全名称</param>
-            /// <param name="para">对象实例参数</param>
-            /// <returns></returns>
-            private static T CreateObject<T>(string assemblyName, string name, params object[] para) where T : class
+            public static object CreateObjectShortName(Type type ,string shortName,params object[] objects)
             {
                 try
                 {
-                    Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();　
-                    Assembly assembly = assemblies.Where(p => p.FullName.Contains(assemblyName)).FirstOrDefault();  
-                    Type type = assembly.GetType(name);//反射入口 
-                    return Activator.CreateInstance(type, para) as T;//创建实例
-                }
-                catch  
-                { 
-                    return default;
-                } 
-            }
-
-            /// <summary>
-            /// 创建实例 简单查找命名空间
-            /// </summary> 
-            /// <typeparam name="T">实例类型</typeparam> 
-            /// <param name="fullName">实例的全名称</param>
-            /// <param name="para">对象实例参数</param>
-            /// <returns></returns>
-            private static T CreateObjectSimple<T>(string fullName, params object[] para) where T : class
-            {
-                try
+                    var result=  type.Assembly.GetTypes().Where(a => !a.IsAbstract && a.Name == shortName).FirstOrDefault();
+                    if (result == null)
+                    {
+                        throw new ArgumentNullException($"'{type.FullName}'未找到对应的名称'{shortName}'实现,实现是不包括抽象!");
+                    }
+                    return CreateObject(type, result.FullName, objects);
+                }   
+                catch (Exception ex)
                 {
-                    string assemblyName = fullName.Split('.')[0];
-                    Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-                    Assembly assembly = assemblies.Where(p => p.FullName.Contains(assemblyName)).FirstOrDefault();
-                    Type type = assembly.GetType(fullName);//反射入口 
-                    return Activator.CreateInstance(type, para) as T;//创建实例
-                }
-                catch
-                {
-                    return default;
+                    throw ex;
+                    throw;
                 }
             }
 
-            /// <summary>
-            /// 创建对象实例
-            /// </summary>
-            /// <typeparam name="T">要创建对象的类型</typeparam>
-            /// <param name="nameSpace">类型所在命名空间</param>
-            /// <param name="className">类型名</param>
-            /// <param name="parameters">构造函数参数</param>
-            /// <returns></returns>
-            internal static T CreateInstance<T>(string nameSpace, string className, params object[] parameters)
-            => CreateInstance<T>(nameSpace + "." + className, parameters);
-
-            /// <summary>
-            /// 创建对象实例
-            /// </summary>
-            /// <typeparam name="T">要创建对象的类型</typeparam>
-            /// <param name="nameSpace">类型所在命名空间</param>
-            /// <param name="className">类型名</param>
-            /// <param name="parameters">构造函数参数</param>
-            /// <returns></returns>
-            internal static T CreateInstance<T>(string fullName ,params object[] parameters)
-            {
-                try
-                { 
-                    object ect = Assembly.GetExecutingAssembly().CreateInstance(fullName, true, System.Reflection.BindingFlags.Default, null, parameters, null, null);//加载程序集，创建程序集里面的 命名空间.类型名 实例
-                    return (T)ect;//类型转换并返回
-                }
-                catch
-                {
-                    //发生异常，返回类型的默认值
-                    return default(T);
-                }
-            }
-
-
+        
             /// <summary>
             /// 创建指定类型实例,并且规定类型继承于 T1,且有添加对应的特性T2.
             /// </summary>
@@ -268,6 +224,14 @@ namespace CommonApi
                 GetInheritors(typeof(T), ref cd);
                 return cd;
             }
+
+            public static ClassData GetClassData(Type t)
+            {
+                ClassData cd = new ClassData();
+                GetInheritors(t, ref cd);
+                return cd;
+            }
+
             /// <summary>
             /// 获取类型所有的直接继承的类型，对[抽象类]再递归获取
             /// <para>使用的话:用递归，遍历<see cref="ClassData.ChildrenTypes"/> 判断<see cref="Type.IsAbstract"/>进行递归</para>

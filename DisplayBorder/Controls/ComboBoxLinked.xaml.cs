@@ -96,6 +96,30 @@ namespace DisplayBorder.Controls
                 Growl.ErrorGlobal(ExceptionOperater.GetSaveStringFromException("设置组合框内容时出现未知异常:", ex));  
             } 
         }
+
+        public void SetType(Type type)
+        {
+            try
+            {
+                classData = Utility.Reflection.GetClassData (type);
+                if (classData != null)
+                { 
+                    Create(classData);
+                    GetComboBox(1).SetVisiable(Visibility.Hidden);
+                    GetComboBox(2).SetVisiable(Visibility.Hidden); 
+                }
+                else
+                {
+                    Growl.ErrorGlobal($"未能正确获取到'{type}'类型的数据");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Growl.ErrorGlobal(ExceptionOperater.GetSaveStringFromException("设置组合框内容时出现未知异常:", ex));
+            }
+        }
+
         public T GetType<T>(params object[] para) where T : class
         {  
             if (currenData == null)
@@ -112,6 +136,23 @@ namespace DisplayBorder.Controls
                 return result;
             }
         }
+        public object GetType(Type type, params object[] para)
+        {
+            if(currenData == null)
+            {
+                return default;
+            }
+            var result = Utility.Reflection.CreateObjectShortName (type,currenData.Combo.SelectedItem.ToString(), para);
+            if (result == null)
+            {
+                return default;
+            }
+            else
+            {
+                return result;
+            }
+        }
+        
 
         public void Create(ClassData data)
         {

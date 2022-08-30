@@ -49,7 +49,7 @@ namespace DisplayBorder.Controls
         private void Btn_Click_CreateOperation(object sender, RoutedEventArgs e)
         {
             if (deviceView == null) return;
-            WindowHelper.GetObject<OperationBase>((obj) =>
+            WindowHelper.CreateComboBox<OperationBase>((obj) =>
             {
                 deviceView.Operation = obj;
             });

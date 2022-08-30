@@ -23,5 +23,10 @@ namespace DisplayBorder
         {
             InitializeComponent();
         }
+
+        private void Btn_Click_Close(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

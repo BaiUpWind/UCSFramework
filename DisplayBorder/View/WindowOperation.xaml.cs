@@ -68,7 +68,7 @@ namespace DisplayBorder.View
         //创建这个操作
         private void Btn_Click_CreateOperation(object sender, RoutedEventArgs e)
         {
-            WindowHelper.GetObject<OperationBase>((operation) =>
+            WindowHelper.CreateComboBox<OperationBase>((operation) =>
             {
                 Clear();
                 CreateNew(operation);

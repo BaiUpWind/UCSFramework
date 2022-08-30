@@ -61,14 +61,15 @@ namespace DisplayBorder.Controls
             }
         }
 
-        public void CreateType<T>(T target) where T : class
+        public void CreateType (Type targetType, object traget) 
         {
-            Ttype = target;
-            WindowHelper.CreateContrl(target, container);
+            Ttype = traget;
+            WindowHelper.CreateContrl(targetType, traget, container);
         }
 
-        public T GetType<T>(params object[] paras) where T : class => (T)Ttype;
+      
 
+        public object GetType(params object[] paras) => Ttype;
     }
 
     /// <summary>
@@ -78,9 +79,9 @@ namespace DisplayBorder.Controls
     public interface IControlHelper
     {
 
-        void CreateType<T>(T target) where T : class;
-
-        T GetType<T>(params object[] paras) where T : class;
+        void CreateType(Type targetType,object target);
+         
+        object GetType(params object[] paras);
 
         event Action<object> OnEnter;
         event Action OnCancel;

@@ -44,7 +44,14 @@ namespace DisplayBorder
         private static IList<Group> groups; 
         private static EventManager eventManager;
         private static SysConfigPara sysConfig;
+        public static void Init()
+        {
+            CheckPath(SysPath);
+        }
 
+        /// <summary>
+        /// 系统的所有组的信息
+        /// </summary>
         public static IList<Group> Groups
         {
             get
@@ -73,6 +80,10 @@ namespace DisplayBorder
                 } 
             }
         }
+
+        /// <summary>
+        /// 系统配置的参数
+        /// </summary>
         public static SysConfigPara SysConfig
         {
             get
@@ -108,10 +119,6 @@ namespace DisplayBorder
             }
         }
 
-        public static void Init()
-        {
-            CheckPath(SysPath);
-        }
 
         public static void CheckPath(string path)
         {
@@ -130,6 +137,24 @@ namespace DisplayBorder
         private string groupsFilePath;
 
         /// <summary>
+        /// 标题
+        /// </summary>
+        [Control("Title", "标题", ControlType.TextBox)]
+        public string Title { get; set; }
+
+        /// <summary>
+        /// 描述
+        /// </summary>
+        [Control("Description", "描述", ControlType.TextBox)]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// 版本
+        /// </summary>
+        [Control("Version", "版本", ControlType.TextBox)]
+        public string Version { get; set; }
+ 
+        /// <summary>
         /// 组的文件路径
         /// </summary>
         [Control("GroupsFilePath", "组配置路径", ControlType.TextBox)]
@@ -138,6 +163,7 @@ namespace DisplayBorder
         {
             get
             {
+                //当没有路径时,使用默认路径
                 if (string.IsNullOrEmpty(groupsFilePath))
                 {
                     groupsFilePath = GlobalPara.GroupsFilePath;
@@ -146,6 +172,7 @@ namespace DisplayBorder
             }
             set => groupsFilePath = value;
         }
+
         /// <summary>
         /// 显示的图片信息
         /// </summary>

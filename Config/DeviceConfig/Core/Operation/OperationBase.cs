@@ -30,18 +30,18 @@ namespace DeviceConfig.Core
         /// 连接配置的基类
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
+        [Control("ConnectConfig", "连接类型", ControlType.Data, GenerictyType: typeof(ConnectionConfigBase), FieldName: nameof(ConnectConfig))]
         public ConnectionConfigBase ConnectConfig
         {
             get
-            {
-                //if (UseDefaultConn)
-                //{
-                //    return defaultConn;
-                //}
+            { 
                 return connectConfig;
             }
            set => connectConfig = value;
         }
+
+        [Control("testconn", "测试连接", ControlType.Button, MethodName: nameof(Connect))]
+        public string TestConn { get; set; }
 
         /// <summary>
         /// 读取设备数据的指令

@@ -11,12 +11,13 @@ namespace DeviceConfig
     /// 使用哪种控件
     /// <para>Name 不能重复</para>
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)] 
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, Inherited = false, AllowMultiple = true)] 
     public class ControlAttribute : BaseAttribute
     {
       
         public ControlAttribute(string Name, string LabelName, ControlType ControlType, bool Enable = true, bool ReadOnly = false, bool Visable = true
-            , object[] Items = null, Type EnumType = null, string FieldName = null, string FileType = null) : base(Name)
+            , object[] Items = null, Type EnumType = null, string FieldName = null, string FileType = null
+            ,Type GenerictyType=null,string MethodName =null) : base(Name)
         {
             this.controlType = ControlType;
             this.visable = Visable;
@@ -28,6 +29,8 @@ namespace DeviceConfig
             labelName = LabelName;
             fieldName = FieldName;
             fileType = FileType;
+            generictyType = GenerictyType;
+            methodName = MethodName;
         }
 
         private readonly ControlType controlType;
@@ -39,6 +42,8 @@ namespace DeviceConfig
         private readonly string labelName;
         private readonly string fieldName;
         private readonly string fileType;
+        private readonly Type generictyType;
+        private readonly string methodName;
 
         public ControlType ControlType { get => controlType; } 
         /// <summary>
@@ -57,6 +62,10 @@ namespace DeviceConfig
         public object[] Items => items;
 
         public Type EnumType => enumType;
+        /// <summary>
+        /// 生成的类型
+        /// </summary>
+        public Type GenerictyType => generictyType;
 
         public string LabelName => labelName;
 
@@ -69,5 +78,7 @@ namespace DeviceConfig
         /// <para>只支持一种</para>
         /// </summary>
         public string FileType => fileType;
+
+        public string MethodName => methodName;
     }
 }

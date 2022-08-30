@@ -14,6 +14,7 @@ using System.IO;
 
 namespace DisplayBorder.ViewModel
 {
+    [Obsolete("暂时弃用220830")]
     public class GroupsViewModel : ViewModelBase
     {
 

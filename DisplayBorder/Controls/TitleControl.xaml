@@ -8,12 +8,12 @@
               mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100" Cursor="Hand"   >
     <Grid x:Name="gMain" Background="Transparent"   >
-        <TextBlock  x:Name="txb1" Text="{Binding CurrentGroup.GroupName}" Foreground="White"  HorizontalAlignment="Left" VerticalAlignment="Top"  MouseDown="txb1_MouseDown" Cursor="Hand" />
+        <TextBlock   x:Name="txb1" Text="{Binding CurrentGroup.GroupName}" Foreground="{Binding CurrentGroup.FontBrush}"  HorizontalAlignment="Left" VerticalAlignment="Top"  MouseDown="txb1_MouseDown" Cursor="Hand" />
 
         <!--<TextBlock Text="111111111111" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 0 0 17" />-->
         
         
-        <Path Stroke="Blue" x:Name="linePath">
+        <Path Stroke="{Binding CurrentGroup.PathBrush}" x:Name="linePath">
             <Path.Data>
                 <GeometryGroup>
                     <LineGeometry x:Name="line1" />

@@ -10,8 +10,8 @@
            x:Class="DisplayBorder.View.WindowGroupsConfig"
         mc:Ignorable="d"
         Title="WindowGroupsConfig" Height="450" Width="800">
-    <hc:TransitioningContentControl>
-        <Grid>
+    <hc:TransitioningContentControl >
+        <Grid Background="CornflowerBlue">
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"></RowDefinition> 
                 <RowDefinition Height="10*"></RowDefinition>
@@ -25,26 +25,33 @@
                     <Button Content="保存" Margin="15,0,0,0" Click="Btn_SaveGroupsData"></Button>
                     <Button Content="组详情" Margin="15,0,0,0" Click="Btn_GroupsDetails" ></Button>
                     <Button Content="配置文件"  Margin="15,0,0,0" Click="Btn_OpenConfig" ></Button>
+                    <Button Content="test"  Margin="15,0,0,0" Click="Btn_Test" ></Button>
+
                 </StackPanel>
             </Grid>
            
             <Grid Grid.Row="1" Margin="5">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="125" />
                     <ColumnDefinition Width="8*" />
-                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="125" />
                 </Grid.ColumnDefinitions>
                 
 
                 <Grid Grid.Column="0">
-                    <Border BorderThickness="1" Margin="5" BorderBrush="Aqua"  CornerRadius="5"></Border>
-                    <StackPanel Orientation="Vertical">
-                        <!--<Button  Content="切换位置" Margin="15,15,0,0" Click="Btn_SwitchDirection"></Button>-->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" FontSize="18" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">组操作</TextBlock>
+                    <Border Grid.Row="1" BorderThickness="1" Margin="5" BorderBrush="Aqua"  CornerRadius="5"></Border>
+                    <StackPanel  Grid.Row="1" Orientation="Vertical" x:Name="opSP">
+                        <Button  x:Name="btnAdd" Content="添加" Margin="15,15,0,0" Click="Btn_ClickAddGroup"></Button>
+                        <Button x:Name="btnDelete" Content="删除" Margin="15,5,0,0" Click="Btn_DeleteGroup"></Button>
+                        <Button x:Name="btnModify" Content="修改" Margin="15,5,0,0" Click="Btn_ModifyGroup"></Button>
 
-                        <Button  Content="添加" Margin="15,15,0,0" Click="Btn_ClickAddGroup"></Button>
-                        <Button  Content="删除" Margin="15,5,0,0" Click="Btn_DeleteGroup"></Button>
                         <Border Margin="15" BorderBrush="SeaGreen" BorderThickness="1"/>
-                        <Button Content="生成这个点位 " Click="Btn_CreatePoint"></Button>
+             
                     </StackPanel>
 
                 </Grid>
@@ -70,19 +77,30 @@
                 </Grid>
 
                 <Grid Grid.Column="2">
-                    <Border BorderThickness="1" Margin="5" BorderBrush="Aqua"  CornerRadius="5"></Border>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" FontSize="18" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">组信息 </TextBlock>
+                        <Border Grid.Row="1" BorderThickness="1" Margin="5" BorderBrush="Aqua"  CornerRadius="5"></Border>
+
+                    </Grid>
+                    
+                    
                 </Grid>
             </Grid>
 
             <Grid Grid.Row="2">
                 <Border BorderThickness="1" Margin="5" BorderBrush="Aqua"  CornerRadius="5"></Border>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Label x:Name="lblxy" Margin="5">鼠标位置X,Y</Label>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" x:Name="lblxy" Margin="5">鼠标位置X,Y</TextBlock>
                     <Border Margin="15" BorderBrush="SeaGreen" BorderThickness="1"/>
-                    <Label x:Name="lblTpos" Content="窗体X:Y:" Margin="5"/>
-                    <Label x:Name="lblTimgpos" Content="图像X:Y:" />
-                    <Border Margin="15" BorderBrush="SeaGreen" BorderThickness="1"/>
-                    <Label x:Name="lblresolution"  Margin="5,0,15,0">分辨率</Label>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" x:Name="lblTpos" Text="窗体X:Y:" Margin="5"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" x:Name="lblTimgpos" Text="图像X:Y:" />
+                    <Border   Margin="15" BorderBrush="SeaGreen" BorderThickness="1"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" x:Name="lblresolution"  Margin="5,0,15,0">分辨率</TextBlock>
 
                 </StackPanel>
          
