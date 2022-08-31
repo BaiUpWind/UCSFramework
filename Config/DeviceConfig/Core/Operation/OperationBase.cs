@@ -48,6 +48,7 @@ namespace DeviceConfig.Core
         /// <para>这里根据对应类型进行解析的指令</para>
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
+        [Control("Command","编辑指令",ControlType.Data,GenerictyType:typeof(CommandBase),FieldName:nameof(Command))]
         public CommandBase Command { get => command; set => command = value; }
 
         /// <summary>

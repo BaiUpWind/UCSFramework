@@ -24,16 +24,16 @@ namespace DisplayBorder.View
         {
             InitializeComponent();
         }
-        private object Ttype;
+        private object Ttraget;
         public event Action<object> OnEnter;
-        public event Action OnCancel;
+        public event Action<object> OnCancel;
 
         public void CreateType(Type targetType, object target)
         {
-            Ttype = target;
-            WindowHelper.CreateContrl(targetType, target, container,this);
+            Ttraget = target;
+            WindowHelper.CreateControl(targetType, target, container,this);
         } 
-        public object GetType(params object[] paras) => Ttype;
+        public object GetType(params object[] paras) => Ttraget;
 
         private void Btn_Click(object sender, RoutedEventArgs e)
         {
@@ -41,11 +41,11 @@ namespace DisplayBorder.View
             { 
                 if (btn.Content.ToString() == "确认")
                 {
-                    OnEnter?.Invoke(Ttype);
+                    OnEnter?.Invoke(Ttraget);
                 }
                 else if (btn.Content.ToString() == "关闭")
                 {
-                    OnCancel?.Invoke();
+                    OnCancel?.Invoke(Ttraget);
                 }
             }
         }

@@ -23,7 +23,15 @@ namespace DeviceConfig.Core
 
         public override bool Connect()
         {
-            return splc != null && splc.Connection();
+            try
+            {
+                return splc != null && splc.Connection();
+            }
+            catch  
+            {
+
+                return false;
+            } 
         }
 
         public override void Disconnected()

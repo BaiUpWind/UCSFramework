@@ -158,7 +158,7 @@ namespace DisplayBorder
         /// 组的文件路径
         /// </summary>
         [Control("GroupsFilePath", "组配置路径", ControlType.TextBox)]
-        [Control("FileChosee", null, ControlType.FilePathSelector, FieldName: nameof(GroupsFilePath), FileType: "cfg")]
+        [Control("FileChoose", null, ControlType.FilePathSelector, FieldName: nameof(GroupsFilePath), FileType: "cfg")]
         public string GroupsFilePath
         {
             get

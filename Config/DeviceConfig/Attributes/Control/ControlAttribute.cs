@@ -17,7 +17,7 @@ namespace DeviceConfig
       
         public ControlAttribute(string Name, string LabelName, ControlType ControlType, bool Enable = true, bool ReadOnly = false, bool Visable = true
             , object[] Items = null, Type EnumType = null, string FieldName = null, string FileType = null
-            ,Type GenerictyType=null,string MethodName =null) : base(Name)
+            , Type GenerictyType = null, string MethodName = null, double Height = 0,double Width =0) : base(Name)
         {
             this.controlType = ControlType;
             this.visable = Visable;
@@ -31,6 +31,8 @@ namespace DeviceConfig
             fileType = FileType;
             generictyType = GenerictyType;
             methodName = MethodName;
+            height = Height;
+            width = Width;
         }
 
         private readonly ControlType controlType;
@@ -44,6 +46,8 @@ namespace DeviceConfig
         private readonly string fileType;
         private readonly Type generictyType;
         private readonly string methodName;
+        private readonly double width;
+        private readonly double height;
 
         public ControlType ControlType { get => controlType; } 
         /// <summary>
@@ -80,5 +84,8 @@ namespace DeviceConfig
         public string FileType => fileType;
 
         public string MethodName => methodName;
+        public double Width => width;
+        public double Height => height;
+
     }
 }

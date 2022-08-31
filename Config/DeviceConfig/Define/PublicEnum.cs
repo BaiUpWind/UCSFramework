@@ -71,7 +71,11 @@
         /// <summary>
         /// 数据修改生成器
         /// </summary>
-        Data
+        Data,
+        /// <summary>
+        /// 集合类型的数据生成器
+        /// </summary>
+        Collection,
 
     }
 

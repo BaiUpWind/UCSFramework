@@ -23,7 +23,7 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="5,10,5,10">
                         <Button Content="关闭" Margin="15,0,25,0" HorizontalAlignment="Right" Click="Btn_Click" />
                         <Button Content="确认" Margin="15,0,25,0" HorizontalAlignment="Right" Click="Btn_Click"/>
-
+                     
                     </StackPanel>
                 </Grid>
 
@@ -32,10 +32,10 @@
 
                     <hc:ScrollViewer   Margin="15">
                         <hc:FlexPanel x:Name="container" Margin="15" AlignItems="FlexStart" AlignContent="SpaceBetween" JustifyContent="SpaceAround" FlexWrap="Wrap" FlexDirection="Row">
-                        
-                        
+                            
+
                         </hc:FlexPanel>
-                        <!--<hc:WaterfallPanel Margin="15" Groups="2" x:Name="container"  MaxWidth="800" >
+                        <!--<hc:WaterfallPanel Margin="15" Groups="4" x:Name="container"   >
 
                         </hc:WaterfallPanel>-->
                     </hc:ScrollViewer>

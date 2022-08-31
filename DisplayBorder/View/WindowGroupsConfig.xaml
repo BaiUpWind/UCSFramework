@@ -19,13 +19,12 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" Margin="5,1,5,1">
-                <Border BorderThickness="1" BorderBrush="Aqua"  CornerRadius="5"></Border>
+                <Border BorderThickness="1" BorderBrush="White"  CornerRadius="5"></Border>
                 <StackPanel Orientation="Horizontal"> 
                     <Button Content="打开" Margin="15,0,0,0" Click="Btn_OpenGroupsData" ToolTip="打开配置中的文件路径"></Button>
                     <Button Content="保存" Margin="15,0,0,0" Click="Btn_SaveGroupsData"></Button>
                     <Button Content="组详情" Margin="15,0,0,0" Click="Btn_GroupsDetails" ></Button>
                     <Button Content="配置文件"  Margin="15,0,0,0" Click="Btn_OpenConfig" ></Button>
-                    <Button Content="test"  Margin="15,0,0,0" Click="Btn_Test" ></Button>
 
                 </StackPanel>
             </Grid>
@@ -44,20 +43,22 @@
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
                     <TextBlock Grid.Row="0" FontSize="18" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">组操作</TextBlock>
-                    <Border Grid.Row="1" BorderThickness="1" Margin="5" BorderBrush="Aqua"  CornerRadius="5"></Border>
-                    <StackPanel  Grid.Row="1" Orientation="Vertical" x:Name="opSP">
-                        <Button  x:Name="btnAdd" Content="添加" Margin="15,15,0,0" Click="Btn_ClickAddGroup"></Button>
-                        <Button x:Name="btnDelete" Content="删除" Margin="15,5,0,0" Click="Btn_DeleteGroup"></Button>
-                        <Button x:Name="btnModify" Content="修改" Margin="15,5,0,0" Click="Btn_ModifyGroup"></Button>
+                    <Border Grid.Row="1" BorderThickness="1" Margin="5" BorderBrush="White"  CornerRadius="5"></Border>
+                    <StackPanel  Grid.Row="1" Orientation="Vertical" >
+                        <Button  x:Name="btnAdd" Content="添加组" Margin="0,15,0,0" Click="Btn_ClickAddGroup"></Button>
+                        <Border Margin="15,10,15,10" BorderBrush="LightBlue" BorderThickness="1"/>
+                        <StackPanel  x:Name="opSP">
+                            <Button x:Name="btnDelete" Content="删除组" Margin="0,5,0,0" Click="Btn_DeleteGroup"></Button>
+                            <Button x:Name="btnModify" Content="修改组" Margin="0,5,0,0" Click="Btn_ModifyGroup"></Button>
+                        </StackPanel>
+                        <Border Margin="15,10,15,10" BorderBrush="LightBlue" BorderThickness="1"/>
 
-                        <Border Margin="15" BorderBrush="SeaGreen" BorderThickness="1"/>
-             
                     </StackPanel>
 
                 </Grid>
 
                 <Grid Grid.Column="1" x:Name="g2" Margin="5">
-                    <Border BorderThickness="1" Margin="0" BorderBrush="Aqua"  CornerRadius="5"></Border>
+                    <Border BorderThickness="1" Margin="0" BorderBrush="White"  CornerRadius="5"></Border>
                     <ScrollViewer   HorizontalScrollBarVisibility="Auto"  Margin="5" Background="Gray"  >
                         <Canvas  x:Name="C1"  Background="Gray" Focusable="True" 
                                        HorizontalAlignment="Left"  VerticalAlignment="Top"  
@@ -84,8 +85,13 @@
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0" FontSize="18" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">组信息 </TextBlock>
-                        <Border Grid.Row="1" BorderThickness="1" Margin="5" BorderBrush="Aqua"  CornerRadius="5"></Border>
+                        <Border Grid.Row="1" BorderThickness="1" Margin="5" BorderBrush="White"  CornerRadius="5"></Border>
+                        <Grid Grid.Row="1">
+                            <StackPanel Margin="0,15,0,15">
+                             
+                            </StackPanel>
 
+                        </Grid>
                     </Grid>
                     
                     
@@ -93,7 +99,7 @@
             </Grid>
 
             <Grid Grid.Row="2">
-                <Border BorderThickness="1" Margin="5" BorderBrush="Aqua"  CornerRadius="5"></Border>
+                <Border BorderThickness="1" Margin="5" BorderBrush="White"  CornerRadius="5"></Border>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" x:Name="lblxy" Margin="5">鼠标位置X,Y</TextBlock>
                     <Border Margin="15" BorderBrush="SeaGreen" BorderThickness="1"/>

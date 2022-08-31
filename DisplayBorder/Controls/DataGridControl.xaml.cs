@@ -21,7 +21,7 @@ namespace DisplayBorder.Controls
     /// <summary>
     /// DataGridControl.xaml 的交互逻辑
     /// </summary>
-    public partial class DataGridControl : UserControl, ISingleOpen, IControlData
+    public partial class DataGridControl : UserControl//, ISingleOpen, IControlData
     {
         public DataGridControl()
         {
@@ -29,6 +29,8 @@ namespace DisplayBorder.Controls
         }
 
         public bool CanDispose => true;
+
+        public object TypeData { get  ; set  ; }
 
         public event Action<object> OnSet;
         public event Action OnClose;
@@ -38,10 +40,11 @@ namespace DisplayBorder.Controls
             dg1.ItemsSource = null;
         }
 
-        public object GetData() => null;
+        public object GetData() => TypeData;
 
         public void SetData(object data)
         {
+            TypeData = data;
             OnSet?.Invoke(data);
             if (data != null && data is DataTable dt)
             {

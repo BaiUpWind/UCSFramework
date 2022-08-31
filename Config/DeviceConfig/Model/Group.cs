@@ -69,14 +69,15 @@ namespace DeviceConfig
         {
             get
             {
-                if(DeviceConfigs != null)
+                if(DeviceInfos != null)
                 {
-                    return DeviceConfigs.Count;
+                    return DeviceInfos.Count;
                 }
                 return 0;
             }
         }
         [JsonIgnore]
+        [Obsolete("暂时弃用 20220831")]
         /// <summary>
         /// 当前正在扫描的设备名称
         /// </summary>
@@ -97,8 +98,14 @@ namespace DeviceConfig
             }
 
         }
-         
-        public IList<Device> DeviceConfigs { get; set; }  
+
+
+        [JsonIgnore]
+        [Obsolete("暂时弃用 20220831")]
+        public IList<Device> DeviceConfigs { get; set; }
+
+        [Control("DeviceInfos", "设备集合", ControlType.Collection, GenerictyType: typeof(DeviceInfo), FieldName: nameof(DeviceInfos))]
+        public IList<DeviceInfo> DeviceInfos { get; set; }  
         
     }
 }

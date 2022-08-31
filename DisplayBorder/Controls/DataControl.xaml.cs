@@ -37,7 +37,7 @@ namespace DisplayBorder.Controls
         public bool CanDispose => canDispose;
 
         public event Action<object> OnEnter;
-        public event Action OnCancel;
+        public event Action<object> OnCancel;
 
 
         public void Dispose()
@@ -56,7 +56,7 @@ namespace DisplayBorder.Controls
                 }
                 else if (btn.Content.ToString() == "关闭")
                 {
-                    OnCancel?.Invoke();
+                    OnCancel?.Invoke(Ttype);
                 }
             }
         }
@@ -64,7 +64,7 @@ namespace DisplayBorder.Controls
         public void CreateType (Type targetType, object traget) 
         {
             Ttype = traget;
-            WindowHelper.CreateContrl(targetType, traget, container);
+            WindowHelper.CreateControl(targetType, traget, container);
         }
 
       
@@ -84,7 +84,7 @@ namespace DisplayBorder.Controls
         object GetType(params object[] paras);
 
         event Action<object> OnEnter;
-        event Action OnCancel;
+        event Action<object> OnCancel;
 
     }
     /// <summary>
@@ -92,6 +92,8 @@ namespace DisplayBorder.Controls
     /// </summary>
     public interface IControlData
     {
+        bool OnlyWacth { get; set; }
+        object TypeData { get; set; }
         /// <summary>
         /// 设置控件的数据
         /// </summary>

@@ -22,13 +22,19 @@
                         <!--<Button Content="确认" Margin="15,0,15,0" HorizontalAlignment="Right" Click="Btn_Click"/>-->
 
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Name="opSP">
+                        <Button Content="增加" Margin="15,0,15,0" Click="Btn_AddElement"   />
+                        <Button Content="删除" Margin="15,0,15,0" Click="Btn_DeleteElement" />
+                        <Button Content="修改" Margin="15,0,15,0" Click="Btn_ModifyElement" />
+                    
+                    </StackPanel>
                 </Grid>
 
                 <Grid Grid.Row =" 1">
                     <Border BorderThickness="2" BorderBrush="White" CornerRadius="15"  Margin="15">
                     </Border>
 
-                    <DataGrid Name="dg1" Margin="25" IsReadOnly="True"  />
+                    <DataGrid Name="dg1" Margin="25" IsReadOnly="True"  SelectionMode="Single"  />
 
                 </Grid>
             </Grid>

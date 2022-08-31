@@ -52,12 +52,16 @@ namespace DeviceConfig
         /// 对设备的操作类型
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
-        [Control("Operation","操作类型",ControlType.Genericity, GenerictyType:typeof(OperationBase), FieldName:nameof(Operation))]
+        [Control("Operation","创建操作类型",ControlType.Genericity, GenerictyType:typeof(OperationBase), FieldName:nameof(Operation))]
+        [Control("编辑操作类型", null, ControlType.Data, GenerictyType: typeof(OperationBase), FieldName: nameof(Operation))]
         public OperationBase Operation { get => operation; set => operation = value; }
+
+ 
+
         /// <summary>
         /// 刷新数据间隔  单位:毫秒 
         /// </summary>
-        [Control("DeviceInfoName", "数据刷新间隔(毫秒)", ControlType.TextBox)]
+        [Control("RefreshInterval", "数据刷新间隔(毫秒)", ControlType.TextBox)]
         public int RefreshInterval { get; set; }
 
         #region 操作的创建(弃用 20220830)

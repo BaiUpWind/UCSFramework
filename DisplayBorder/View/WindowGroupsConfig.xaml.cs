@@ -282,7 +282,7 @@ namespace DisplayBorder.View
                         img.Height = bitmap.Height;
   
                     }
-                    SetControlEnable(true);
+                   
                 }
                 catch (Exception ex)
                 {
@@ -304,7 +304,8 @@ namespace DisplayBorder.View
             if (CacheTc != null)
             { 
                 CacheTc.HideDot();  
-            } 
+            }
+
         }
 
         //当点击的是子控件时
@@ -316,6 +317,7 @@ namespace DisplayBorder.View
                 if (args.Source == null)
                 {
                     CurrentCachceLostFocus();
+                    SetControlEnable(false);
                 }
                 else
                 {
@@ -338,17 +340,25 @@ namespace DisplayBorder.View
                             tc.ShowDot();
                             CacheTc = tc;
                         }
-                    }
+                        SetControlEnable(true);
+                    } 
                 }
             }
         }
         //当添加一个组时
         private void Btn_ClickAddGroup(object sender, RoutedEventArgs e)
         {
-            WindowHelper.CreateWindow<Group, DataWindow>((g) =>
+            if (BackImage == null)
             {
-                CreateTitle(g);
-            }  );
+                Growl.Info("请打开文件配置");
+            }
+            else
+            { 
+                WindowHelper.CreateWindow<Group, DataWindow>((g) =>
+                {
+                    CreateTitle(g);
+                });
+            }
         }
 
         //当删除一个组时
@@ -356,8 +366,19 @@ namespace DisplayBorder.View
         {
             if(CacheTc != null)
             {
-                groups.Remove(cacheTc.groupViewModel.CurrentGroup);
-                C1.Children.Remove((UIElement)CacheTc.Parent);
+                MessageBoxResult result = MessageBox.Ask($"是否删除'{CacheTc.groupViewModel.CurrentGroup.GroupName}'");
+                if(result == MessageBoxResult.Yes)
+                {
+                    groups.Remove(cacheTc.groupViewModel.CurrentGroup);
+                    C1.Children.Remove((UIElement)CacheTc.Parent);
+                    Growl.Info("删除成功!");
+                }
+                else
+                {
+                    Growl.Info("取消删除");
+                }
+
+              
             }
             else
             {
@@ -398,18 +419,15 @@ namespace DisplayBorder.View
         private void img_MouseLeave(object sender, MouseEventArgs e)
         {
             lblxy.Text = $"X:{0} Y:{0}";
-        }
- 
-     
-
-
-      
-
+        } 
         private void Btn_GroupsDetails(object sender, RoutedEventArgs e)
         {
             if (groups.Count > 0)
             {
-                WindowHelper.CreateDataGirdWindow<DataGirdWindow>(groups ,titleName:"组的详细信息");
+                WindowHelper.CreateDataGirdWindow<DataGirdWindow>(groups, titleName: "组的详细信息",oldWindow:null, onClose: () =>
+                {
+
+                });
             }
             else
             {
@@ -429,12 +447,7 @@ namespace DisplayBorder.View
                 } 
             }
             else
-            {
-                if (GlobalPara.Groups == groups)
-                {
-                    Growl.Info("已经打开了");
-                    return;
-                }
+            { 
                 if (C1.Children.Count > 2)
                 {
                     foreach (var border in cacheBorder)
@@ -451,7 +464,7 @@ namespace DisplayBorder.View
                     {
                         CreateTitle(group);
                     }
-                    groups = GlobalPara.Groups as List<Group> ;
+                    groups =  new List<Group>(GlobalPara.Groups);
            
                     Growl.Info(GlobalPara.Groups.Count == 0 ?"创建成功":"打开成功");
                     
@@ -502,17 +515,9 @@ namespace DisplayBorder.View
         }
 
         #endregion
-        DeviceInfo testinfo;
+      
 
-     
-        private void Btn_Test(object sender, RoutedEventArgs e)
-        {
-
-            WindowHelper.CreateWindow<DataBaseOperation, DataWindow>((a) =>
-            {
-
-            }, null, "数据库连接");
-        }
+      
     }
 
 
