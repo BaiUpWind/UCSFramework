@@ -18,6 +18,7 @@ namespace DeviceConfig
         //    this.defaultConn = defaultConn ?? throw new Exception("初始化设备信息配置，未能获取到默认的连接方式！");
         //}
         //private readonly ConnectionConfigBase defaultConn;// 默认的连接方式 来源于设备
+  
         private OperationBase operation;//对设备的操作 读取之类的 
         private bool start;//是否开始获取信息
  
@@ -54,7 +55,7 @@ namespace DeviceConfig
         [JsonConverter(typeof(PolyConverter))]
         [Control("Operation","创建操作类型",ControlType.Genericity, GenerictyType:typeof(OperationBase), FieldName:nameof(Operation))]
         [Control("编辑操作类型", null, ControlType.Data, GenerictyType: typeof(OperationBase), FieldName: nameof(Operation))]
-        public OperationBase Operation { get => operation; set => operation = value; }
+        public OperationBase  Operation { get => operation; set => operation = value; }
 
  
 
@@ -104,7 +105,7 @@ namespace DeviceConfig
             start = true;
             while (start)
             {
-                Operation.Read(Operation.Command);
+                //Operation.Read(Operation.Command);
                 await Task.Delay(RefreshInterval);
             }
         }

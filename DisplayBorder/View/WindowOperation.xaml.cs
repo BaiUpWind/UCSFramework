@@ -80,8 +80,8 @@ namespace DisplayBorder.View
             DataContext = operationView = new OperationViewModel(operation, temp);
             operationView.Conn = operation.ConnectConfig;
             CreateControl(operationView.Operation.ConnectConfig, 1);
-            operationView.Command = operation.Command;
-            CreateControl(operationView.Operation.Command, 2);
+            //operationView.Command = operation.Command;
+            //CreateControl(operationView.Operation.Command, 2);
         }
 
        
@@ -136,18 +136,18 @@ namespace DisplayBorder.View
 
         private void Btn_Click_Read(object sender, RoutedEventArgs e)
         {
-            var data =  operationView.Operation.Read(operationView.Operation.Command);
+            //var data =  operationView.Operation.Read(operationView.Operation.Command);
 
-            string heads = "";
-            foreach (var item in data.Tables[0].Keys)
-            {
-                heads += item + ",";
-            }
+            //string heads = "";
+            //foreach (var item in data.Tables[0].Keys)
+            //{
+            //    heads += item + ",";
+            //}
 
-            Growl.InfoGlobal($"列头:"+ heads);
+            //Growl.InfoGlobal($"列头:"+ heads);
             
-            DataView dv = new DataView((DataTable) data.Data);
-            dgv1.ItemsSource = dv;
+            //DataView dv = new DataView((DataTable) data.Data);
+            //dgv1.ItemsSource = dv;
         }
 
         private void CreateControl<T>(T target, int index) where T : class

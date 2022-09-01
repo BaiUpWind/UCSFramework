@@ -434,7 +434,7 @@ namespace DisplayBorder.View
                 Growl.Warning($"未找到任何组的信息");
             }
         }
-
+        //打开所有信息
         private void Btn_OpenGroupsData(object sender, RoutedEventArgs e)
         {
             MessageBoxResult result = MessageBoxResult.OK;

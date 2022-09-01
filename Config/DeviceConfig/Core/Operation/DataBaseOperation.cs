@@ -7,25 +7,14 @@ namespace DeviceConfig.Core
 
 
     [DependOn(typeof(DataBaseConnectCfg) ,typeof(SQLCmd))]
-    public sealed class DataBaseOperation : OperationBase
+    public sealed class DataBaseOperation : OperationBase 
     {
       
         public DataBaseOperation( )  
         {
-            if (ConnectConfig is DataBaseConnectCfg dataBase)
+            if (ConnectConfig is DataBaseConnectCfg dbcc)
             {
-                switch ( dataBase.DbType )
-                {
-                    case 0:
-                        db = new OracleHelp(dataBase.GetConnStr());
-                        break;
-                    case 1:
-                        db = new SQLServerHelp(dataBase.GetConnStr());
-                        break;
-                    case 2:
-                        db = new MySqlHelp(dataBase.GetConnStr());
-                        break;
-                }
+                CreateType(dbcc);
                 return;
             }
            throw new ArgumentException("创建数据库操作实例失败!");
@@ -55,19 +44,18 @@ namespace DeviceConfig.Core
         {
             db.CurrentConnection.Close();
         } 
-        public override ResultBase Read(CommandBase command)
+   
+        protected override ResultBase Read(object cmd)
         {
-            if (command is SQLCmd cmd)
-            { 
-                //var data = db.DatatoTable(db.GetDataTable(cmd.Sql, System.Data.CommandType.Text));
-                ////var  data1 = db.GetDataSet(cmd.Sql, System.Data.CommandType.Text);
-                ////var data2 = db.GetDataReader(cmd.Sql, System.Data.CommandType.Text); 
-                //command.Result.Tables = data;
-                command.Result.Data = db.GetDataTable(cmd.Sql, System.Data.CommandType.Text);
+            if (cmd is SQLCmd sqlcmd)
+            {
+                var data = db.GetDataTable(sqlcmd.SQL, System.Data.CommandType.Text);
+                sqlcmd.Result.Data = data;
+                return sqlcmd.Result;
             }
-
-            return command.Result;
+            return null; 
         }
+
 
         public override void SetConn(ConnectionConfigBase conn)
         {
@@ -75,12 +63,11 @@ namespace DeviceConfig.Core
              
             if (conn is DataBaseConnectCfg dbconn)
             {
-                CreateType(conn);
-                //db.ConnStr = dbconn.GetConnStr();
+                CreateType(dbconn); 
             }
         }
 
-        private void CreateType(ConnectionConfigBase type)
+        private void CreateType(DataBaseConnectCfg type)
         {  
             if (type is DataBaseConnectCfg dataBase)
             {

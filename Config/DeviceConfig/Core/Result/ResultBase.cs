@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 namespace  DeviceConfig.Core 
 {
     public abstract class ResultBase
-    {
-        public IList<object> Datas;
+    { 
+        /// <summary>
+        /// 数据
+        /// </summary>
+        public object Data { get; set; }
 
         /// <summary>
-        /// 数据库表
+        /// 显示数据使用的类型
         /// </summary>
-        public IList<Dictionary<string, object>> Tables;
-
-        public object Data { get; set; }
+        public DataType ShowDataType { get; set; }
     }
 }

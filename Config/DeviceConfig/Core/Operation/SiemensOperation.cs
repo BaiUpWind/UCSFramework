@@ -7,7 +7,7 @@ namespace DeviceConfig.Core
     /// 西门子读取指令
     /// </summary>
     [DependOn(typeof(SiemensConnectCfg),typeof(SiemensCmd))]
-    public sealed class SiemensOperation : PLCOperation
+    public sealed class SiemensOperation : PLCOperation 
     {
         public SiemensOperation()  
         {
@@ -38,8 +38,8 @@ namespace DeviceConfig.Core
         {
             splc?.DisConnected();
         }
-         
-        public override ResultBase Read(CommandBase command)
+
+        protected override ResultBase Read(object cmd)
         {
             throw new NotImplementedException();
         }

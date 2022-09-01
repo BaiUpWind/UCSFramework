@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 
 namespace DeviceConfig
 {
+    [Obsolete("不再使用 20220901 找个机会删除掉")]
     public class Device
     {
         /// <summary>

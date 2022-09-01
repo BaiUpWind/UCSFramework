@@ -11,18 +11,7 @@ namespace DeviceConfig
 {
     internal static class CreateFactory
     {
-        /// <summary>
-        /// 创建操作类型
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="para"></param>
-        /// <returns></returns>
-        public static OperationBase CreateOperation(string name, params object[] para)
-        {
-            //命名规则 'Name' + Operation
-            //实现定义:SeimensOperation
-            return CreateObject<OperationBase>($"DeviceConfig.{name}", para);
-        }
+ 
 
         /// <summary>
         /// 创建读取指令类型

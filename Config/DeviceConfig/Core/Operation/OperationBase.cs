@@ -1,6 +1,7 @@
-﻿using CommonApi;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace DeviceConfig.Core
 {
@@ -14,63 +15,51 @@ namespace DeviceConfig.Core
     public abstract class OperationBase
     {
         public OperationBase()
-        {
-            //defaultConn = null;
+        { 
             CreateConn();
-        }
-        //public OperationBase(ConnectionConfigBase defaultConn)
-        //{
-        //    this.defaultConn = defaultConn ?? throw new Exception("初始化操作配置失败，未能获取到默认的连接方式！");
-        //}
-        //private readonly ConnectionConfigBase defaultConn;// 默认的连接方式 来源于设备 
-        private ConnectionConfigBase connectConfig; 
-        private CommandBase command;
-
+        } 
+        private ConnectionConfigBase connectConfig;
+        private List<ResultBase> results = new List<ResultBase>(); 
         /// <summary>
         /// 连接配置的基类
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
-        [Control("ConnectConfig", "连接类型", ControlType.Data, GenerictyType: typeof(ConnectionConfigBase), FieldName: nameof(ConnectConfig))]
+        [Control("ConnectConfig", "编辑连接内容", ControlType.Data, GenerictyType: typeof(ConnectionConfigBase), FieldName: nameof(ConnectConfig))]
+        [Control("测试连接", null, ControlType.Button, MethodName: nameof(Connect))]
         public ConnectionConfigBase ConnectConfig
         {
             get
-            { 
+            {
                 return connectConfig;
             }
-           set => connectConfig = value;
+            set => connectConfig = value;
         }
-
-        [Control("testconn", "测试连接", ControlType.Button, MethodName: nameof(Connect))]
-        public string TestConn { get; set; }
-
+      
         /// <summary>
-        /// 读取设备数据的指令
-        /// <para>这里根据对应类型进行解析的指令</para>
+        /// 这玩意是个集合[List]
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
-        [Control("Command","编辑指令",ControlType.Data,GenerictyType:typeof(CommandBase),FieldName:nameof(Command))]
-        public CommandBase Command { get => command; set => command = value; }
+        [Control("Commands", "编辑指令集合", ControlType.Collection, GenerictyType: typeof(CommandBase), FieldName: nameof(Commands))]
+        public object Commands { get; set; } 
 
+        public  List<ResultBase> GetResults()
+        {
+            results.Clear();
+            if (Commands is IList cmds)
+            {
+                foreach (var cmd in cmds)
+                {
+                    results.Add(Read(cmd)); 
+                }
+            }
+            return results;
+        }
         /// <summary>
-        ///  当前指令读取后返回的结果(缓存)
+        /// 读取信息
         /// </summary>
-        [JsonIgnore]
-        public ResultBase Result { get => Command?.Result; }
-        /// <summary>
-        /// 使用默认的连接方式
-        /// </summary>
-        //public bool UseDefaultConn { get; set; }
-        /// <summary>
-        /// 使用跟随配置
-        /// </summary>
-        //public bool UseFllowConfiguration { get; set; } = true;
-
-        /// <summary>
-        /// 根据连接类型的读取指令读取对应内容
-        /// </summary>
-        /// <param name="command"></param>
+        /// <param name="cmd"></param>
         /// <returns></returns>
-        public abstract ResultBase Read(CommandBase command);
+        protected abstract ResultBase Read(object cmd) ; 
         /// <summary>
         /// 连接
         /// </summary>
@@ -100,7 +89,16 @@ namespace DeviceConfig.Core
                         //创建连接
                         connectConfig = Activator.CreateInstance(depend.Conn) as ConnectionConfigBase;
                         //创建指令
-                        command = Activator.CreateInstance(depend.Command) as CommandBase; ;
+                        //var  commandType = Activator.CreateInstance(depend.Command) as CommandBase;
+                        if (Commands == null)
+                        {
+                            //创建指令集合
+                            var reslut = Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[] { depend.Command }));
+                            Commands = reslut;
+                            //获取当前类的字段
+                            //var property = GetType().GetProperty(nameof(Commands)); 
+                            //property.SetValue(this, reslut);
+                        }
                     }
                 }
                 if (objAttrs.Length == 0)

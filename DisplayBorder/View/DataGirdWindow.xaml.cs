@@ -154,7 +154,7 @@ namespace DisplayBorder.View
          
             var value = new object[] { selectionTemp };
             var result = MessageBox.Ask($"是否确定删除该元素");
-            if(result == MessageBoxResult.Yes)
+            if(result == MessageBoxResult.OK)
             {
                 var check = (bool)collType.GetMethod("Contains").Invoke(TypeData, value);
                 if (!check)

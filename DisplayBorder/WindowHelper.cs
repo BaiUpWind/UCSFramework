@@ -352,14 +352,14 @@ namespace DisplayBorder
                 if (oldWindow != null)
                 {
 
-                    if ((bool)oldWindow.DialogResult)
-                    {
+                    //if ((bool)oldWindow.DialogResult)
+                    //{
                         oldWindow.ShowDialog();
-                    }
-                    else
-                    {
-                        oldWindow.Show();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    oldWindow.Show();
+                    //}
                 }
             };
             oldWindow?.Hide();
@@ -399,14 +399,14 @@ namespace DisplayBorder
                 if (oldWindow != null)
                 {
 
-                    if ((bool)oldWindow.DialogResult)
-                    {
+                    //if ((bool)oldWindow.DialogResult)
+                    //{
                         oldWindow.ShowDialog();
-                    }
-                    else
-                    {
-                        oldWindow.Show();
-                    }
+                    //}
+                    //else
+                    //{
+                    //    oldWindow.Show();
+                    //}
                 }
             };
             oldWindow?.Hide();
@@ -451,6 +451,12 @@ namespace DisplayBorder
                 if (objAttrs.Length > 0)
                 {
                     StackPanel sp = new StackPanel();
+                    Border bod = new Border();
+                    bod.BorderBrush = new SolidColorBrush(Colors.White);
+                    bod.BorderThickness = new Thickness(1);
+                    bod.CornerRadius =  new CornerRadius(10);
+                    bod.Margin = new Thickness(5);
+                    bod.Child = sp;
                     //存放当前生成的元素
                     List<UIElement> listElements = new List<UIElement>();
                     foreach (var att in objAttrs)
@@ -506,7 +512,17 @@ namespace DisplayBorder
                                     var modelList = propInfo.GetValue(target);
                                     if (modelList == null)
                                     {
-                                        modelList = Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[] { collTaget.GenericTypeArguments[0] }));
+                                        //获取这个集合的泛型类型
+                                        Type GenericType =null;
+                                        if (collTaget == null) 
+                                        {
+                                            GenericType = attr.GenerictyType;
+                                        }
+                                        else
+                                        {
+                                            GenericType = collTaget.GenericTypeArguments[0];
+                                        }
+                                        modelList = Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[] { GenericType }));
                                         propInfo.SetValue(target, modelList);
                                     }
                                     btnColl.Content = $"集合'{propInfo.Name}'[{((ICollection)modelList).Count}]";
@@ -573,7 +589,7 @@ namespace DisplayBorder
                         }
                     }
                     listElements.Clear();
-                    container.Children.Add(sp);
+                    container.Children.Add(bod);
                 }
 
             }
@@ -783,12 +799,29 @@ namespace DisplayBorder
                     }
                 }
             };
-            cmb.SelectedIndex = int.Parse(objType.GetProperty(propInfo.Name).GetValue(target, null)?.ToString());
           
-
-            foreach (var cbItem in attr.Items)
+            if (attr.Items != null)
             {
-                cmb.Items.Add(cbItem);
+                foreach (var cbItem in attr.Items)
+                {
+                    cmb.Items.Add(cbItem);
+                }
+            }
+            else if(attr.EnumType != null)
+            {
+                foreach (var item in Enum.GetNames(attr.EnumType))
+                {
+                    cmb.Items.Add(item);
+                } 
+            }
+
+            if (propInfo.PropertyType == typeof(int))
+            {
+                cmb.SelectedIndex = int.Parse(objType.GetProperty(propInfo.Name).GetValue(target, null)?.ToString());
+            }
+            else
+            {
+                cmb.SelectedIndex = 0;
             }
             sp.Children.Add(cmb);
 
@@ -902,7 +935,7 @@ namespace DisplayBorder
             Button btnMethod = new Button();
             btnMethod.HorizontalAlignment = HorizontalAlignment.Left;
             btnMethod.Margin = new Thickness(5);
-            btnMethod.Content = "调用";
+            btnMethod.Content = attr.Name;
             btnMethod.Click += (s, e) =>
             {
                 if (mif != null)
