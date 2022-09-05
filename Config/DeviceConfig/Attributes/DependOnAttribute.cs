@@ -35,9 +35,16 @@ namespace DeviceConfig
         public Type Command => command;
     }
 
-    [AttributeUsage(AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
+    [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
     public sealed class RequireAttribute : Attribute
     {
+        private readonly Type requireType;
 
+        public RequireAttribute(Type RequireType)
+        {
+            requireType = RequireType;
+        }
+
+        public Type RequireType => requireType;
     }
 }

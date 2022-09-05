@@ -7,15 +7,18 @@ using System.Threading.Tasks;
 namespace  DeviceConfig.Core 
 {
     public abstract class ResultBase
-    { 
+    {
         /// <summary>
-        /// 数据
+        /// 数据,原始数据
         /// </summary>
-        public object Data { get; set; }
+        public object Data { get; set; } = null;
 
         /// <summary>
-        /// 显示数据使用的类型
+        /// 解析完成后的数据
         /// </summary>
-        public DataType ShowDataType { get; set; }
+        public object FinalData { get; set; } = null;
+
+
+
     }
 }

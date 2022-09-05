@@ -1,35 +1,26 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace  DeviceConfig.Core 
 {
-    public enum DataType
-    {
-        饼状图,
-        网格,
-        树状图
-    }
-  
+
+    [Require(typeof(SQLResultAnalysis))]  
+    
     public class SQLCmd : CommandBase
     {
         public SQLCmd()
         {
             Result = new SQLResult(); 
         }
-        [Control("SelectType", "结果显示图集", ControlType.ComboBox, EnumType: typeof(DataType))]
-        public int SelectType { get; set; }
-        [Control("SQL", "查询语句", ControlType.TextBox, Height: 200, Width: 300)]
-        public string SQL { get; set; }
 
-        
-        //[Control("cmbResult", "结果显示图集", ControlType.ComboBox,Items:new object[] {"图标","网格","树状图"})]
-        //[Control("Sql","SQL", ControlType.TextBox,Height:200,Width:300 )]
-        //public string Sql { get; set; } = "";
-
+        [Control("SQL", "查询语句", ControlType.TextBox, Height: 200, Width: 300,Order:1)]
+        public override object CommandStr { get  ; set ; }
+         
         #region 测试代码
         //[Control("cmbResult", "结果显示图集", ControlType.ComboBox, Items: new object[] { "图标", "网格", "树状图" })]
         //[Control("test1", "test1", ControlType.TextBox )] 
@@ -54,5 +45,44 @@ namespace  DeviceConfig.Core
         //public string test7 { get; set; }
 
         #endregion
+    }
+
+    public class SQLResultAnalysis : ResulteAnalysisBase
+    {
+        public override object GetData(ResultBase rb, string cmdStr, DataType dataType )
+        {
+            if(rb is SQLResult result)
+            {
+                if(result.Data != null)
+                {
+                    //这里的Data一定是DataTable
+                    if(result.Data is DataTable dt)
+                    {
+
+                    }
+
+                    switch (dataType)
+                    {
+                        case DataType.饼状图:
+                             
+                            break;
+                        case DataType.网格:
+                            break;
+                        case DataType.柱状图:
+                            break; 
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 指令解析基类
+    /// <para>用于解析对应</para>
+    /// </summary>
+    public abstract class ResulteAnalysisBase
+    {
+        public abstract object GetData(ResultBase rb,string cmdStr, DataType dataType);
     }
 }

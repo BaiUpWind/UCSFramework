@@ -440,14 +440,22 @@ namespace DisplayBorder
             Type objType = targetType;
 
             var properties = targetType.GetProperties().ToList();
+             //var resul  =  properties
+             //       .Where(a => a.GetCustomAttributes(typeof(ControlAttribute)).Count() != 0)
+             //       .Select(a => a.GetCustomAttributes(typeof(ControlAttribute)).ToList()) 
+             //       .OrderBy(a=> ((ControlAttribute)a[0]).Order ).ToList();
+
+             //todo:根据order再排序
+
             foreach (PropertyInfo propInfo in properties)
             {
                 //Console.WriteLine(propInfo.Name);
                 //当前这个类
                 if (!propInfo.DeclaringType.IsPublic) continue;
 
-                object[] objAttrs = propInfo.GetCustomAttributes(typeof(ControlAttribute), true);
-
+                var objAttrs = propInfo.GetCustomAttributes(typeof(ControlAttribute), true);
+                    //.Select(a=> (ControlAttribute)a)
+                    //.OrderBy(a=> a.Order).ToList();  
                 if (objAttrs.Length > 0)
                 {
                     StackPanel sp = new StackPanel();
@@ -657,7 +665,7 @@ namespace DisplayBorder
                         break;
                     }
                 }
-                if (fieldPi != null && attr.GenerictyType.IsAbstract)
+                if (fieldPi != null  )
                 {
                     btnData.IsEnabled = false;
                     btnData.Content = "等待创建";
@@ -970,6 +978,24 @@ namespace DisplayBorder
             sp.Children.Add(btnMethod); ;
             return btnMethod;
         }
+        #endregion
+
+        #region 常用方法
+
+        public static void SetWindowGrowl<T>(T window) where T :System.Windows.Window
+        {
+            if (window == null) return;
+            window.SetValue(Growl.GrowlParentProperty, true);
+            window. Activated += (s, e) =>
+            {
+                Growl.SetGrowlParent(window, true);
+            };
+            window. Deactivated += (s, e) => {
+
+                Growl.SetGrowlParent(window, false);
+            };
+        }
+
         #endregion
     }
 

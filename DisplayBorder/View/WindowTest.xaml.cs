@@ -21,13 +21,14 @@ using System.Windows;
 using Window = HandyControl.Controls.Window;
 using DisplayBorder.ViewModel;
 using System.Windows.Threading;
+using System.Threading;
 
 namespace DisplayBorder.View
 {
     /// <summary>
     /// WindowTest.xaml 的交互逻辑
     /// </summary>
-    public partial class WindowTest : Window
+    public partial class WindowTest : MyWindows.MyWindow
     {
         public WindowTest()
         {
@@ -40,7 +41,7 @@ namespace DisplayBorder.View
             //-----------------------
 
             Growl.SetToken(this, "wode");
-
+        
             for (int i = 0; i < 20; i++)
             {
                 MixerControl mc = new MixerControl(new GroupViewModel(new Group()
@@ -127,7 +128,7 @@ namespace DisplayBorder.View
             if (e is OnOpenNewWindowArgs args && args.NewWindow != null)
             {
                 //设置弹窗新的父类容器
-                Growl.SetGrowlParent(args.NewWindow, true); 
+                Growl.SetGrowlParent(args.NewWindow, false); 
             }
         }
 
@@ -149,17 +150,17 @@ namespace DisplayBorder.View
                 Growl.Info($"创建成功!{obj.GetType().Name}");
             }, para: new DataBaseConnectCfg());
         }
-
+        string token = "wode";
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            //WindowEmpty window = new WindowEmpty();
             Window1 window = new Window1();
-            //WindowOperation window = new WindowOperation();
+            
+            //Growl.SetToken(window, token);
 
-            GlobalPara.EventManager.Fire(this, OnOpenNewWindowArgs.Create(window, this));
-            //window.Init(new DataBaseOperation(), new DeviceInfo()
-            //{
-            //    RefreshInterval = 50,
-            //});
+            //var result = Growl.GetToken(window);
+            //GlobalPara.EventManager.Fire(this, OnOpenNewWindowArgs.Create(window, this));
+
             window.Show();
         }
 
@@ -188,5 +189,69 @@ namespace DisplayBorder.View
                 }
             }
         }
+
+        private void Btn_ShowInfo(object sender, RoutedEventArgs e)
+        {
+            Growl.Info("创建成功!" );
+        }
     }
 }
+
+namespace MyWindows
+{
+    public class MyWindow : System.Windows.Window
+    {
+        public MyWindow()
+        {
+            Loaded += MyWindow_Loaded;
+            Activated += MyWindow_Activated;
+            Deactivated += MyWindow_Deactivated;
+        }
+        private Panel Panel;
+        private void MyWindow_Deactivated(object sender, EventArgs e)
+        {
+            if (Panel != null)
+            {
+            Growl.SetGrowlParent(Panel, false);
+
+            }
+           
+
+        }
+
+        private void MyWindow_Activated(object sender, EventArgs e)
+        {
+            if (Panel != null)
+                Growl.SetGrowlParent(Panel, true);
+           
+        }
+
+        private void MyWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (this.Content is Panel panel)
+            {
+                StackPanel sp = new StackPanel();
+                sp.VerticalAlignment = VerticalAlignment.Top;
+                sp.HorizontalAlignment = HorizontalAlignment.Right;
+
+                panel.Children.Insert(0, sp);
+                Panel = panel;
+                //Activated += (sa, ea) =>
+                //{
+                //    Growl.SetGrowlParent(sp, true);
+                //};
+                //Deactivated += (sa, ea) => {
+
+                //    Growl.SetGrowlParent(sp, false);
+                //};
+                //this.Closed += (sa, ea) =>
+                //{
+                //    Growl.SetGrowlParent(sp, false);
+
+                //};
+
+            }
+        }
+    }
+}
+

@@ -1,15 +1,16 @@
-﻿<hc:Window
+﻿<local:MyWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DisplayBorder.View"
-        xmlns:hc="https://handyorg.github.io/handycontrol" 
+        xmlns:local="clr-namespace:MyWindows"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
         x:Class="DisplayBorder.View.Window1"
         mc:Ignorable="d"
         Title="Window1" Height="450" Width="800">
-    <hc:TransitioningContentControl>
-        <Button HorizontalAlignment="Left"  VerticalAlignment="Top" Content="text" Click="Button_Click" Margin="267,116,0,0" Height="54" Width="67"/>
+    <Grid Background="Pink" >
 
-    </hc:TransitioningContentControl>
-</hc:Window>
+        <Button Content="显示信息" Click="Btn_ShowInfo"/>
+
+    </Grid>
+</local:MyWindow>

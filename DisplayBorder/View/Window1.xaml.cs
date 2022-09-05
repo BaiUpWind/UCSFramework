@@ -12,23 +12,23 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Window = HandyControl.Controls.Window;
 
 namespace DisplayBorder.View
 {
     /// <summary>
     /// Window1.xaml 的交互逻辑
     /// </summary>
-    public partial class Window1 :  Window
+    public partial class Window1 : MyWindows.MyWindow
     {
         public Window1()
         {
             InitializeComponent();
+        
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Btn_ShowInfo(object sender, RoutedEventArgs e)
         {
-            Growl.Info("qweqweq");//,GetType().GetHashCode().ToString() );
+            Growl.Info("显示信息");
         }
     }
 }

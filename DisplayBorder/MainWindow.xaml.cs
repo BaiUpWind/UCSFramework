@@ -171,9 +171,7 @@ namespace DisplayBorder
 
         private void Btn_Click_OpenSysConfig(object sender, RoutedEventArgs e)
         {
-            WindowConfig wc = new WindowConfig();
-
-            wc.ShowDialog();
+            
         }
 
         //---------------------- 注册事件

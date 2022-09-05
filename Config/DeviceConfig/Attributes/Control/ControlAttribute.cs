@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace DeviceConfig 
 {
     /// <summary>
-    /// 使用哪种控件
-    /// <para>Name 不能重复</para>
+    /// 使用哪种控件 
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, Inherited = false, AllowMultiple = true)] 
     public class ControlAttribute : BaseAttribute
@@ -17,7 +16,7 @@ namespace DeviceConfig
       
         public ControlAttribute(string Name, string LabelName, ControlType ControlType, bool Enable = true, bool ReadOnly = false, bool Visable = true
             , object[] Items = null, Type EnumType = null, string FieldName = null, string FileType = null
-            , Type GenerictyType = null, string MethodName = null, double Height = 0,double Width =0) : base(Name)
+            , Type GenerictyType = null, string MethodName = null, double Height = 0, double Width = 0, int Order = 0) : base(Name)
         {
             this.controlType = ControlType;
             this.visable = Visable;
@@ -33,6 +32,7 @@ namespace DeviceConfig
             methodName = MethodName;
             height = Height;
             width = Width;
+            order = Order;
         }
 
         private readonly ControlType controlType;
@@ -48,6 +48,9 @@ namespace DeviceConfig
         private readonly string methodName;
         private readonly double width;
         private readonly double height;
+        private readonly int order;
+
+        public int Order => order;
 
         public ControlType ControlType { get => controlType; } 
         /// <summary>

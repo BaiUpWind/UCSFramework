@@ -49,7 +49,7 @@ namespace DeviceConfig.Core
         {
             if (cmd is SQLCmd sqlcmd)
             {
-                var data = db.GetDataTable(sqlcmd.SQL, System.Data.CommandType.Text);
+                var data = db.GetDataTable(sqlcmd.CommandStr.ToString(), System.Data.CommandType.Text);
                 sqlcmd.Result.Data = data;
                 return sqlcmd.Result;
             }

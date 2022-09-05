@@ -69,7 +69,8 @@ namespace DisplayBorder.View
         {
             InitializeComponent();
             SetControlEnable(false);
-             Loaded += (s, e) =>
+            var result = (DateTime.Now - DateTime.Parse("2022-09-03 11:00:00")).TotalHours;
+            Loaded += (s, e) =>
             {
                  
                 GlobalPara.EventManager.Subscribe(OnCanvasChildrenClickArgs.EventID, OnClickChildren);
@@ -81,6 +82,8 @@ namespace DisplayBorder.View
                         AdornerLayer.GetAdornerLayer(border).Add( new ElementAdorner(border));
                     }
                 }
+
+               
               
 
                 if(img.Source is BitmapSource bitmap)

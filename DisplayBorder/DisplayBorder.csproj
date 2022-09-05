@@ -83,9 +83,6 @@
     <Compile Include="Controls\DataGridControl.xaml.cs">
       <DependentUpon>DataGridControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DeviceControl.xaml.cs">
-      <DependentUpon>DeviceControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Dot.xaml.cs">
       <DependentUpon>Dot.xaml</DependentUpon>
     </Compile>
@@ -108,7 +105,6 @@
       <DependentUpon>RGVDataWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MixerViewModel.cs" />
-    <Compile Include="ViewModel\TitleViewModel.cs" />
     <Compile Include="View\DataGirdWindow.xaml.cs">
       <DependentUpon>DataGirdWindow.xaml</DependentUpon>
     </Compile>
@@ -118,24 +114,17 @@
     <Compile Include="View\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\WindowEmpty.xaml.cs">
+      <DependentUpon>WindowEmpty.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\WindowGroupsConfig.xaml.cs">
       <DependentUpon>WindowGroupsConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\WindowOperation.xaml.cs">
-      <DependentUpon>WindowOperation.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModel\DeviceInfoVewModel.cs" />
     <Compile Include="ViewModel\DeviceViewModel.cs" />
     <Compile Include="ViewModel\GroupsViewModel.cs" />
     <Compile Include="ViewModel\GroupViewModel.cs" />
     <Compile Include="ViewModel\OperationViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="Controls\GroupControl.xaml.cs">
-      <DependentUpon>GroupControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\WindowConfig.xaml.cs">
-      <DependentUpon>WindowConfig.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\WindowTest.xaml.cs">
       <DependentUpon>WindowTest.xaml</DependentUpon>
     </Compile>
@@ -149,10 +138,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\DataGridControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\DeviceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -181,14 +166,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Window1.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WindowEmpty.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\WindowGroupsConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\WindowOperation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -204,14 +189,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Controls\GroupControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\WindowConfig.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\WindowTest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

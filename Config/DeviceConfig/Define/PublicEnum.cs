@@ -1,8 +1,8 @@
 ﻿namespace DeviceConfig
-{
-  
-   
-
+{ 
+    /// <summary>
+    /// 控件类型
+    /// </summary>
     public enum ControlType 
     { 
         /// <summary>
@@ -43,5 +43,13 @@
 
     }
 
-  
+    /// <summary>
+    /// 数据显示的方式
+    /// </summary>
+    public enum DataType
+    {
+        饼状图,
+        网格,
+        柱状图
+    }
 }

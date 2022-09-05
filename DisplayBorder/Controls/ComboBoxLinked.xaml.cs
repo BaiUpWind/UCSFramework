@@ -157,26 +157,34 @@ namespace DisplayBorder.Controls
         public void Create(ClassData data)
         {
             if (data == null) return;
-            if (data.ChildrenTypes.Count == 0) return;  
+            if (data.ClassType.IsAbstract && data.ChildrenTypes.Count == 0) return;  
 
             ComboBoxData comboBoxData = GetComboBox(data.LayerIndex-1); 
             comboBoxData.Text.Text = data.ClassType.Name;
             
             comboBoxData.Combo.SelectionChanged += Combo_SelectionChanged;
-            foreach (var item in data.ChildrenTypes)
+            if (data.ClassType.IsAbstract)
             {
-                
-                if (item.IsAbstract)
-                { 
-                    var reulst = data.Children.Where(a => a.ClassType == item).FirstOrDefault();
-                    if (reulst != null)
+                foreach (var item in data.ChildrenTypes)
+                {
+
+                    if (item.IsAbstract)
                     {
-                        comboBoxData.Combo.Tag = reulst.LayerIndex-1;
-                        Create(reulst);
+                        var reulst = data.Children.Where(a => a.ClassType == item).FirstOrDefault();
+                        if (reulst != null)
+                        {
+                            comboBoxData.Combo.Tag = reulst.LayerIndex - 1;
+                            Create(reulst);
+                        }
                     }
+                    comboBoxData.Combo.Items.Add(item.Name + (item.IsAbstract ? "_[A]" : ""));
                 }
-                comboBoxData.Combo.Items.Add(item.Name+(item.IsAbstract ? "_[A]":"")); 
-            } 
+            }
+            else
+            {
+                comboBoxData.Combo.Items.Add(data.ClassType.Name  );
+            }
+          
         }
 
         private void Combo_SelectionChanged(object sender, SelectionChangedEventArgs e)

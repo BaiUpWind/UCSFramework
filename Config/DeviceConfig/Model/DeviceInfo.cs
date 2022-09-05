@@ -12,17 +12,9 @@ namespace DeviceConfig
     /// 设备需要读取的信息所需要的配置 
     /// </summary>
     public class DeviceInfo
-    { 
-        //public DeviceInfo(ConnectionConfigBase defaultConn)
-        //{
-        //    this.defaultConn = defaultConn ?? throw new Exception("初始化设备信息配置，未能获取到默认的连接方式！");
-        //}
-        //private readonly ConnectionConfigBase defaultConn;// 默认的连接方式 来源于设备
-  
+    {  
         private OperationBase operation;//对设备的操作 读取之类的 
-        private bool start;//是否开始获取信息
- 
-
+        private bool start;//是否开始获取信息 
         /// <summary>
         /// 对应的设备编号
         /// </summary> 

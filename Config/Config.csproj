@@ -47,10 +47,7 @@
   <ItemGroup>
     <Compile Include="DeviceConfig\Attributes\Control\ControlAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\DependOnAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\LabelAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\Control\ReadOnlyAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\Control\ShowIfAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\ShowWindowAttribute.cs" />
     <Compile Include="DeviceConfig\Core\Command\CommandBase.cs" />
     <Compile Include="DeviceConfig\Core\Command\PLCCmd.cs" />
     <Compile Include="DeviceConfig\Core\Command\SiemensCmd.cs" />
@@ -69,7 +66,7 @@
     <Compile Include="DeviceConfig\Model\Device.cs" />
     <Compile Include="DeviceConfig\Core\Operation\OperationBase.cs" />
     <Compile Include="DeviceConfig\Core\Operation\DataBaseOperation.cs" />
-    <Compile Include="DeviceConfig\CreateFactory.cs" />
+    <Compile Include="DeviceConfig\PolyConverter.cs" />
     <Compile Include="DeviceConfig\Core\Operation\PLCOperation.cs" />
     <Compile Include="DeviceConfig\Core\Operation\SiemensOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
