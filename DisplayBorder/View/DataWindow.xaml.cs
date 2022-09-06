@@ -43,11 +43,23 @@ namespace DisplayBorder.View
                 {
                     OnEnter?.Invoke(Ttraget);
                 }
-                else if (btn.Content.ToString() == "关闭")
-                {
-                    OnCancel?.Invoke(Ttraget);
-                }
+                //else if (btn.Content.ToString() == "关闭")
+                //{
+                 
+                //}
             }
+        }
+
+ 
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        private void Btn_Close(object sender, RoutedEventArgs e)
+        {
+            OnCancel?.Invoke(Ttraget);
         }
     }
 }

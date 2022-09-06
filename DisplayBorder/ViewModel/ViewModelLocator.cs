@@ -15,6 +15,8 @@
 using CommonServiceLocator;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Ioc;
+using System;
+using System.Windows;
 //using Microsoft.Practices.ServiceLocation;
 
 namespace DisplayBorder.ViewModel
@@ -45,11 +47,13 @@ namespace DisplayBorder.ViewModel
 
 
             SimpleIoc.Default.Register<GroupViewModel>();
-            SimpleIoc.Default.Register<GroupsViewModel>();
+            //SimpleIoc.Default.Register<GroupsViewModel>();
+            SimpleIoc.Default.Register<WindowStateViewModel>();
         
         }
 
-
+        public static ViewModelLocator Instance = new Lazy<ViewModelLocator>(() =>
+    Application.Current.TryFindResource("Locator") as ViewModelLocator).Value;
         public GroupViewModel Group
         {
             get
@@ -58,12 +62,13 @@ namespace DisplayBorder.ViewModel
             }
         }
      
-
-        public GroupsViewModel GroupsViewModel 
+ 
+        public WindowStateViewModel WindowState
         {
             get
             {
-                return ServiceLocator.Current.GetInstance<GroupsViewModel>();
+                return ServiceLocator.Current.GetInstance<WindowStateViewModel>();
+
             }
         }
 

@@ -22,13 +22,14 @@ using Window = HandyControl.Controls.Window;
 using DisplayBorder.ViewModel;
 using System.Windows.Threading;
 using System.Threading;
+using ScrollViewer = System.Windows.Controls.ScrollViewer;
 
 namespace DisplayBorder.View
 {
     /// <summary>
     /// WindowTest.xaml 的交互逻辑
     /// </summary>
-    public partial class WindowTest : MyWindows.MyWindow
+    public partial class WindowTest :Window
     {
         public WindowTest()
         {
@@ -39,9 +40,7 @@ namespace DisplayBorder.View
         
             GlobalPara.EventManager.Subscribe(OnGroupChooseArgs.EventID, OnGroupChoose);
             //-----------------------
-
-            Growl.SetToken(this, "wode");
-        
+             
             for (int i = 0; i < 20; i++)
             {
                 MixerControl mc = new MixerControl(new GroupViewModel(new Group()
@@ -56,6 +55,20 @@ namespace DisplayBorder.View
                 groupMixers.Add(mc);
             }
             InitTimer();
+      
+
+
+            Activated += (s, e) =>
+            {
+                Growl.SetGrowlParent(this, true);
+
+            };
+            Deactivated += (s, e) =>
+            {
+                Growl.SetGrowlParent(this, false);
+
+            };
+
         }
 
         private List<MixerControl> groupMixers = new List<MixerControl>();
@@ -128,20 +141,11 @@ namespace DisplayBorder.View
             if (e is OnOpenNewWindowArgs args && args.NewWindow != null)
             {
                 //设置弹窗新的父类容器
-                Growl.SetGrowlParent(args.NewWindow, false); 
+                //Growl.SetGrowlParent(args.NewWindow, false); 
             }
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            //WindowHelper.GetObject<ConnectionConfigBase>(OnCreate);
-            Growl.Info("创建成功!", "wode");
-        }
-
-        //private void OnCreate(ConnectionConfigBase obj)
-        //{
-        //    Growl.Info("创建成功!");
-        //}
+         
+        
 
         private void Button_Click2(object sender, RoutedEventArgs e)
         {
@@ -192,7 +196,7 @@ namespace DisplayBorder.View
 
         private void Btn_ShowInfo(object sender, RoutedEventArgs e)
         {
-            Growl.Info("创建成功!" );
+            Growl.Info("创建成功!"  );
         }
     }
 }
@@ -202,56 +206,19 @@ namespace MyWindows
     public class MyWindow : System.Windows.Window
     {
         public MyWindow()
-        {
-            Loaded += MyWindow_Loaded;
-            Activated += MyWindow_Activated;
-            Deactivated += MyWindow_Deactivated;
-        }
-        private Panel Panel;
-        private void MyWindow_Deactivated(object sender, EventArgs e)
-        {
-            if (Panel != null)
+        { 
+            Activated += (s, e) =>
             {
-            Growl.SetGrowlParent(Panel, false);
+                Growl.SetGrowlParent(this, true);
 
-            }
-           
-
-        }
-
-        private void MyWindow_Activated(object sender, EventArgs e)
-        {
-            if (Panel != null)
-                Growl.SetGrowlParent(Panel, true);
-           
-        }
-
-        private void MyWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (this.Content is Panel panel)
+            };
+            Deactivated += (s, e) =>
             {
-                StackPanel sp = new StackPanel();
-                sp.VerticalAlignment = VerticalAlignment.Top;
-                sp.HorizontalAlignment = HorizontalAlignment.Right;
+                Growl.SetGrowlParent(this, false);
 
-                panel.Children.Insert(0, sp);
-                Panel = panel;
-                //Activated += (sa, ea) =>
-                //{
-                //    Growl.SetGrowlParent(sp, true);
-                //};
-                //Deactivated += (sa, ea) => {
-
-                //    Growl.SetGrowlParent(sp, false);
-                //};
-                //this.Closed += (sa, ea) =>
-                //{
-                //    Growl.SetGrowlParent(sp, false);
-
-                //};
-
-            }
+            }; 
         }
+     
     }
 }
 

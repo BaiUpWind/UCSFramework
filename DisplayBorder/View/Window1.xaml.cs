@@ -18,17 +18,28 @@ namespace DisplayBorder.View
     /// <summary>
     /// Window1.xaml 的交互逻辑
     /// </summary>
-    public partial class Window1 : MyWindows.MyWindow
+    public partial class Window1 : HandyControl.Controls.Window
     {
         public Window1()
         {
             InitializeComponent();
-        
+            Name = "window1";
+            Activated += (s, e) =>
+            {
+                Growl.SetGrowlParent(this, true);
+
+            };
+            Deactivated += (s, e) =>
+            {
+                Growl.SetGrowlParent(this, false);
+
+            };
+
         }
 
         private void Btn_ShowInfo(object sender, RoutedEventArgs e)
         {
-            Growl.Info("显示信息");
+            Growl.Info("显示信息" );
         }
     }
 }

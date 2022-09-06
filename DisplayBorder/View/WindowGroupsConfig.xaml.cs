@@ -17,6 +17,7 @@ using DeviceConfig;
 using DeviceConfig.Core;
 using DisplayBorder.Controls;
 using DisplayBorder.Events;
+using DisplayBorder.ViewModel;
 using HandyControl.Controls;
 using MessageBox = HandyControl.Controls.MessageBox;
 using Window = HandyControl.Controls.Window;
@@ -28,48 +29,12 @@ namespace DisplayBorder.View
     /// WindowGroupsConfig.xaml 的交互逻辑
     /// </summary>
     public partial class WindowGroupsConfig : Window
-    {
-        public const double CanvasOffset = 45 * 2;
-        public class TitleControls
-        {
-            public Canvas Canvas { get; set; }
-            public Border Border   { get; set; }
-
-            public TitleControl TitleControl { get; set; }
-
-            public Point GetPoint 
-            {
-                get
-                {
-                    if (Canvas == null || Border == null || TitleControl == null)
-                    {
-                        return new Point(0, 0);
-                    }
-                    return Border.TransformToAncestor(Canvas).Transform(new Point(0, 0));
-                } 
-            }
-
-            public Size GetTitleSize
-            {
-                get
-                {
-                    if(TitleControl == null)
-                    {
-                        return new Size(0, 0);
-                    }
-
-                    return new Size(TitleControl.ActualWidth, TitleControl.ActualHeight);
-                }
-            }
-
-        }
-
-     
+    { 
         public WindowGroupsConfig()
         {
             InitializeComponent();
             SetControlEnable(false);
-            var result = (DateTime.Now - DateTime.Parse("2022-09-03 11:00:00")).TotalHours;
+            //DataContext = ViewModelLocator.Instance;
             Loaded += (s, e) =>
             {
                  
@@ -82,10 +47,7 @@ namespace DisplayBorder.View
                         AdornerLayer.GetAdornerLayer(border).Add( new ElementAdorner(border));
                     }
                 }
-
-               
-              
-
+                 
                 if(img.Source is BitmapSource bitmap)
                 {
                     lblresolution.Text = $"分辨率{bitmap.PixelWidth}*{bitmap.PixelHeight}";
@@ -102,9 +64,7 @@ namespace DisplayBorder.View
                 if (h <= 0)
                 {
                     return;
-                }
-                //g3.Width = w;
-                //g3.Height = h; 
+                } 
             };
 
             Unloaded += (s, e) =>
@@ -282,17 +242,47 @@ namespace DisplayBorder.View
                     {
                         lblresolution.Text = $"分辨率{bitmap.PixelWidth}*{bitmap.PixelHeight}";
                         img.Width = bitmap.Width;
-                        img.Height = bitmap.Height;
-  
-                    }
-                   
+                        img.Height = bitmap.Height; 
+                    } 
                 }
                 catch (Exception ex)
                 {
-                    Growl.InfoGlobal($"打开图片失败!其他信息'{ex.Message}'");
+                    Growl.ErrorGlobal($"打开图片失败!\n\r其他信息'{ex.Message}'");
                 }
             }
         }
+        #region 基本检查
+
+        private bool CheckSysConfig()
+        {
+            //检查图片路径 
+            if(string.IsNullOrEmpty(GlobalPara.SysConfig.BackImagPath))
+            {
+                MessageBox.Show("背景图片路径为设置,请打开系统配置进行设置","提示信息",MessageBoxButton.OK,MessageBoxImage.Warning);
+                return false;
+            }
+            else if (img.Source==null)
+            {
+                try
+                {
+                    var tempBitmap = new BitmapImage(new Uri(GlobalPara.SysConfig.BackImagPath, UriKind.Absolute));
+                    if(tempBitmap == null)
+                    {
+                        MessageBox.Show("背景图片生成有误,请选择正确的图片", "提示信息", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return false;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"背景图片路径格式有误,请打开系统配置进行设置,\r\n错误信息:{ex.Message}", "错误信息", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                } 
+            }
+             
+            return true;
+        }
+
+        #endregion
         #region 控件事件
 
         /// <summary>
@@ -440,7 +430,8 @@ namespace DisplayBorder.View
         //打开所有信息
         private void Btn_OpenGroupsData(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = MessageBoxResult.OK;
+            if (!CheckSysConfig()) return;  
+            MessageBoxResult result;
             if (C1.Children.Count > 2  && GlobalPara.Groups != groups)
             {
                 result = MessageBox.Ask($"当前操作未保存\n\r是否打开新的文件", "警告");
@@ -517,10 +508,23 @@ namespace DisplayBorder.View
 
         }
 
-        #endregion
-      
 
-      
+
+        #endregion
+
+        private void Btn_Close(object sender, RoutedEventArgs e)
+        {
+            var result = MessageBox.Ask("请确认是否关闭");
+            if (result == MessageBoxResult.OK)
+            {
+                Close(); 
+            }
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
     }
 
 

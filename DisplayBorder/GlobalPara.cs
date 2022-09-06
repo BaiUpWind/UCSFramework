@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks; 
 using CommonApi.Event;
+using DisplayBorder.ViewModel;
 
 namespace DisplayBorder
 {
@@ -44,6 +45,7 @@ namespace DisplayBorder
         private static IList<Group> groups; 
         private static EventManager eventManager;
         private static SysConfigPara sysConfig;
+        private static ViewModelLocator vewModel;
         public static void Init()
         {
             CheckPath(SysPath);
@@ -59,8 +61,7 @@ namespace DisplayBorder
                 if (groups == null)
                 {
                     try
-                    {
-                   
+                    { 
                         groups = JsonHelper.ReadJson<IList<Group>>(SysConfig.GroupsFilePath,true);
                     }
                     catch (Exception ex)
@@ -116,6 +117,18 @@ namespace DisplayBorder
                     eventManager = new EventManager();
                 }  
                 return eventManager;
+            }
+        }
+
+        public static ViewModelLocator ViewModel
+        {
+            get
+            {
+                if (vewModel == null)
+                {
+                    vewModel = new ViewModelLocator();
+                }
+                return vewModel;
             }
         }
 

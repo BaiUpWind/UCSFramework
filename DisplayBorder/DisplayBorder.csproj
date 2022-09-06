@@ -105,6 +105,7 @@
       <DependentUpon>RGVDataWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MixerViewModel.cs" />
+    <Compile Include="ViewModel\WindowStateViewModel.cs" />
     <Compile Include="View\DataGirdWindow.xaml.cs">
       <DependentUpon>DataGirdWindow.xaml</DependentUpon>
     </Compile>
@@ -113,9 +114,6 @@
     </Compile>
     <Compile Include="View\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\WindowEmpty.xaml.cs">
-      <DependentUpon>WindowEmpty.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\WindowGroupsConfig.xaml.cs">
       <DependentUpon>WindowGroupsConfig.xaml</DependentUpon>
@@ -166,10 +164,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Window1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\WindowEmpty.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -260,6 +254,9 @@
     <Resource Include="Images\背景图片.jpeg" />
     <Content Include="Lib\UICommon.dll" />
     <Content Include="Lib\UICommon.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
