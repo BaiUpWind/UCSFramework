@@ -49,13 +49,18 @@ namespace DeviceConfig
         [Control("编辑操作类型", null, ControlType.Data, GenerictyType: typeof(OperationBase), FieldName: nameof(Operation))]
         public OperationBase  Operation { get => operation; set => operation = value; }
 
- 
+
 
         /// <summary>
         /// 刷新数据间隔  单位:毫秒 
         /// </summary>
         [Control("RefreshInterval", "数据刷新间隔(毫秒)", ControlType.TextBox)]
-        public int RefreshInterval { get; set; }
+        public int RefreshInterval { get; set; } = 1000;
+        /// <summary>
+        /// 停留时间  单位:毫秒 
+        /// </summary>
+        [Control("StayTime", "停留时间(毫秒)", ControlType.TextBox)]
+        public int StayTime { get; set; } = 5000;
 
         #region 操作的创建(弃用 20220830)
 

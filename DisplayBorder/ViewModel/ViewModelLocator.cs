@@ -46,10 +46,9 @@ namespace DisplayBorder.ViewModel
             ////}
 
 
-            SimpleIoc.Default.Register<GroupViewModel>();
-            //SimpleIoc.Default.Register<GroupsViewModel>();
-            SimpleIoc.Default.Register<WindowStateViewModel>();
-        
+            SimpleIoc.Default.Register<GroupViewModel>(); 
+            SimpleIoc.Default.Register<WindowStateViewModel>();  
+            SimpleIoc.Default.Register<MainViewModel>();
         }
 
         public static ViewModelLocator Instance = new Lazy<ViewModelLocator>(() =>
@@ -72,6 +71,13 @@ namespace DisplayBorder.ViewModel
             }
         }
 
+        public MainViewModel Main
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<MainViewModel>(); 
+            }
+        }
         public static void Cleanup()
         {
             // TODO Clear the ViewModels

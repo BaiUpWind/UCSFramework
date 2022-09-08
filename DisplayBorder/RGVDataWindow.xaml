@@ -7,6 +7,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:local="clr-namespace:DisplayBorder"
+        DataContext="{Binding  Source={StaticResource Locator }}"
         mc:Ignorable="d"
         d:DesignHeight="1080" d:DesignWidth="1920"  
         MinWidth="800" MinHeight="600"
@@ -86,7 +87,12 @@
             </Setter>
         </Style>
 
-  
+        <Style x:Key="NameTextTtile" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="32"/>
+        </Style>
 
  
 
@@ -104,8 +110,9 @@
         <hc:TransitioningContentControl>
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="80"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
                     <RowDefinition></RowDefinition>
+                    <!--<RowDefinition Height="25"></RowDefinition>-->
                 </Grid.RowDefinitions>
 
                 <!--导航条-->
@@ -165,7 +172,7 @@
                             </Button.Content>
                         </Button>
                 
-                        <Button  Foreground="#065789" FontSize="18" Background="#005cb8" Margin="5"
+                        <Button  Foreground="#065789" FontSize="18" Background="#005cb8" Margin="5,5,20,5"
                            ToolTip="关闭系统"    Click="Btn_Click_Close"
                          Width="60" Height="50" BorderThickness="0"  >
                             <Button.Content>
@@ -190,18 +197,21 @@
                             <ColumnDefinition  Width="1*" ></ColumnDefinition>
                         </Grid.ColumnDefinitions>
 
-                        <Grid Grid.Column="0" Margin="15">
-                            <!--阴影-->
+                        <Grid Grid.Column="0" Margin="15"> 
                             <Border    Style="{StaticResource BorderStyle}"/>
                             <Border   Margin="15"    Background="#b1dffc" BorderThickness="2"  BorderBrush="#144aad" CornerRadius="10" />
-                            <ScrollViewer Margin="30" HorizontalScrollBarVisibility="Auto" >
-                                <Canvas  x:Name="C1" HorizontalAlignment="Center"  VerticalAlignment="Center" 
-                                         Background="Gray" Focusable="True" 
+
+                            <ScrollViewer Margin="30" HorizontalScrollBarVisibility="Auto" x:Name="sv" >
+                                <Canvas  x:Name="C1"  Background="Gray" Focusable="True" 
+                                       HorizontalAlignment="Left"  VerticalAlignment="Top"  
                                          Height="{Binding ElementName=mainImg,Path=ActualHeight}"
                                          Width="{Binding ElementName=mainImg,Path=ActualWidth}">
-                                    <Image Name="mainImg" Stretch="Fill" Source="Images\背景图片.jpeg">
+                                   
+                                    <Grid    x:Name="g3"  >
+                                        <Image x:Name="mainImg" Stretch="Fill"  >
 
-                                    </Image>
+                                        </Image>
+                                    </Grid>
                                 </Canvas>
                             </ScrollViewer> 
                         </Grid> 
@@ -218,29 +228,31 @@
                             </Grid.RowDefinitions>
                             <!--边框-->
                             <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource BorderStyle}"> 
-                                <TextBlock Text="产线名称" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Foreground="White"/>
+                                <TextBlock Text="产线名称"  Style="{StaticResource NameTextTtile}"/>
                             </Border> 
-                            <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyle}"> 
-                                <TextBlock Text="工艺名称"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Foreground="White"  />
+                            <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyle}">
+                                <TextBlock Text="工艺名称"   Style="{StaticResource NameTextTtile}"/>
                             </Border>
                             <Border Grid.Column="0" Grid.Row="2"  Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="工艺详情"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Foreground="White"  />
+                                <TextBlock Text="读取数量"   Style="{StaticResource NameTextTtile}"  />
                             </Border>
                             <Border Grid.Column="0" Grid.Row="3" Style="{StaticResource BorderStyle}">
+                                <TextBlock Text="当前读取"   Style="{StaticResource NameTextTtile}" /> 
                             </Border>
  
                             <Border Grid.Column="1" Grid.Row="0"  Style="{StaticResource BorderStyle}">
+                                <TextBlock Text="{Binding Main.SysConfig.Title}"   Style="{StaticResource NameTextTtile}"></TextBlock>
                             </Border>
                             <Border Grid.Column="1" Grid.Row="1"  Style="{StaticResource BorderStyle}">
+                                <TextBlock Text="{Binding Main.RunGroup.GroupName}"   Style="{StaticResource NameTextTtile}"></TextBlock>
                             </Border>
                             <Border Grid.Column="1" Grid.Row="2"  Style="{StaticResource BorderStyle}">
+                                <TextBlock Text="{Binding Main.RunGroup.DeviceCount}"   Style="{StaticResource NameTextTtile}"></TextBlock>
                             </Border>
                             <Border Grid.Column="1" Grid.Row="3"  Style="{StaticResource BorderStyle}">
+                                <TextBlock Text="{Binding Main.CurrentRunDeviceName}"   Style="{StaticResource NameTextTtile}"></TextBlock>
                             </Border> 
-                        </Grid>
-
-
-
+                        </Grid> 
                     </Grid>
                     
                     <!--组内设备-->
@@ -347,6 +359,11 @@
                         </Grid>
                     </Grid>
                 </Grid>
+
+                <!--<Grid Grid.Row="2"  Margin="15,0,15,5">
+                    <Border Style="{StaticResource BorderStyle2}"></Border>
+                    <ProgressBar Style="{StaticResource ProgressBarPrimaryStripe}" Value="10"   />
+                </Grid>-->
             </Grid>
 
         </hc:TransitioningContentControl>

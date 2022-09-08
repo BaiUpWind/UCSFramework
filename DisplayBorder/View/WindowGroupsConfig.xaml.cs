@@ -34,8 +34,9 @@ namespace DisplayBorder.View
         {
             InitializeComponent();
             SetControlEnable(false);
-            //DataContext = ViewModelLocator.Instance;
-            Loaded += (s, e) =>
+            ShowNonClientArea = false;
+              //DataContext = ViewModelLocator.Instance;
+              Loaded += (s, e) =>
             {
                  
                 GlobalPara.EventManager.Subscribe(OnCanvasChildrenClickArgs.EventID, OnClickChildren);
@@ -53,17 +54,6 @@ namespace DisplayBorder.View
                     lblresolution.Text = $"分辨率{bitmap.PixelWidth}*{bitmap.PixelHeight}";
                     img.Width = bitmap.Width;
                     img.Height = bitmap.Height;
-                }
-
-                var w = C1.ActualWidth;
-                if (w <= 0)
-                {
-                    return;
-                }
-                var h = C1.ActualHeight;
-                if (h <= 0)
-                {
-                    return;
                 } 
             };
 
@@ -183,6 +173,7 @@ namespace DisplayBorder.View
             groups.Add(g);
             cacheBorder.Add(border);
             #region 事件 
+             
             //大小发生变化时
             border.SizeChanged += (bs, be) =>
             {
@@ -476,7 +467,7 @@ namespace DisplayBorder.View
         {
             if(groups.Count > 0)
             { 
-                GlobalPara.Groups = groups;
+                GlobalPara.Groups = new List<Group>( groups);
                 Growl.Info("保存成功!");
             }
         }
@@ -508,22 +499,27 @@ namespace DisplayBorder.View
 
         }
 
-
-
-        #endregion
-
         private void Btn_Close(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Ask("请确认是否关闭");
             if (result == MessageBoxResult.OK)
             {
-                Close(); 
+                Close();
             }
         }
 
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
+        }
+
+
+        #endregion
+
+
+        private void Btn_Test(object sender, RoutedEventArgs e)
+        {
+         
         }
     }
 

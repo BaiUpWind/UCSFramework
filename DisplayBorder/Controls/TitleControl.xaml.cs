@@ -21,8 +21,8 @@ namespace DisplayBorder.Controls
     /// TitleControl.xaml 的交互逻辑
     /// </summary>
     public partial class TitleControl : UserControl
-    { 
-        public enum DirectionArrow:byte
+    {
+        public enum DirectionArrow : byte
         {
             /// <summary>
             /// 左上
@@ -51,71 +51,36 @@ namespace DisplayBorder.Controls
         {
             InitializeComponent();
             Init();
-          DataContext =   groupViewModel = new GroupViewModel(group);
+            DataContext = groupViewModel = new GroupViewModel(group);
         }
         public GroupViewModel groupViewModel;
-        public event Action<object,Group> OnClick;
-         
+        public event Action<object, Group> OnClick;
+
         public DirectionArrow Direction { get; private set; }
-
-        public Point OnCanvsLocation { get; set; }
-
-
-        private Point location;
-        public Point Location
+         
+ 
+        private bool isSelected;
+         
+        /// <summary>
+        /// 是否被选中了
+        /// </summary>
+        public bool IsSelected
         {
-            get
+            get => isSelected; set
             {
-                return  ((Visual)Parent).TransformToAncestor( (Visual)(((FrameworkElement)Parent).Parent)).Transform(new Point(0, 0));
-
+                isSelected = value;
+                bSelected.Visibility = value ? Visibility.Visible : Visibility.Hidden;
             }
-            set => location = value;
         }
-
-        public Path LinePath => linePath;
-
+        /// <summary>
+        /// 当前组信息
+        /// </summary>
+        public Group GroupInfo => groupViewModel?.CurrentGroup;
         /// <summary>
         /// 当前控件在图像上的位置
         /// </summary>
         public Point ImagePixelPoint { get; set; }
-
-        public string LocationStr
-        {
-            get
-            {
-                return $"X:{Location.X:0}Y:{Location.Y:0}";
-            }
-        }
-
-        private void Init()
-        {
          
-            SizeChanged += (s, e) =>
-            {
-                line1.StartPoint = d1.Location;
-                line1.EndPoint = d2.Location;
-
-                line2.StartPoint = d2.Location;
-                line2.EndPoint = d3.Location;
-            };
-            d1.OnMove += () =>
-            {
-                line1.StartPoint = d1.Location;
-            };
-            d2.OnMove += () =>
-            {
-                line1.EndPoint = d2.Location;
-                line2.StartPoint = d2.Location;
-            };
-
-            d3.OnMove += () =>
-            {
-                line2.EndPoint = d3.Location;
-            };
-            HideDot();
-            SwitchDricetion(DirectionArrow.LeftUp);
-        }
- 
 
         public void SwitchDricetion(DirectionArrow dir)
         {
@@ -161,7 +126,7 @@ namespace DisplayBorder.Controls
 
                     d2.HorizontalAlignment = HorizontalAlignment.Left;
                     d2.VerticalAlignment = VerticalAlignment.Top;
-                    d2.Margin = new Thickness(25,16,0,0);
+                    d2.Margin = new Thickness(25, 16, 0, 0);
 
                     d3.HorizontalAlignment = HorizontalAlignment.Right;
                     d3.VerticalAlignment = VerticalAlignment.Top;
@@ -170,8 +135,8 @@ namespace DisplayBorder.Controls
 
                     txb1.HorizontalAlignment = HorizontalAlignment.Right;
                     txb1.VerticalAlignment = VerticalAlignment.Top;
-                    txb1.Margin = new Thickness(0,0,0,0);
-                     
+                    txb1.Margin = new Thickness(0, 0, 0, 0);
+
 
                     break;
                 case DirectionArrow.RightDown:
@@ -200,9 +165,9 @@ namespace DisplayBorder.Controls
             Direction = dir;
 
             //这里位置切换以后,path路径的不会重绘,没找到原因
-         
+
         }
-         
+
         public void HideDot()
         {
             d1.Visibility = Visibility.Hidden;
@@ -217,17 +182,44 @@ namespace DisplayBorder.Controls
             d3.Visibility = Visibility.Visible;
         }
 
-   
+        private void Init()
+        {
+
+            SizeChanged += (s, e) =>
+            {
+                line1.StartPoint = d1.Location;
+                line1.EndPoint = d2.Location;
+
+                line2.StartPoint = d2.Location;
+                line2.EndPoint = d3.Location;
+            };
+            d1.OnMove += () =>
+            {
+                line1.StartPoint = d1.Location;
+            };
+            d2.OnMove += () =>
+            {
+                line1.EndPoint = d2.Location;
+                line2.StartPoint = d2.Location;
+            };
+
+            d3.OnMove += () =>
+            {
+                line2.EndPoint = d3.Location;
+            };
+            HideDot();
+            SwitchDricetion(DirectionArrow.LeftUp);
+        }
         private void txb1_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(groupViewModel != null && groupViewModel.CurrentGroup !=null)
+            if (groupViewModel != null && groupViewModel.CurrentGroup != null)
             {
                 OnClick?.Invoke(this, groupViewModel.CurrentGroup);
             }
         }
 
-    
-    } 
+
+    }
 }
 
 

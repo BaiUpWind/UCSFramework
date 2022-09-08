@@ -100,10 +100,12 @@
     <Compile Include="Events\OnGroupChooseArgs.cs" />
     <Compile Include="Events\OnOpenNewWindowArgs.cs" />
     <Compile Include="Events\OnUserInputArgs.cs" />
+    <Compile Include="Events\OnValueChangedArgs.cs" />
     <Compile Include="GlobalPara.cs" />
     <Compile Include="RGVDataWindow.xaml.cs">
       <DependentUpon>RGVDataWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\MixerViewModel.cs" />
     <Compile Include="ViewModel\WindowStateViewModel.cs" />
     <Compile Include="View\DataGirdWindow.xaml.cs">

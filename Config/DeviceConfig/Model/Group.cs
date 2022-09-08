@@ -13,6 +13,8 @@ namespace DeviceConfig
     /// </summary>
     public class Group
     {
+        private DeviceInfo currentRunDevice; 
+
         /// <summary>
         /// 组编号
         /// </summary>  
@@ -21,15 +23,15 @@ namespace DeviceConfig
         /// <summary>
         /// 组名称
         /// </summary>
-        [Control("GroupName", "组名称", ControlType.TextBox)] 
+        [Control("GroupName", "组名称", ControlType.TextBox)]
         public string GroupName { get; set; }
 
         #region 控件位置属性 
 
-        [Control("LinePathColor","线条颜色",ControlType.ColorPicker,FieldName:nameof(LinePathColor))]
+        [Control("LinePathColor", "线条颜色", ControlType.ColorPicker, FieldName: nameof(LinePathColor))]
         public Color LinePathColor { get; set; } = Colors.Blue;
 
-        [Control("FontColor", "字体颜色", ControlType.ColorPicker, FieldName: nameof(FontColor))] 
+        [Control("FontColor", "字体颜色", ControlType.ColorPicker, FieldName: nameof(FontColor))]
         public Color FontColor { get; set; } = Colors.White;
 
         [JsonIgnore]
@@ -40,12 +42,12 @@ namespace DeviceConfig
         /// 位置x 对应在图像像素的x位置
         /// </summary>
         //[Control("PosX", "位置X", ControlType.TextBox)]
-        public double PosX { get; set; } =-1;
+        public double PosX { get; set; } = -1;
         /// <summary>
         /// 位置y 对应在图像像素的y位置
         /// </summary>
         //[Control("PosY", "位置Y", ControlType.TextBox)]
-        public double PosY { get; set; }=-1;
+        public double PosY { get; set; } = -1;
 
         /// <summary>
         /// 控件的宽度
@@ -69,13 +71,17 @@ namespace DeviceConfig
         {
             get
             {
-                if(DeviceInfos != null)
+                if (DeviceInfos != null)
                 {
                     return DeviceInfos.Count;
                 }
                 return 0;
             }
         }
+    
+
+       
+
         [JsonIgnore]
         [Obsolete("暂时弃用 20220831")]
         /// <summary>
@@ -90,7 +96,7 @@ namespace DeviceConfig
                     return "没有设备";
                 }
                 var result = DeviceConfigs.Where(a => a.IsRunning).FirstOrDefault();
-                if(result == null)
+                if (result == null)
                 {
                     return "无";
                 }
@@ -105,7 +111,7 @@ namespace DeviceConfig
         public IList<Device> DeviceConfigs { get; set; }
 
         [Control("DeviceInfos", "设备集合", ControlType.Collection, GenerictyType: typeof(DeviceInfo), FieldName: nameof(DeviceInfos))]
-        public IList<DeviceInfo> DeviceInfos { get; set; }  
-        
+        public IList<DeviceInfo> DeviceInfos { get; set; }
+
     }
 }

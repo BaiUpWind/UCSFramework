@@ -18,18 +18,18 @@ namespace DisplayBorder.ViewModel
         public GroupViewModel(Group group)
         {
             this.currentGroup = group;
-            if (group.DeviceConfigs == null)
-            {
-                group.DeviceConfigs = new List<Device>();
-            }
-            devices =  new ObservableCollection<Device>(group.DeviceConfigs);
-            addDevice = new RelayCommand(AddDevice);
+            //if (group.DeviceConfigs == null)
+            //{
+            //    group.DeviceConfigs = new List<Device>();
+            //}
+            //devices =  new ObservableCollection<Device>(group.DeviceConfigs);
+            //addDevice = new RelayCommand(AddDevice);
         }
 
         private Group currentGroup;
-        private ObservableCollection<Device> devices;
+        //private ObservableCollection<Device> devices;
 
-        public RelayCommand addDevice { get; set; }
+        //public RelayCommand addDevice { get; set; }
 
         public Group CurrentGroup
         {
@@ -39,50 +39,50 @@ namespace DisplayBorder.ViewModel
                 RaisePropertyChanged();
             }
         }
-        #region device model
+        //#region device model
 
-        private int deviceId;
-        private string deviceName;
-        private double stayTime =5d;
-        private ConnectionConfigBase defaultConn =null; 
+        //private int deviceId;
+        //private string deviceName;
+        //private double stayTime =5d;
+        //private ConnectionConfigBase defaultConn =null; 
 
-        #endregion
-        public ObservableCollection<Device> Devices
-        {
-            get => devices; set
-            {
-                devices = value;
-                RaisePropertyChanged();
+        //#endregion
+        //public ObservableCollection<Device> Devices
+        //{
+        //    get => devices; set
+        //    {
+        //        devices = value;
+        //        RaisePropertyChanged();
              
-            }
-        }
+        //    }
+        //}
 
 
 
-        public int DeviceId
-        {
-            get => deviceId; set
-            {
-                deviceId = value;
-                RaisePropertyChanged();
-            }
-        }
-        public string DeviceName
-        {
-            get => deviceName; set
-            {
-                deviceName = value;
-                RaisePropertyChanged();
-            }
-        }
-        public double StayTime
-        {
-            get => stayTime; set
-            {
-                stayTime = value;
-                RaisePropertyChanged();
-            }
-        }
+        //public int DeviceId
+        //{
+        //    get => deviceId; set
+        //    {
+        //        deviceId = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+        //public string DeviceName
+        //{
+        //    get => deviceName; set
+        //    {
+        //        deviceName = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+        //public double StayTime
+        //{
+        //    get => stayTime; set
+        //    {
+        //        stayTime = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
         //public ConnectionConfigBase DefaultConn
         //{
         //    get => defaultConn; set
@@ -98,41 +98,34 @@ namespace DisplayBorder.ViewModel
         //}
 
 
-        public void AddDevice()
-        {
-            //if (defaultConn == null)
-            //{
-            //    Growl.Error("添加失败,请创建默认连接方式");
-            //    return;
-            //}
-            if( CurrentGroup.DeviceConfigs.Where(a => a.DeviceId == DeviceId).Count() >0)
-            {
-                Growl.Error($"'{DeviceId}'设备编号已经存在!");
-                return;
-            }
+        //public void AddDevice()
+        //{
+        //    //if (defaultConn == null)
+        //    //{
+        //    //    Growl.Error("添加失败,请创建默认连接方式");
+        //    //    return;
+        //    //}
+        //    if( CurrentGroup.DeviceConfigs.Where(a => a.DeviceId == DeviceId).Count() >0)
+        //    {
+        //        Growl.Error($"'{DeviceId}'设备编号已经存在!");
+        //        return;
+        //    }
 
-            Device device = new Device()
-            {
-                DeviceId = DeviceId,
-                DeviceName = DeviceName,
-                StayTime = StayTime,
-                //DefaultConn = DefaultConn,
-                DeviceInfos = new List<DeviceInfo>()
-            };
-            Devices.Add(device); 
-            if (currentGroup != null)
-            {
-                currentGroup.DeviceConfigs = Devices.ToList(); 
-            }
-            Growl.Success($"添加'{device.DeviceId}','{device.DeviceName}'设备成功!");
-        }
-
-
-        private void RestartValue()
-        {
-            //DefaultConn = null;
-            DeviceId = 0;
-            DeviceName = null;
-        }
+        //    Device device = new Device()
+        //    {
+        //        DeviceId = DeviceId,
+        //        DeviceName = DeviceName,
+        //        StayTime = StayTime,
+        //        //DefaultConn = DefaultConn,
+        //        DeviceInfos = new List<DeviceInfo>()
+        //    };
+        //    Devices.Add(device); 
+        //    if (currentGroup != null)
+        //    {
+        //        currentGroup.DeviceConfigs = Devices.ToList(); 
+        //    }
+        //    Growl.Success($"添加'{device.DeviceId}','{device.DeviceName}'设备成功!");
+        //}
+         
     }
 }

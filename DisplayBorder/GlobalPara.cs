@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks; 
 using CommonApi.Event;
 using DisplayBorder.ViewModel;
+using DisplayBorder.Events;
+using HandyControl.Controls;
 
 namespace DisplayBorder
 {
@@ -42,10 +44,9 @@ namespace DisplayBorder
         /// </summary>
         public readonly static string GroupsFilePath = ConfigsPath + "\\Groups.cfg";
 
-        private static IList<Group> groups; 
+        private static IList<Group> groups ; 
         private static EventManager eventManager;
-        private static SysConfigPara sysConfig;
-        private static ViewModelLocator vewModel;
+        private static SysConfigPara sysConfig; 
         public static void Init()
         {
             CheckPath(SysPath);
@@ -67,18 +68,20 @@ namespace DisplayBorder
                     catch (Exception ex)
                     {
                         groups = null;
-                        throw ex; 
+                        MessageBox.Error($"组文件配置损坏,\n\r具体信息'{ex.Message}'");
+                        return null;
                     } 
                 }
                 return groups;
             }
             set
             {
-                if (value != null && value.Count > 0)
+                if (value != null && value.Count > 0 && !groups.Equals(value))
                 {
                     groups = value;
                     JsonHelper.WriteJson(groups, SysConfig.GroupsFilePath);
-                } 
+                    EventManager.Fire(null, OnValueChangedArgs.Create(groups));
+                }
             }
         }
 
@@ -91,16 +94,26 @@ namespace DisplayBorder
             {
                 if (sysConfig == null)
                 {
-                    sysConfig = JsonHelper.ReadJson<SysConfigPara>(ConfigPath,true);
+                    try
+                    {
+                        sysConfig = JsonHelper.ReadJson<SysConfigPara>(ConfigPath, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        sysConfig = null;
+                        MessageBox.Error($"配置文件损坏,\n\r具体信息'{ex.Message}'");
+                        return null;
+                    } 
                 }
                 return sysConfig;
             }
             set
             {
-                if (value != null )
-                {
+                if (value != null && !sysConfig.Equals(value))
+                { 
                     sysConfig = value;
-                    JsonHelper.WriteJson(sysConfig, ConfigPath);     
+                    JsonHelper.WriteJson(sysConfig, ConfigPath);
+                    EventManager.Fire(null, OnValueChangedArgs.Create(sysConfig));
                 }
             }
         }
@@ -119,18 +132,7 @@ namespace DisplayBorder
                 return eventManager;
             }
         }
-
-        public static ViewModelLocator ViewModel
-        {
-            get
-            {
-                if (vewModel == null)
-                {
-                    vewModel = new ViewModelLocator();
-                }
-                return vewModel;
-            }
-        }
+ 
 
 
         public static void CheckPath(string path)
