@@ -10,6 +10,7 @@ using CommonApi.Event;
 using DisplayBorder.ViewModel;
 using DisplayBorder.Events;
 using HandyControl.Controls;
+using GalaSoft.MvvmLight;
 
 namespace DisplayBorder
 {
@@ -59,6 +60,10 @@ namespace DisplayBorder
         {
             get
             {
+                if (ViewModelBase.IsInDesignModeStatic)
+                {
+                    return null;
+                }
                 if (groups == null)
                 {
                     try
@@ -92,6 +97,10 @@ namespace DisplayBorder
         {
             get
             {
+                if (ViewModelBase.IsInDesignModeStatic)
+                {
+                    return null;
+                }
                 if (sysConfig == null)
                 {
                     try
@@ -109,7 +118,7 @@ namespace DisplayBorder
             }
             set
             {
-                if (value != null && !sysConfig.Equals(value))
+                if (value != null )
                 { 
                     sysConfig = value;
                     JsonHelper.WriteJson(sysConfig, ConfigPath);

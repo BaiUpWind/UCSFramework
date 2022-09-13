@@ -12,53 +12,37 @@
              d1p1:Ignorable="d" 
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
              StartupUri="View/WindowTest.xaml" >-->
-<Application x:Class="DisplayBorder.App" 
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-             xmlns:local="clr-namespace:DisplayBorder"  
-             xmlns:vm="clr-namespace:DisplayBorder.ViewModel"  
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             d1p1:Ignorable="d" 
-             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             StartupUri="RGVDataWindow.xaml" >
-   <Application.Resources>
-
-        <ResourceDictionary>
-
-            <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
-                <Setter Property="Background" Value="#5cadff"></Setter>
-                <Setter Property="Margin"  Value="5"></Setter>
-                <Setter Property="Effect"  >
-                    <Setter.Value>
-                        <DropShadowEffect Color="#0057ad" ShadowDepth="12" BlurRadius="25" Opacity="0.8" Direction="270"/>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="BorderStyle2" TargetType="{x:Type Border}">
-                <Setter Property="Background" Value="#99ccff"></Setter>
-                <Setter Property="Opacity" Value="0.55"/>
-                <Setter Property="Effect"  >
-                    <Setter.Value>
-                        <DropShadowEffect Color="#0057ad" ShadowDepth="25" BlurRadius="25" Opacity="0.8" Direction="270"/>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True"  />
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml">
-                </ResourceDictionary>
-                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml">
-
-                </ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
-
+<Application x:Class="DisplayBorder.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:DisplayBorder" xmlns:vm="clr-namespace:DisplayBorder.ViewModel" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006" StartupUri="RGVDataWindow.xaml">
+  <Application.Resources>
+    <ResourceDictionary>
+      <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
+        <Setter Property="Background" Value="#5cadff">
+        </Setter>
+        <Setter Property="Margin" Value="5">
+        </Setter>
+        <Setter Property="Effect">
+          <Setter.Value>
+            <DropShadowEffect Color="#0057ad" ShadowDepth="12" BlurRadius="25" Opacity="0.8" Direction="270" />
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <Style x:Key="BorderStyle2" TargetType="{x:Type Border}">
+        <Setter Property="Background" Value="#99ccff">
+        </Setter>
+        <Setter Property="Opacity" Value="0.55" />
+        <Setter Property="Effect">
+          <Setter.Value>
+            <DropShadowEffect Color="#0057ad" ShadowDepth="25" BlurRadius="25" Opacity="0.8" Direction="270" />
+          </Setter.Value>
+        </Setter>
+      </Style>
+      <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml">
         </ResourceDictionary>
-
-
-    </Application.Resources>
-    
-   
+        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml">
+        </ResourceDictionary>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
 </Application>
-    
-   

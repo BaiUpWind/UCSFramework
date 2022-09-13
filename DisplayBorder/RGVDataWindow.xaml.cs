@@ -73,10 +73,17 @@ namespace DisplayBorder
                 RecoverAutoTimer.Stop();
             };
 
-
+            //测试代码
+            testPanel = new Panel[] { g1, g2, g3, g4, g5, g6 };
+           LiveChartsCore. LiveCharts.Configure(config =>
+           config.HasMap<StorageInfo>((info, point) =>
+           {
+               point.PrimaryValue = (float)info.Value;
+               point.SecondaryValue = point.Context.Entity.EntityIndex;
+           }));
 
         }
-
+        Panel[] testPanel;
         #region 字段&属性  
         /// <summary>
         /// 检查恢复为自定定时器
@@ -94,6 +101,9 @@ namespace DisplayBorder
         private Task MainTask;
         private bool isRunning;
 
+        /// <summary>
+        ///  是否在自动运行中
+        /// </summary>
         public bool IsAuto
         {
             get => isAuto; set
@@ -107,6 +117,9 @@ namespace DisplayBorder
                 }
             }
         }
+        /// <summary>
+        /// 是否在采集数据中
+        /// </summary>
         public bool IsRunning
         {
             get => isRunning; set
@@ -153,13 +166,12 @@ namespace DisplayBorder
             IsRunning = true;
             while (!MainCancellToken.IsCancellationRequested)
             {
-                if (DicTitleContorl == null || DicTitleContorl.Count == 0)
-                {
-                    continue;
-                }
+                if (DicTitleContorl == null || DicTitleContorl.Count == 0)continue; 
+                //提前中断
                 if (MainCancellToken.IsCancellationRequested) break;
                 foreach (var titleControl in DicTitleContorl.Values)
                 {
+                    //提前中断
                     if (MainCancellToken.IsCancellationRequested) break;
                     var group = titleControl.GroupInfo;
                     AsyncRunUI(() =>
@@ -169,13 +181,26 @@ namespace DisplayBorder
                     if (group.DeviceInfos == null) continue;
                     //await Task.Delay(3000);
                     //continue;
+
+                    //获取新的设备信息
                     foreach (var deviceInfo in group.DeviceInfos)
                     {
+                        //提前中断
                         if (MainCancellToken.IsCancellationRequested) break;
                         AsyncRunUI(() =>
                         {
                             Main.CurrentRunDeviceName = deviceInfo.DeviceInfoName;
-                        });
+
+                            Random random = new Random();
+                            for (int i = 0; i < 6; i++)
+                            {
+                                var index = random.Next(0, 3);
+                                DataType dt = (DataType)index;
+
+                                ResultHelper.CreateDataControl(testPanel[i], dt);
+
+                            }
+                        }); 
                         CancellationTokenSource intervalToken = new CancellationTokenSource();
                         Task task = new Task(async () =>
                         {
@@ -186,6 +211,7 @@ namespace DisplayBorder
                                 {
                                     break;
                                 }
+                                //读取数据并且加载对应的控件
                                 //deviceInfo.Operation.GetResults(); 
                                 Console.WriteLine($"[{DateTime.Now}]{deviceInfo.DeviceInfoName}刷新");
                                 if (deviceInfo.RefreshInterval == 0) deviceInfo.RefreshInterval = 1000;
@@ -322,12 +348,16 @@ namespace DisplayBorder
         {
             if (target == null) return;
             if (sv.ScrollableHeight == 0 && sv.ScrollableWidth ==0) return;
+         
             var currentPosY = sv.VerticalOffset;
             var currentPosX = sv.HorizontalOffset;
             //获取目标控件相对scrollViewer位置
             var point = new Point(currentPosX - 25, currentPosY - 25);
             //获取目标相对sv的位置
             var tarPos = target.TransformToVisual(sv).Transform(point);
+            if (sv.ScrollableHeight == 0) tarPos.Y = 0;
+            if (sv.VerticalOffset == 0) tarPos.X = 0;
+
             CancellationTokenSource lerpToken = new CancellationTokenSource();
             Task task;
             if (DicSvTask.Count > 0)
@@ -353,7 +383,7 @@ namespace DisplayBorder
                         //水平方向上的定位
                         sv.ScrollToHorizontalOffset(newPoint.X);
                     });
-                    //调整这个 可以调整帧率
+                    //调整这个20=0.02秒刷新一个位置; 
                     await Task.Delay(20);
                 }
             }, lerpToken.Token);
@@ -460,4 +490,6 @@ namespace DisplayBorder
         }
         #endregion
     }
+
+  
 }

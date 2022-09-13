@@ -49,7 +49,7 @@
     public enum DataType
     {
         饼状图,
-        网格,
+        线状图,
         柱状图
     }
 }

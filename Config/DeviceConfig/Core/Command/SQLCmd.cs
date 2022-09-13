@@ -18,6 +18,8 @@ namespace  DeviceConfig.Core
             Result = new SQLResult(); 
         }
 
+        public string sql = "select count(1) as 剩余货位_绿色 , count(1) as 满盘货物_红色 ,count(1) as 超时货位_蓝色 from dual";
+
         [Control("SQL", "查询语句", ControlType.TextBox, Height: 200, Width: 300,Order:1)]
         public override object CommandStr { get  ; set ; }
          
@@ -66,7 +68,7 @@ namespace  DeviceConfig.Core
                         case DataType.饼状图:
                              
                             break;
-                        case DataType.网格:
+                        case DataType.线状图:
                             break;
                         case DataType.柱状图:
                             break; 
