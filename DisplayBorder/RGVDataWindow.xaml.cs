@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using CommonApi;
 using DeviceConfig;
+using DeviceConfig.Core;
 using DisplayBorder.Controls;
 using DisplayBorder.Events;
 using DisplayBorder.View;
@@ -72,18 +73,25 @@ namespace DisplayBorder
                 IsAuto = true;
                 RecoverAutoTimer.Stop();
             };
+            //注册统计图的数据类型
+            LiveChartsCore.LiveCharts.Configure(config =>
+            config.HasMap<ChartBasicInfo>((info, point) =>
+            {
+                point.PrimaryValue = info.Value;
+                point.SecondaryValue = point.Context.Entity.EntityIndex;
+            }));
+            grids = new Grid[] { G1, G2, G3, G4, G5, G6 };
+            ClearGirds();
 
-            //测试代码
-            testPanel = new Panel[] { g1, g2, g3, g4, g5, g6 };
-           LiveChartsCore. LiveCharts.Configure(config =>
-           config.HasMap<StorageInfo>((info, point) =>
-           {
-               point.PrimaryValue = (float)info.Value;
-               point.SecondaryValue = point.Context.Entity.EntityIndex;
-           }));
+
+
+
+
 
         }
-        Panel[] testPanel;
+        Grid[] grids;
+
+     
         #region 字段&属性  
         /// <summary>
         /// 检查恢复为自定定时器
@@ -151,6 +159,15 @@ namespace DisplayBorder
         }
         #endregion
         #region 内部方法
+        private void ClearGirds()
+        {
+            foreach (var grid in grids)
+            {
+                grid.RowDefinitions.Clear();
+                grid.ColumnDefinitions.Clear();
+                grid.Children.Clear();
+            }
+        }
         /// <summary>
         /// 异步更改UI
         /// </summary>
@@ -170,9 +187,7 @@ namespace DisplayBorder
                 //提前中断
                 if (MainCancellToken.IsCancellationRequested) break;
                 foreach (var titleControl in DicTitleContorl.Values)
-                {
-                    //提前中断
-                    if (MainCancellToken.IsCancellationRequested) break;
+                { 
                     var group = titleControl.GroupInfo;
                     AsyncRunUI(() =>
                     {
@@ -180,9 +195,9 @@ namespace DisplayBorder
                     });
                     if (group.DeviceInfos == null) continue;
                     //await Task.Delay(3000);
-                    //continue;
-
-                    //获取新的设备信息
+                    //continue; 
+                    //提前中断
+                    if (MainCancellToken.IsCancellationRequested) break; 
                     foreach (var deviceInfo in group.DeviceInfos)
                     {
                         //提前中断
@@ -190,29 +205,57 @@ namespace DisplayBorder
                         AsyncRunUI(() =>
                         {
                             Main.CurrentRunDeviceName = deviceInfo.DeviceInfoName;
+                            //------------ 测试代码
+                            //Random random = new Random();
+                            //for (int i = 0; i < 6; i++)
+                            //{
+                            //    var index = random.Next(0, 3);
+                            //    DataType dt = (DataType)index;
 
-                            Random random = new Random();
-                            for (int i = 0; i < 6; i++)
-                            {
-                                var index = random.Next(0, 3);
-                                DataType dt = (DataType)index;
+                            //    ChartControlHelper.CreateDataControl(testPanel[i], dt);
 
-                                ResultHelper.CreateDataControl(testPanel[i], dt);
+                            //}
 
-                            }
+                            //ClearGirds();
+                            //Random random = new Random();
+                            //for (int i = 0; i < 6; i++)
+                            //{
+                            //    var index = random.Next(0, 3);
+                            //    DataType dt = (DataType)index;
+
+                            //    ChartControlHelper.CreateChartConrotl(grids[i], dt);
+
+                            //}
+                            //--------------
                         }); 
                         CancellationTokenSource intervalToken = new CancellationTokenSource();
                         Task task = new Task(async () =>
                         {
+                            //todo: 先创建对应的控件
+                            //todo: 设置控件的数据绑定
+                            //todo: 每次获取数据只对数据源进行更新 
                             Console.WriteLine($"{deviceInfo.DeviceInfoName}获取数据刷新");
                             while (true)
                             {
-                                if (intervalToken.IsCancellationRequested)
-                                {
-                                    break;
-                                }
+                                if (intervalToken.IsCancellationRequested) break;
+                               
                                 //读取数据并且加载对应的控件
-                                //deviceInfo.Operation.GetResults(); 
+                                AsyncRunUI(() =>
+                                {
+                                    ClearGirds();
+                                    var results = deviceInfo.Operation.GetResults();
+                                    for (int i = 0; i < results.Count; i++)
+                                    {
+                                        if (i > grids.Length) break;
+                                        var result = results[i];
+                                        if (result == null) continue;
+
+                                        if (result is SQLResult sql)
+                                        { 
+                                            ChartControlHelper.CreateChartConrotl(grids[i], (DataType)sql.SelectType, sql.Title); 
+                                        }
+                                    }
+                                });
                                 Console.WriteLine($"[{DateTime.Now}]{deviceInfo.DeviceInfoName}刷新");
                                 if (deviceInfo.RefreshInterval == 0) deviceInfo.RefreshInterval = 1000;
                                 await Task.Delay(deviceInfo.RefreshInterval);

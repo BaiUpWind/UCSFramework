@@ -125,6 +125,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\BasicDataInfo.xaml.cs">
+      <DependentUpon>BasicDataInfo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ChartControl.xaml.cs">
+      <DependentUpon>ChartControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ComboBoxLinked.xaml.cs">
       <DependentUpon>ComboBoxLinked.xaml</DependentUpon>
     </Compile>
@@ -153,7 +159,7 @@
     <Compile Include="Events\OnUserInputArgs.cs" />
     <Compile Include="Events\OnValueChangedArgs.cs" />
     <Compile Include="GlobalPara.cs" />
-    <Compile Include="ResultHelper.cs" />
+    <Compile Include="ChartControlHelper.cs" />
     <Compile Include="RGVDataWindow.xaml.cs">
       <DependentUpon>RGVDataWindow.xaml</DependentUpon>
     </Compile>
@@ -181,6 +187,14 @@
       <DependentUpon>WindowTest.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowHelper.cs" />
+    <Page Include="Controls\BasicDataInfo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ComboBoxLinked.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

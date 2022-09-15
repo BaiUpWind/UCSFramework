@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace DisplayBorder.ViewModel
 {
+    [Obsolete("不再使用 找个机会删掉")]
     public class OperationViewModel : ViewModelBase
     {
         public OperationViewModel(OperationBase operation,  DeviceInfo info )

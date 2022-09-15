@@ -49,8 +49,9 @@ namespace DeviceConfig.Core
         {
             if (cmd is SQLCmd sqlcmd)
             {
-                var data = db.GetDataTable(sqlcmd.CommandStr.ToString(), System.Data.CommandType.Text);
-                sqlcmd.Result.Data = data;
+                //因为测试先注释掉
+                //var data = db.GetDataTable(sqlcmd.CommandStr.ToString(), System.Data.CommandType.Text);
+                //sqlcmd.Result.Data = data;
                 return sqlcmd.Result;
             }
             return null; 

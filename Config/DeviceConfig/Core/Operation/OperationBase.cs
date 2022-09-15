@@ -6,11 +6,7 @@ using System.Collections.Generic;
 namespace DeviceConfig.Core
 {
     /// <summary>
-    /// 读取设备信息的指令基类
-    /// <para>数据库：配置SQL语句</para>
-    /// <para>PLC:配置对应的DB块</para>
-    /// <para>TcpClient:配置对应的协议</para>
-    /// <para>SerialPort:配置对应的 读写信息</para>
+    /// 读取设备信息的指令基类 
     /// </summary>
     public abstract class OperationBase
     {
@@ -19,7 +15,14 @@ namespace DeviceConfig.Core
             CreateConn();
         } 
         private ConnectionConfigBase connectConfig;
-        private List<ResultBase> results = new List<ResultBase>(); 
+        private List<object> results = new List<object>();
+
+        /// <summary>
+        /// 读取信息
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
+        protected abstract ResultBase Read(object cmd);
         /// <summary>
         /// 连接配置的基类
         /// </summary>
@@ -36,13 +39,19 @@ namespace DeviceConfig.Core
         }
       
         /// <summary>
-        /// 这玩意是个集合[List]
+        /// 这玩意是个集合[List],存放所有的指令操作和返回结果
+        /// <para>基类型为<see cref="CommandBase"/></para>
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
         [Control("Commands", "编辑指令集合", ControlType.Collection, GenerictyType: typeof(CommandBase), FieldName: nameof(Commands))]
         public object Commands { get; set; } 
 
-        public  List<ResultBase> GetResults()
+        /// <summary>
+        /// 获取所有的返回结果
+        /// <para>object的基础类型为<see cref="ResultBase"/></para>
+        /// </summary>
+        /// <returns></returns>
+        public  List<object> GetResults()
         {
             results.Clear();
             if (Commands is IList cmds)
@@ -54,12 +63,7 @@ namespace DeviceConfig.Core
             }
             return results;
         }
-        /// <summary>
-        /// 读取信息
-        /// </summary>
-        /// <param name="cmd"></param>
-        /// <returns></returns>
-        protected abstract ResultBase Read(object cmd) ; 
+   
         /// <summary>
         /// 连接
         /// </summary>

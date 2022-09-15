@@ -44,11 +44,13 @@ namespace DisplayBorder.ViewModel
             ////    // Create run time view services and models
             ////    SimpleIoc.Default.Register<IDataService, DataService>();
             ////}
-
+      
 
             SimpleIoc.Default.Register<GroupViewModel>(); 
             SimpleIoc.Default.Register<WindowStateViewModel>();  
             SimpleIoc.Default.Register<MainViewModel>();
+
+          
         }
 
         public static ViewModelLocator Instance = new Lazy<ViewModelLocator>(() =>
