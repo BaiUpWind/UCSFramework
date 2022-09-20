@@ -224,7 +224,12 @@ namespace CommonApi
                 GetInheritors(typeof(T), ref cd);
                 return cd;
             }
-
+            /// <summary>
+            /// 获取类型所有的直接继承的类型，对[抽象类]再递归获取
+            /// <para>使用的话:用递归，遍历<see cref="ClassData.ChildrenTypes"/> 判断<see cref="Type.IsAbstract"/>进行递归</para>
+            /// </summary>
+            /// <param name="target">目标对象</param>
+            /// <param name="inData"></param>
             public static ClassData GetClassData(Type t)
             {
                 ClassData cd = new ClassData();
@@ -232,6 +237,41 @@ namespace CommonApi
                 return cd;
             }
 
+            public static List<string> GetClassDataFullName(Type t)
+            {
+                ClassData cd = new ClassData();
+                GetInheritors(t, ref cd);
+                return GetAllImplement(cd);
+            }
+
+            private static List<string> GetAllImplement(ClassData cd, List<string> classFullName = null)
+            {
+                if (cd == null) return null;
+                if (classFullName == null) classFullName = new List<string>(); 
+                if (cd.ClassType.IsAbstract)
+                {
+                    foreach (var item in cd.ChildrenTypes)
+                    {
+                        if (item.IsAbstract)
+                        {
+                            var result = GetAllImplement(cd.Children.Where(a => a.ClassType == item).FirstOrDefault(), classFullName);
+                            if (result == null)
+                            {
+                                classFullName.AddRange(result);
+                            }
+                        }
+                        else
+                        {
+                            classFullName.Add(item.FullName);
+                        }
+                    }
+                }
+                else
+                {
+                    classFullName.Add(cd.ClassType.FullName);
+                }
+                return classFullName;
+            }
             /// <summary>
             /// 获取类型所有的直接继承的类型，对[抽象类]再递归获取
             /// <para>使用的话:用递归，遍历<see cref="ClassData.ChildrenTypes"/> 判断<see cref="Type.IsAbstract"/>进行递归</para>

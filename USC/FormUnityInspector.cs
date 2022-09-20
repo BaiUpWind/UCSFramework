@@ -300,31 +300,66 @@ namespace USC
 
     public class Data : DataBase
     {
-        public int ID = 1001;
-        public string Name = "哈哈";
-        public bool Check = true;
+        //public AttackType AttackType;
+        public int ID = 1001; 
+        //public string Name = "哈哈";
+        //public bool Check = true;
         public Person Charlie;
+        //public Animal ok  = new qqqqqqqCat("asd");
         //public Person Jsone = new Person()
         //{
         //    Age = 18,
         //    Sex = "男",
         //};
-        public List<Person> Strings = new List<Person>()
-        {
-           new Person()
-            {
-                Age = 18,
-                Sex = "男",
-            },
-           new Person()
-            {
-                Age = 11,
-                Sex = "女",
-            }
-        };
-        //public int[] Ints;
-        private float speed;
+        //public List<Person> Strings = new List<Person>()
+        //{
+        //   new Person()
+        //    {
+        //        Age = 18,
+        //        Sex = "男",
+        //    },
+        //   new Person()
+        //    {
+        //        Age = 11,
+        //        Sex = "女",
+        //    }
+        //};
+        //public bool[] bools = new bool[]
+        //{
+        //    true,
+        //    false,true
+        //};
+        //public string[] strings; 
+        //public List<AttackType> listAttacks;
+        //public int[] Ints = new int[] { 1, 2, 3, 4 };
+        //public Person[] people = new Person[]
+        //{
+        //         new Person()
+        //    {
+        //        Age = 18,
+        //        Sex = "男",
+        //    },
+        //   new Person()
+        //    {
+        //        Age = 11,
+        //        Sex = "女",
+        //    }
+        //};
+        //public AttackType[] attacks = new AttackType[]{
+        //     AttackType.Fire,
+        //     AttackType.Dust,
+        //     AttackType.Water,
+        //};
+
         public string Description { get; set; }
+    }
+    public enum AttackType
+    {
+        Gold,
+        Fire,
+        Water,
+        Dust,   
+        Wood
     }
 
     public abstract class DataBase: IData
@@ -332,6 +367,7 @@ namespace USC
         public string OrginName { get; set; }
         public string DataName { get  ; set  ; }
     }
+     
 
     public interface IData
     {
