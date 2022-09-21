@@ -20,16 +20,18 @@ namespace  DeviceConfig.Core
         /// <para>对应类型<see cref="DataType"/></para>
         /// </summary>
         [Control("SelectType", "结果显示图像", ControlType.ComboBox, EnumType: typeof(DataType))]
-        public int SelectType { get; set; } = 0;
+        public DataType SelectType { get; set; } = 0;
         /// <summary>
         /// 数据,原始数据
         /// </summary>
        [JsonIgnore]
+        [Hide]
         public object Data { get; set; } = null;
         /// <summary>
         /// 解析完成后的数据
         /// </summary>
         [JsonIgnore]
+        [Hide]
         public object FinalData { get; set; } = null; 
     }
 }

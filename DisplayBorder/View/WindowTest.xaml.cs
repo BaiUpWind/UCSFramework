@@ -69,6 +69,10 @@ namespace DisplayBorder.View
 
             };
 
+            ClassControl cc = new ClassControl(typeof(List<Group>), true,GlobalPara.Groups);
+            sp.Children.Add(cc);
+
+
         }
 
         private List<MixerControl> groupMixers = new List<MixerControl>();
@@ -158,14 +162,14 @@ namespace DisplayBorder.View
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             //WindowEmpty window = new WindowEmpty();
-            Window1 window = new Window1();
+            //Window1 window = new Window1();
             
             //Growl.SetToken(window, token);
 
             //var result = Growl.GetToken(window);
             //GlobalPara.EventManager.Fire(this, OnOpenNewWindowArgs.Create(window, this));
 
-            window.Show();
+            //window.Show();
         }
 
         private void OnGroupChoose(object sender, BaseEventArgs e)

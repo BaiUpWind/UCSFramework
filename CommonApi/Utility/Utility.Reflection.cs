@@ -103,6 +103,25 @@ namespace CommonApi
                 }
             }
 
+            /// <summary>
+            /// 判断该类型是否继承了<see cref="System.Collections.IList "/>
+            /// </summary>
+            /// <param name="type"></param>
+            /// <returns></returns>
+            /// <exception cref="ArgumentNullException"></exception>
+            public static bool IsList(Type type)
+            {
+                if (null == type)
+                    throw new ArgumentNullException("type");
+
+                if (typeof(System.Collections.IList).IsAssignableFrom(type))
+                    return true;
+                foreach (var it in type.GetInterfaces())
+                    if (it.IsGenericType && typeof(IList<>) == it.GetGenericTypeDefinition())
+                        return true;
+                return false;
+            }
+
             public static object CreateObjectShortName(Type type ,string shortName,params object[] objects)
             {
                 try

@@ -194,8 +194,11 @@ namespace DisplayBorder
                         CurrentSelectedTitle = titleControl; 
                     });
                     if (group.DeviceInfos == null) continue;
+
+                    //----------- 测试代码
                     //await Task.Delay(3000);
                     //continue; 
+                    //------------
                     //提前中断
                     if (MainCancellToken.IsCancellationRequested) break; 
                     foreach (var deviceInfo in group.DeviceInfos)
@@ -206,26 +209,17 @@ namespace DisplayBorder
                         {
                             Main.CurrentRunDeviceName = deviceInfo.DeviceInfoName;
                             //------------ 测试代码
-                            //Random random = new Random();
-                            //for (int i = 0; i < 6; i++)
-                            //{
-                            //    var index = random.Next(0, 3);
-                            //    DataType dt = (DataType)index;
+                           
+                            ClearGirds();
+                            Random random = new Random();
+                            for (int i = 0; i < 6; i++)
+                            {
+                                var index = random.Next(0, 3);
+                                DataType dt = (DataType)index;
 
-                            //    ChartControlHelper.CreateDataControl(testPanel[i], dt);
+                                ChartControlHelper.CreateChartConrotl(grids[i], dt,"测试界面");
 
-                            //}
-
-                            //ClearGirds();
-                            //Random random = new Random();
-                            //for (int i = 0; i < 6; i++)
-                            //{
-                            //    var index = random.Next(0, 3);
-                            //    DataType dt = (DataType)index;
-
-                            //    ChartControlHelper.CreateChartConrotl(grids[i], dt);
-
-                            //}
+                            }
                             //--------------
                         }); 
                         CancellationTokenSource intervalToken = new CancellationTokenSource();
@@ -238,24 +232,24 @@ namespace DisplayBorder
                             while (true)
                             {
                                 if (intervalToken.IsCancellationRequested) break;
-                               
-                                //读取数据并且加载对应的控件
-                                AsyncRunUI(() =>
-                                {
-                                    ClearGirds();
-                                    var results = deviceInfo.Operation.GetResults();
-                                    for (int i = 0; i < results.Count; i++)
-                                    {
-                                        if (i > grids.Length) break;
-                                        var result = results[i];
-                                        if (result == null) continue;
 
-                                        if (result is SQLResult sql)
-                                        { 
-                                            ChartControlHelper.CreateChartConrotl(grids[i], (DataType)sql.SelectType, sql.Title); 
-                                        }
-                                    }
-                                });
+                                //读取数据并且加载对应的控件
+                                //AsyncRunUI(() =>
+                                //{
+                                //    ClearGirds();
+                                //    var results = deviceInfo.Operation.GetResults();
+                                //    for (int i = 0; i < results.Count; i++)
+                                //    {
+                                //        if (i > grids.Length) break;
+                                //        var result = results[i];
+                                //        if (result == null) continue;
+
+                                //        if (result is SQLResult sql)
+                                //        {
+                                //            ChartControlHelper.CreateChartConrotl(grids[i], (DataType)sql.SelectType, sql.Title);
+                                //        }
+                                //    }
+                                //});
                                 Console.WriteLine($"[{DateTime.Now}]{deviceInfo.DeviceInfoName}刷新");
                                 if (deviceInfo.RefreshInterval == 0) deviceInfo.RefreshInterval = 1000;
                                 await Task.Delay(deviceInfo.RefreshInterval);

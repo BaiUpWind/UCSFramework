@@ -35,26 +35,26 @@ namespace DisplayBorder.View
             InitializeComponent();
             SetControlEnable(false);
             ShowNonClientArea = false;
-              //DataContext = ViewModelLocator.Instance;
-              Loaded += (s, e) =>
+            //DataContext = ViewModelLocator.Instance;
+            Loaded += (s, e) =>
             {
-                 
+
                 GlobalPara.EventManager.Subscribe(OnCanvasChildrenClickArgs.EventID, OnClickChildren);
-               
+
                 foreach (var item in C1.Children)
                 {
-                    if(item is Border border)
+                    if (item is Border border)
                     {
-                        AdornerLayer.GetAdornerLayer(border).Add( new ElementAdorner(border));
+                        AdornerLayer.GetAdornerLayer(border).Add(new ElementAdorner(border));
                     }
                 }
-                 
-                if(img.Source is BitmapSource bitmap)
+
+                if (img.Source is BitmapSource bitmap)
                 {
                     lblresolution.Text = $"分辨率{bitmap.PixelWidth}*{bitmap.PixelHeight}";
                     img.Width = bitmap.Width;
                     img.Height = bitmap.Height;
-                } 
+                }
             };
 
             Unloaded += (s, e) =>

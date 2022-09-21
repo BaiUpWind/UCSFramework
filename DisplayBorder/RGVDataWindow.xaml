@@ -17,9 +17,9 @@
         >
     <Window.Resources>
         <!--静态资源-->
-        <ImageBrush x:Key="leftImage" ImageSource="images/leftImage.png"/>
+        <!--<ImageBrush x:Key="leftImage" ImageSource="images/leftImage.png"/>
         <ImageBrush x:Key="leftImageSub" ImageSource=" images/leftImageSub.png"/>
-        <ImageBrush x:Key="topImage" ImageSource=" images/topImage.png"/>
+        <ImageBrush x:Key="topImage" ImageSource=" images/topImage.png"/>-->
 
         <!--下拉列表样式-->
       

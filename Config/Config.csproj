@@ -45,9 +45,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DeviceConfig\Attributes\ButtonAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\Control\ControlAttribute.cs" />
+    <Compile Include="DeviceConfig\Attributes\ConvertTypeAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\DependOnAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\Control\ShowIfAttribute.cs" />
+    <Compile Include="DeviceConfig\Attributes\HideAttribute.cs" />
+    <Compile Include="DeviceConfig\Attributes\InstanceAttribute.cs" />
     <Compile Include="DeviceConfig\Core\Command\CommandBase.cs" />
     <Compile Include="DeviceConfig\Core\Command\PLCCmd.cs" />
     <Compile Include="DeviceConfig\Core\Command\SiemensCmd.cs" />
@@ -60,6 +64,7 @@
     <Compile Include="DeviceConfig\Core\Connection\TcpConnectCfg.cs" />
     <Compile Include="DeviceConfig\Core\Result\ResultBase.cs" />
     <Compile Include="DeviceConfig\Core\Result\SQLResult.cs" />
+    <Compile Include="DeviceConfig\Model\ColorPicker.cs" />
     <Compile Include="DeviceConfig\Model\DeviceInfo.cs" />
     <Compile Include="DeviceConfig\Model\Group.cs" />
     <Compile Include="DeviceConfig\Define\PublicEnum.cs" />

@@ -1,5 +1,6 @@
 ﻿using CommonApi.PLC;
 using System;
+using System.Collections.Generic;
 
 namespace DeviceConfig.Core
 {
@@ -13,13 +14,17 @@ namespace DeviceConfig.Core
         {
             if (ConnectConfig is SiemensConnectCfg siemens)
             {
-                splc = new SiemensPlc(siemens.SiemensSelected, siemens.IP, siemens.Port, siemens.Rack, siemens.Slot);
+                splc = new SiemensPlc((int)siemens.SiemensSelected, siemens.IP, siemens.Port, siemens.Rack, siemens.Slot);
                 return;
             }
             throw new Exception("错误的PLC配置类型");
         }
         private SiemensPlc splc;
 
+        List<SiemensCmd> cmds = new List<SiemensCmd>();
+
+        [Instance]
+        public override object Commands { get => cmds; set=> cmds = value as List<SiemensCmd>; }
 
         public override bool Connect()
         {

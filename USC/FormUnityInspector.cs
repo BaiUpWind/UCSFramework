@@ -21,7 +21,8 @@ namespace USC
             InitializeComponent();
             //Auto (typeof(Data),false );
 
-            DropControl dc = new DropControl(typeof(Data), false);
+            DropControl dc = new DropControl(typeof(DeviceConfig.Group), true);
+            dc.Name = "top";
             dc.Dock = DockStyle.Fill;
             inspector.Controls.Add(dc);
 
@@ -280,7 +281,7 @@ namespace USC
     {
         public string Sex;
         public int Age;
-        //public Monster Data;
+         public Monster Data;
     }
 
     public class Monster
@@ -329,7 +330,7 @@ namespace USC
         //    true,
         //    false,true
         //};
-        //public string[] strings; 
+        public string[] strings;
         //public List<AttackType> listAttacks;
         //public int[] Ints = new int[] { 1, 2, 3, 4 };
         //public Person[] people = new Person[]

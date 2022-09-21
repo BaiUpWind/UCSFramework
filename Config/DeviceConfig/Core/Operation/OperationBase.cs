@@ -29,7 +29,9 @@ namespace DeviceConfig.Core
         [JsonConverter(typeof(PolyConverter))]
         [Control("ConnectConfig", "编辑连接内容", ControlType.Data, GenerictyType: typeof(ConnectionConfigBase), FieldName: nameof(ConnectConfig))]
         [Control("测试连接", null, ControlType.Button, MethodName: nameof(Connect))]
-        public ConnectionConfigBase ConnectConfig
+        [Instance]
+        [Button("测试连接", nameof(Connect))]
+        public virtual ConnectionConfigBase ConnectConfig
         {
             get
             {
@@ -44,7 +46,8 @@ namespace DeviceConfig.Core
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
         [Control("Commands", "编辑指令集合", ControlType.Collection, GenerictyType: typeof(CommandBase), FieldName: nameof(Commands))]
-        public object Commands { get; set; } 
+
+        public abstract object Commands { get; set; } 
 
         /// <summary>
         /// 获取所有的返回结果

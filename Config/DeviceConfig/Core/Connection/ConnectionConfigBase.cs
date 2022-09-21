@@ -12,7 +12,9 @@ namespace DeviceConfig.Core
     /// </summary>
     public abstract class ConnectionConfigBase
     {
+        [Hide]
         public int ConnectID { get; set; }
+        [Hide] 
         public string ConnectName { get; set; } 
     } 
 

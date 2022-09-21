@@ -24,7 +24,7 @@
                     <Button Content="保存" Margin="15,0,0,0" Click="Btn_SaveGroupsData"></Button>
                     <Button Content="组详情" Margin="15,0,0,0" Click="Btn_GroupsDetails" ></Button>
                     <Button Content="配置文件"  Margin="15,0,0,0" Click="Btn_OpenConfig" ></Button> 
-                    <Button Content="test"  Margin="15,0,0,0" Click="Btn_Test" ></Button> 
+                    <!--<Button Content="test"  Margin="15,0,0,0" Click="Btn_Test" ></Button>--> 
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal" HorizontalAlignment="Right">
                    
@@ -68,11 +68,11 @@
                     <TextBlock Grid.Row="0" FontSize="18" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">组操作</TextBlock>
                     <Border Grid.Row="1" BorderThickness="1" Margin="5" BorderBrush="White"  CornerRadius="5"></Border>
                     <StackPanel  Grid.Row="1" Orientation="Vertical" >
-                        <Button  x:Name="btnAdd" Content="添加组" Margin="0,15,0,0" Click="Btn_ClickAddGroup"></Button>
+                        <Button  x:Name="btnAdd" Content="添加工艺" Margin="0,15,0,0" Click="Btn_ClickAddGroup"></Button>
                         <Border Margin="15,10,15,10" BorderBrush="LightBlue" BorderThickness="1"/>
                         <StackPanel  x:Name="opSP">
-                            <Button x:Name="btnDelete" Content="删除组" Margin="0,5,0,0" Click="Btn_DeleteGroup"></Button>
-                            <Button x:Name="btnModify" Content="修改组" Margin="0,5,0,0" Click="Btn_ModifyGroup"></Button>
+                            <Button x:Name="btnDelete" Content="删除工艺" Margin="0,5,0,0" Click="Btn_DeleteGroup"></Button>
+                            <Button x:Name="btnModify" Content="修改工艺" Margin="0,5,0,0" Click="Btn_ModifyGroup"></Button>
                         </StackPanel>
                         <Border Margin="15,10,15,10" BorderBrush="LightBlue" BorderThickness="1"/>
 

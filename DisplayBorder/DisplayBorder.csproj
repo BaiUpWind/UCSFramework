@@ -131,6 +131,9 @@
     <Compile Include="Controls\ChartControl.xaml.cs">
       <DependentUpon>ChartControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ClassControl.xaml.cs">
+      <DependentUpon>ClassControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ComboBoxLinked.xaml.cs">
       <DependentUpon>ComboBoxLinked.xaml</DependentUpon>
     </Compile>
@@ -172,9 +175,6 @@
     <Compile Include="View\DataWindow.xaml.cs">
       <DependentUpon>DataWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\WindowGroupsConfig.xaml.cs">
       <DependentUpon>WindowGroupsConfig.xaml</DependentUpon>
     </Compile>
@@ -192,6 +192,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ChartControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ClassControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -228,10 +232,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\DataWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="View\Window1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,4 +1,5 @@
 ﻿using CommonApi;
+using DeviceConfig;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -64,14 +65,12 @@ namespace USC.MyContorls
                     {
                         data = null;
                     } 
-                }
-
+                } 
             }
             else
             {
                 data = target;
-            }
-      
+            } 
             Title = type.Name;
             isList = CreateHelper.IsList(type); 
             lblSelectedInfo.Text = string.Empty;
@@ -86,6 +85,8 @@ namespace USC.MyContorls
         /// 当折叠时 传出当前控件,宽和高
         /// </summary>
         public event Action<object, int,int> OnFold;
+
+        public event Action<object, int, int> OnSizeChanged;
  
      
         public string Title
@@ -100,6 +101,19 @@ namespace USC.MyContorls
         public object Data { get => data; }
 
         public object GenericData => genericData;
+
+        public int HeightR
+        {
+            get => Height; set
+            { 
+                Parent.Height = value ; 
+                OnSizeChanged?.Invoke(this, Width, HeightR);
+                ReCalcuY(childen);
+                Console.WriteLine($"{Name}改变高度'{value}'");
+            }
+        }
+
+        public int PDataHeight => GetPDataHeight();
 
         private Color GetTitleColor(bool islist) => islist ? Color.SkyBlue : Color.Teal;
         private int GetPDataHeight()
@@ -155,16 +169,16 @@ namespace USC.MyContorls
                     case ControlType.TextBox:
                         control = new TextBox();
                         control.Text = GetValue(td.Name)?.ToString();
-                        if(control is TextBox txt)
+                        if (control is TextBox txt)
                         {
                             txt.KeyPress += (ts, te) =>
-                             {
-                                 //todo:这里类型会有不同的适配
-                                 if (ts is TextBox t)
-                                 {
-                                     SetValue(td.Name, Convert.ChangeType((t.Text), td.ObjectType));
-                                 }
-                             };
+                            {
+                                //todo:这里类型会有不同的适配
+                                if (ts is TextBox t)
+                                {
+                                    SetValue(td.Name, Convert.ChangeType((t.Text), td.ObjectType));
+                                }
+                            };
                         }
                         break;
                     case ControlType.CheckBox:
@@ -179,41 +193,44 @@ namespace USC.MyContorls
                         }
                         break;
                     case ControlType.List: 
-                    case ControlType.Class: 
-                        control = new DropControl(td.ObjectType,isProperty,GetValue(td.Name));
-                        if (control is DropControl c)
-                        {  
-                            c.OnFold += (s, w, h) =>
-                            {
-                                Height -= h;
-                                if (s is Button btn   )
-                                {
-                                    var dc = GetTop(btn);
-                                    if(dc != null)
-                                    {
-                                        dc.Parent.Height -= h;
-                                    } 
-                                }
-                                ReCalcuY(childen, childen[0].Location.Y);
-                            };
-                            c.OnUnfold += (s, w, h) =>
-                            { 
-                                Height += h;
-                                if (s is Button btn)
-                                {
-                                    var dc = GetTop(btn);
-                                    if (dc != null)
-                                    {
-                                        dc.Parent.Height += h;
-                                    }
-                                }
-                                ReCalcuY(childen, childen[0].Location.Y);
-                              
-                            };
-                            c.pData.BackColor = Color.Tan;
-                            c.Title = td.Name + (td.IsList ?  "_{0}" :"");
-                        }
-                      
+                    case ControlType.Class:
+                        control = GetGenericControl(  i, GetValue(td.Name),td.ObjectType, isProperty);// new DropControl(td.ObjectType,isProperty,GetValue(td.Name));
+                        if (control is DropControl dc)
+                        {
+                            #region 暂时弃用 
+                            //c.OnFold += (s, w, h) =>
+                            //{
+                            //    Height -= h;
+                            //    if (s is Button btn   )
+                            //    {
+                            //        var dc = GetTop(btn);
+                            //        if(dc != null)
+                            //        {
+                            //            dc.Parent.Height -= h;
+                            //        } 
+                            //    }
+                            //    ReCalcuY(childen, childen[0].Location.Y);
+                            //};
+                            //c.OnUnfold += (s, w, h) =>
+                            //{ 
+                            //    Height += h;
+                            //    if (s is Button btn)
+                            //    {
+                            //        var dc = GetTop(btn);
+                            //        if (dc != null)
+                            //        {
+                            //            dc.Parent.Height += h;
+                            //        }
+                            //    }
+                            //    ReCalcuY(childen, childen[0].Location.Y);
+
+                            //};
+                            #endregion
+
+                            dc.pData.BackColor = Color.Tan;
+                            dc.Title = td.Name + (td.IsList ? "_{0}" : "");
+                            
+                        } 
                         break;
                     case ControlType.ComboBox: 
                         control = new ComboBox();
@@ -284,9 +301,10 @@ namespace USC.MyContorls
                         x += 5;
                     }
                     control.Location = new Point(x,  0); 
-                    fixedPanel.BackColor = Color.Crimson;
+                    fixedPanel.BackColor = Color.Aqua;
                     fixedPanel.Location = new Point(5, 10 + i * 25);
                     fixedPanel.Controls.Add(control);
+                    
                     fixedPanel.Height = control.Height; 
                     panel.Controls.Add(fixedPanel);
                     childen.Add(fixedPanel); 
@@ -314,17 +332,19 @@ namespace USC.MyContorls
         {
             if (btnShow.Text == "↓")
             {
+                /*
+                 * 
+                 * 这里在展开时候有有很大问题,就是显示界面的问题
+                 * 其他功能是实现了,就暂时不管了 20220921
+                 * 
+                 */
                 //展开
                 btnShow.Text = "↑";
                 pData.Visible = true;
-                Height = pTitle.Height + GetPDataHeight() ; 
-                if (isList)
-                {
-                    Height += pOper.Height;
-                    pOper.Visible = true;
-                }
-
-                OnUnfold?.Invoke(sender, Width, Height); 
+                HeightR = pTitle.Height + PDataHeight + (isList ? pOper.Height : 0);
+               
+                pOper.Visible = isList;
+                ReCalcuY(childen); 
             }
             else if (btnShow.Text == "↑")
             {
@@ -333,9 +353,9 @@ namespace USC.MyContorls
                 btnShow.Text = "↓"; 
                 pData.Visible = false;
                 pOper.Visible = false;
-                Height = pTitle.Height;
+                HeightR = pTitle.Height;
                 if (isList) pOper.Visible = false;
-                OnFold?.Invoke(sender, Width, tempHeight);
+                //OnFold?.Invoke(sender, Width, tempHeight);
              
                 if (childen == null) return;
                 foreach (var item in childen)
@@ -384,7 +404,7 @@ namespace USC.MyContorls
             var code = Type.GetTypeCode(genericArgument); 
             if (code == TypeCode.Object)
             {
-                DropControl dc = GetGenericControl(drops,startIndex, genericData, true);
+                DropControl dc = GetGenericControl( startIndex, genericData, genericArgument, true);
                 pData.Controls.Add(dc);
                 drops.Add(dc);
             }
@@ -407,7 +427,7 @@ namespace USC.MyContorls
              
             //重新计算Y
             ReCalcuY(drops);
-            Height = pTitle.Height + GetPDataHeight() + pOper.Height;
+            HeightR = pTitle.Height + GetPDataHeight() + pOper.Height;
             //名字重新计算
             var temp = Title.Split('_');
             temp[1] = $"_[{((IList)data).Count}]";
@@ -418,47 +438,12 @@ namespace USC.MyContorls
             }
             OnUnfold?.Invoke(this, Width, Height);
 
-        }
-         
+        } 
         private void btnSub_Click(object sender, EventArgs e)
         {
-            if (!isList ) return;
-            if (drops.Count <= 0) return;
-
-            //当没有选择时 默认选择第一个
-            if (selectedItemTemp == null)
-            { 
-                selectedControl = drops[0];
-                if(selectedControl is DropControl dc)
-                {
-                    selectedItemTemp = dc.Data;
-                } 
-                else
-                {
-                    selectedItemTemp = ((IList)data)[0];
-                } 
-            } 
-            if (orginType.IsGenericType)
-            { 
-                //泛型集合 
-                ((IList)data).Remove(selectedItemTemp);
-            }
-            else
-            { 
-                //数组
-                var orginArr = (Array)data; 
-                ArrayList arrayList = new ArrayList();
-                foreach (var item in orginArr)
-                {
-                    arrayList.Add(item);
-                } 
-                arrayList.Remove(selectedItemTemp); 
-                data = arrayList.ToArray(); 
-            } 
-            drops.Remove( selectedControl   );
-            pData.Controls.Remove(  selectedControl );
+        
             ReCalcuY(drops);
-            Height = pTitle.Height + GetPDataHeight() + pOper.Height;
+            HeightR = pTitle.Height + GetPDataHeight() + pOper.Height;
             //名字更新数量
             var temp = Title.Split('_');
             temp[1] = $"_[{((IList)data).Count}]";
@@ -470,8 +455,7 @@ namespace USC.MyContorls
             selectedItemTemp = null;
             selectedControl = null;
             OnUnfold?.Invoke(this, Width, Height);
-        }
-
+        } 
         private void DropControl_Load(object sender, EventArgs e)
         {
             if (orginType == null) return;
@@ -482,19 +466,16 @@ namespace USC.MyContorls
             pOper.Height = 25;
             pOper.Visible = false;
             pOper.BackColor = Color.Transparent;
-
-
-
-            Height = pTitle.Height;
-            ReCalcuY(drops);
-
+                     
+            Parent.Height = pTitle.Height;
+             
             pData.Click += (ms, me) =>
             {
                 selectedItemTemp = null;
                 selectedControl = null;
                 lblSelectedInfo.Text = string.Empty;
             };
-            if (!isList) CreateControls(pData, CreateHelper.Auto(orginType, false));
+            if (!isList) CreateControls(pData, CreateHelper.Auto(orginType, isProperty));
             else
             { 
                 if (orginType.IsGenericType)
@@ -510,19 +491,16 @@ namespace USC.MyContorls
                 {
                     //数组
                     genericArgument = orginType.GetArrayElementType(); 
-                }
-
+                } 
                 TypeCode code = Type.GetTypeCode(genericArgument);
-                var list = (IList)data;
-
-
+                var list = (IList)data; 
                 if (list.Count == 0) return;
                 if (code == TypeCode.Object)
                 { 
                     for (int i = 0; i < list.Count; i++)
                     {
                         var item = list[i];
-                        DropControl dc = GetGenericControl(drops, i, item, true);
+                        DropControl dc = GetGenericControl( i, item, genericArgument, true);
                         pData.Controls.Add(dc);
                         drops.Add(dc);
                     }
@@ -561,9 +539,10 @@ namespace USC.MyContorls
                     }
                 }
                 Title = string.Format(Title, $"[{((IList)data).Count}]");
-            }  
-        }
-          
+            }
+
+            ReCalcuY(drops);
+        } 
         private void AddComboBox(IList list, int i)
         {
             Panel panel = new Panel();
@@ -678,65 +657,54 @@ namespace USC.MyContorls
             pData.Controls.Add(panel);
             drops.Add(panel);
         }
-        private DropControl GetGenericControl(List<Control> drops, int i, object item,bool ischildren =false)
+        private DropControl GetGenericControl(  int index, object item,Type type, bool ischildren =false)
         {
-            DropControl dc = new DropControl(genericArgument, isProperty, item, ischildren);
-            dc.Name = "dc_" + i.ToString();
-            dc.Title = genericArgument.Name + $"'{i}'"; 
-            dc.pTitle.MouseEnter += (ms, me) =>
+            DropControl dc = new DropControl(type, isProperty, item, ischildren);
+            dc.Name = "dc_" + index.ToString();
+            dc.Title = type.Name + $"'{index}'";
+            if (ischildren)
             {
-                Cursor = Cursors.Hand;
-            };
-            dc.pTitle.MouseLeave += (ms, me) =>
-            {
-                Cursor = Cursors.Arrow;
-            };
-            dc.pTitle.Click += (ms, me) =>
-            {
-                if (ms is Control c && c.Parent is DropControl drop)
+                dc.pTitle.MouseEnter += (ms, me) =>
                 {
-                    selectedItemTemp = drop.Data;
-                    selectedControl = drop;
-                    Console.WriteLine(selectedItemTemp);
+                    Cursor = Cursors.Hand;
+                };
+                dc.pTitle.MouseLeave += (ms, me) =>
+                {
+                    Cursor = Cursors.Arrow;
+                };
+                dc.pTitle.Click += (ms, me) =>
+                {
+                    if (ms is Control c && c.Parent is DropControl drop)
+                    {
+                        selectedItemTemp = drop.Data;
+                        selectedControl = drop;
+                        Console.WriteLine(selectedItemTemp);
 
-                    lblSelectedInfo.Text = $"当前选中'{drop.Title}'";
-                }
-            };
-            dc.OnFold += (s, w, h) =>
+                        lblSelectedInfo.Text = $"当前选中'{drop.Title}'";
+                    }
+                };
+            }
+
+            dc.OnSizeChanged += (s, w, h) =>
             {
-                Height -= h;
-                if (s is Button btn && btn.Parent != null && btn.Parent is Panel p)
-                {
-                    p.Height -= h;
-                }
-                ReCalcuY(drops);
+                HeightR = pTitle.Height + PDataHeight + (isList ? pOper.Height : 0);
             };
-            dc.OnUnfold += (s, w, h) =>
-            {
-                Height += h;
-                if(s is Button btn && btn.Parent !=null && btn.Parent is Panel p)
-                {
-                    p.Height += h;
-                }
-                ReCalcuY(drops);
-            };
+            dc.Dock = DockStyle.Fill;
             dc.pData.BackColor = Color.Tan;
             return dc;
         }
-
-       
         /// <summary>
         /// 重新计算y轴
         /// </summary>
         /// <param name="h"></param>
-        /// <param name="drops"></param>
-        private void ReCalcuY(  List<Control> drops,int orginY = 5)
-        { 
-            for (int j = 0; j < drops.Count; j++)
-            { 
-                if (drops[j] is DropControl drop)
-                { 
-                    if (drop.IsArrayChild) drop.Title = drop.orginType?.Name + $"_'{j}'"; 
+        /// <param name="controls"></param>
+        private void ReCalcuY(List<Control> controls, int orginY = 5)
+        {
+            for (int j = 0; j < controls.Count; j++)
+            {
+                if (controls[j].Controls[0] is DropControl drop)
+                {
+                    if (drop.IsArrayChild) drop.Title = drop.orginType?.Name + $"_'{j}'";
                 }
                 int y;
                 if (j == 0)
@@ -745,11 +713,11 @@ namespace USC.MyContorls
                 }
                 else
                 {
-                    y = drops[j - 1].Location.Y + drops[j - 1].Height + 5;
+                    y = controls[j - 1].Location.Y + controls[j - 1].Height + 5;
                 }
-                drops[j].Location = new Point(5, y);
+                controls[j].Location = new Point(5, y);
             }
-     
+
         }
         #endregion
 
@@ -844,11 +812,62 @@ public   static  class CreateHelper
         {
             //获取公共的属性
             var props = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            td = new TypeData[props.Length];
+
+            List<TypeData> typedatas = new List<TypeData>();
+   
             for (int i = 0; i < props.Length; i++)
             {
+                PropertyInfo pi = props[i];
+                if (!pi.CanWrite)
+                {
+                    continue;
+                } 
+                var attrs = pi.GetCustomAttributes();
+                if(attrs.Count() > 0)
+                {
+                   if( attrs.Where(a=> a is HideAttribute).Count() > 0)
+                    {
+                        continue;
+                    }
+                }
 
-            }
+                TypeCode typeCode = Type.GetTypeCode(pi.PropertyType); 
+                Console.WriteLine($"当前属性名称'{pi.Name}',类型'{typeCode}'");
+                TypeData  typeData = new TypeData()
+                {
+                    Name = pi.Name,
+                    TypeCode = typeCode,
+                    ObjectType = pi.PropertyType
+                };
+                typedatas.Add(typeData);
+                if (pi.PropertyType.IsAbstract)
+                {
+                    typeData.ControlType = ControlType.ComboBoxImplement;
+                    continue;
+                }
+                if (pi.PropertyType.IsEnum)
+                {
+                    typeData.ControlType = ControlType.ComboBox;
+                    continue;
+                }
+                if (typeCode == TypeCode.Object)
+                {
+                    bool islist = IsList(pi.PropertyType);
+                    typeData.IsList = islist;
+                    typeData.IsObject = true;
+                    //这里只用两种可能,因为只对未知的类型和集合类型进行拆解
+                    typeData.ControlType = islist ? ControlType.List : ControlType.Class; 
+                }
+                else if (typeCode == TypeCode.Boolean)
+                {
+                    typeData.ControlType = ControlType.CheckBox;
+                }
+                else
+                {
+                    typeData.ControlType = ControlType.TextBox;
+                }
+            } 
+            td = typedatas.ToArray();
         }
         else
         {

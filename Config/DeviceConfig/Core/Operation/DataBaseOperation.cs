@@ -1,5 +1,6 @@
 ﻿using CommonApi.DBHelper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace DeviceConfig.Core
@@ -19,12 +20,15 @@ namespace DeviceConfig.Core
             }
            throw new ArgumentException("创建数据库操作实例失败!");
         }
-        private    DBUnitiyBase db;
-         
-         
+        private DBUnitiyBase db;
+
+
+        private List<SQLCmd> cmds = new List<SQLCmd>();
+        [Instance]
+        public override object Commands { get => cmds; set => cmds = value as List<SQLCmd>; }  
+
         public override bool Connect()
-        {
-        
+        { 
             try
             {
                 db.CurrentConnection.Open();
@@ -52,7 +56,7 @@ namespace DeviceConfig.Core
                 //因为测试先注释掉
                 //var data = db.GetDataTable(sqlcmd.CommandStr.ToString(), System.Data.CommandType.Text);
                 //sqlcmd.Result.Data = data;
-                return sqlcmd.Result;
+                //return sqlcmd.Result;
             }
             return null; 
         }
@@ -84,6 +88,7 @@ namespace DeviceConfig.Core
                         db = new MySqlHelp(dataBase.GetConnStr());
                         break;
                 }
+                ConnectConfig = dataBase;
                 return;
             }
             throw new ArgumentException("创建数据库操作实例失败!"); 

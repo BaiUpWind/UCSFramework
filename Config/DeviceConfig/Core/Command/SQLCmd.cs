@@ -9,23 +9,25 @@ using System.Threading.Tasks;
 namespace  DeviceConfig.Core 
 {
 
-    [Require(typeof(SQLResultAnalysis))]  
-    
+    [Require(typeof(SQLResultAnalysis))]
+
     public class SQLCmd : CommandBase
     {
         public SQLCmd()
         {
-           
+
         }
 
         public string sql = "select count(1) as 剩余货位_绿色 , count(1) as 满盘货物_红色 ,count(1) as 超时货位_蓝色 from dual";
 
-        [Control("SQL", "查询语句", ControlType.TextBox, Height: 200, Width: 300,Order:1)]
-        public override object CommandStr { get  ; set ; }
+        [Control("SQL", "查询语句", ControlType.TextBox, Height: 200, Width: 300, Order: 1)]
+        [ConvertType(typeof(string))]
+        public override object CommandStr { get; set; }
 
 
-        [Control("Result", "创建返回结果类型", ControlType.Data, GenerictyType: typeof(SQLResult), FieldName: nameof(Result))] 
-        public override ResultBase Result { get ; set ; } = new SQLResult();
+        [Control("Result", "创建返回结果类型", ControlType.Data, GenerictyType: typeof(SQLResult), FieldName: nameof(Result))]
+        [Instance]
+        public override ResultBase Result { get; set; } = new SQLResult();
 
         #region 测试代码
         //[Control("cmbResult", "结果显示图集", ControlType.ComboBox, Items: new object[] { "图标", "网格", "树状图" })]

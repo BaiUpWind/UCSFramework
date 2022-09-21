@@ -44,6 +44,9 @@ namespace DisplayBorder
         /// 组文件路径(默认路径)
         /// </summary>
         public readonly static string GroupsFilePath = ConfigsPath + "\\Groups.cfg";
+        public readonly static string BackImageFilePath = ConfigsPath + "\\背景图片.jpg";
+
+        
 
         private static IList<Group> groups ; 
         private static EventManager eventManager;
@@ -159,6 +162,7 @@ namespace DisplayBorder
     public class SysConfigPara
     {
         private string groupsFilePath;
+        private string backImagPath;
 
         /// <summary>
         /// 标题
@@ -177,7 +181,7 @@ namespace DisplayBorder
         /// </summary>
         [Control("Version", "版本", ControlType.TextBox)]
         public string Version { get; set; }
- 
+
         /// <summary>
         /// 组的文件路径
         /// </summary>
@@ -191,7 +195,7 @@ namespace DisplayBorder
                 if (string.IsNullOrEmpty(groupsFilePath))
                 {
                     groupsFilePath = GlobalPara.GroupsFilePath;
-                } 
+                }
                 return groupsFilePath;
             }
             set => groupsFilePath = value;
@@ -202,7 +206,15 @@ namespace DisplayBorder
         /// </summary>
         [Control("BackImagPath", "图片配置路径", ControlType.TextBox)]
         [Control("FileChosee2", null, ControlType.FilePathSelector, FieldName: nameof(BackImagPath), FileType: "jpg")]
-        public string BackImagPath { get; set; }
+        public string BackImagPath { get
+            {
+                //当没有路径时,使用默认路径
+                if (string.IsNullOrEmpty(backImagPath))
+                {
+                    backImagPath = GlobalPara.BackImageFilePath;
+                }
+                return backImagPath; 
+            } set => backImagPath = value; }
 
     }
 }
