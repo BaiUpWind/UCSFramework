@@ -808,14 +808,15 @@ namespace DisplayBorder
                 }
             };
           
-            if (attr.Items != null)
-            {
-                foreach (var cbItem in attr.Items)
-                {
-                    cmb.Items.Add(cbItem);
-                }
-            }
-            else if(attr.EnumType != null)
+            //if (attr.Items != null)
+            //{
+            //    foreach (var cbItem in attr.Items)
+            //    {
+            //        cmb.Items.Add(cbItem);
+            //    }
+            //}
+            //else 
+            if(attr.EnumType != null)
             {
                 foreach (var item in Enum.GetNames(attr.EnumType))
                 {
@@ -1014,9 +1015,7 @@ namespace DisplayBorder
                     if (convert.Any())
                     {
                         typeCode = Type.GetTypeCode(convert[0].TargetType);
-                    }
-
-             
+                    } 
                     Console.WriteLine($"当前属性名称'{pi.Name}',类型'{typeCode}'");
                     TypeData typeData = new TypeData()
                     {
@@ -1024,8 +1023,23 @@ namespace DisplayBorder
                         TypeCode = typeCode,
                         ObjectType = pi.PropertyType
                     };
+                    if(attrs.Count() > 0)
+                    {
+                        var size = attrs.Where(a => a is SizeAttribute).FirstOrDefault();
+                        if (size != null && size is SizeAttribute wh)
+                        {
+                            typeData.Width = wh.Width;
+                            typeData.Height = wh.Height;
+                        }
+                        var nickName = attrs.Where(a => a is NickNameAttribute).FirstOrDefault();
+                        if(nickName != null && nickName is NickNameAttribute nna)
+                        {
+                            typeData.NickName = nna.NickName;
+                        }
+                    }
                   
                     typedatas.Add(typeData);
+                    //找到按钮属性
                     var but = attrs.Where(a => a is ButtonAttribute);
                     if (but.Count() > 0)
                     {
@@ -1037,8 +1051,7 @@ namespace DisplayBorder
                             TypeCode = typeCode,
                             CustomAttr = but.First()
                         });
-                    }
-
+                    } 
 
                     if (pi.PropertyType.IsAbstract)
                     {
@@ -1050,33 +1063,28 @@ namespace DisplayBorder
                         else
                         {
                             typeData.ControlType = ClassControlType.ComboBoxImplement;
+                        } 
+                    }
+                    else if (pi.PropertyType.IsEnum)
+                    {
+                        typeData.ControlType = ClassControlType.ComboBox; 
+                    }
+                    else if (typeCode == TypeCode.Object)
+                    {  
+                        if (attrs.Where(a => a is InstanceAttribute).Count() > 0)
+                        {
+                            typeData.ObjectType = pi.GetValue(target).GetType();
                         }
-                       
-                        continue;
-                    }
-                    if (pi.PropertyType.IsEnum)
-                    {
-                        typeData.ControlType = ClassControlType.ComboBox;
-                        continue;
-                    }
-                    if (typeCode == TypeCode.Object)
-                    {
+
                         if (pi.PropertyType.Name == "Color")
                         {
                             typeData.ControlType = ClassControlType.ColorPicker;
                             continue;
                         }
-
-                        if (attrs.Where(a => a is InstanceAttribute).Count() > 0)
-                        {
-                            typeData.ObjectType = pi.GetValue(target).GetType(); 
-                        } 
                         typeData.IsList = CommonApi.Utility.Reflection.IsList(typeData.ObjectType);
                         typeData.IsObject = true;
                         //这里只用两种可能,因为只对未知的类型和集合类型进行拆解
                         typeData.ControlType = typeData.IsList ? ClassControlType.List : ClassControlType.Class;
-                        
-                    
                     }
                     else if (typeCode == TypeCode.Boolean)
                     {
@@ -1091,9 +1099,11 @@ namespace DisplayBorder
             }
             else
             {
+                throw new Exception("先别用字段的,获取字段跟属性一样一样,暂时把属性的搞完先,再搞字段的");
                 //获取公共的字段
                 var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public);
-                td = new TypeData[fields.Length];
+              
+                List<TypeData> typedatas = new List<TypeData>();
                 for (int i = 0; i < fields.Length; i++)
                 {
                     FieldInfo field = fields[i];
@@ -1105,6 +1115,9 @@ namespace DisplayBorder
                             continue;
                         }
                     }
+                 
+
+
                     TypeCode typeCode = Type.GetTypeCode(field.FieldType);
                     var convert = attrs.Where(a => a is ConvertTypeAttribute).Select(a => a as ConvertTypeAttribute).ToList();
                     if (convert.Any())
@@ -1112,38 +1125,59 @@ namespace DisplayBorder
                         typeCode = Type.GetTypeCode(convert[0].TargetType);
                     }
                     Console.WriteLine($"当前字段名称'{field.Name}',类型'{typeCode}'");
-                    td[i] = new TypeData()
+                    var typeData = new TypeData()
                     {
                         Name = field.Name,
                         TypeCode = typeCode,
                         ObjectType = field.FieldType
                     };
+
+                    var size = attrs.Where(a => a is SizeAttribute).First( );
+                    if (size != null && size is SizeAttribute wh)
+                    {
+                        typeData.Width = wh.Width;
+                        typeData.Height = wh.Height;
+                    }
+                    typedatas.Add(typeData);    
+                    var but = attrs.Where(a => a is ButtonAttribute);
+                    if (but.Count() > 0)
+                    {
+                        typedatas.Add(new TypeData()
+                        {
+                            ControlType = ClassControlType.Button,
+                            ObjectType = field.FieldType,
+                            Name = field.Name,
+                            TypeCode = typeCode,
+                            CustomAttr = but.First()
+                        });
+                    }
+
                     if (field.FieldType.IsAbstract)
                     {
-                        td[i].ControlType = ClassControlType.ComboBoxImplement;
-                        continue;
+                        typeData.ControlType = ClassControlType.ComboBoxImplement; 
                     }
-                    if (field.FieldType.IsEnum)
+                    else if (field.FieldType.IsEnum)
                     {
-                        td[i].ControlType = ClassControlType.ComboBox;
-                        continue;
+                        typeData.ControlType = ClassControlType.ComboBox; 
                     }
-                    if (typeCode == TypeCode.Object)
+                    else if (typeCode == TypeCode.Object)
                     {
                         if (attrs.Where(a => a is InstanceAttribute).Count() > 0)
                         {
-                            td[i].ObjectType = field.GetValue(target).GetType();
+                            typeData.ObjectType = field.GetValue(target).GetType();
                         }
-                        else if (field.Name == "Color")
+
+                        if (field.FieldType.Name == "Color")
                         {
-                            td[i].ControlType = ClassControlType.ColorPicker; 
-                        }
-                        else
+                            typeData.ControlType = ClassControlType.ColorPicker;
+                            continue;
+                        } 
+
                         { 
-                            td[i].IsList = CommonApi.Utility.Reflection.IsList(field.FieldType);
-                            td[i].IsObject = true;
+                            typeData.IsList = CommonApi.Utility.Reflection.IsList(field.FieldType);
+                            typeData.IsObject = true;
                             //这里只用两种可能,因为只对未知的类型和集合类型进行拆解
-                            td[i].ControlType = td[i].IsList ? ClassControlType.List : ClassControlType.Class;
+                            typeData.ControlType = typeData.IsList ? ClassControlType.List : ClassControlType.Class;
                         } 
                         #region 创建对应的实例 好像没啥用....
                         ////创建实例
@@ -1160,8 +1194,8 @@ namespace DisplayBorder
                         //            {
                         //                throw new Exception("目前只对单个泛型集合进行处理");
                         //            }
-                        //            td[i].IsGeneric = true;
-                        //            td[i].GenericType = field.FieldType.GenericTypeArguments[0];
+                        //            typeData.IsGeneric = true;
+                        //            typeData.GenericType = field.FieldType.GenericTypeArguments[0];
                         //            //泛型集合 只对单个泛型进行操作
                         //            var generics = typeof(List<>).MakeGenericType(field.FieldType.GenericTypeArguments);
                         //            value = Activator.CreateInstance(generics); 
@@ -1185,13 +1219,14 @@ namespace DisplayBorder
                     }
                     else if (typeCode == TypeCode.Boolean)
                     {
-                        td[i].ControlType = ClassControlType.CheckBox;
+                        typeData.ControlType = ClassControlType.CheckBox;
                     }
                     else
                     {
-                        td[i].ControlType = ClassControlType.TextBox;
+                        typeData.ControlType = ClassControlType.TextBox;
                     }
-                }
+                } 
+                td = typedatas.ToArray();
             }
             return td;
         }
@@ -1249,6 +1284,9 @@ namespace DisplayBorder
         public Type GenericType; 
         public Regex InputRegex;
         public Attribute CustomAttr;
+        public string NickName = string.Empty;
+        public double Width = double.NaN;
+        public double Height = double.NaN;
     }
     public enum ClassControlType
     {

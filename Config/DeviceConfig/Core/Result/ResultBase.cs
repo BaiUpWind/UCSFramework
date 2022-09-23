@@ -24,7 +24,7 @@ namespace  DeviceConfig.Core
         /// <summary>
         /// 数据,原始数据
         /// </summary>
-       [JsonIgnore]
+        [JsonIgnore]
         [Hide]
         public object Data { get; set; } = null;
         /// <summary>

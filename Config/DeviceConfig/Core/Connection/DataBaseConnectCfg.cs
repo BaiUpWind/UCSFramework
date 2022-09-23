@@ -1,17 +1,19 @@
-﻿namespace DeviceConfig.Core
+﻿using CommonApi.DBHelper;
+
+namespace DeviceConfig.Core
 {
     public sealed class DataBaseConnectCfg : ConnectionConfigBase
     {
         /// <summary>
         /// 数据库类型
         /// </summary>
-        [Control("DbType", "数据库类型"  , ControlType.ComboBox, Items: new object[] { "Oracle", "SqlServer", "MySQL" })]
-        public int DbType { get; set; } = 2;
+        [Control("DbType", "数据库类型",ControlType.ComboBox,  EnumType:typeof(DBType))] //Items: new object[] { "Oracle", "SqlServer", "MySQL" })
+        public DBType DbType { get; set; }   
         /// <summary>
         /// 数据库的ip
         /// </summary>
         [Control("DbIp", "IP地址", ControlType.TextBox, ReadOnly: true)]
-        public string DbIp { get; set; } = "192.168.1.1";
+        public string DbIp { get; set; } = "192.168.22.22";
         /// <summary>
         /// 数据库实例名
         /// </summary>

@@ -13,7 +13,7 @@
         MinWidth="800" MinHeight="600"
         
         Title="RGVDataWindow" Height="600" Width="800"  
-       MouseLeftButtonDown="Window_MouseLeftButtonDown"
+       MouseLeftButtonDown="Window_MouseLeftButtonDown" SizeChanged="Window_SizeChanged" KeyDown="Window_KeyDown"
         >
     <Window.Resources>
         <!--静态资源-->
@@ -136,6 +136,7 @@
 
 
                     <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                        <lvc:CartesianChart Visibility="Hidden"/> 
                         <TextBlock x:Name="txtTime" Text="1997-12-25 00:00:00" Margin="15" FontSize="28" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"></TextBlock>
                     </StackPanel>
                 
@@ -202,7 +203,7 @@
                             <Border   Margin="15"    Background="#b1dffc" BorderThickness="2"  BorderBrush="#144aad" CornerRadius="10" />
 
                             <ScrollViewer Margin="30" HorizontalScrollBarVisibility="Auto" x:Name="sv" >
-                                <Canvas  x:Name="C1"  Background="Gray" Focusable="True" 
+                                <Canvas  x:Name="C1"  Background="Transparent" Focusable="True" 
                                        HorizontalAlignment="Left"  VerticalAlignment="Top"  
                                          Height="{Binding ElementName=mainImg,Path=ActualHeight}"
                                          Width="{Binding ElementName=mainImg,Path=ActualWidth}">
@@ -227,30 +228,30 @@
                                 <RowDefinition></RowDefinition>
                             </Grid.RowDefinitions>
                             <!--边框-->
-                            <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource BorderStyle}"> 
-                                <TextBlock Text="产线名称"  Style="{StaticResource NameTextTtile}"/>
+                            <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource BorderStyle}">
+                                <TextBlock Text="产线名称"  Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"/>
                             </Border> 
                             <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="工艺名称"   Style="{StaticResource NameTextTtile}"/>
+                                <TextBlock Text="工艺名称"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"/>
                             </Border>
                             <Border Grid.Column="0" Grid.Row="2"  Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="读取数量"   Style="{StaticResource NameTextTtile}"  />
+                                <TextBlock Text="读取数量"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"  />
                             </Border>
                             <Border Grid.Column="0" Grid.Row="3" Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="当前读取"   Style="{StaticResource NameTextTtile}" /> 
+                                <TextBlock Text="当前读取"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}" /> 
                             </Border>
  
                             <Border Grid.Column="1" Grid.Row="0"  Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="{Binding Main.SysConfig.Title}"   Style="{StaticResource NameTextTtile}"></TextBlock>
+                                <TextBlock Text="{Binding Main.SysConfig.Title}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
                             </Border>
                             <Border Grid.Column="1" Grid.Row="1"  Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="{Binding Main.RunGroup.GroupName}"   Style="{StaticResource NameTextTtile}"></TextBlock>
+                                <TextBlock Text="{Binding Main.RunGroup.GroupName}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
                             </Border>
                             <Border Grid.Column="1" Grid.Row="2"  Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="{Binding Main.RunGroup.DeviceCount}"   Style="{StaticResource NameTextTtile}"></TextBlock>
+                                <TextBlock Text="{Binding Main.RunGroup.DeviceCount}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
                             </Border>
                             <Border Grid.Column="1" Grid.Row="3"  Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="{Binding Main.CurrentRunDeviceName}"   Style="{StaticResource NameTextTtile}"></TextBlock>
+                                <TextBlock Text="{Binding Main.CurrentRunDeviceName}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
                             </Border> 
                         </Grid> 
                     </Grid>
@@ -281,9 +282,7 @@
                             <Grid Grid.Row="1"  Margin="10,0,10,10">
                                 <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
                                 <Grid x:Name="g1">
-                                    <lvc:CartesianChart Visibility="Collapsed">
-
-                                    </lvc:CartesianChart>
+                      
                                 </Grid>
                             </Grid>
                         </Grid>

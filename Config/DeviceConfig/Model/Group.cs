@@ -13,28 +13,28 @@ namespace DeviceConfig
     /// </summary>
     public class Group
     {
-        private DeviceInfo currentRunDevice; 
+        private DeviceInfo currentRunDevice;
 
         /// <summary>
         /// 组编号
         /// </summary>  
         //[Control("GroupID","组编号", ControlType.TextBox)]
+        [Hide]
         public int GroupID { get; set; }
         /// <summary>
         /// 组名称
         /// </summary>
         [Control("GroupName", "工艺名称", ControlType.TextBox)]
+        [NickName("工艺名称")]
         public string GroupName { get; set; }
 
         #region 控件位置属性 
  
          
         [Control("LinePathColor", "线条颜色", ControlType.ColorPicker, FieldName: nameof(LinePathColor))]
-        [ConvertType(typeof(Color))]
         public Color LinePathColor { get; set; } = Colors.Blue;
        
         [Control("FontColor", "字体颜色", ControlType.ColorPicker, FieldName: nameof(FontColor))]
-        [ConvertType(typeof(Color))] 
         public Color FontColor { get; set; } = Colors.White;
         [Hide]
         [JsonIgnore]

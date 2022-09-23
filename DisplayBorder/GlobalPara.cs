@@ -39,18 +39,18 @@ namespace DisplayBorder
         /// 系统配置文件的路径(默认路径)
         /// </summary>
         public readonly static string ConfigPath = SysFliePath + "\\Configs.syscfg";
-         
+
         /// <summary>
         /// 组文件路径(默认路径)
         /// </summary>
         public readonly static string GroupsFilePath = ConfigsPath + "\\Groups.cfg";
         public readonly static string BackImageFilePath = ConfigsPath + "\\背景图片.jpg";
 
-        
 
-        private static IList<Group> groups ; 
+
+        private static IList<Group> groups;
         private static EventManager eventManager;
-        private static SysConfigPara sysConfig; 
+        private static SysConfigPara sysConfig;
         public static void Init()
         {
             CheckPath(SysPath);
@@ -70,21 +70,21 @@ namespace DisplayBorder
                 if (groups == null)
                 {
                     try
-                    { 
-                        groups = JsonHelper.ReadJson<IList<Group>>(SysConfig.GroupsFilePath,true);
+                    {
+                        groups = JsonHelper.ReadJson<IList<Group>>(SysConfig.GroupsFilePath, true);
                     }
                     catch (Exception ex)
                     {
                         groups = null;
                         MessageBox.Error($"组文件配置损坏,\n\r具体信息'{ex.Message}'");
                         return null;
-                    } 
+                    }
                 }
                 return groups;
             }
             set
             {
-                if (value != null && value.Count > 0 && !groups.Equals(value))
+                if (value != null && value.Count > 0  )
                 {
                     groups = value;
                     JsonHelper.WriteJson(groups, SysConfig.GroupsFilePath);
@@ -115,14 +115,14 @@ namespace DisplayBorder
                         sysConfig = null;
                         MessageBox.Error($"配置文件损坏,\n\r具体信息'{ex.Message}'");
                         return null;
-                    } 
+                    }
                 }
                 return sysConfig;
             }
             set
             {
-                if (value != null )
-                { 
+                if (value != null)
+                {
                     sysConfig = value;
                     JsonHelper.WriteJson(sysConfig, ConfigPath);
                     EventManager.Fire(null, OnValueChangedArgs.Create(sysConfig));
@@ -140,10 +140,13 @@ namespace DisplayBorder
                 if (eventManager == null)
                 {
                     eventManager = new EventManager();
-                }  
+                }
                 return eventManager;
             }
         }
+        public static double TitleFontSize { get; set; }
+        public static double TabFontSize { get;  set;  }
+        public static double GridFontSize { get; set; } = 9;
  
 
 

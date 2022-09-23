@@ -99,6 +99,9 @@ namespace DisplayBorder.Controls
         /// <para>只有在是泛型添加的时才有用</para>
         /// </summary>
         private List<UIElement> generics  ;
+
+        public Action<Type,object> OnSetData;
+
         public string Title
         {
             get => title; set
@@ -122,11 +125,14 @@ namespace DisplayBorder.Controls
             if (CheckProperty)
             {
                 orginType.GetProperty(name, BindingFlags.Instance | BindingFlags.Public)?.SetValue(Data, value);
+                OnSetData?.Invoke(orginType.GetProperty(name, BindingFlags.Instance | BindingFlags.Public)?.PropertyType, value);
             }
             else
             {
                 orginType.GetField(name, BindingFlags.Instance | BindingFlags.Public)?.SetValue(Data, value);
+                OnSetData?.Invoke(orginType.GetField(name, BindingFlags.Instance | BindingFlags.Public)?.FieldType, value); 
             }
+
         }
 
         private void CreateControls(Panel panel, TypeData[] typeDatas)
@@ -142,19 +148,40 @@ namespace DisplayBorder.Controls
                 switch (td.ControlType)
                 {
                     case ClassControlType.TextBox:
-                        control = new TextBox(); 
-                        if (control is TextBox txt)
-                        { 
-                            txt.Text = GetValue(td.Name)?.ToString();
+                        control = new RichTextBox();
+
+                        if (control is RichTextBox txt)
+                        {
+                            txt.VerticalContentAlignment = VerticalAlignment.Top;
+                            txt.HorizontalContentAlignment = HorizontalAlignment.Left;
+                            txt.Document = new FlowDocument();
+                            txt.Document.LineHeight = 2;
+                            var txtValue = GetValue(td.Name)?.ToString();
+                            if(txtValue != null)
+                            {
+                                Paragraph paragraph = new Paragraph();  
+                                paragraph.Inlines.Add(txtValue);
+                                txt.Document.Blocks.Add(paragraph);
+                            } 
                             txt.BorderThickness =  new Thickness(0.2);
                             txt.BorderBrush = new SolidColorBrush(Colors.Black);
-                            txt.PreviewTextInput += (ts, te) =>
+                            txt.TextChanged += (ts, te) =>
                             {
-                                //todo:这里类型会有不同的适配
-                                if (ts is TextBox t && !string.IsNullOrEmpty(t.Text))
+                                try
                                 {
-                                    SetValue(td.Name, Convert.ChangeType((t.Text), td.ObjectType));
+                                    //todo:这里类型会有不同的适配
+                                    if (ts is RichTextBox txtBox )  // && !string.IsNullOrEmpty(te.Changes))
+                                    {
+                                        TextRange textRange = new TextRange(txtBox.Document.ContentStart, txtBox.Document.ContentEnd);
+                                        SetValue(td.Name, Convert.ChangeType(textRange.Text.Replace("\n\r",""), td.ObjectType));
+                                    }
                                 }
+                                catch (Exception ex)
+                                {
+                                    txt.Document = new FlowDocument();
+                                    MessageBox.Info($"请输入正确的类型'{td.ObjectType}',\n\r 错误信息:'{ex.Message}'", "输入提示");
+                                }
+                               
                             };
                         }
                         break;
@@ -162,7 +189,7 @@ namespace DisplayBorder.Controls
                         control = new CheckBox();
                         if (control is CheckBox cb)
                         {
-                            cb.IsChecked = (bool)GetValue(td.Name);
+                            cb.IsChecked = (GetValue(td.Name)  ==null ? false : (bool)GetValue(td.Name));
                             cb.Checked += (s, e) =>
                             {
                                 SetValue(td.Name, cb.IsChecked);
@@ -186,13 +213,15 @@ namespace DisplayBorder.Controls
                             foreach (var item in Enum.GetNames(td.ObjectType))
                             {
                                 combo.Items.Add(item);
-                            } 
+                            }
+                            if (combo.Items.Count > 0)
+                            {
+                                combo.SelectedIndex =  GetValue(td.Name) ==null ? 0 :(int)GetValue(td.Name);
+                            }
                             combo.SelectionChanged += (s, e) =>
                             {
                                 SetValue(td.Name, Enum.Parse(td.ObjectType, combo.SelectedItem.ToString()));
                             };
-                            combo.SelectedIndex = (int)GetValue(td.Name);
-                            if (combo.Items.Count > 0) combo.SelectedIndex = 0;
                         }
                         break;
                     case ClassControlType.ComboBoxImplement:
@@ -208,11 +237,12 @@ namespace DisplayBorder.Controls
                                 foreach (var item in Utility.Reflection.GetClassDataFullName(td.ObjectType).ToArray())
                                 {
                                     ci.Items.Add(item);
-                                }
+                                } 
                                 var result = GetValue(td.Name);
                                 if (result != null)
                                 {
                                     int index = 0;
+                                    //获取已经选择值的索引
                                     for (int j = 0; j < ci.Items.Count; j++)
                                     {
                                         var item = ci.Items[j];
@@ -223,6 +253,7 @@ namespace DisplayBorder.Controls
                                         }
                                     }
                                     ci.SelectedIndex = index; 
+                                    //创建目前实现的超类控件
                                     CreateSuperClass(sp, result);  
                                 }
                                 ci.SelectionChanged += (s, e) =>
@@ -234,31 +265,7 @@ namespace DisplayBorder.Controls
                                             var obj = Utility.Reflection.CreateObject(td.ObjectType, comboI.SelectedItem.ToString());
                                             if (obj != null)
                                             {
-                                                SetValue(td.Name, result);
-                                                td.ObjectType = obj.GetType();
-                                                #region 创建按钮
-                                                //foreach (var item in stackPanel.Children)
-                                                //{
-                                                //    if (item is Button)
-                                                //    {
-                                                //        return;
-                                                //    }
-                                                //}
-                                                //Button btn = new Button();
-                                                //btn.Content = "打开";
-                                                //btn.Margin = new Thickness(5, 0, 0, 0);
-                                                //btn.Click += (bs, be) =>
-                                                //{
-                                                //    WindowHelper.CreateWindow<DataWindow>(obj.GetType(), (o) =>
-                                                //    {
-                                                //        if (o.GetType() == obj.GetType())
-                                                //        {
-                                                //            obj = o;
-                                                //        }
-                                                //    }, obj, "", null);
-                                                //};
-                                                //stackPanel.Children.Add(btn);
-                                                #endregion 
+                                                SetValue(td.Name, result); 
                                                 CreateSuperClass(sp, obj); 
                                             }
                                         }
@@ -268,6 +275,29 @@ namespace DisplayBorder.Controls
                                         }
                                     }
                                 };
+                                //创建超类的额外控件
+                                void CreateSuperClass(StackPanel internalSp, object obj)
+                                {
+                                    for (int k = 0; k < internalSp.Children.Count; k++)
+                                    {
+                                        var child = internalSp.Children[k];
+                                        if (child is ClassControl clc)
+                                        {
+                                            internalSp.Children.Remove(child);
+                                        }
+                                    }
+                                    var newDc = new ClassControl(obj.GetType(), CheckProperty, obj);
+                                    newDc.OnSetData += (o, v) =>
+                                    {
+                                        this.OnSetData?.Invoke(o, v);
+                                    };
+                                    internalSp.Children.Add(newDc);
+                                    internalSp.SizeChanged += (sps, spe) =>
+                                    {
+                                        if (!double.IsNaN(newDc.Width) && internalSp.ActualWidth - cutWidth > 0)
+                                            newDc.Width = internalSp.ActualWidth - cutWidth;
+                                    };
+                                }
                             }
                         }
                         break;
@@ -312,6 +342,10 @@ namespace DisplayBorder.Controls
                         if(control is Button btnClick && td.CustomAttr != null && td.CustomAttr is ButtonAttribute ba)
                         { 
                             MethodInfo mif = null;
+                            if(string.IsNullOrEmpty(ba.MethodName))
+                            {
+                                break;
+                            }
                             foreach (MethodInfo method in orginType.GetMethods())
                             {
                                 if (method.Name == ba.MethodName)
@@ -358,7 +392,14 @@ namespace DisplayBorder.Controls
                     if (td.ControlType != ClassControlType.List && td.ControlType != ClassControlType.Class)
                     {
                         TextBlock label = new TextBlock();
-                        label.Text = td.Name; 
+                        if (string.IsNullOrEmpty(td.NickName))
+                        {
+                            label.Text = td.Name;
+                        }
+                        else
+                        {
+                            label.Text = td.NickName;
+                        }
                         label.TextAlignment = TextAlignment.Left;
                         label.VerticalAlignment = VerticalAlignment.Center;
                         label.Margin = new Thickness(5,0,0,0);  
@@ -371,13 +412,29 @@ namespace DisplayBorder.Controls
                     }
                     control.HorizontalAlignment = HorizontalAlignment.Left;
                     control.VerticalAlignment = VerticalAlignment.Stretch;
-                    control.Margin = new Thickness(15, 0, 0, 0);
-                    if(td.ControlType != ClassControlType.Class && td.ControlType != ClassControlType.List
-                        && td.ControlType  != ClassControlType.ComboBoxImplement) 
-                        control.Width = 220;
+                    control.Margin = new Thickness(15, 0, 0, 0); 
+                    if (td.ControlType != ClassControlType.Class 
+                        && td.ControlType != ClassControlType.List
+                        && td.ControlType != ClassControlType.ComboBoxImplement 
+                        ) 
+                    { 
+                        if(!double.IsNaN(td.Width))
+                        {
+                            control.Width = td.Width;
+                        }
+                        else
+                        {
+                            control.Width = 220;
+                        }
+
+                        if(!double.IsNaN(td.Height))
+                        {
+                            control.Height = td.Height;
+                        } 
+                    } 
                     else
                     {
-                       
+                       //自动缩放
                         childen.Add(control);
                     }
                     stackPanel.Background = new SolidColorBrush(Colors.LightCyan);
@@ -400,30 +457,17 @@ namespace DisplayBorder.Controls
             }
         }
 
-        private void CreateSuperClass(StackPanel sp, object obj)
-        {
-            for (int k = 0; k < sp.Children.Count; k++)
-            {
-                var child = sp.Children[k];
-                if (child is ClassControl clc)
-                {
-                    sp.Children.Remove(child);
-                }
-            }
-            var newDc = new ClassControl(obj.GetType(), CheckProperty, obj);
-            sp.Children.Add(newDc);
-            sp.SizeChanged += (sps, spe) =>
-            {
-                if (!double.IsNaN(newDc.Width) && sp.ActualWidth - cutWidth > 0)
-                    newDc.Width = sp.ActualWidth - cutWidth;
-            };
-        }
+        
 
         private ClassControl GetGenericControl(int index, object item, Type type, bool ischildren = false)
         {
             ClassControl dc = new ClassControl(type, CheckProperty, item, ischildren);
             dc.Name = "dc_" + index.ToString();
             dc.Title = type.Name + $"'{index}'";
+            dc.OnSetData += (o, v) =>
+            {
+                this.OnSetData?.Invoke(o, v);
+            };
             if (ischildren)
             {
                 dc.gTitle.MouseEnter += (ms, me) =>
@@ -571,30 +615,39 @@ namespace DisplayBorder.Controls
             int startIndex = list.Count;
             if (list.Count > 0) startIndex = list.Count - 1;
             var code = Type.GetTypeCode(genericArgument);
+            if (generics == null) generics = new List<UIElement>();
             if (code == TypeCode.Object)
             {
                 var dc = GetGenericControl(startIndex, genericData, genericArgument, true);
-                gData.Children.Add(dc);
-                if (generics == null) generics = new List<UIElement>();
+                gData.Children.Add(dc); 
                 generics.Add(dc);
             }
             else if (genericArgument.IsEnum)
             {
                 //枚举类型
-                generics.Add(GetComboBox(list, startIndex));
+                var cb = GetComboBox(list, startIndex);
+                gData.Children.Add(cb);
+                generics.Add(cb);
             }
             else
             {
                 if (code == TypeCode.Boolean)
                 {
-                    generics.Add(AddCheckBox(list, startIndex));
+                  
+                    var cb = AddCheckBox(list, startIndex);
+                    gData.Children.Add(cb);
+                    generics.Add(cb);
                 }
                 else
                 {
-                    generics.Add(AddTextBox(list, startIndex));
+
+                    var cb = AddTextBox(list, startIndex);
+                    gData.Children.Add(cb);
+                    generics.Add(cb); 
                 }
             }
 
+            OnSetData?.Invoke(orginType, data);
             var temp = Title.Split('_');
             if (temp.Length > 1)
             {
@@ -656,7 +709,7 @@ namespace DisplayBorder.Controls
                     Title += item;
                 }
             }
-          
+            OnSetData?.Invoke(orginType, data);
             selectedItemTemp = null;
             selectedControl = null;
             lblSelectedInfo.Text = string.Empty;
@@ -672,7 +725,10 @@ namespace DisplayBorder.Controls
             {
                 combo.Items.Add(item);
             } 
-            combo.SelectedIndex = (int)list[i];
+            if(combo.Items.Count > 0)
+            {
+                combo.SelectedIndex = (int)list[i]; 
+            }
             combo.SelectionChanged += (cs, ce) =>
             {
                 if (cs is ComboBox cb)

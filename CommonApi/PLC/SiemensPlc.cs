@@ -11,10 +11,10 @@ namespace CommonApi.PLC
     public class SiemensPlc
     {
 
-        public SiemensPlc(int plcs ,string ip,int port = 102, byte Rack = 0, byte Slot = 0)
+        public SiemensPlc(SiemensPLCS plcs ,string ip,int port = 102, byte Rack = 0, byte Slot = 0)
         {
-            s7Net?.ConnectClose(); 
-            s7Net = new SiemensS7Net(GetPlCS(plcs))
+            s7Net?.ConnectClose();
+            s7Net = new SiemensS7Net(plcs) // new SiemensS7Net(GetPlCS(plcs))
             {
                 IpAddress = ip,
                 Port = port,

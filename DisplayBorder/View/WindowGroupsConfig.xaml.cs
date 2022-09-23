@@ -20,7 +20,9 @@ using DisplayBorder.Events;
 using DisplayBorder.ViewModel;
 using HandyControl.Controls;
 using MessageBox = HandyControl.Controls.MessageBox;
+using ScrollViewer = System.Windows.Controls.ScrollViewer;
 using Window = HandyControl.Controls.Window;
+ 
 
 namespace DisplayBorder.View
 {
@@ -418,6 +420,38 @@ namespace DisplayBorder.View
                 Growl.Warning($"未找到任何组的信息");
             }
         }
+
+        private void Btn_GroupsDetialC(object sender, RoutedEventArgs e)
+        {
+            Window window = new Window();
+            window.Title = "编辑对应信息";
+            Grid grid = new Grid();
+            grid.Margin = new Thickness(5);
+            window.Content = grid;
+            ScrollViewer sv = new  ScrollViewer();
+            sv.Margin = new  Thickness(5);
+            grid.Children.Add(sv);
+       
+            ClassControl cc = new ClassControl(typeof(List<Group>), true, GlobalPara.Groups);
+            sv.Content=(cc);
+
+            window.Closing += (ws, we) =>
+            {
+               var result = MessageBox.Show("是:保存且关闭\n\r 否:关闭不保存 \n\r 取消:不保存不关闭", "是否保存已经修改的信息", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                if(result == MessageBoxResult.Yes)
+                {
+                    GlobalPara.Groups = (List<Group>)cc.Data;
+                }
+                else if ( result == MessageBoxResult.Cancel)
+                {
+                    we.Cancel = true;
+                }
+             
+            };
+            window.WindowState = WindowState.Maximized;
+            window.ShowDialog();
+
+        }
         //打开所有信息
         private void Btn_OpenGroupsData(object sender, RoutedEventArgs e)
         {
@@ -521,6 +555,8 @@ namespace DisplayBorder.View
         {
          
         }
+
+     
     }
 
 

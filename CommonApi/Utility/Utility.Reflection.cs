@@ -238,7 +238,7 @@ namespace CommonApi
             /// <param name="target">目标对象</param>
             /// <param name="inData"></param>
             public static ClassData GetClassData<T>() where T : class
-            {
+            { 
                 ClassData cd = new ClassData();
                 GetInheritors(typeof(T), ref cd);
                 return cd;
@@ -251,13 +251,20 @@ namespace CommonApi
             /// <param name="inData"></param>
             public static ClassData GetClassData(Type t)
             {
+                if (t == null) return null; 
                 ClassData cd = new ClassData();
                 GetInheritors(t, ref cd);
                 return cd;
             }
 
+            /// <summary>
+            /// 获取该类所有实现类的全名称
+            /// </summary>
+            /// <param name="t">对应类的类型</param>
+            /// <returns></returns>
             public static List<string> GetClassDataFullName(Type t)
             {
+                if(t == null) return null;
                 ClassData cd = new ClassData();
                 GetInheritors(t, ref cd);
                 return GetAllImplement(cd);

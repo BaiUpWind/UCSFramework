@@ -15,7 +15,7 @@ namespace DeviceConfig
     {
       
         public ControlAttribute(string Name, string LabelName, ControlType ControlType, bool Enable = true, bool ReadOnly = false, bool Visable = true
-            , object[] Items = null, Type EnumType = null, string FieldName = null, string FileType = null
+            , /*object[] Items = null,*/ Type EnumType = null, string FieldName = null, string FileType = null
             , Type GenerictyType = null, string MethodName = null, double Height = 0, double Width = 0, int Order = 0) : base(Name)
         {
             this.controlType = ControlType;
@@ -23,7 +23,7 @@ namespace DeviceConfig
             visable = Visable;
             enable = Enable;
             readOnly = ReadOnly;
-            items = Items;
+            //items = Items;
             enumType = EnumType;
             labelName = LabelName;
             fieldName = FieldName;
@@ -39,7 +39,7 @@ namespace DeviceConfig
         private readonly bool visable;
         private readonly bool enable;
         private readonly bool readOnly;
-        private readonly object[] items;
+        //private readonly object[] items;
         private readonly Type enumType;
         private readonly string labelName;
         private readonly string fieldName;
@@ -66,7 +66,7 @@ namespace DeviceConfig
         /// </summary>
         public bool ReadOnly => readOnly;
 
-        public object[] Items => items;
+        //public object[] Items => items;
 
         public Type EnumType => enumType;
         /// <summary>

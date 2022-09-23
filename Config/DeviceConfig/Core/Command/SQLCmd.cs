@@ -17,10 +17,11 @@ namespace  DeviceConfig.Core
         {
 
         }
-
+        [JsonIgnore]
         public string sql = "select count(1) as 剩余货位_绿色 , count(1) as 满盘货物_红色 ,count(1) as 超时货位_蓝色 from dual";
 
         [Control("SQL", "查询语句", ControlType.TextBox, Height: 200, Width: 300, Order: 1)]
+        [Size(200,300)]
         [ConvertType(typeof(string))]
         public override object CommandStr { get; set; }
 

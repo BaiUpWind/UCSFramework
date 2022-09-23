@@ -128,9 +128,6 @@
     <Compile Include="Controls\BasicDataInfo.xaml.cs">
       <DependentUpon>BasicDataInfo.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ChartControl.xaml.cs">
-      <DependentUpon>ChartControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ClassControl.xaml.cs">
       <DependentUpon>ClassControl.xaml</DependentUpon>
     </Compile>
@@ -162,7 +159,7 @@
     <Compile Include="Events\OnUserInputArgs.cs" />
     <Compile Include="Events\OnValueChangedArgs.cs" />
     <Compile Include="GlobalPara.cs" />
-    <Compile Include="ChartControlHelper.cs" />
+    <Compile Include="ControlHelper.cs" />
     <Compile Include="RGVDataWindow.xaml.cs">
       <DependentUpon>RGVDataWindow.xaml</DependentUpon>
     </Compile>
@@ -183,15 +180,14 @@
     <Compile Include="ViewModel\GroupViewModel.cs" />
     <Compile Include="ViewModel\OperationViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="View\WindowSourceDataView.xaml.cs">
+      <DependentUpon>WindowSourceDataView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\WindowTest.xaml.cs">
       <DependentUpon>WindowTest.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowHelper.cs" />
     <Page Include="Controls\BasicDataInfo.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ChartControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -251,6 +247,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\WindowSourceDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\WindowTest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

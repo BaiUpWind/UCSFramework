@@ -1,4 +1,6 @@
-﻿namespace DeviceConfig.Core
+﻿using HslCommunication.Profinet.Siemens;
+
+namespace DeviceConfig.Core
 {
     public sealed class SiemensConnectCfg : PLCConnectionCfg
     {
@@ -13,8 +15,8 @@
         /// <para> 5 : S200Smart</para>
         /// <para> 6 : S200</para>
         /// </summary>    
-        [Control("SiemensSelected","西门子型号", ControlType.ComboBox,Items: new object[] { "S1200","S300", "S400", "S1500", "S200Smart", "S200" })]
-        public int SiemensSelected { get; set; } = 5;
+        [Control("SiemensSelected","西门子型号", ControlType.ComboBox, EnumType: typeof(SiemensPLCS))]
+        public SiemensPLCS SiemensSelected { get; set; }  
 
         /// <summary>
         /// 机架号

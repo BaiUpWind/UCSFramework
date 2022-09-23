@@ -13,7 +13,7 @@ namespace Modle
         /// <summary>
         /// 数据库类型
         /// </summary>
-        public static DBEnum BEnum { get; set; } = DBEnum.MySql;
+        public static DBType BEnum { get; set; } = DBType.MySql;
         /// <summary>
         /// 数据库连接字符串
         /// </summary>

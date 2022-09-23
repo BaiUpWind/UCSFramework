@@ -23,6 +23,15 @@ using DisplayBorder.ViewModel;
 using System.Windows.Threading;
 using System.Threading;
 using ScrollViewer = System.Windows.Controls.ScrollViewer;
+using LiveChartsCore; 
+using LiveChartsCore.Measure;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.Painting;
+using LiveChartsCore.SkiaSharpView.WPF;
+using SkiaSharp;
+using System.ComponentModel;
+using GalaSoft.MvvmLight;
+using System.Collections.ObjectModel;
 
 namespace DisplayBorder.View
 {
@@ -68,9 +77,14 @@ namespace DisplayBorder.View
                 Growl.SetGrowlParent(this, false);
 
             };
-
-            ClassControl cc = new ClassControl(typeof(List<Group>), true,GlobalPara.Groups);
-            sp.Children.Add(cc);
+            //注册统计图的数据类型
+            LiveChartsCore.LiveCharts.Configure(config =>
+            config.HasMap<ChartBasicInfo>((info, point) =>
+            {
+                point.PrimaryValue = info.Value;
+                point.SecondaryValue = point.Context.Entity.EntityIndex;
+            }));
+    
 
 
         }
@@ -202,8 +216,38 @@ namespace DisplayBorder.View
         {
             Growl.Info("创建成功!"  );
         }
+
+        private void Btn_AddChart(object sender, RoutedEventArgs e)
+        {
+            sp.Children.Clear();
+            gChart.Children.Clear();
+            BasicDataInfo.ChartInfo ci = new BasicDataInfo.ChartInfo(DataType.柱状图, ControlHelper.StorageInfos);
+            ClassControl cc = new ClassControl(ControlHelper.StorageInfos.GetType(), true, ControlHelper.StorageInfos);
+            gChart.Children.Add(ci);
+            sp.Children.Add(cc);
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    Console.WriteLine("更新数据");
+                    Application.Current.Dispatcher.Invoke( new Action(() =>
+                    {
+                        ci.Update();
+                    } )); 
+                    await Task.Delay(5000);
+                }
+            });
+        }
+
+      
+
+       
+
+    
     }
+     
 }
+
 
 namespace MyWindows
 {

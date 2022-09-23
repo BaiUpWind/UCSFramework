@@ -1,0 +1,16 @@
+﻿<Window xmlns:Controls="clr-namespace:DisplayBorder.Controls"  x:Class="DisplayBorder.View.WindowSourceDataView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DisplayBorder.View"
+        mc:Ignorable="d"
+        Title="源数据监视器" Height="450" Width="800">
+    <Grid Background="Gray">
+        <ScrollViewer Margin="5">
+            <StackPanel Name="spFather" Orientation="Vertical" Margin="5" >
+            
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

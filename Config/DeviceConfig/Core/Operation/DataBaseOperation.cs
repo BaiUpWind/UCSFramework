@@ -31,6 +31,10 @@ namespace DeviceConfig.Core
         { 
             try
             {
+                if(ConnectConfig is DataBaseConnectCfg dbcc)
+                {
+                  db.ConnStr =  dbcc.GetConnStr().Replace("\r\n", "");
+                }
                 db.CurrentConnection.Open();
                 return true;
             }
@@ -53,10 +57,22 @@ namespace DeviceConfig.Core
         {
             if (cmd is SQLCmd sqlcmd)
             {
+                if (ConnectConfig is DataBaseConnectCfg dbcc)
+                {
+                    db.ConnStr = dbcc.GetConnStr().Replace("\r\n", "");
+                }
                 //因为测试先注释掉
-                //var data = db.GetDataTable(sqlcmd.CommandStr.ToString(), System.Data.CommandType.Text);
-                //sqlcmd.Result.Data = data;
-                //return sqlcmd.Result;
+                try
+                {
+                    if (string.IsNullOrEmpty((sqlcmd.CommandStr?.ToString()))) return null;
+                    var data = db.GetDataTable(sqlcmd.CommandStr.ToString().Replace("\r\n", ""), System.Data.CommandType.Text);
+                    sqlcmd.Result.Data = data;
+                    return sqlcmd.Result;
+                }
+                catch (Exception)
+                {
+                    return null;
+                } 
             }
             return null; 
         }
@@ -78,13 +94,13 @@ namespace DeviceConfig.Core
             {
                 switch (dataBase.DbType)
                 {
-                    case 0:
+                    case  DBType.Oracle:
                         db = new OracleHelp(dataBase.GetConnStr());
                         break;
-                    case 1:
+                    case  DBType.SqlServer:
                         db = new SQLServerHelp(dataBase.GetConnStr());
                         break;
-                    case 2:
+                    case  DBType.MySql:
                         db = new MySqlHelp(dataBase.GetConnStr());
                         break;
                 }

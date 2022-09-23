@@ -14,7 +14,7 @@ namespace DeviceConfig.Core
         {
             if (ConnectConfig is SiemensConnectCfg siemens)
             {
-                splc = new SiemensPlc((int)siemens.SiemensSelected, siemens.IP, siemens.Port, siemens.Rack, siemens.Slot);
+                splc = new SiemensPlc( siemens.SiemensSelected, siemens.IP, siemens.Port, siemens.Rack, siemens.Slot);
                 return;
             }
             throw new Exception("错误的PLC配置类型");

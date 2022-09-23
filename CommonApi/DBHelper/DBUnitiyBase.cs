@@ -12,7 +12,7 @@ namespace CommonApi.DBHelper
      * 
      * 
      *      数据库访问的基类
-     *      时间：2022年7月11日08:57:53
+     *      时间：2019年7月11日08:57:53
      *      更新：连接，执行，数据适配器，查询结果集，执行SQL（返回影响行数）,DataSet转实体类，Data
      * 
      * 
@@ -368,7 +368,7 @@ namespace CommonApi.DBHelper
     /// <summary>
     /// 数据库类型
     /// </summary>
-    public enum DBEnum
+    public enum DBType
     {
         MySql,
         Oracle,
@@ -377,17 +377,17 @@ namespace CommonApi.DBHelper
 
     public abstract class GetDB : IDisposable
     {
-        public GetDB(DBEnum type,string connStr)
+        public GetDB(DBType type,string connStr)
         {
             switch(type)
             {
-                case DBEnum.MySql:
+                case DBType.MySql:
                     db = new MySqlHelp(connStr);
                     break;
-                case DBEnum.Oracle:
+                case DBType.Oracle:
                     db = new OracleHelp(connStr);
                     break;
-                case DBEnum.SqlServer:
+                case DBType.SqlServer:
                     db = new SQLServerHelp(connStr);
                     break;
             }

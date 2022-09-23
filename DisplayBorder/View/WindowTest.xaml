@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:DisplayBorder.View"
         xmlns:Controls="clr-namespace:DisplayBorder.Controls" xmlns:hc="https://handyorg.github.io/handycontrol" x:Class="DisplayBorder.View.WindowTest"
         mc:Ignorable="d"
-         xmlns:local2="clr-namespace:MyWindows"
-        Title="WindowTest" Height="450" Width="800" x:Name="hahah"> 
+         xmlns:local2="clr-namespace:MyWindows"  
+     xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+    Title="WindowTest" Height="450" Width="800" x:Name="hahah"> 
     <Grid>
        
         <Grid> 
@@ -23,22 +24,38 @@
                     <Border BorderBrush="Green"  BorderThickness="1" Margin="15,5,15,5"></Border>
                     <Button Content="打开新的窗体" Click="Button_Click_1" Margin="0,5,0,5"/>
                     <Button Content="显示信息" Click="Btn_ShowInfo" Margin="0,5,0,5"/>
+                    <Button Content="添加数据图" Click="Btn_AddChart" Margin="0,5,0,5"/>
                 </StackPanel>
             </Grid>
-            <Grid Grid.Column="1" Margin="0,0,141,132">
-                <ScrollViewer> 
-                    <StackPanel x:Name="sp" Margin="15">
+            <Grid Grid.Column="1" >
+                <ScrollViewer Visibility="Hidden" >
+                    <lvc:CartesianChart Visibility="Collapsed">
 
-
-                    </StackPanel>
+                    </lvc:CartesianChart>
                 </ScrollViewer>
-                <hc:ScrollViewer Orientation="Vertical"  Visibility="Hidden"  Margin="15" Grid.Row="1"  Background="Aqua" Width=" 300" Height="200" x:Name="sv">
+                <hc:ScrollViewer Visibility="Hidden" Orientation="Vertical"    Margin="15" Grid.Row="1"  Background="Aqua" Width=" 300" Height="200" x:Name="sv">
                     <hc:WaterfallPanel  Groups="3"    Margin="15"  x:Name="wpGroups"    >
 
 
 
                     </hc:WaterfallPanel>
                 </hc:ScrollViewer>
+                <Grid   >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition   ></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid>
+                        <ScrollViewer> 
+                            <StackPanel x:Name="sp" Margin="15">
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>     
+                    <Grid Name="gChart" Grid.Column="1" Margin="15">
+                      
+                    </Grid>
+                </Grid>
+                
             </Grid>
         </Grid>
       

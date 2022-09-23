@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HslCommunication, Version=6.2.2.0, Culture=neutral, PublicKeyToken=cdb2261fa039ed67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CommonApi\Lib\HslCommunication.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -52,6 +56,8 @@
     <Compile Include="DeviceConfig\Attributes\Control\ShowIfAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\HideAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\InstanceAttribute.cs" />
+    <Compile Include="DeviceConfig\Attributes\NickNameAttribute.cs" />
+    <Compile Include="DeviceConfig\Attributes\SizeAttribute.cs" />
     <Compile Include="DeviceConfig\Core\Command\CommandBase.cs" />
     <Compile Include="DeviceConfig\Core\Command\PLCCmd.cs" />
     <Compile Include="DeviceConfig\Core\Command\SiemensCmd.cs" />

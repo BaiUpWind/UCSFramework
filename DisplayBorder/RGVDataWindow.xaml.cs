@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -23,6 +24,8 @@ using DisplayBorder.View;
 using DisplayBorder.ViewModel;
 using HandyControl.Controls;
 using MessageBox = HandyControl.Controls.MessageBox;
+using ScrollViewer = System.Windows.Controls.ScrollViewer;
+using Window = System.Windows.Window;
 
 namespace DisplayBorder
 {
@@ -160,13 +163,13 @@ namespace DisplayBorder
         #endregion
         #region 内部方法
         private void ClearGirds()
-        {
+        { 
             foreach (var grid in grids)
             {
                 grid.RowDefinitions.Clear();
                 grid.ColumnDefinitions.Clear();
                 grid.Children.Clear();
-            }
+            } 
         }
         /// <summary>
         /// 异步更改UI
@@ -210,54 +213,106 @@ namespace DisplayBorder
                             Main.CurrentRunDeviceName = deviceInfo.DeviceInfoName;
                             //------------ 测试代码
                            
-                            ClearGirds();
-                            Random random = new Random();
-                            for (int i = 0; i < 6; i++)
-                            {
-                                var index = random.Next(0, 3);
-                                DataType dt = (DataType)index;
+                            //ClearGirds();
+                            //Random random = new Random();
+                            //for (int i = 0; i < 6; i++)
+                            //{
+                            //    var index = random.Next(0, 3);
+                            //    DataType dt = (DataType)index;
 
-                                ChartControlHelper.CreateChartConrotl(grids[i], dt,"测试界面");
+                            //    ChartControlHelper.CreateChartConrotl(grids[i], dt,"测试界面");
 
-                            }
+                            //}
                             //--------------
-                        }); 
+                        });
+                        //是否初次创建控件
+                        bool isFirstCreate = false;
                         CancellationTokenSource intervalToken = new CancellationTokenSource();
-                        Task task = new Task(async () =>
-                        {
-                            //todo: 先创建对应的控件
-                            //todo: 设置控件的数据绑定
-                            //todo: 每次获取数据只对数据源进行更新 
+                        CancellationTokenSource delayToken = new CancellationTokenSource();
+                        Task task = Task.Run(async () =>
+                        { 
                             Console.WriteLine($"{deviceInfo.DeviceInfoName}获取数据刷新");
+                         
+
                             while (true)
                             {
+                                if (MainCancellToken.IsCancellationRequested)
+                                {
+                                    //终止异步
+                                    AsyncRunUI(() =>
+                                    {
+                                        ClearGirds();
+                                    }); 
+                                    intervalToken.Cancel();
+                                    delayToken.Cancel();
+                                }
                                 if (intervalToken.IsCancellationRequested) break;
 
                                 //读取数据并且加载对应的控件
-                                //AsyncRunUI(() =>
-                                //{
-                                //    ClearGirds();
-                                //    var results = deviceInfo.Operation.GetResults();
-                                //    for (int i = 0; i < results.Count; i++)
-                                //    {
-                                //        if (i > grids.Length) break;
-                                //        var result = results[i];
-                                //        if (result == null) continue;
+                                AsyncRunUI(() =>
+                                {
+                                    if(!isFirstCreate)  ClearGirds();
+                                    var results = deviceInfo.Operation.GetResults();
+                                    for (int i = 0; i < results.Count; i++)
+                                    {
+                                        if (i > grids.Length) break;
+                                        var result = results[i];
+                                        if (result == null) continue;
 
-                                //        if (result is SQLResult sql)
-                                //        {
-                                //            ChartControlHelper.CreateChartConrotl(grids[i], (DataType)sql.SelectType, sql.Title);
-                                //        }
-                                //    }
-                                //});
+                                        if (result is SQLResult sqlr)
+                                        {
+                                            if (!isFirstCreate)
+                                            {
+                                                if(sqlr.Data is DataTable dt)
+                                                { 
+                                                    if(dt.Columns.Count > 0 && dt.Rows.Count > 0 && dt.Rows.Count ==1)
+                                                    {
+                                                        //单行的数据 只能做 图表统计
+                                                        List<ChartBasicInfo> chartInfos = new List<ChartBasicInfo>(); 
+                                                        for (int c = 0; c < dt.Columns.Count; c++)
+                                                        {
+                                                            chartInfos.Add(new ChartBasicInfo()
+                                                            {
+                                                                Name = dt.Columns[c].ColumnName,
+                                                                Value = double.Parse((dt.Rows[0].ItemArray[c]).ToString())
+                                                            }); 
+                                                        } 
+                                                        ControlHelper.CreateChartConrotl(grids[i], chartInfos, sqlr.SelectType, sqlr.Title, deviceInfo.RefreshInterval);
+                                                        #region 测试代码 
+                                                        ClassControl cc = new ClassControl(chartInfos.GetType(), true, chartInfos);
+                                                        SourceDataView.AddControl(cc);
+                                                        #endregion
+                                                    }
+                                                    else if(dt.Columns.Count > 0 && dt.Rows.Count > 0 && dt.Rows.Count > 1)
+                                                    {
+                                                        ControlHelper.CreateDataGridConrotl(grids[i], dt,  DataType.表格, sqlr.Title, deviceInfo.RefreshInterval);
+                                                    }
+                                                }
+                                             
+                                              
+                                            } 
+                                        }
+                                    }
+
+                                    isFirstCreate = true;
+                                });
                                 Console.WriteLine($"[{DateTime.Now}]{deviceInfo.DeviceInfoName}刷新");
                                 if (deviceInfo.RefreshInterval == 0) deviceInfo.RefreshInterval = 1000;
                                 await Task.Delay(deviceInfo.RefreshInterval);
                             }
                         }, intervalToken.Token);
-                        task.Start();
-                        await Task.Delay(deviceInfo.StayTime);
-                        intervalToken.Cancel();
+
+                        try
+                        {
+                            await Task.Delay(deviceInfo.StayTime  , delayToken.Token);
+                        }
+                        catch 
+                        {
+                            //引发异常 终止等待 
+                            break;
+                        } 
+                        if(!intervalToken.IsCancellationRequested)
+                            intervalToken.Cancel();
                         Console.WriteLine($"{deviceInfo.DeviceInfoName}终止任务");
                     }
                 }
@@ -294,7 +349,7 @@ namespace DisplayBorder
                 CreateTitle(group);
             }
 
-
+            SourceDataView.Claer();
 
             MainTask = Task.Run(() =>
             {
@@ -526,6 +581,46 @@ namespace DisplayBorder
             }
         }
         #endregion
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double titlesize = ((ActualWidth / 12) / 3 * 2) / 3;
+            System.Windows.Application.Current.Resources.Remove("TitleFontSize");
+            System.Windows.Application.Current.Resources.Add("TitleFontSize", titlesize);
+            double tabsize = ((ActualWidth / 12) / 3 * 2) / 4;
+            System.Windows.Application.Current.Resources.Remove("TabFontSize");
+            System.Windows.Application.Current.Resources.Add("TabFontSize", tabsize);
+            double gridsize = ((ActualWidth / 12) / 3 * 2) / 5 * 0.8;
+            System.Windows.Application.Current.Resources.Remove("GridFontSize");
+            System.Windows.Application.Current.Resources.Add("GridFontSize", gridsize); 
+            GlobalPara.TitleFontSize = titlesize;
+            GlobalPara.TabFontSize = tabsize;
+            GlobalPara.GridFontSize = gridsize; 
+            //计算额外的偏移
+            Thickness mg = new Thickness(10, titlesize + 25, 10, 10);
+            Application.Current.Resources.Remove("TitleTickness");
+            Application.Current.Resources.Add("TitleTickness", mg);
+
+        }
+        private WindowSourceDataView sourceDataView;
+        WindowSourceDataView SourceDataView
+        {
+            get
+            {
+                if (sourceDataView == null)
+                {
+                    sourceDataView = new WindowSourceDataView();
+                }
+                return sourceDataView;
+            }
+        }
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.F1)
+            { 
+                SourceDataView.Show();
+            }
+        }
     }
 
   
