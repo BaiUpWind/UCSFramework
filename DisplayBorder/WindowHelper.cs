@@ -795,18 +795,7 @@ namespace DisplayBorder
             cmb.HorizontalAlignment = HorizontalAlignment.Left;
             cmb.Tag = attr.Name;
             cmb.Width = 258;
-            cmb.SelectionChanged += (sender, e) =>
-            {
-                if (sender is ComboBox c)
-                {
-                    if (c.SelectedIndex <= -1) return;
-                    if (c.Tag.ToString() == propInfo.Name)
-                    {
-                        propInfo.SetValue(target, c.SelectedIndex);
-                        //var value = objType.GetProperty(propInfo.Name).GetValue(target, null)?.ToString(); 
-                    }
-                }
-            };
+         
           
             //if (attr.Items != null)
             //{
@@ -824,14 +813,38 @@ namespace DisplayBorder
                 } 
             }
 
-            if (propInfo.PropertyType == typeof(int))
+            var result =  objType.GetProperty(propInfo.Name).GetValue(target, null)?.ToString();
+            if ( result != null)
             {
-                cmb.SelectedIndex = int.Parse(objType.GetProperty(propInfo.Name).GetValue(target, null)?.ToString());
+                int index = 0;
+                for (int j = 0; j < cmb.Items.Count; j++)
+                {
+                    var item = cmb.Items[j];
+                    if (item.ToString() == result.ToString())
+                    {
+                        index = j;
+                        break;
+                    }
+                }
+                cmb.SelectedIndex = index;
             }
             else
             {
                 cmb.SelectedIndex = 0;
             }
+
+            cmb.SelectionChanged += (sender, e) =>
+            {
+                if (sender is ComboBox c)
+                {
+                    if (c.SelectedIndex <= -1) return;
+                    if (c.Tag.ToString() == propInfo.Name)
+                    {
+                        propInfo.SetValue(target, c.SelectedIndex);
+                        //var value = objType.GetProperty(propInfo.Name).GetValue(target, null)?.ToString(); 
+                    }
+                }
+            };
             sp.Children.Add(cmb);
 
             return cmb;
@@ -851,11 +864,7 @@ namespace DisplayBorder
             txtBox.HorizontalContentAlignment = HorizontalAlignment.Left;
             if (attr.Width != 0) txtBox.Width = attr.Width;
             if (attr.Height != 0)  txtBox.Height = attr.Height ;
-              
-         
-
-            //todo:这里需要根据类型获取对应的输入限制
-
+               
             //根据值发生变化时 自动将值附上去
             txtBox.LostFocus += (sender, e) =>
             { 
@@ -866,6 +875,7 @@ namespace DisplayBorder
                         if (string.IsNullOrEmpty(t.Text)) return;
                         if (t.Tag.ToString() == propInfo.Name)
                         {
+                            //todo:这里需要根据类型获取对应的输入限制
                             propInfo.SetValue(target, Convert.ChangeType(t.Text, propInfo.PropertyType));
                         }
                     }
@@ -873,7 +883,7 @@ namespace DisplayBorder
                 catch (Exception ex)
                 {
                     propInfo.SetValue(target, null);
-                    txtBox.Text = $"正确的类型:'{propInfo.PropertyType.Name}'";
+                    txtBox.Text = String.Empty;// $"正确的类型:'{propInfo.PropertyType.Name}'";
                     MessageBox.Show($"错误的类型输入!'{ex.Message}'");
                 }
            
@@ -1039,7 +1049,7 @@ namespace DisplayBorder
                     }
                   
                     typedatas.Add(typeData);
-                    //找到按钮属性
+                    //找到按钮属性 额外添加一个按钮
                     var but = attrs.Where(a => a is ButtonAttribute);
                     if (but.Count() > 0)
                     {
@@ -1115,8 +1125,6 @@ namespace DisplayBorder
                             continue;
                         }
                     }
-                 
-
 
                     TypeCode typeCode = Type.GetTypeCode(field.FieldType);
                     var convert = attrs.Where(a => a is ConvertTypeAttribute).Select(a => a as ConvertTypeAttribute).ToList();

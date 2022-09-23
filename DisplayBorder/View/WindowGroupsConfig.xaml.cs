@@ -423,6 +423,11 @@ namespace DisplayBorder.View
 
         private void Btn_GroupsDetialC(object sender, RoutedEventArgs e)
         {
+            if(groups.Count == 0)
+            {
+                Growl.Warning($"未找到任何组的信息");
+                return;
+            }
             Window window = new Window();
             window.Title = "编辑对应信息";
             Grid grid = new Grid();
@@ -432,7 +437,7 @@ namespace DisplayBorder.View
             sv.Margin = new  Thickness(5);
             grid.Children.Add(sv);
        
-            ClassControl cc = new ClassControl(typeof(List<Group>), true, GlobalPara.Groups);
+            ClassControl cc = new ClassControl(typeof(List<Group>), true, groups);
             sv.Content=(cc);
 
             window.Closing += (ws, we) =>
@@ -445,8 +450,7 @@ namespace DisplayBorder.View
                 else if ( result == MessageBoxResult.Cancel)
                 {
                     we.Cancel = true;
-                }
-             
+                } 
             };
             window.WindowState = WindowState.Maximized;
             window.ShowDialog();

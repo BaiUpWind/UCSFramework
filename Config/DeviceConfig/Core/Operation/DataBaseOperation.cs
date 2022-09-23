@@ -23,9 +23,9 @@ namespace DeviceConfig.Core
         private DBUnitiyBase db;
 
 
-        private List<SQLCmd> cmds = new List<SQLCmd>();
-        [Instance]
-        public override object Commands { get => cmds; set => cmds = value as List<SQLCmd>; }  
+        //private List<SQLCmd> cmds = new List<SQLCmd>();
+    
+        //public override object Commands { get => cmds; set => cmds = value as List<SQLCmd>; }  
 
         public override bool Connect()
         { 
@@ -61,7 +61,6 @@ namespace DeviceConfig.Core
                 {
                     db.ConnStr = dbcc.GetConnStr().Replace("\r\n", "");
                 }
-                //因为测试先注释掉
                 try
                 {
                     if (string.IsNullOrEmpty((sqlcmd.CommandStr?.ToString()))) return null;

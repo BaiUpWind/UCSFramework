@@ -45,9 +45,9 @@ namespace DeviceConfig.Core
         /// <para>基类型为<see cref="CommandBase"/></para>
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
+        [Instance]
         [Control("Commands", "编辑指令集合", ControlType.Collection, GenerictyType: typeof(CommandBase), FieldName: nameof(Commands))]
-
-        public abstract object Commands { get; set; } 
+        public virtual object Commands { get; set; } 
 
         /// <summary>
         /// 获取所有的返回结果

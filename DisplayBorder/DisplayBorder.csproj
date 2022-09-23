@@ -7,7 +7,7 @@
     <ProjectGuid>{BCCF1C19-951C-4CBB-A007-038F6C02AA63}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>DisplayBorder</RootNamespace>
-    <AssemblyName>DisplayBorder</AssemblyName>
+    <AssemblyName>数据看板</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -35,6 +35,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>tb7.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
@@ -274,7 +277,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Resource Include="Fonts\iconfont.ttf" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -295,36 +297,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\头部.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\框框.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\buttonImage.png" />
-    <Resource Include="Images\centerImage.png" />
-    <Resource Include="Images\drop.png" />
-    <Resource Include="Images\img3d.png" />
-    <Resource Include="Images\leftback.png" />
-    <Resource Include="Images\leftImage.png" />
-    <Resource Include="Images\leftImageSub.png" />
-    <Resource Include="Images\rightImage.png" />
-    <Resource Include="Images\timeback.png" />
-    <Resource Include="Images\topback.png" />
-    <Resource Include="Images\topImage.png" />
-    <Resource Include="Images\vs.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\中部选择栏选中-1.png" />
-    <Resource Include="Images\中部选择栏选中-2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\背景图片.jpeg" />
-    <Content Include="Lib\UICommon.dll" />
-    <Content Include="Lib\UICommon.pdb" />
-  </ItemGroup>
-  <ItemGroup>
+    <Folder Include="Images\" />
+    <Folder Include="Lib\" />
     <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Ico\tb7.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="tb7.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SkiaSharp.NativeAssets.macOS.2.88.2\build\net462\SkiaSharp.NativeAssets.macOS.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.macOS.2.88.2\build\net462\SkiaSharp.NativeAssets.macOS.targets')" />

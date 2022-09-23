@@ -449,10 +449,8 @@ namespace DisplayBorder.Controls
                             else
                                 item.Width = 10; 
                         } 
-                    };
-                    //stackPanel.Height = control.Height;
-                    panel.Children.Add(stackPanel);
-                    //childen.Add(stackPanel);
+                    }; 
+                    panel.Children.Add(stackPanel); 
                 }
             }
         }
