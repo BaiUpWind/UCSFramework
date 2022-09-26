@@ -11,6 +11,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace DisplayBorder
 {
@@ -82,7 +83,14 @@ namespace DisplayBorder
             cc.SetDataControl(infos, dataType, refreshTime);
             panel.Children.Add(cc);
         }
-
+        /// <summary>
+        /// 创建datagrid view 控件
+        /// </summary>
+        /// <param name="panel"></param>
+        /// <param name="dataTable"></param>
+        /// <param name="dataType"></param>
+        /// <param name="title"></param>
+        /// <param name="refreshTime"></param>
         public static void CreateDataGridConrotl(Panel panel, object dataTable, DataType dataType, string title = null, int refreshTime = 1000)
         {
             if (panel == null) return;
@@ -90,6 +98,33 @@ namespace DisplayBorder
             cc.Title = title;
             cc.SetDataControl(null, dataType, refreshTime, dataTable);
             panel.Children.Add(cc);
+        }
+
+        /// <summary>
+        /// 获取元素节点下的子元素
+        /// </summary>
+        /// <typeparam name="T">指定的类型</typeparam>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public static T GetVisualChild<T>(DependencyObject parent) where T : Visual
+        {
+            T child = default(T);
+
+            int numVisuals = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < numVisuals; i++)
+            {
+                Visual v = (Visual)VisualTreeHelper.GetChild(parent, i);
+                child = v as T;
+                if (child == null)
+                {
+                    child = GetVisualChild<T>(v);
+                }
+                if (child != null)
+                {
+                    break;
+                }
+            }
+            return child;
         }
     }
 

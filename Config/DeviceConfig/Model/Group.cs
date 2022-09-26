@@ -10,9 +10,10 @@ namespace DeviceConfig
 {
     /// <summary>
     /// 组/车间 的配置 最顶级的单位
-    /// </summary>
+    /// </summary> 
     public class Group
     {
+       
         private DeviceInfo currentRunDevice;
 
         /// <summary>
@@ -27,6 +28,8 @@ namespace DeviceConfig
         [Control("GroupName", "工艺名称", ControlType.TextBox)]
         [NickName("工艺名称")]
         public string GroupName { get; set; }
+
+        public string[] strings { get; set; }
 
         #region 控件位置属性 
  
@@ -121,6 +124,7 @@ namespace DeviceConfig
         public IList<Device> DeviceConfigs { get; set; }
 
         [Control("DeviceInfos", "设备集合", ControlType.Collection, GenerictyType: typeof(DeviceInfo), FieldName: nameof(DeviceInfos))]
+        [NickName("设备集合")]
         public List<DeviceInfo> DeviceInfos { get; set; }
 
     }

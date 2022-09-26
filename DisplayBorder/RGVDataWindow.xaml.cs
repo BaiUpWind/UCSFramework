@@ -267,7 +267,7 @@ namespace DisplayBorder
                                                 { 
                                                     if(dt.Columns.Count > 0 && dt.Rows.Count > 0 && dt.Rows.Count ==1)
                                                     {
-                                                        //单行的数据 只能做 图表统计
+                                                        //单行的数据 只做 图表统计
                                                         List<ChartBasicInfo> chartInfos = new List<ChartBasicInfo>(); 
                                                         for (int c = 0; c < dt.Columns.Count; c++)
                                                         {
@@ -283,7 +283,7 @@ namespace DisplayBorder
                                                         SourceDataView.AddControl(cc);
                                                         #endregion
                                                     }
-                                                    else if(dt.Columns.Count > 0 && dt.Rows.Count > 0 && dt.Rows.Count > 1)
+                                                    else if(dt.Columns.Count > 0 && dt.Rows.Count > 0 && dt.Rows.Count > 1 && sqlr.SelectType == DataType.表格)
                                                     {
                                                         ControlHelper.CreateDataGridConrotl(grids[i], dt,  DataType.表格, sqlr.Title, deviceInfo.RefreshInterval);
                                                     }
@@ -304,7 +304,7 @@ namespace DisplayBorder
 
                         try
                         {
-                            await Task.Delay(deviceInfo.StayTime  , delayToken.Token);
+                            await Task.Delay(deviceInfo.StayTime *1000000 , delayToken.Token);
                         }
                         catch 
                         {

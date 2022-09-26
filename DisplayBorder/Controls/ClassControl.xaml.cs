@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CommonApi;
 using DeviceConfig;
+using DisplayBorder.Events;
 using DisplayBorder.View;
 using HandyControl.Controls;
 using HandyControl.Tools;
@@ -67,8 +68,11 @@ namespace DisplayBorder.Controls
             gTitle.DataContext = this;
             isList = Utility.Reflection.IsList(type); 
             lblSelectedInfo.Text = string.Empty;
-
+             
+            btnCopy.Visibility = Visibility.Hidden; 
         }
+
+     
         private object target;
         private string title;
         private object data;
@@ -173,13 +177,14 @@ namespace DisplayBorder.Controls
                                     if (ts is RichTextBox txtBox )  // && !string.IsNullOrEmpty(te.Changes))
                                     {
                                         TextRange textRange = new TextRange(txtBox.Document.ContentStart, txtBox.Document.ContentEnd);
-                                        SetValue(td.Name, Convert.ChangeType(textRange.Text.Replace("\n\r",""), td.ObjectType));
+                                        //这里在存入时 会把 \r\n 符号也存入进去 ,所以在使用的时候注意repalce掉
+                                        SetValue(td.Name, Convert.ChangeType(textRange.Text, td.ObjectType));
                                     }
                                 }
                                 catch (Exception ex)
                                 {
-                                    txt.Document = new FlowDocument();
-                                    MessageBox.Info($"请输入正确的类型'{td.ObjectType}',\n\r 错误信息:'{ex.Message}'", "输入提示");
+                                    MessageBox.Info($"请输入正确的类型'{td.ObjectType}',\n\r 错误信息:'{ex.Message}' \r\n 内部信息:'{ex.InnerException.Message}'", "输入提示");
+                                    txt.Document.Blocks.Clear(); 
                                 }
                                
                             };
@@ -189,7 +194,7 @@ namespace DisplayBorder.Controls
                         control = new CheckBox();
                         if (control is CheckBox cb)
                         {
-                            cb.IsChecked = (GetValue(td.Name)  ==null ? false : (bool)GetValue(td.Name));
+                            cb.IsChecked = (GetValue(td.Name)  !=null && (bool)GetValue(td.Name));
                             cb.Checked += (s, e) =>
                             {
                                 SetValue(td.Name, cb.IsChecked);
@@ -198,7 +203,7 @@ namespace DisplayBorder.Controls
                         break;
                     case ClassControlType.List:
                     case ClassControlType.Class:
-                        control = GetGenericControl(i, GetValue(td.Name), td.ObjectType, CheckProperty); 
+                        control = GetGenericControl(i, GetValue(td.Name), td.ObjectType, CheckProperty,td.NickName); 
                         if (control is ClassControl dc)
                         { 
                             dc.Background = new SolidColorBrush( Colors.Tan);
@@ -454,14 +459,12 @@ namespace DisplayBorder.Controls
                 }
             }
         }
-
-        
-
-        private ClassControl GetGenericControl(int index, object item, Type type, bool ischildren = false)
+         
+        private ClassControl GetGenericControl(int index, object item, Type type, bool ischildren = false,string otherName=null)
         {
             ClassControl dc = new ClassControl(type, CheckProperty, item, ischildren);
             dc.Name = "dc_" + index.ToString();
-            dc.Title = type.Name + $"'{index}'";
+            dc.Title =  $"{(otherName ==null? "":$"{otherName}")}{type.Name}_'{index}'" ;
             dc.OnSetData += (o, v) =>
             {
                 this.OnSetData?.Invoke(o, v);
@@ -482,19 +485,254 @@ namespace DisplayBorder.Controls
                     {
                         selectedItemTemp = drop.Data;
                         selectedControl = drop;
+                        btnCopy.Visibility = Visibility.Visible;
                         Console.WriteLine(selectedItemTemp);
 
                         lblSelectedInfo.Text = $"当前选中'{drop.Title}'";
                     }
-                };
+                }; 
             } 
             return dc;
         } 
+        private UIElement GetComboBox(IList list, int i)
+        {
+            StackPanel panel = new StackPanel();
+            panel.Margin = new Thickness(10);
+            TextBlock block = new TextBlock();
+            ComboBox combo = new ComboBox();
+            combo.IsReadOnly = true;
+            block.Text = combo.Name = "combo_" + i.ToString();
+            foreach (var item in Enum.GetNames(genericArgument))
+            {
+                combo.Items.Add(item);
+            } 
+            if(combo.Items.Count > 0)
+            {
+                combo.SelectedIndex = (int)list[i]; 
+            }
+            combo.SelectionChanged += (cs, ce) =>
+            {
+                if (cs is ComboBox cb)
+                    list[int.Parse(cb.Name.Split('_')[1])] = Enum.Parse(genericArgument, cb.SelectedItem.ToString());
+            };
+          
+            panel.MouseDown += (s, e) =>
+            {
+                if (s is StackPanel p && p.Children[0] is ComboBox c)//&& e is MouseEventArgs me  )
+                {
+                    selectedItemTemp = c.SelectedIndex;
+                    selectedControl = p;
+                    Console.WriteLine(selectedItemTemp);
+                    lblSelectedInfo.Text = $"当前选中'{c.Name}'";
+                }
+            };
+            panel.MouseEnter += (s, e) =>
+            {
+                Cursor = Cursors.Hand;
+            };
+            panel.MouseLeave += (ms, me) =>
+            {
+                Cursor = Cursors.Arrow;
+            };
+            panel.Children.Add(block); 
+            panel.Children.Add(combo);  
+            return panel;
+        }
+        private UIElement AddTextBox(IList list, int i)
+        {
+            StackPanel panel = new StackPanel();
+            TextBlock block = new TextBlock();
+            panel.Margin = new Thickness(10);
+            TextBox textBox = new TextBox();
+            block.Text  =textBox.Name = "txt_" + i.ToString();
+            textBox.Text = list[i]?.ToString();
+            textBox.PreviewTextInput += (ts, te) =>
+            {
+                //todo:这里类型会有不同的适配
+                if (ts is TextBox t && !string.IsNullOrEmpty(t.Text))
+                    list[int.Parse(t.Name.Split('_')[1])] = Convert.ChangeType(t.Text, genericArgument);
+            };
+            
+            panel.MouseDown += (s, e) =>
+            {
+                if (s is StackPanel p && p.Children[0] is TextBox t)//&& e is MouseEventArgs me  )
+                {
+                    selectedItemTemp = t.Text;
+                    selectedControl = p;
+                    Console.WriteLine(selectedItemTemp);
+                    lblSelectedInfo.Text = $"当前选中'{t.Name}'";
+                }
+            };
+            panel.MouseEnter += (s, e) =>
+            {
+                Cursor = Cursors.Hand;
+            };
+            panel.MouseLeave += (ms, me) =>
+            {
+                Cursor = Cursors.Arrow;
+            };
+            panel.Children.Add(block); 
+            panel.Children.Add(textBox); 
+            return panel;
+        }
+        private UIElement AddCheckBox(IList list, int i)
+        {
+            StackPanel panel = new StackPanel();
+            TextBlock block = new TextBlock();
+          
+            panel.Margin = new Thickness(10);
+            CheckBox checkBox = new CheckBox();
+            checkBox.IsChecked = (bool)list[i];
+            block.Text = checkBox.Name = "checkb_" + i.ToString();
+            checkBox.Checked += (cs, ce) =>
+            {
+                if (cs is CheckBox cb)
+                    list[int.Parse(cb.Name.Split('_')[1])] = (checkBox.IsChecked);
+            };
+           
+            panel.MouseDown += (s, e) =>
+            {
+                if (s is StackPanel p && p.Children[0] is CheckBox c)//&& e is MouseEventArgs me  )
+                {
+                    selectedItemTemp = c.IsChecked;
+                    selectedControl = p;
+                    Console.WriteLine(selectedItemTemp);
+                    lblSelectedInfo.Text = $"当前选中'{c.Name}'";
+                }
+            };
+            panel.MouseEnter += (s, e) =>
+            {
+                Cursor = Cursors.Hand;
+            };
+            panel.MouseLeave += (ms, me) =>
+            {
+                Cursor = Cursors.Arrow;
+            };
+            panel.Children.Add(block);
+            panel.Children.Add(checkBox); 
+            return panel;
+        }
+        private void AddChildren(object copyData)
+        {
+            if (!isList) return;
+
+            if (copyData != null)
+            {
+                genericData = copyData;
+            }
+            else
+            {
+                try
+                {
+                    genericData = Activator.CreateInstance(genericArgument);
+                }
+                catch
+                {
+                    //当没有对应的构造函数时 使用空对象
+                    genericData = null;
+                }
+            }
+        
+            var list = (IList)data;
+            if (orginType.IsGenericType)
+            {
+                //泛型  
+                list.Add(genericData);
+
+            }
+            else if (orginType.IsArray)
+            {
+                //数组 
+                var array = (Array)data;
+                //创建新的数组
+                var tempArr = (Array)Activator.CreateInstance(orginType, array.Length + 1);
+                array.CopyTo(tempArr, 0);
+                tempArr.SetValue(genericData, tempArr.Length - 1);
+                list = tempArr;
+            }
+            data = list;
+            int startIndex = list.Count;
+            if (list.Count > 0) startIndex = list.Count - 1;
+            var code = Type.GetTypeCode(genericArgument);
+            if (generics == null) generics = new List<UIElement>();
+            if (code == TypeCode.Object)
+            {
+                var dc = GetGenericControl(startIndex, genericData, genericArgument, true);
+                gData.Children.Add(dc);
+                generics.Add(dc);
+            }
+            else if (genericArgument.IsEnum)
+            {
+                //枚举类型
+                var cb = GetComboBox(list, startIndex);
+                gData.Children.Add(cb);
+                generics.Add(cb);
+            }
+            else
+            {
+                if (code == TypeCode.Boolean)
+                {
+
+                    var cb = AddCheckBox(list, startIndex);
+                    gData.Children.Add(cb);
+                    generics.Add(cb);
+                }
+                else
+                {
+
+                    var cb = AddTextBox(list, startIndex);
+                    gData.Children.Add(cb);
+                    generics.Add(cb);
+                }
+            }
+
+            OnSetData?.Invoke(orginType, data);
+            ReClaculateName();
+        }
+        private void ClaerSelectItem()
+        {
+            selectedItemTemp = null;
+            selectedControl=null;
+            lblSelectedInfo.Text = string.Empty;
+        }
+
+        private void ReClaculateName()
+        {
+            var temp = Title.Split('_');
+            if (temp.Length > 1)
+            {
+                temp[1] = $"_[{((IList)data).Count}]";
+                Title = string.Empty;
+                foreach (var item in temp)
+                {
+                    Title += item;
+                }
+            }
+            if (generics == null) return;
+            for (int i = 0; i < generics.Count; i++)
+            {
+                var control = generics[i]; 
+                if(control is ClassControl dc)
+                {
+                    dc.Title = $" {dc.orginType.Name}_'{i}'";
+                }
+            }
+        }
+        #region 事件
+        //当拷贝时
+        private void Btn_Copy(object sender, RoutedEventArgs e)
+        {
+            if (selectedItemTemp == null) return;
+            AddChildren(selectedItemTemp); 
+            btnCopy.Visibility = Visibility.Hidden;
+            ClaerSelectItem(); 
+        } 
+        //控件加载时
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (orginType == null) return; 
+            if (orginType == null) return;
             gOper.Visibility = isList ? Visibility.Visible : Visibility.Collapsed;
-            gInfos.Visibility = Visibility.Collapsed; 
+            gInfos.Visibility = Visibility.Collapsed;
             if (!isList) CreateControls(gData, WindowHelper.GetTypeDatas(orginType, CheckProperty, target));
             else
             {
@@ -564,14 +802,14 @@ namespace DisplayBorder.Controls
         //展开 收起
         private void Btn_Show(object sender, RoutedEventArgs e)
         {
-            if(sender is Button btn && btn.Content is TextBlock tb)
+            if (sender is Button btn && btn.Content is TextBlock tb)
             {
-                if(tb.Text  == "↓")
+                if (tb.Text == "↓")
                 {
                     gInfos.Visibility = Visibility.Visible;
                     tb.Text = "↑";
                 }
-                else if(tb.Text == "↑")
+                else if (tb.Text == "↑")
                 {
                     gInfos.Visibility = Visibility.Collapsed;
                     tb.Text = "↓";
@@ -581,81 +819,7 @@ namespace DisplayBorder.Controls
         //添加
         private void Btn_Add(object sender, RoutedEventArgs e)
         {
-            if (!isList) return;
-
-            try
-            {
-                genericData = Activator.CreateInstance(genericArgument);
-            }
-            catch
-            {
-                //当没有对应的构造函数时 使用空对象
-                genericData = null;
-            }
-            var list = (IList)data;
-            if (orginType.IsGenericType)
-            {
-                //泛型  
-                list.Add(genericData);
-
-            }
-            else if (orginType.IsArray)
-            {
-                //数组 
-                var array = (Array)data;
-                //创建新的数组
-                var tempArr = (Array)Activator.CreateInstance(orginType, array.Length + 1);
-                array.CopyTo(tempArr, 0);
-                tempArr.SetValue(genericData, tempArr.Length - 1);
-                list = tempArr;
-            }
-            data = list;
-            int startIndex = list.Count;
-            if (list.Count > 0) startIndex = list.Count - 1;
-            var code = Type.GetTypeCode(genericArgument);
-            if (generics == null) generics = new List<UIElement>();
-            if (code == TypeCode.Object)
-            {
-                var dc = GetGenericControl(startIndex, genericData, genericArgument, true);
-                gData.Children.Add(dc); 
-                generics.Add(dc);
-            }
-            else if (genericArgument.IsEnum)
-            {
-                //枚举类型
-                var cb = GetComboBox(list, startIndex);
-                gData.Children.Add(cb);
-                generics.Add(cb);
-            }
-            else
-            {
-                if (code == TypeCode.Boolean)
-                {
-                  
-                    var cb = AddCheckBox(list, startIndex);
-                    gData.Children.Add(cb);
-                    generics.Add(cb);
-                }
-                else
-                {
-
-                    var cb = AddTextBox(list, startIndex);
-                    gData.Children.Add(cb);
-                    generics.Add(cb); 
-                }
-            }
-
-            OnSetData?.Invoke(orginType, data);
-            var temp = Title.Split('_');
-            if (temp.Length > 1)
-            {
-                temp[1] = $"_[{((IList)data).Count}]";
-                Title = string.Empty;
-                foreach (var item in temp)
-                {
-                    Title += item;
-                }
-            }
+            AddChildren(null);
         }
         //移除
         private void Btn_Sub(object sender, RoutedEventArgs e)
@@ -697,132 +861,12 @@ namespace DisplayBorder.Controls
             gData.Children.Remove(selectedControl);
 
             //名字更新数量
-            var temp = Title.Split('_');
-            if(temp.Length > 1)
-            {
-                temp[1] = $"_[{((IList)data).Count}]";
-                Title = string.Empty;
-                foreach (var item in temp)
-                {
-                    Title += item;
-                }
-            }
+            ReClaculateName();
             OnSetData?.Invoke(orginType, data);
-            selectedItemTemp = null;
-            selectedControl = null;
-            lblSelectedInfo.Text = string.Empty;
+            ClaerSelectItem();
         }
+        #endregion
 
-        private UIElement GetComboBox(IList list, int i)
-        {
-            StackPanel panel = new StackPanel();
-            ComboBox combo = new ComboBox();
-            combo.IsReadOnly = true;
-            combo.Name = "combo_" + i.ToString();
-            foreach (var item in Enum.GetNames(genericArgument))
-            {
-                combo.Items.Add(item);
-            } 
-            if(combo.Items.Count > 0)
-            {
-                combo.SelectedIndex = (int)list[i]; 
-            }
-            combo.SelectionChanged += (cs, ce) =>
-            {
-                if (cs is ComboBox cb)
-                    list[int.Parse(cb.Name.Split('_')[1])] = Enum.Parse(genericArgument, cb.SelectedItem.ToString());
-            };
-          
-            panel.MouseDown += (s, e) =>
-            {
-                if (s is StackPanel p && p.Children[0] is ComboBox c)//&& e is MouseEventArgs me  )
-                {
-                    selectedItemTemp = c.SelectedIndex;
-                    selectedControl = p;
-                    Console.WriteLine(selectedItemTemp);
-                    lblSelectedInfo.Text = $"当前选中'{c.Name}'";
-                }
-            };
-            panel.MouseEnter += (s, e) =>
-            {
-                Cursor = Cursors.Hand;
-            };
-            panel.MouseLeave += (ms, me) =>
-            {
-                Cursor = Cursors.Arrow;
-            }; 
-            panel.Children.Add(combo);  
-            return panel;
-        }
-        private UIElement AddTextBox(IList list, int i)
-        {
-            StackPanel panel = new StackPanel();
-            TextBox textBox = new TextBox();
-            textBox.Name = "txt_" + i.ToString();
-            textBox.Text = list[i]?.ToString();
-            textBox.PreviewTextInput += (ts, te) =>
-            {
-                //todo:这里类型会有不同的适配
-                if (ts is TextBox t && !string.IsNullOrEmpty(t.Text))
-                    list[int.Parse(t.Name.Split('_')[1])] = Convert.ChangeType(t.Text, genericArgument);
-            };
-            
-            panel.MouseDown += (s, e) =>
-            {
-                if (s is StackPanel p && p.Children[0] is TextBox t)//&& e is MouseEventArgs me  )
-                {
-                    selectedItemTemp = t.Text;
-                    selectedControl = p;
-                    Console.WriteLine(selectedItemTemp);
-                    lblSelectedInfo.Text = $"当前选中'{t.Name}'";
-                }
-            };
-            panel.MouseEnter += (s, e) =>
-            {
-                Cursor = Cursors.Hand;
-            };
-            panel.MouseLeave += (ms, me) =>
-            {
-                Cursor = Cursors.Arrow;
-            };
-            panel.Children.Add(textBox); 
-            return panel;
-        }
-        private UIElement AddCheckBox(IList list, int i)
-        {
-            StackPanel panel = new StackPanel();
-            CheckBox checkBox = new CheckBox();
-            checkBox.IsChecked = (bool)list[i];
-            checkBox.Name = "checkb_" + i.ToString();
-            checkBox.Checked += (cs, ce) =>
-            {
-                if (cs is CheckBox cb)
-                    list[int.Parse(cb.Name.Split('_')[1])] = (checkBox.IsChecked);
-            };
-           
-            panel.MouseDown += (s, e) =>
-            {
-                if (s is StackPanel p && p.Children[0] is CheckBox c)//&& e is MouseEventArgs me  )
-                {
-                    selectedItemTemp = c.IsChecked;
-                    selectedControl = p;
-                    Console.WriteLine(selectedItemTemp);
-                    lblSelectedInfo.Text = $"当前选中'{c.Name}'";
-                }
-            };
-            panel.MouseEnter += (s, e) =>
-            {
-                Cursor = Cursors.Hand;
-            };
-            panel.MouseLeave += (ms, me) =>
-            {
-                Cursor = Cursors.Arrow;
-            };
-            panel.Children.Add(checkBox); 
-            return panel;
-        }
-
-       
-      
+     
     }
 }

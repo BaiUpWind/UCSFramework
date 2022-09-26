@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace  DeviceConfig 
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Class, Inherited = false,AllowMultiple =false)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field  , Inherited = false,AllowMultiple =false)]
     public class NickNameAttribute:Attribute
     { 
         public NickNameAttribute(string NickName)

@@ -162,7 +162,7 @@
     <Compile Include="Events\OnUserInputArgs.cs" />
     <Compile Include="Events\OnValueChangedArgs.cs" />
     <Compile Include="GlobalPara.cs" />
-    <Compile Include="ControlHelper.cs" />
+    <Compile Include="Helper\ControlHelper.cs" />
     <Compile Include="RGVDataWindow.xaml.cs">
       <DependentUpon>RGVDataWindow.xaml</DependentUpon>
     </Compile>
@@ -189,7 +189,7 @@
     <Compile Include="View\WindowTest.xaml.cs">
       <DependentUpon>WindowTest.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WindowHelper.cs" />
+    <Compile Include="Helper\WindowHelper.cs" />
     <Page Include="Controls\BasicDataInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -299,13 +299,27 @@
   <ItemGroup>
     <Folder Include="Images\" />
     <Folder Include="Lib\" />
-    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Ico\tb7.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="tb7.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\discount.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\管理.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\面性-箱子.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\库存管理.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\来料控制.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SkiaSharp.NativeAssets.macOS.2.88.2\build\net462\SkiaSharp.NativeAssets.macOS.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.macOS.2.88.2\build\net462\SkiaSharp.NativeAssets.macOS.targets')" />

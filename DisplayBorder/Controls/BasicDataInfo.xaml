@@ -4,9 +4,81 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DisplayBorder.Controls" 
-             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+             xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF" xmlns:hc="https://handyorg.github.io/handycontrol"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style TargetType="DataGrid">
+                <!--网格线颜色-->
+                <Setter Property="CanUserResizeColumns" Value="false"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="ColumnWidth" Value="*"/>
+                <Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>
+                <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+                <Setter Property="RowHeaderWidth" Value="0"/>
+                <Setter Property="CanUserAddRows" Value="False"/>
+                <Setter Property="CanUserDeleteRows" Value="False"/>
+                <Setter Property="CanUserResizeColumns" Value="False"/>
+                <Setter Property="CanUserResizeRows"     Value="False"/>
+                <Setter Property="CanUserSortColumns" Value="False"/>
+                <Setter Property="IsReadOnly" Value="True"/>
+                <Setter Property="SelectionMode" Value="Single"/>
+                <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                <Setter Property="IsHitTestVisible" Value="False"/>
+                <!--<Setter Property="Margin" Value="2"/>-->
+            </Style> 
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="FontSize" Value="{DynamicResource TabFontSize}" />
+           
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="DataGridColumnHeader">
+                            <Border x:Name="BackgroundBorder"  
+                               Width="Auto" Margin="5">
+                                <Grid Background="#3F0057AD" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter  Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                                    <Path x:Name="SortArrow" Visibility="Collapsed" Data="M0,0 L1,0 0.5,1 z" Stretch="Fill"  Grid.Column="2" Width="8" Height="6" Fill="White" Margin="0,0,50,0" 
+                                VerticalAlignment="Center" RenderTransformOrigin="1,1" />
+                                    <!--<Rectangle Width="1" Fill="#FF7EAFE0" HorizontalAlignment="Right" Grid.ColumnSpan="1" />-->
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+            </Style> 
+            <Style TargetType="DataGridRow">
+                <Setter Property="Background" Value="Transparent"/>
+
+            </Style> 
+            <Style TargetType="DataGridCell">
+                <Setter Property="FontSize" Value="{DynamicResource GridFontSize}"/>
+                <Setter Property="Margin"   Value="2"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="DataGridCell">
+                            <Border    BorderThickness="2" Background="#265CADFF">
+                                <TextBlock TextAlignment="Center"   VerticalAlignment="Center"  >
+                                <ContentPresenter />
+                                </TextBlock>
+
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+   
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"></RowDefinition>
@@ -14,14 +86,123 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-            <TextBlock HorizontalAlignment="Center" Margin="0,5,0,0"    x:Name="txtTitle"
-                       VerticalAlignment="Center"  Foreground="#000075" FontSize="{DynamicResource TabFontSize}">统计信息</TextBlock>
+            <TextBlock HorizontalAlignment="Center" Margin="0,5,0,0"    x:Name="txtTitle"  VerticalAlignment="Center"  Foreground="#000075" FontSize="{DynamicResource TabFontSize}">统计信息</TextBlock>
         </Grid>
 
         <Grid Grid.Row="1"  Margin="10,0,10,10">
             <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
             <Grid x:Name="g1">
-      
+               
+                  <hc:WaterfallPanel Groups="3">
+
+                    <Border Background="#265CADFF" Margin="5" >
+                        <StackPanel Margin="5" Orientation="Horizontal">
+                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
+                            <Border>
+                                <Grid >
+                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
+                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="#265CADFF" Margin="5" >
+                        <StackPanel Margin="5" Orientation="Horizontal">
+                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
+                            <Border>
+                                <Grid >
+                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
+                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#265CADFF" Margin="5" >
+                        <StackPanel Margin="5" Orientation="Horizontal">
+                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
+                            <Border>
+                                <Grid >
+                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
+                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="#265CADFF" Margin="5" >
+                        <StackPanel Margin="5" Orientation="Horizontal">
+                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
+                            <Border>
+                                <Grid >
+                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
+                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#265CADFF" Margin="5" >
+                        <StackPanel Margin="5" Orientation="Horizontal">
+                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
+                            <Border>
+                                <Grid >
+                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
+                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#265CADFF" Margin="5" >
+                        <StackPanel Margin="5" Orientation="Horizontal">
+                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
+                            <Border>
+                                <Grid >
+                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
+                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#265CADFF" Margin="5" >
+                        <StackPanel Margin="5" Orientation="Horizontal">
+                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
+                            <Border>
+                                <Grid >
+                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
+                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#265CADFF" Margin="5" >
+                        <StackPanel Margin="5" Orientation="Horizontal">
+                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
+                            <Border>
+                                <Grid >
+                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
+                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    <Border Background="#265CADFF" Margin="5" >
+                        <StackPanel Margin="5" Orientation="Horizontal">
+                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
+                            <Border>
+                                <Grid >
+                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
+                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
+                                </Grid>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </hc:WaterfallPanel>
+               
+
+
+                
+               
+                
             </Grid>
         </Grid>
     </Grid>

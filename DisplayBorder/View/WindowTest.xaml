@@ -8,7 +8,72 @@
         mc:Ignorable="d"
          xmlns:local2="clr-namespace:MyWindows"  
      xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
-    Title="WindowTest" Height="450" Width="800" x:Name="hahah"> 
+    Title="WindowTest" Height="450" Width="800" x:Name="hahah" SizeChanged="hahah_SizeChanged">
+    <Window.Resources>
+        <Style TargetType="DataGrid">
+            <!--网格线颜色-->
+            <Setter Property="CanUserResizeColumns" Value="false"/>
+            <Setter Property="Background" Value="Transparent"/> 
+            <Setter Property="ColumnWidth" Value="*"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>
+            <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+            <Setter Property="RowHeaderWidth" Value="0"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="CanUserResizeColumns" Value="False"/>
+            <Setter Property="CanUserResizeRows"     Value="False"/>
+            <Setter Property="CanUserSortColumns" Value="False"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="SelectionMode" Value="Single"/>  
+        </Style>
+      
+        <Style TargetType="DataGridColumnHeader"> 
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="FontSize" Value="18" /> 
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridColumnHeader">
+                        <Border x:Name="BackgroundBorder"  
+                               Width="Auto" Margin="5">
+                            <Grid Background="#3F0057AD" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <ContentPresenter  Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                 
+                                <Path x:Name="SortArrow" Visibility="Collapsed" Data="M0,0 L1,0 0.5,1 z" Stretch="Fill"  Grid.Column="2" Width="8" Height="6" Fill="White" Margin="0,0,50,0" 
+                                VerticalAlignment="Center" RenderTransformOrigin="1,1" />
+                                <Rectangle Width="1" Fill="#FF7EAFE0" HorizontalAlignment="Right" Grid.ColumnSpan="1" /> 
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="Background" Value="Transparent"/> 
+        </Style>
+         
+        <Style TargetType="DataGridCell">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin"   Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border    BorderThickness="2" Background="#265CADFF">
+                            <TextBlock TextAlignment="Center"   VerticalAlignment="Center"  >
+                                <ContentPresenter /> 
+                            </TextBlock>
+                          
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+          
+        </Style>
+    </Window.Resources>
     <Grid>
        
         <Grid> 
@@ -54,6 +119,14 @@
                     <Grid Name="gChart" Grid.Column="1" Margin="15">
                       
                     </Grid>
+                </Grid>
+                <Grid  Background="#8C99CCFF">
+                    <ScrollViewer  >
+
+                        <DataGrid x:Name="dgTest"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+
+                        </DataGrid>
+                    </ScrollViewer>
                 </Grid>
                 
             </Grid>

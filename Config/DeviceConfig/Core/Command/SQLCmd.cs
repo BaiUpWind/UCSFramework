@@ -1,12 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace  DeviceConfig.Core 
+namespace DeviceConfig.Core
 {
 
     [Require(typeof(SQLResultAnalysis))]
@@ -16,15 +12,44 @@ namespace  DeviceConfig.Core
         public SQLCmd()
         {
 
-        }
-        [JsonIgnore]
-        public string sql = "select count(1) as 剩余货位_绿色 , count(1) as 满盘货物_红色 ,count(1) as 超时货位_蓝色 from dual";
+        } 
+        private object commandStr;
 
         [Control("SQL", "查询语句", ControlType.TextBox, Height: 200, Width: 300, Order: 1)]
-        [Size(200,300)]
+        [Size(200, 300)]
         [ConvertType(typeof(string))]
-        public override object CommandStr { get; set; }
+        public override object CommandStr
+        {
+            get => commandStr; set {
+                ErrorCheck(value);
+                commandStr = value; 
+            }
 
+        }
+        private static void ErrorCheck(object strSql)
+        {
+            if (strSql == null) return;
+            if (strSql.ToString().ToLower().Contains("update"))
+            {
+                throw new Exception("不支持的语句 update");
+            }
+            if (strSql.ToString().ToLower().Contains("delete"))
+            {
+                throw new Exception("不支持的语句 delete");
+            }
+            if (strSql.ToString().ToLower().Contains("instert"))
+            {
+                throw new Exception("不支持的语句 delete");
+            }
+            if (strSql.ToString().ToLower().Contains("alter"))
+            {
+                throw new Exception("不支持的语句 alter");
+            }
+            if (strSql.ToString().ToLower().Contains("drop"))
+            {
+                throw new Exception("不支持的语句 drop");
+            }
+        }
 
         [Control("Result", "创建返回结果类型", ControlType.Data, GenerictyType: typeof(SQLResult), FieldName: nameof(Result))]
         [Instance]

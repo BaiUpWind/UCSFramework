@@ -40,6 +40,17 @@ namespace DisplayBorder.View
     /// </summary>
     public partial class WindowTest :Window
     {
+        public class DataGridInfo
+        {
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public int Age { get; set; }
+            public string Sex { get; set; }
+            public string Company { get; set; }
+
+            public string Address { get; set; }
+        }
+
         public WindowTest()
         {
             InitializeComponent();
@@ -64,9 +75,7 @@ namespace DisplayBorder.View
                 groupMixers.Add(mc);
             }
             InitTimer();
-      
-
-
+       
             Activated += (s, e) =>
             {
                 Growl.SetGrowlParent(this, true);
@@ -84,10 +93,25 @@ namespace DisplayBorder.View
                 point.PrimaryValue = info.Value;
                 point.SecondaryValue = point.Context.Entity.EntityIndex;
             }));
-    
-
+            var datas = new List<DataGridInfo>();
+            for (int i = 0; i < 100; i++)
+            {
+                DataGridInfo info = new DataGridInfo()
+                {
+                    Name = $"小马{i + 1}",
+                    Address = $"位置{i}层",
+                    Age = i,
+                    Company = "无",
+                     Description ="哈哈",
+                     Sex = i%2==0?"男":"女",
+                };
+                datas.Add(info);
+            }
+            dgTest.ItemsSource = datas;
 
         }
+
+       
 
         private List<MixerControl> groupMixers = new List<MixerControl>();
 
@@ -239,11 +263,18 @@ namespace DisplayBorder.View
             });
         }
 
-      
-
-       
-
-    
+        private void hahah_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double titlesize = ((ActualWidth / 12) / 3 * 2) / 3;
+            System.Windows.Application.Current.Resources.Remove("TitleFontSize");
+            System.Windows.Application.Current.Resources.Add("TitleFontSize", titlesize);
+            double tabsize = ((ActualWidth / 12) / 3 * 2) / 4;
+            System.Windows.Application.Current.Resources.Remove("TabFontSize");
+            System.Windows.Application.Current.Resources.Add("TabFontSize", tabsize);
+            double gridsize = ((ActualWidth / 12) / 3 * 2) / 5 * 0.8;
+            System.Windows.Application.Current.Resources.Remove("GridFontSize");
+            System.Windows.Application.Current.Resources.Add("GridFontSize", gridsize);
+        }
     }
      
 }

@@ -64,6 +64,7 @@ namespace DeviceConfig.Core
                 try
                 {
                     if (string.IsNullOrEmpty((sqlcmd.CommandStr?.ToString()))) return null;
+                    ErrorCheck(sqlcmd); 
                     var data = db.GetDataTable(sqlcmd.CommandStr.ToString().Replace("\r\n", ""), System.Data.CommandType.Text);
                     sqlcmd.Result.Data = data;
                     return sqlcmd.Result;
@@ -76,6 +77,29 @@ namespace DeviceConfig.Core
             return null; 
         }
 
+        private static void ErrorCheck(SQLCmd sqlcmd)
+        {
+            if (sqlcmd.CommandStr.ToString().ToLower().Contains("update"))
+            {
+                throw new Exception("不支持的语句 update");
+            }
+            if (sqlcmd.CommandStr.ToString().ToLower().Contains("delete"))
+            {
+                throw new Exception("不支持的语句 delete");
+            }
+            if (sqlcmd.CommandStr.ToString().ToLower().Contains("instert"))
+            {
+                throw new Exception("不支持的语句 delete");
+            }
+            if (sqlcmd.CommandStr.ToString().ToLower().Contains("alter"))
+            {
+                throw new Exception("不支持的语句 alter");
+            }
+            if (sqlcmd.CommandStr.ToString().ToLower().Contains("drop"))
+            {
+                throw new Exception("不支持的语句 drop");
+            }
+        }
 
         public override void SetConn(ConnectionConfigBase conn)
         {

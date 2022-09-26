@@ -21,7 +21,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using System.Windows.Threading;
 
 namespace DisplayBorder.Controls
 {
@@ -229,36 +229,57 @@ namespace DisplayBorder.Controls
         public class DataGridInfo
         {
             public DataGridInfo(DataTable dt)
-            {
-                grid = new DataGrid();
-                grid.Background = new SolidColorBrush(Colors.Transparent);
-                //grid.AutoGenerateColumns = false;
-                grid.CanUserAddRows = false;
-                grid.CanUserDeleteRows = false;
-                grid.CanUserResizeRows = false;
-                grid.CanUserSortColumns= false;
-                grid.CanUserResizeColumns= false;
-                grid.CanUserReorderColumns= false;
-                grid.SelectionMode = DataGridSelectionMode.Single;
-                grid.SelectionUnit = DataGridSelectionUnit.FullRow;
-              
-                //grid.ColumnHeaderHeight = 80;
-                grid.Margin = new Thickness(2);
-                grid.SetBinding(FontSizeProperty, new Binding() { Source = Application.Current.Resources.FindName("TabFontSize") });
-                grid.GridLinesVisibility = DataGridGridLinesVisibility.Horizontal;
-                //grid.HeadersVisibility = DataGridHeadersVisibility.Column;
-                 
-                grid.IsReadOnly = true;
-           
-                grid.RowHeight = 28;
+            { 
+                grid = new DataGrid(); 
                 DataView dv = new DataView(dt);
                 grid.ItemsSource = dv;
+                grid.Visibility = Visibility.Hidden;
+                //grid.SelectedCellsChanged += (s, e) =>
+                //{
+                //    if (scrollViewer == null) return;
+                //    DataGridCellInfo info = new DataGridCellInfo(grid.SelectedItem, grid.Columns[0]);
+                //    var target = info.Column.GetCellContent(info.Item);
+
+                //    var currentPosY = scrollViewer.VerticalOffset;
+                //    var currentPosX = scrollViewer.HorizontalOffset;
+                //    //获取目标控件相对scrollViewer位置
+                //    var point = new Point(currentPosX, currentPosY);   
+                //    var tarPos = target.TransformToVisual(scrollViewer).Transform(point);
+                //    scrollViewer.ScrollToVerticalOffset(tarPos.Y);
+                //};
             }
 
-            private DataGrid grid;
+            private readonly DataGrid grid;
+            private  ScrollViewer scrollViewer;
             public DataGrid GridInfo => grid;
 
-            public static implicit operator FrameworkElement(DataGridInfo grid) => grid.GridInfo;
+         
+            double offset = 0;
+            public void Update()
+            {
+                grid.Visibility = Visibility.Visible; 
+                if (grid.Items  != null)
+                { 
+                    if (scrollViewer == null)
+                    {
+                        scrollViewer = ControlHelper.GetVisualChild<ScrollViewer>(grid); 
+                        scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                        scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    }
+                    if (scrollViewer.ScrollableHeight == 0) return;
+                    if(offset >= scrollViewer.ScrollableHeight)
+                    {
+                        offset = 0; 
+                    }
+                    else 
+                    {
+                        offset +=0.5d;
+                    } 
+                    scrollViewer.ScrollToVerticalOffset(offset);
+                }
+            }
+
+            public static implicit operator FrameworkElement(DataGridInfo grid) =>  grid.grid ;
         }
 
         private string title;
@@ -267,10 +288,17 @@ namespace DisplayBorder.Controls
             InitializeComponent();
             Unloaded += (s, e) =>
             {
-                intervalToken.Cancel();
+                //intervalToken.Cancel();
+                if (TickTimer != null)
+                {
+                    TickTimer.Stop();
+                    TickTimer = null; 
+                }
             };
         }
-        CancellationTokenSource intervalToken = new CancellationTokenSource();
+        //CancellationTokenSource intervalToken = new CancellationTokenSource(); 
+        DispatcherTimer tickTimer  ;
+
         public string Title
         {
             get => title; set
@@ -280,6 +308,18 @@ namespace DisplayBorder.Controls
             }
         }
 
+        public DispatcherTimer TickTimer
+        {
+            get
+            {
+                if (tickTimer == null)
+                {
+                    tickTimer = new DispatcherTimer();
+                }
+                return tickTimer;
+            }
+            set => tickTimer = value;
+        }
 
         public void SetDataControl(List<ChartBasicInfo> datas, DataType dataType, int refreshTime,object data =null)
         {
@@ -293,30 +333,48 @@ namespace DisplayBorder.Controls
                 case DataType.柱状图:
                     ChartInfo ci = new ChartInfo(dataType, datas);
                     g1.Children.Add(ci);
-                    Task.Run(async () =>
+
+                    TickTimer.Interval = TimeSpan.FromMilliseconds(1000);
+                    TickTimer.Tick += (s, e) =>
                     {
-                        await Task.Delay(1000);
-                        while (true)
-                        {
-                            if (intervalToken.IsCancellationRequested)
-                            {
-                                break;
-                            }
-                            Console.WriteLine("更新数据");
-                            Application.Current.Dispatcher.Invoke(new Action(() =>
-                            {
-                                ci.Update();
-                            }));
-                            await Task.Delay(refreshTime);
-                        }
-                    }, intervalToken.Token);
+                        ci.Update();
+                    };
+                    TickTimer.Start();
+                    #region 异步先暂时保留,等有用的时候再放开
+                    //Task.Run(async () =>
+                    //{
+                    //    await Task.Delay(1000);
+                    //    while (true)
+                    //    {
+                    //        if (intervalToken.IsCancellationRequested)
+                    //        {
+                    //            break;
+                    //        }
+                    //        Console.WriteLine("更新数据");
+                    //        Application.Current.Dispatcher.Invoke(new Action(() =>
+                    //        {
+                    //            ci.Update();
+                    //        }));
+                    //        await Task.Delay(refreshTime);
+                    //    }
+                    //}, intervalToken.Token);
+                    #endregion 
                     break;
                 case DataType.表格:
                     if(data is DataTable dt)
                     {
                         DataGridInfo di = new DataGridInfo(dt);
                         g1.Children.Add(di);
+                        TickTimer.Interval = TimeSpan.FromMilliseconds(1000);
+                        TickTimer.Tick += (s, e) =>
+                        {
+                            di.Update();
+                        };
+                        TickTimer.Start();
                     } 
+                    break;
+                case DataType.标签组:
+
                     break;
                 default:
                     break;

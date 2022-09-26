@@ -866,7 +866,7 @@ namespace DisplayBorder
             if (attr.Height != 0)  txtBox.Height = attr.Height ;
                
             //根据值发生变化时 自动将值附上去
-            txtBox.LostFocus += (sender, e) =>
+            txtBox.TextChanged += (sender, e) =>
             { 
                 try
                 {
@@ -882,9 +882,9 @@ namespace DisplayBorder
                 }
                 catch (Exception ex)
                 {
-                    propInfo.SetValue(target, null);
+                    MessageBox.Info($"请输入正确的类型'{objType}',\n\r 错误信息:'{ex.Message}' \r\n 内部信息:'{ex.InnerException.Message}'", "输入提示"); 
                     txtBox.Text = String.Empty;// $"正确的类型:'{propInfo.PropertyType.Name}'";
-                    MessageBox.Show($"错误的类型输入!'{ex.Message}'");
+               
                 }
            
             };
@@ -1319,13 +1319,16 @@ namespace DisplayBorder
         /// </summary>
         ComboBox,
         /// <summary>
-        ///  超类所有的实现
+        ///  超类的所有的实现,不包括超类
         /// </summary>
         ComboBoxImplement,
         /// <summary>
         /// 颜色选择器
         /// </summary>
         ColorPicker,
+        /// <summary>
+        /// 创建一个对指定方法名的调用按钮
+        /// </summary>
         Button,
     }
 

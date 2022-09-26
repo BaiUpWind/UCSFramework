@@ -10,7 +10,7 @@ namespace DeviceConfig
 {
     /// <summary>
     /// 设备需要读取的信息所需要的配置 
-    /// </summary>
+    /// </summary> 
     public class DeviceInfo
     {  
         private OperationBase operation;//对设备的操作 读取之类的 
