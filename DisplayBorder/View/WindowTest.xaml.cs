@@ -58,22 +58,10 @@ namespace DisplayBorder.View
 
             GlobalPara.EventManager.Subscribe(OnOpenNewWindowArgs.EventID, OnOpenNewWindow);
         
-            GlobalPara.EventManager.Subscribe(OnGroupChooseArgs.EventID, OnGroupChoose);
+            //GlobalPara.EventManager.Subscribe(OnGroupChooseArgs.EventID, OnGroupChoose);
             //-----------------------
              
-            for (int i = 0; i < 20; i++)
-            {
-                MixerControl mc = new MixerControl(new GroupViewModel(new Group()
-                {
-                    GroupID = 100 + i,
-                    GroupName = $"第{i}台",
-                    DeviceConfigs = new List<Device>()
-                })) ;
-                mc.BorderThickness = new Thickness(5);
-                if (i == 0) mc.IsChoose = true;
-                wpGroups.Children.Add(mc);
-                groupMixers.Add(mc);
-            }
+        
             InitTimer();
        
             Activated += (s, e) =>
@@ -111,15 +99,13 @@ namespace DisplayBorder.View
 
         }
 
-       
-
-        private List<MixerControl> groupMixers = new List<MixerControl>();
+        
 
         private DispatcherTimer mDataTimer = null; //定时器
-        private long timerExeCount = 0; //定时器执行次数
+        //private long timerExeCount = 0; //定时器执行次数
 
         private Group currentGroup;
-        private MixerControl groupMixer; 
+  
         /// <summary>
         /// 当前在读取的组
         /// </summary>
@@ -131,53 +117,21 @@ namespace DisplayBorder.View
             }
         }
 
-        public MixerControl GroupMixer
-        {
-            get => groupMixer; set
-            {
+      
 
-                if (groupMixer != null)
-                {
-                    groupMixer.IsChoose = false;
-                }
-                groupMixer = value;
-
-            }
-        }
-
-        private int gmIndex = 0;
+        //private int gmIndex = 0;
 
 
         private void InitTimer()
         {
             if (mDataTimer == null)
             {
-                mDataTimer = new DispatcherTimer();
-                mDataTimer.Tick += MDataTimer_Tick; ;
+                mDataTimer = new DispatcherTimer(); 
                 mDataTimer.Interval = TimeSpan.FromSeconds(1);
             }
         }
 
-        private void MDataTimer_Tick(object sender, EventArgs e)
-        {
-            if(gmIndex < 0) gmIndex = 0;
-            if (gmIndex >= groupMixers.Count)
-            {
-                gmIndex = 0;
-            }
-            var target = groupMixers[gmIndex++];
-            target.IsChoose = true;
-
-            var currentScrollPosition = sv.VerticalOffset;
-            //获取目标控件相对scrollViewer位置
-            var point = new Point(0, currentScrollPosition);
-
-            var tarPos = target.TransformToVisual(sv).Transform(point);
-
-            //垂直方向上的定位
-            sv.ScrollToVerticalOffset(tarPos.Y);
-        }
-
+     
         private void OnOpenNewWindow(object sender, BaseEventArgs e)
         {
             if (e is OnOpenNewWindowArgs args && args.NewWindow != null)
@@ -196,7 +150,7 @@ namespace DisplayBorder.View
                 Growl.Info($"创建成功!{obj.GetType().Name}");
             }, para: new DataBaseConnectCfg());
         }
-        string token = "wode";
+        //string token = "wode";
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             //WindowEmpty window = new WindowEmpty();
@@ -210,14 +164,7 @@ namespace DisplayBorder.View
             //window.Show();
         }
 
-        private void OnGroupChoose(object sender, BaseEventArgs e)
-        {
-            if (e is OnGroupChooseArgs args)
-            {
-                CurrentGroup = args.Group;
-                GroupMixer = args.GroupMixer; 
-            }
-        }
+       
 
         private void Button_Start(object sender, RoutedEventArgs e)
         {

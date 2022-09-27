@@ -7,7 +7,7 @@
     <ProjectGuid>{BCCF1C19-951C-4CBB-A007-038F6C02AA63}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>DisplayBorder</RootNamespace>
-    <AssemblyName>数据看板</AssemblyName>
+    <AssemblyName>DisplayBorder</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -146,9 +146,6 @@
     <Compile Include="Controls\Dot.xaml.cs">
       <DependentUpon>Dot.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\MixerControl.xaml.cs">
-      <DependentUpon>MixerControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\TitleControl.xaml.cs">
       <DependentUpon>TitleControl.xaml</DependentUpon>
     </Compile>
@@ -156,13 +153,12 @@
     <Compile Include="ElementAdorner\ElementAdorner.cs" />
     <Compile Include="ElementAdorner\ThumbAngle.cs" />
     <Compile Include="Events\OnCanvasChildrenClickArgs.cs" />
-    <Compile Include="Events\OnDeviceChooseArgs.cs" />
-    <Compile Include="Events\OnGroupChooseArgs.cs" />
     <Compile Include="Events\OnOpenNewWindowArgs.cs" />
     <Compile Include="Events\OnUserInputArgs.cs" />
     <Compile Include="Events\OnValueChangedArgs.cs" />
     <Compile Include="GlobalPara.cs" />
     <Compile Include="Helper\ControlHelper.cs" />
+    <Compile Include="Helper\ListExtension.cs" />
     <Compile Include="RGVDataWindow.xaml.cs">
       <DependentUpon>RGVDataWindow.xaml</DependentUpon>
     </Compile>
@@ -214,10 +210,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\MixerControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\TitleControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -238,16 +230,8 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\WindowSourceDataView.xaml">
@@ -297,29 +281,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Images\" />
     <Folder Include="Lib\" />
+    <Folder Include="Resources\Fonts\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Ico\tb7.ico" />
+    <Resource Include="Resources\Ico\tb7.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="tb7.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Image\discount.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Image\管理.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\面性-箱子.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\库存管理.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\来料控制.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SkiaSharp.NativeAssets.macOS.2.88.2\build\net462\SkiaSharp.NativeAssets.macOS.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.macOS.2.88.2\build\net462\SkiaSharp.NativeAssets.macOS.targets')" />

@@ -10,12 +10,10 @@ namespace DeviceConfig
 {
     /// <summary>
     /// 组/车间 的配置 最顶级的单位
-    /// </summary> 
-    public class Group
-    {
-       
-        private DeviceInfo currentRunDevice;
-
+    /// </summary>  
+    [Serializable]
+    public class Group 
+    { 
         /// <summary>
         /// 组编号
         /// </summary>  
@@ -28,17 +26,21 @@ namespace DeviceConfig
         [Control("GroupName", "工艺名称", ControlType.TextBox)]
         [NickName("工艺名称")]
         public string GroupName { get; set; }
-
-        public string[] strings { get; set; }
+ 
 
         #region 控件位置属性 
  
          
         [Control("LinePathColor", "线条颜色", ControlType.ColorPicker, FieldName: nameof(LinePathColor))]
+        [NickName("线条颜色")]
         public Color LinePathColor { get; set; } = Colors.Blue;
        
         [Control("FontColor", "字体颜色", ControlType.ColorPicker, FieldName: nameof(FontColor))]
+        [NickName("字体颜色")]
         public Color FontColor { get; set; } = Colors.White;
+
+        //[NickName("字体大小")]
+        //public int FontSize { get; set; } = 12;
         [Hide]
         [JsonIgnore]
         public SolidColorBrush PathBrush => new SolidColorBrush(LinePathColor);
@@ -127,5 +129,6 @@ namespace DeviceConfig
         [NickName("设备集合")]
         public List<DeviceInfo> DeviceInfos { get; set; }
 
+       
     }
 }

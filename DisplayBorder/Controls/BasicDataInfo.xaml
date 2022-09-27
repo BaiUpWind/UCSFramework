@@ -97,7 +97,7 @@
 
                     <Border Background="#265CADFF" Margin="5" >
                         <StackPanel Margin="5" Orientation="Horizontal">
-                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
+                            <Image  Source="/Image/管理.png" Width="100" Height="100"/>
                             <Border>
                                 <Grid >
                                     <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
@@ -106,96 +106,7 @@
                             </Border>
                         </StackPanel>
                     </Border>
-
-                    <Border Background="#265CADFF" Margin="5" >
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
-                            <Border>
-                                <Grid >
-                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
-                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-                    <Border Background="#265CADFF" Margin="5" >
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
-                            <Border>
-                                <Grid >
-                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
-                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-
-                    <Border Background="#265CADFF" Margin="5" >
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
-                            <Border>
-                                <Grid >
-                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
-                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-                    <Border Background="#265CADFF" Margin="5" >
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
-                            <Border>
-                                <Grid >
-                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
-                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-                    <Border Background="#265CADFF" Margin="5" >
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
-                            <Border>
-                                <Grid >
-                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
-                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-                    <Border Background="#265CADFF" Margin="5" >
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
-                            <Border>
-                                <Grid >
-                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
-                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-                    <Border Background="#265CADFF" Margin="5" >
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
-                            <Border>
-                                <Grid >
-                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
-                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-                    <Border Background="#265CADFF" Margin="5" >
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <Image  Source="/Resources/Image/管理.png" Width="100" Height="100"/>
-                            <Border>
-                                <Grid >
-                                    <TextBlock  FontSize="18" HorizontalAlignment="Left">总货位数</TextBlock>
-                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-                    </Border>
+ 
                 </hc:WaterfallPanel>
                
 

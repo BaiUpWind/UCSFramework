@@ -8,23 +8,26 @@
               mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100" Cursor="Hand"   >
     <Grid x:Name="gMain" Background="Transparent"   >
-        <Border BorderBrush="Red" BorderThickness="2" x:Name="bSelected"  Visibility="Hidden"></Border>
-        <TextBlock   x:Name="txb1" Text="{Binding CurrentGroup.GroupName}" Foreground="{Binding CurrentGroup.FontBrush}"  HorizontalAlignment="Left" VerticalAlignment="Top"  MouseDown="txb1_MouseDown" Cursor="Hand" />
- 
-        <Path Stroke="{Binding CurrentGroup.PathBrush}"   x:Name="linePath">
-            <Path.Data>
-                <GeometryGroup>
-                    <LineGeometry x:Name="line1" />
-                    <LineGeometry x:Name="line2" /> 
-                </GeometryGroup> 
-            </Path.Data>
-        </Path>
-
-
-        <local:Dot  HorizontalAlignment="Right" VerticalAlignment="Bottom"  x:Name="d1"  Width="5" Height="5" Background="Blue" Margin="0 0 0 0"></local:Dot>
-        <local:Dot  HorizontalAlignment="Right" VerticalAlignment="Top" x:Name="d2" Margin="0,16,25,0" Width="5" Height="5" Background="Blue"></local:Dot>
-        <local:Dot  HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="d3" Margin="0,16,0,0" Width="5" Height="5" Background="Blue"></local:Dot>
-        
+        <Border BorderBrush="White" BorderThickness="2"  x:Name="bSelected" Visibility="Hidden"   ></Border>
+        <Grid Margin="3"> 
+            <TextBlock   x:Name="txb1" FontSize="16" Text="{Binding CurrentGroup.GroupName}" Foreground="{Binding CurrentGroup.FontBrush}"  HorizontalAlignment="Left" VerticalAlignment="Top"  MouseDown="txb1_MouseDown" Cursor="Hand" >
          
+            </TextBlock>
+ 
+            <Path Stroke="{Binding CurrentGroup.PathBrush}"   x:Name="linePath">
+                <Path.Data>
+                    <GeometryGroup>
+                        <LineGeometry x:Name="line1" />
+                        <LineGeometry x:Name="line2" /> 
+                    </GeometryGroup> 
+                </Path.Data>
+            </Path>
+
+
+            <local:Dot  HorizontalAlignment="Right" VerticalAlignment="Bottom"  x:Name="d1"  Width="5" Height="5" Background="Blue" Margin="0 0 0 0"></local:Dot>
+            <local:Dot  HorizontalAlignment="Right" VerticalAlignment="Top" x:Name="d2" Margin="0,21,25,0" Width="5" Height="5" Background="Blue"></local:Dot>
+            <local:Dot  HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="d3" Margin="0,21,0,0" Width="5" Height="5" Background="Blue"></local:Dot>
+
+        </Grid>
     </Grid>
 </UserControl>

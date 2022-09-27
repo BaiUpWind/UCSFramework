@@ -70,7 +70,6 @@
     <Compile Include="DeviceConfig\Core\Connection\TcpConnectCfg.cs" />
     <Compile Include="DeviceConfig\Core\Result\ResultBase.cs" />
     <Compile Include="DeviceConfig\Core\Result\SQLResult.cs" />
-    <Compile Include="DeviceConfig\Model\ColorPicker.cs" />
     <Compile Include="DeviceConfig\Model\DeviceInfo.cs" />
     <Compile Include="DeviceConfig\Model\Group.cs" />
     <Compile Include="DeviceConfig\Define\PublicEnum.cs" />

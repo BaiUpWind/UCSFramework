@@ -23,6 +23,13 @@ namespace DisplayBorder.View
         public DataWindow()
         {
             InitializeComponent();
+            KeyDown += (s, e) =>
+            {
+                if(e.Key == Key.Escape)
+                {
+                    Close();
+                }
+            };
         }
         private object Ttraget;
         public event Action<object> OnEnter;

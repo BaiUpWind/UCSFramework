@@ -63,10 +63,7 @@ namespace DisplayBorder
         {
             get
             {
-                if (ViewModelBase.IsInDesignModeStatic)
-                {
-                    return null;
-                }
+              
                 if (groups == null)
                 {
                     try
@@ -84,7 +81,7 @@ namespace DisplayBorder
             }
             set
             {
-                if (value != null && value.Count > 0  )
+                if (value != null   )
                 {
                     groups = value;
                     JsonHelper.WriteJson(groups, SysConfig.GroupsFilePath);
@@ -108,6 +105,7 @@ namespace DisplayBorder
                 {
                     try
                     {
+                        CheckPath(SysFliePath);
                         sysConfig = JsonHelper.ReadJson<SysConfigPara>(ConfigPath, true);
                     }
                     catch (Exception ex)

@@ -1,4 +1,4 @@
-﻿<hc:Window 
+﻿<Window 
         x:Class="DisplayBorder.RGVDataWindow"
         xmlns:Controls="clr-namespace:DisplayBorder.Controls" 
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -11,9 +11,9 @@
         mc:Ignorable="d"
         d:DesignHeight="1080" d:DesignWidth="1920"  
         MinWidth="800" MinHeight="600"
-        
+        WindowStyle="None" ResizeMode="NoResize"
         Title="RGVDataWindow" Height="600" Width="800"  
-       MouseLeftButtonDown="Window_MouseLeftButtonDown" SizeChanged="Window_SizeChanged" KeyDown="Window_KeyDown"
+       MouseLeftButtonDown="Window_MouseLeftButtonDown" SizeChanged="Window_SizeChanged" KeyDown="Window_KeyDown" ShowInTaskbar="False" 
         >
     <Window.Resources>
         <!--静态资源-->
@@ -27,7 +27,7 @@
        
 
         <!--顶部单选按钮样式-->
-        <Style x:Key="RadioButtonStyle" TargetType="{x:Type RadioButton}">
+        <!--<Style x:Key="RadioButtonStyle" TargetType="{x:Type RadioButton}">
             <Setter Property="Width" Value="180"/>
             <Setter Property="FontSize" Value="22"/>
             <Setter Property="Foreground" Value="#4B8EC4"/>
@@ -72,9 +72,9 @@
                             <Trigger Property="IsChecked" Value="true">
                                 <Setter Property="Foreground" Value="White"/>
                                 <Setter Property="Background" TargetName="border2" Value="{StaticResource ResourceKey=topImage}">
-                                    <!--<Setter.Value>
+                                    --><!--<Setter.Value>
                                         <ImageBrush ImageSource="./images/back.png" />
-                                    </Setter.Value>-->
+                                    </Setter.Value>--><!--
                                 </Setter>
                             </Trigger>
                             <Trigger Property="IsChecked" Value="false">
@@ -85,7 +85,7 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
+        </Style>-->
 
         <Style x:Key="NameTextTtile" TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -107,279 +107,279 @@
             </Canvas.Background>
         </Canvas>
 
-        <hc:TransitioningContentControl>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="60"></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <!--<RowDefinition Height="25"></RowDefinition>-->
-                </Grid.RowDefinitions>
 
-                <!--导航条-->
-                <Border Grid.Row="0" Background="#003870"/>
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition  ></ColumnDefinition>
-                        <ColumnDefinition ></ColumnDefinition>
-                        <ColumnDefinition ></ColumnDefinition>
-                        
-                    </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <!--<RowDefinition Height="25"></RowDefinition>-->
+            </Grid.RowDefinitions>
 
-                    <!--标题处-->
-                    <!--<Border  BorderThickness="1"  Background="#003870"     />-->
+            <!--导航条-->
+            <Border Grid.Row="0" Background="#003870"/>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition  ></ColumnDefinition>
+                    <ColumnDefinition ></ColumnDefinition>
+                    <ColumnDefinition ></ColumnDefinition>
 
+                </Grid.ColumnDefinitions>
 
-                    <!--导航栏背景图片-->
-                    <!--<Border Grid.Column="1"  Background="#003870"  />-->
- 
-                    <!--<Border BorderThickness="1 1 1 0"  BorderBrush="#FF17BBD2"/>-->
+                <!--标题处-->
+                <!--<Border  BorderThickness="1"  Background="#003870"     />-->
 
 
-                    <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                        <lvc:CartesianChart Visibility="Hidden"/> 
-                        <TextBlock x:Name="txtTime" Text="1997-12-25 00:00:00" Margin="15" FontSize="28" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"></TextBlock>
-                    </StackPanel>
-                
-                    <!--标题-->
-                    <TextBlock Text="JSH数据监控" Foreground="#d6ebff" Grid.Column="1"
-                       FontFamily="fonts/#iconfont"
-                       FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <TextBlock.Effect>
-                            <DropShadowEffect Color="#0985d3"  Direction="1" ShadowDepth="3"/>
-                        </TextBlock.Effect>
-                    </TextBlock>
+                <!--导航栏背景图片-->
+                <!--<Border Grid.Column="1"  Background="#003870"  />-->
 
-                      
-                    <!--按钮-->
-                    <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right"   >
-                        <Button   FontSize="18" Background="#005cb8" Margin="5"  ToolTip="打开系统设置" Click="Btn_Click_OpenConfig"
-                         Width="60" Height="50" BorderThickness="0"  >
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-
-                                    <TextBlock Text="&#xE115;" FontSize="32"  Foreground="#6bb5ff" VerticalAlignment="Center"  FontFamily="Segoe UI Symbol" />
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                        <Button  Foreground="#065789" FontSize="18" Background="#005cb8" Margin="5"   Click="Btn_Click_FullSwitch" ToolTip="切换全屏"
-                         Width="60" Height="50" BorderThickness="0"  Tag="全屏"  >
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <!-- 缩小为 &#xE1D8;-->
-                                    <TextBlock Text="&#xE1D9;" Foreground="#6bb5ff"    FontSize="28"  FontFamily="Segoe UI Symbol"  VerticalAlignment="Center"  />
-                                    <TextBlock Text="&#xE1D8;" Foreground="#6bb5ff"  Visibility="Collapsed"   FontSize="28"  FontFamily="Segoe UI Symbol"  VerticalAlignment="Center"  />
-
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                
-                        <Button  Foreground="#065789" FontSize="18" Background="#005cb8" Margin="5,5,20,5"
-                           ToolTip="关闭系统"    Click="Btn_Click_Close"
-                         Width="60" Height="50" BorderThickness="0"  >
-                            <Button.Content>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="&#xE07D;" FontSize="32"   Foreground="#6bb5ff"  VerticalAlignment="Center"  FontFamily="Segoe UI Symbol"/>
-                                </StackPanel>
-                            </Button.Content>
-                        </Button>
-                    </StackPanel>
-                </Grid>
-
-                <!--显示界面-->
-                <Grid Grid.Row="1"  >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height=" 4*"></RowDefinition>
-                        <RowDefinition Height=" 7*" ></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <!--系统信息-->
-                    <Grid Grid.Row="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*" ></ColumnDefinition>
-                            <ColumnDefinition  Width="1*" ></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-
-                        <Grid Grid.Column="0" Margin="15"> 
-                            <Border    Style="{StaticResource BorderStyle}"/>
-                            <Border   Margin="15"    Background="#b1dffc" BorderThickness="2"  BorderBrush="#144aad" CornerRadius="10" />
-
-                            <ScrollViewer Margin="30" HorizontalScrollBarVisibility="Auto" x:Name="sv" >
-                                <Canvas  x:Name="C1"  Background="Transparent" Focusable="True" 
-                                       HorizontalAlignment="Left"  VerticalAlignment="Top"  
-                                         Height="{Binding ElementName=mainImg,Path=ActualHeight}"
-                                         Width="{Binding ElementName=mainImg,Path=ActualWidth}">
-                                   
-                                    <Grid  >
-                                        <Image x:Name="mainImg" Stretch="Fill"  >
-
-                                        </Image>
-                                    </Grid>
-                                </Canvas>
-                            </ScrollViewer> 
-                        </Grid> 
-                        <Grid Grid.Column="1" Margin="15"> 
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"></ColumnDefinition>
-                                <ColumnDefinition Width="2*"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition></RowDefinition>
-                                <RowDefinition></RowDefinition>
-                                <RowDefinition></RowDefinition>
-                                <RowDefinition></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <!--边框-->
-                            <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="产线名称"  Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"/>
-                            </Border> 
-                            <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="工艺名称"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"/>
-                            </Border>
-                            <Border Grid.Column="0" Grid.Row="2"  Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="读取数量"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"  />
-                            </Border>
-                            <Border Grid.Column="0" Grid.Row="3" Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="当前读取"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}" /> 
-                            </Border>
- 
-                            <Border Grid.Column="1" Grid.Row="0"  Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="{Binding Main.SysConfig.Title}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
-                            </Border>
-                            <Border Grid.Column="1" Grid.Row="1"  Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="{Binding Main.RunGroup.GroupName}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
-                            </Border>
-                            <Border Grid.Column="1" Grid.Row="2"  Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="{Binding Main.RunGroup.DeviceCount}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
-                            </Border>
-                            <Border Grid.Column="1" Grid.Row="3"  Style="{StaticResource BorderStyle}">
-                                <TextBlock Text="{Binding Main.CurrentRunDeviceName}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
-                            </Border> 
-                        </Grid> 
-                    </Grid>
-                    
-                    <!--组内设备-->
-                    <Grid Grid.Row="1" Margin="5" x:Name="girdInfos"  >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions> 
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
+                <!--<Border BorderThickness="1 1 1 0"  BorderBrush="#FF17BBD2"/>-->
 
 
-                        <Grid Grid.Column="0" Grid.Row="0" x:Name="G1" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="2.5*"></RowDefinition>
-                                <RowDefinition Height="9*"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
-                            </Grid>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                    <lvc:CartesianChart Visibility="Hidden"/>
+                    <TextBlock x:Name="txtTime" Text="1997-12-25 00:00:00" Margin="15" FontSize="{ DynamicResource TitleFontSize}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"></TextBlock>
+                </StackPanel>
 
-                            <Grid Grid.Row="1"  Margin="10,0,10,10">
-                                <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
-                                <Grid x:Name="g1">
-                      
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid Grid.Column="1" Grid.Row="0" x:Name="G2" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="2.5*"></RowDefinition>
-                                <RowDefinition Height="9*"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
-                            </Grid>
+                <!--标题-->
+                <TextBlock Text="JSH数据监控" Foreground="#d6ebff" Grid.Column="1"
+                    FontFamily="fonts/#iconfont"
+                    FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBlock.Effect>
+                        <DropShadowEffect Color="#0985d3"  Direction="1" ShadowDepth="3"/>
+                    </TextBlock.Effect>
+                </TextBlock>
 
-                            <Grid Grid.Row="1"  Margin="10,0,10,10">
-                                <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
-                                <Grid x:Name="g2">
 
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid Grid.Column="2" Grid.Row="0" x:Name="G3" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="2.5*"></RowDefinition>
-                                <RowDefinition Height="9*"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
-                            </Grid>
+                <!--按钮-->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right"   >
+                    <Button   FontSize="18" Background="#005cb8" Margin="5"  ToolTip="打开系统设置" Click="Btn_Click_OpenConfig"
+                        Width="60" Height="50" BorderThickness="0"  >
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
 
-                            <Grid Grid.Row="1"  Margin="10,0,10,10">
-                                <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
-                                <Grid x:Name="g3">
+                                <TextBlock Text="&#xE115;" FontSize="32"  Foreground="#6bb5ff" VerticalAlignment="Center"  FontFamily="Segoe UI Symbol" />
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Button  Foreground="#065789" FontSize="18" Background="#005cb8" Margin="5"   Click="Btn_Click_FullSwitch" ToolTip="切换全屏"
+                        Width="60" Height="50" BorderThickness="0"  Tag="全屏"  >
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <!-- 缩小为 &#xE1D8;-->
+                                <TextBlock Text="&#xE1D9;" Foreground="#6bb5ff"    FontSize="28"  FontFamily="Segoe UI Symbol"  VerticalAlignment="Center"  />
+                                <TextBlock Text="&#xE1D8;" Foreground="#6bb5ff"  Visibility="Collapsed"   FontSize="28"  FontFamily="Segoe UI Symbol"  VerticalAlignment="Center"  />
 
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid Grid.Column="0" Grid.Row="1" x:Name="G4">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="2.5*"></RowDefinition>
-                                <RowDefinition Height="9*"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
-                            </Grid>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
 
-                            <Grid Grid.Row="1"  Margin="10,0,10,10">
-                                <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
-                                <Grid x:Name="g4">
-
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid Grid.Column="1" Grid.Row="1" x:Name="G5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="2.5*"></RowDefinition>
-                                <RowDefinition Height="9*"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
-                            </Grid>
-
-                            <Grid Grid.Row="1"  Margin="10,0,10,10">
-                                <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
-                                <Grid x:Name="g5">
-
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid Grid.Column="2" Grid.Row="1" x:Name="G6">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="2.5*"></RowDefinition>
-                                <RowDefinition Height="9*"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
-                            </Grid>
-
-                            <Grid Grid.Row="1"  Margin="10,0,10,10">
-                                <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
-                                <Grid x:Name="g6">
-
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
-
-                <!--<Grid Grid.Row="2"  Margin="15,0,15,5">
-                    <Border Style="{StaticResource BorderStyle2}"></Border>
-                    <ProgressBar Style="{StaticResource ProgressBarPrimaryStripe}" Value="10"   />
-                </Grid>-->
+                    <Button  Foreground="#065789" FontSize="18" Background="#005cb8" Margin="5,5,20,5"
+                        ToolTip="关闭系统"    Click="Btn_Click_Close"
+                        Width="60" Height="50" BorderThickness="0"  >
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#xE07D;" FontSize="32"   Foreground="#6bb5ff"  VerticalAlignment="Center"  FontFamily="Segoe UI Symbol"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
             </Grid>
 
-        </hc:TransitioningContentControl>
+            <!--显示界面-->
+            <Grid Grid.Row="1"  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height=" 4*"></RowDefinition>
+                    <RowDefinition Height=" 7.5*" ></RowDefinition>
+                </Grid.RowDefinitions>
+                <!--系统信息-->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" ></ColumnDefinition>
+                        <ColumnDefinition  Width="1*" ></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0" Margin="15">
+                        <Border    Style="{StaticResource BorderStyle}"/>
+                        <Border   Margin="15"    Background="#b1dffc" BorderThickness="2"  BorderBrush="#144aad" CornerRadius="10" />
+
+                        <ScrollViewer Margin="30" HorizontalScrollBarVisibility="Auto" x:Name="sv" >
+                            <Canvas  x:Name="C1"  Background="Transparent" Focusable="True" 
+                                    HorizontalAlignment="Left"  VerticalAlignment="Top"  
+                                        Height="{Binding ElementName=mainImg,Path=ActualHeight}"
+                                        Width="{Binding ElementName=mainImg,Path=ActualWidth}">
+
+                                <Grid  >
+                                    <Image x:Name="mainImg" Stretch="Fill"  >
+
+                                    </Image>
+                                </Grid>
+                            </Canvas>
+                        </ScrollViewer>
+                    </Grid>
+                    <Grid Grid.Column="1" Margin="15">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <!--边框-->
+                        <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="产线名称"  Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"/>
+                        </Border>
+                        <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="工艺名称"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"/>
+                        </Border>
+                        <Border Grid.Column="0" Grid.Row="2"  Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="读取数量"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"  />
+                        </Border>
+                        <Border Grid.Column="0" Grid.Row="3" Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="当前读取"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}" />
+                        </Border>
+
+                        <Border Grid.Column="1" Grid.Row="0"  Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="{Binding Main.SysConfig.Title}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
+                        </Border>
+                        <Border Grid.Column="1" Grid.Row="1"  Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="{Binding Main.RunGroup.GroupName}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
+                        </Border>
+                        <Border Grid.Column="1" Grid.Row="2"  Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="{Binding Main.RunGroup.DeviceCount}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
+                        </Border>
+                        <Border Grid.Column="1" Grid.Row="3"  Style="{StaticResource BorderStyle}">
+                            <TextBlock Text="{Binding Main.CurrentRunDeviceName}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <!--组内设备-->
+                <Grid Grid.Row="1" Margin="5" x:Name="girdInfos"  >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+
+                    <Grid Grid.Column="0" Grid.Row="0" x:Name="G1" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2.5*"></RowDefinition>
+                            <RowDefinition Height="9*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
+                        </Grid>
+
+                        <Grid Grid.Row="1"  Margin="10,0,10,10">
+                            <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
+                            <Grid x:Name="g1">
+
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Column="1" Grid.Row="0" x:Name="G2" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2.5*"></RowDefinition>
+                            <RowDefinition Height="9*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
+                        </Grid>
+
+                        <Grid Grid.Row="1"  Margin="10,0,10,10">
+                            <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
+                            <Grid x:Name="g2">
+
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Column="2" Grid.Row="0" x:Name="G3" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2.5*"></RowDefinition>
+                            <RowDefinition Height="9*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
+                        </Grid>
+
+                        <Grid Grid.Row="1"  Margin="10,0,10,10">
+                            <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
+                            <Grid x:Name="g3">
+
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Column="0" Grid.Row="1" x:Name="G4">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2.5*"></RowDefinition>
+                            <RowDefinition Height="9*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
+                        </Grid>
+
+                        <Grid Grid.Row="1"  Margin="10,0,10,10">
+                            <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
+                            <Grid x:Name="g4">
+
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Column="1" Grid.Row="1" x:Name="G5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2.5*"></RowDefinition>
+                            <RowDefinition Height="9*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
+                        </Grid>
+
+                        <Grid Grid.Row="1"  Margin="10,0,10,10">
+                            <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
+                            <Grid x:Name="g5">
+
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Column="2" Grid.Row="1" x:Name="G6">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2.5*"></RowDefinition>
+                            <RowDefinition Height="9*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
+                        </Grid>
+
+                        <Grid Grid.Row="1"  Margin="10,0,10,10">
+                            <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
+                            <Grid x:Name="g6">
+
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            <!--<Grid Grid.Row="2"  Margin="15,0,15,5">
+                <Border Style="{StaticResource BorderStyle2}"></Border>
+                <ProgressBar Style="{StaticResource ProgressBarPrimaryStripe}" Value="10"   />
+            </Grid>-->
+        </Grid>
+
+
     </Grid>
-</hc:Window>
+</Window>

@@ -93,12 +93,12 @@ namespace DisplayBorder.Controls
 
                     d2.HorizontalAlignment = HorizontalAlignment.Right;
                     d2.VerticalAlignment = VerticalAlignment.Top;
-                    d2.Margin = new Thickness(0, 16, 25, 0);
+                    d2.Margin = new Thickness(0, 21, 25, 0);
 
 
                     d3.HorizontalAlignment = HorizontalAlignment.Left;
                     d3.VerticalAlignment = VerticalAlignment.Top;
-                    d3.Margin = new Thickness(0, 16, 0, 0);
+                    d3.Margin = new Thickness(0, 21, 0, 0);
 
                     txb1.HorizontalAlignment = HorizontalAlignment.Left;
                     txb1.VerticalAlignment = VerticalAlignment.Top;
@@ -126,11 +126,11 @@ namespace DisplayBorder.Controls
 
                     d2.HorizontalAlignment = HorizontalAlignment.Left;
                     d2.VerticalAlignment = VerticalAlignment.Top;
-                    d2.Margin = new Thickness(25, 16, 0, 0);
+                    d2.Margin = new Thickness(25, 21, 0, 0);
 
                     d3.HorizontalAlignment = HorizontalAlignment.Right;
                     d3.VerticalAlignment = VerticalAlignment.Top;
-                    d3.Margin = new Thickness(0, 16, 0, 0);
+                    d3.Margin = new Thickness(0, 21, 0, 0);
 
 
                     txb1.HorizontalAlignment = HorizontalAlignment.Right;
@@ -153,7 +153,7 @@ namespace DisplayBorder.Controls
 
                     d3.HorizontalAlignment = HorizontalAlignment.Right;
                     d3.VerticalAlignment = VerticalAlignment.Top;
-                    d3.Margin = new Thickness(0, 16, 0, 0);
+                    d3.Margin = new Thickness(0, 21, 0, 0);
 
 
                     txb1.HorizontalAlignment = HorizontalAlignment.Right;

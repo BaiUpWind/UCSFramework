@@ -39,19 +39,19 @@ namespace DisplayBorder
         private MixerControl groupMixer;
         private MixerControl deviceMixer;
         private Device currenDevice;
-        private bool auto = false;
+        //private bool auto = false;
 
-        private List<MixerControl> groupMixers = new List<MixerControl>();
-        private List<MixerControl> deviceMixers = new List<MixerControl>();
+        //private List<MixerControl> groupMixers = new List<MixerControl>();
+        //private List<MixerControl> deviceMixers = new List<MixerControl>();
 
         //------------- 定时器之类的
 
         /// <summary>
         /// 组轮询定时器
         /// </summary>
-        private DispatcherTimer groupDataTimer = null; //定时器
+        //private DispatcherTimer groupDataTimer = null; //定时器
        
-        private DispatcherTimer deviceDataTimer = null;
+        //private DispatcherTimer deviceDataTimer = null;
 
         //----------------
 

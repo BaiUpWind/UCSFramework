@@ -24,15 +24,14 @@ using DisplayBorder.View;
 using DisplayBorder.ViewModel;
 using HandyControl.Controls;
 using MessageBox = HandyControl.Controls.MessageBox;
-using ScrollViewer = System.Windows.Controls.ScrollViewer;
-using Window = System.Windows.Window;
+
 
 namespace DisplayBorder
 {
     /// <summary>
     /// RGVDataWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class RGVDataWindow : HandyControl.Controls.Window
+    public partial class RGVDataWindow : System.Windows.Window
     {
 
         public RGVDataWindow()
@@ -42,16 +41,16 @@ namespace DisplayBorder
             DataContext = ViewModelLocator.Instance;
             Main = ViewModelLocator.Instance.Main;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            ShowNonClientArea = false;
+            //ShowNonClientArea = false;
 
             Loaded += (s, e) =>
             {
                 CreateInfos();
-                GlobalPara.EventManager.Subscribe(OnValueChangedArgs.EventID, OnGroupsValueChanged);
+                //GlobalPara.EventManager.Subscribe(OnValueChangedArgs.EventID, OnGroupsValueChanged);
             };
             Unloaded += (s, e) =>
             {
-                GlobalPara.EventManager.Unsubscribe(OnValueChangedArgs.EventID, OnGroupsValueChanged);
+                //GlobalPara.EventManager.Unsubscribe(OnValueChangedArgs.EventID, OnGroupsValueChanged);
             };
             #region 时间定时器
             var dateTimeTimer = new DispatcherTimer
@@ -85,12 +84,7 @@ namespace DisplayBorder
             }));
             grids = new Grid[] { G1, G2, G3, G4, G5, G6 };
             ClearGirds();
-
-
-
-
-
-
+             
         }
         Grid[] grids;
 
@@ -122,10 +116,15 @@ namespace DisplayBorder
                 isAuto = value;
                 if (!value)
                 {
+                    //MainCancellToken.Cancel();
                     //每当有为假的值传入时 都重置定时器
                     RecoverAutoTimer.IsEnabled = false;
                     RecoverAutoTimer.Start();
                 }
+                //if (!IsRunning)
+                //{
+                //    CreateInfos();
+                //}
             }
         }
         /// <summary>
@@ -247,55 +246,57 @@ namespace DisplayBorder
                                     delayToken.Cancel();
                                 }
                                 if (intervalToken.IsCancellationRequested) break;
-
-                                //读取数据并且加载对应的控件
-                                AsyncRunUI(() =>
+                                if (!isFirstCreate)
                                 {
-                                    if(!isFirstCreate)  ClearGirds();
-                                    var results = deviceInfo.Operation.GetResults();
-                                    for (int i = 0; i < results.Count; i++)
+                                    //读取数据并且加载对应的控件
+                                    AsyncRunUI(() =>
                                     {
-                                        if (i > grids.Length) break;
-                                        var result = results[i];
-                                        if (result == null) continue;
-
-                                        if (result is SQLResult sqlr)
+                                        if (!isFirstCreate) ClearGirds();
+                                        var results = deviceInfo.Operation.GetResults();
+                                        for (int i = 0; i < results.Count; i++)
                                         {
-                                            if (!isFirstCreate)
-                                            {
-                                                if(sqlr.Data is DataTable dt)
-                                                { 
-                                                    if(dt.Columns.Count > 0 && dt.Rows.Count > 0 && dt.Rows.Count ==1)
-                                                    {
-                                                        //单行的数据 只做 图表统计
-                                                        List<ChartBasicInfo> chartInfos = new List<ChartBasicInfo>(); 
-                                                        for (int c = 0; c < dt.Columns.Count; c++)
-                                                        {
-                                                            chartInfos.Add(new ChartBasicInfo()
-                                                            {
-                                                                Name = dt.Columns[c].ColumnName,
-                                                                Value = double.Parse((dt.Rows[0].ItemArray[c]).ToString())
-                                                            }); 
-                                                        } 
-                                                        ControlHelper.CreateChartConrotl(grids[i], chartInfos, sqlr.SelectType, sqlr.Title, deviceInfo.RefreshInterval);
-                                                        #region 测试代码 
-                                                        ClassControl cc = new ClassControl(chartInfos.GetType(), true, chartInfos);
-                                                        SourceDataView.AddControl(cc);
-                                                        #endregion
-                                                    }
-                                                    else if(dt.Columns.Count > 0 && dt.Rows.Count > 0 && dt.Rows.Count > 1 && sqlr.SelectType == DataType.表格)
-                                                    {
-                                                        ControlHelper.CreateDataGridConrotl(grids[i], dt,  DataType.表格, sqlr.Title, deviceInfo.RefreshInterval);
-                                                    }
-                                                }
-                                             
-                                              
-                                            } 
-                                        }
-                                    }
+                                            if (i > grids.Length) break;
+                                            var result = results[i];
+                                            if (result == null) continue;
 
-                                    isFirstCreate = true;
-                                });
+                                            if (result is SQLResult sqlr)
+                                            {
+                                                if (!isFirstCreate)
+                                                {
+                                                    if (sqlr.Data is DataTable dt)
+                                                    {
+                                                        if (dt.Columns.Count > 0 && dt.Rows.Count > 0 && dt.Rows.Count == 1)
+                                                        {
+                                                            //单行的数据 只做 图表统计
+                                                            List<ChartBasicInfo> chartInfos = new List<ChartBasicInfo>();
+                                                            for (int c = 0; c < dt.Columns.Count; c++)
+                                                            {
+                                                                chartInfos.Add(new ChartBasicInfo()
+                                                                {
+                                                                    Name = dt.Columns[c].ColumnName,
+                                                                    Value = double.Parse((dt.Rows[0].ItemArray[c]).ToString())
+                                                                });
+                                                            }
+                                                            ControlHelper.CreateChartConrotl(grids[i], chartInfos, sqlr.SelectType, sqlr.Title, deviceInfo.RefreshInterval);
+                                                            #region 测试代码 
+                                                            ClassControl cc = new ClassControl(chartInfos.GetType(), true, chartInfos);
+                                                            SourceDataView.AddControl(cc);
+                                                            #endregion
+                                                        }
+                                                        else if (dt.Columns.Count > 0 && dt.Rows.Count > 0 && dt.Rows.Count > 1 && sqlr.SelectType == DataType.表格)
+                                                        {
+                                                            ControlHelper.CreateDataGridConrotl(grids[i], dt, DataType.表格, sqlr.Title, deviceInfo.RefreshInterval);
+                                                        }
+                                                    }
+
+
+                                                }
+                                            }
+                                        } 
+                                        isFirstCreate = true;
+                                    });
+                                }
+                           
                                 Console.WriteLine($"[{DateTime.Now}]{deviceInfo.DeviceInfoName}刷新");
                                 if (deviceInfo.RefreshInterval == 0) deviceInfo.RefreshInterval = 1000;
                                 await Task.Delay(deviceInfo.RefreshInterval);
@@ -304,11 +305,14 @@ namespace DisplayBorder
 
                         try
                         {
-                            await Task.Delay(deviceInfo.StayTime *1000000 , delayToken.Token);
+                            
+                            await Task.Delay(deviceInfo.StayTime , delayToken.Token);
                         }
                         catch 
                         {
+
                             //引发异常 终止等待 
+                            Console.WriteLine("引发异常 终止等待 ");
                             break;
                         } 
                         if(!intervalToken.IsCancellationRequested)
@@ -320,24 +324,24 @@ namespace DisplayBorder
             }
             IsRunning = false;
         }
-
+      
         /// <summary>
         /// 创建显示区信息
         /// </summary>
         /// <param name="groups"></param>
         private void CreateInfos()
         {
-            var groups = GlobalPara.Groups;
+            var groups = GlobalPara.Groups.ToList().Clone()  ; 
             if (groups == null || groups.Count == 0)
             {
-                Growl.ErrorGlobal($"获取配置数据失败,请检查配置文件,或者重新创建");
+                Growl.Error($"获取配置数据失败,请检查配置文件,或者重新创建");
                 return;
             }
             //初始化
             mainImg.Source = null;
             foreach (var control in DicTitleContorl)
             {
-                C1.Children.Remove((UIElement)((FrameworkElement)control.Value).Parent);
+                C1.Children.Remove((UIElement)(control.Value).Parent);
             }
             DicTitleContorl.Clear();
 
@@ -364,7 +368,7 @@ namespace DisplayBorder
                     Width = g.CWidth,
                     Height = g.CHeight,
                     Child = tc,
-                    ToolTip = "单击查看"
+                    //ToolTip = "单击查看"
                 };
 
                 double rx = 20, ry = 20;
@@ -385,14 +389,14 @@ namespace DisplayBorder
                 al.Add(adorner);
                 DicTitleContorl.Add(g.GroupID, tc);
                 #region 事件
-                border.MouseDown += (ms, me) =>
-                {
-                    if (ms is Border b && b.Child is TitleControl ctc)
-                    {
-                        CurrentSelectedTitle = ctc;
-                        IsAuto = false;
-                    }
-                };
+                //border.MouseDown += (ms, me) =>
+                //{
+                //    if (ms is Border b && b.Child is TitleControl ctc)
+                //    {
+                //        CurrentSelectedTitle = ctc;
+                //        IsAuto = false;
+                //    }
+                //};
                 #endregion
             }
         }
@@ -414,7 +418,7 @@ namespace DisplayBorder
                 }
                 catch (Exception ex)
                 {
-                    Growl.ErrorGlobal($"打开图片失败!请检查配置文件\n\r其他信息'{ex.Message}'");
+                    Growl.Error($"打开图片失败!请检查配置文件\n\r其他信息'{ex.Message}'");
                 }
             }
         }
@@ -514,9 +518,8 @@ namespace DisplayBorder
             {
                 if (btn.Tag.ToString() == "全屏")
                 {
-
-                    IsFullScreen = true;
-
+                    this.WindowState = WindowState.Maximized;
+                    //IsFullScreen = true; 
                     btn.Tag = "复原";
 
                     if (btn.Content is StackPanel sp)
@@ -527,7 +530,9 @@ namespace DisplayBorder
                 }
                 else if (btn.Tag.ToString() == "复原")
                 {
-                    IsFullScreen = false;
+                    this.WindowState = WindowState.Normal ;
+
+                    //IsFullScreen = false;
                     btn.Tag = "全屏";
                     if (btn.Content is StackPanel sp)
                     {
@@ -551,17 +556,42 @@ namespace DisplayBorder
         private void Btn_Click_OpenConfig(object sender, RoutedEventArgs e)
         {
             WindowGroupsConfig wgc = new WindowGroupsConfig();
+            MainCancellToken.Cancel();
             wgc.WindowState = WindowState.Maximized;
-            wgc.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            wgc.WindowStartupLocation = WindowStartupLocation.CenterScreen; 
+            wgc.Closing += (ws, we) =>
+            {
+                MainCancellToken = new CancellationTokenSource();
+                CreateInfos();
+            };
             wgc.ShowDialog();
         }
         //鼠标拖拽
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
+        { 
             DragMove();
         }
+        //窗体大小发生变化时
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            double titlesize = ((ActualWidth / 12) / 3 * 2) / 3;
+            System.Windows.Application.Current.Resources.Remove("TitleFontSize");
+            System.Windows.Application.Current.Resources.Add("TitleFontSize", titlesize);
+            double tabsize = ((ActualWidth / 12) / 3 * 2) / 4;
+            System.Windows.Application.Current.Resources.Remove("TabFontSize");
+            System.Windows.Application.Current.Resources.Add("TabFontSize", tabsize);
+            double gridsize = ((ActualWidth / 12) / 3 * 2) / 5 * 0.8;
+            System.Windows.Application.Current.Resources.Remove("GridFontSize");
+            System.Windows.Application.Current.Resources.Add("GridFontSize", gridsize);
+            GlobalPara.TitleFontSize = titlesize;
+            GlobalPara.TabFontSize = tabsize;
+            GlobalPara.GridFontSize = gridsize;
+            //计算额外的偏移
+            Thickness mg = new Thickness(10, titlesize + 25, 10, 10);
+            Application.Current.Resources.Remove("TitleTickness");
+            Application.Current.Resources.Add("TitleTickness", mg);
 
-
+        }
         //当组集合数据发生变化时
         private async void OnGroupsValueChanged(object sender, BaseEventArgs e)
         {
@@ -580,28 +610,8 @@ namespace DisplayBorder
                 CreateInfos();
             }
         }
-        #endregion
-
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            double titlesize = ((ActualWidth / 12) / 3 * 2) / 3;
-            System.Windows.Application.Current.Resources.Remove("TitleFontSize");
-            System.Windows.Application.Current.Resources.Add("TitleFontSize", titlesize);
-            double tabsize = ((ActualWidth / 12) / 3 * 2) / 4;
-            System.Windows.Application.Current.Resources.Remove("TabFontSize");
-            System.Windows.Application.Current.Resources.Add("TabFontSize", tabsize);
-            double gridsize = ((ActualWidth / 12) / 3 * 2) / 5 * 0.8;
-            System.Windows.Application.Current.Resources.Remove("GridFontSize");
-            System.Windows.Application.Current.Resources.Add("GridFontSize", gridsize); 
-            GlobalPara.TitleFontSize = titlesize;
-            GlobalPara.TabFontSize = tabsize;
-            GlobalPara.GridFontSize = gridsize; 
-            //计算额外的偏移
-            Thickness mg = new Thickness(10, titlesize + 25, 10, 10);
-            Application.Current.Resources.Remove("TitleTickness");
-            Application.Current.Resources.Add("TitleTickness", mg);
-
-        }
+        #endregion 
+        #region 调试代码
         private WindowSourceDataView sourceDataView;
         WindowSourceDataView SourceDataView
         {
@@ -616,11 +626,14 @@ namespace DisplayBorder
         }
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.F1)
-            { 
+            if (e.Key == Key.F1)
+            {
                 SourceDataView.Show();
             }
         }
+        #endregion
+
+
     }
 
   

@@ -13,6 +13,7 @@ namespace  DeviceConfig.Core
         /// 数据结果的标题
         /// </summary>
         [Control("Title", "结果标题", ControlType.TextBox)]
+        [NickName("结果标题")]
         public string Title { get; set; } = "统计信息";
 
         /// <summary>
@@ -20,6 +21,7 @@ namespace  DeviceConfig.Core
         /// <para>对应类型<see cref="DataType"/></para>
         /// </summary>
         [Control("SelectType", "结果显示图像", ControlType.ComboBox, EnumType: typeof(DataType))]
+        [NickName("结果显示图像")]
         public DataType SelectType { get; set; } = 0;
         /// <summary>
         /// 数据,原始数据

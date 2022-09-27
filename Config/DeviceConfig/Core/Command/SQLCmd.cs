@@ -15,9 +15,9 @@ namespace DeviceConfig.Core
         } 
         private object commandStr;
 
-        [Control("SQL", "查询语句", ControlType.TextBox, Height: 200, Width: 300, Order: 1)]
-        [Size(200, 300)]
+        [Control("SQL", "查询语句", ControlType.TextBox, Height: 200, Width: 300, Order: 1)] 
         [ConvertType(typeof(string))]
+        [NickName("查询语句")]
         public override object CommandStr
         {
             get => commandStr; set {

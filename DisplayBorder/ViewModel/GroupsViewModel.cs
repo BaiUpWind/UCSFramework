@@ -24,7 +24,7 @@ namespace DisplayBorder.ViewModel
             saveGroup = new RelayCommand(SaveGroup);
 
 
-            GlobalPara.CheckPath(GlobalPara.ConfigPath);
+         
             //if (!File.Exists(GlobalPara.GroupsFilePath))
             //{
             //    File.Create(GlobalPara.GroupsFilePath);

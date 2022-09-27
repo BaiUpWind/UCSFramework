@@ -69,10 +69,83 @@ namespace DisplayBorder.Controls
             isList = Utility.Reflection.IsList(type); 
             lblSelectedInfo.Text = string.Empty;
              
-            btnCopy.Visibility = Visibility.Hidden; 
+            btnCopy.Visibility = Visibility.Hidden;
+
+            #region load
+
+            if (orginType == null) return;
+            gOper.Visibility = isList ? Visibility.Visible : Visibility.Collapsed;
+            gInfos.Visibility = Visibility.Collapsed;
+            if (!isList)
+            {
+                CreateControls(gData, WindowHelper.GetTypeDatas(orginType, CheckProperty, target));
+            }  
+            else
+            {
+                if (orginType.IsGenericType)
+                {
+                    //对泛型 
+                    if (orginType.GenericTypeArguments.Length != 1)
+                    {
+                        throw new Exception("目前只对单个泛型集合进行处理");
+                    }
+                    genericArgument = orginType.GenericTypeArguments[0];
+                }
+                else
+                {
+                    //数组
+                    genericArgument = orginType.GetArrayElementType();
+                }
+                TypeCode code = Type.GetTypeCode(genericArgument);
+                var list = (IList)data;
+                if (list.Count == 0) return;
+                if (generics == null) generics = new List<UIElement>();
+                if (code == TypeCode.Object)
+                {
+                    for (int i = 0; i < list.Count; i++)
+                    {
+                        var item = list[i];
+                        var dc = GetGenericControl(i, item, genericArgument, true);
+                        gData.Children.Add(dc);
+                        generics.Add(dc);
+                    }
+                    gData.Background = new SolidColorBrush(Colors.GreenYellow);
+                }
+                else
+                {
+                    if (genericArgument.IsEnum)
+                    {
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            var cb = GetComboBox(list, i);
+                            gData.Children.Add(cb);
+                            generics.Add(cb);
+                        }
+                    }
+                    else if (code == TypeCode.Boolean)
+                    {
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            var checb = AddCheckBox(list, i);
+                            gData.Children.Add(checb);
+                            generics.Add(checb);
+                        }
+                    }
+                    else
+                    { 
+                        for (int i = 0; i < list.Count; i++)
+                        {
+                            var txt = AddTextBox(list, i);
+                            gData.Children.Add(txt);
+                            generics.Add(txt);
+                        }
+                    }
+                } 
+            }
+            #endregion
         }
 
-     
+
         private object target;
         private string title;
         private object data;
@@ -135,8 +208,7 @@ namespace DisplayBorder.Controls
             {
                 orginType.GetField(name, BindingFlags.Instance | BindingFlags.Public)?.SetValue(Data, value);
                 OnSetData?.Invoke(orginType.GetField(name, BindingFlags.Instance | BindingFlags.Public)?.FieldType, value); 
-            }
-
+            } 
         }
 
         private void CreateControls(Panel panel, TypeData[] typeDatas)
@@ -178,7 +250,7 @@ namespace DisplayBorder.Controls
                                     {
                                         TextRange textRange = new TextRange(txtBox.Document.ContentStart, txtBox.Document.ContentEnd);
                                         //这里在存入时 会把 \r\n 符号也存入进去 ,所以在使用的时候注意repalce掉
-                                        SetValue(td.Name, Convert.ChangeType(textRange.Text, td.ObjectType));
+                                        SetValue(td.Name, Convert.ChangeType(textRange.Text.Replace("\r\n",""), td.ObjectType));
                                     }
                                 }
                                 catch (Exception ex)
@@ -186,7 +258,6 @@ namespace DisplayBorder.Controls
                                     MessageBox.Info($"请输入正确的类型'{td.ObjectType}',\n\r 错误信息:'{ex.Message}' \r\n 内部信息:'{ex.InnerException.Message}'", "输入提示");
                                     txt.Document.Blocks.Clear(); 
                                 }
-                               
                             };
                         }
                         break;
@@ -270,7 +341,7 @@ namespace DisplayBorder.Controls
                                             var obj = Utility.Reflection.CreateObject(td.ObjectType, comboI.SelectedItem.ToString());
                                             if (obj != null)
                                             {
-                                                SetValue(td.Name, result); 
+                                                SetValue(td.Name, obj); 
                                                 CreateSuperClass(sp, obj); 
                                             }
                                         }
@@ -421,6 +492,7 @@ namespace DisplayBorder.Controls
                     if (td.ControlType != ClassControlType.Class 
                         && td.ControlType != ClassControlType.List
                         && td.ControlType != ClassControlType.ComboBoxImplement 
+                        && td.ControlType != ClassControlType.TextBox
                         ) 
                     { 
                         if(!double.IsNaN(td.Width))
@@ -458,8 +530,7 @@ namespace DisplayBorder.Controls
                     panel.Children.Add(stackPanel); 
                 }
             }
-        }
-         
+        } 
         private ClassControl GetGenericControl(int index, object item, Type type, bool ischildren = false,string otherName=null)
         {
             ClassControl dc = new ClassControl(type, CheckProperty, item, ischildren);
@@ -481,6 +552,7 @@ namespace DisplayBorder.Controls
                 };
                 dc.gTitle.MouseDown += (ms, me) =>
                 {
+                    if (!isList) return;
                     if (ms is Grid c && c.DataContext is ClassControl drop  )
                     {
                         selectedItemTemp = drop.Data;
@@ -618,7 +690,7 @@ namespace DisplayBorder.Controls
 
             if (copyData != null)
             {
-                genericData = copyData;
+                genericData = copyData.Clone(genericArgument);
             }
             else
             {
@@ -672,14 +744,12 @@ namespace DisplayBorder.Controls
             {
                 if (code == TypeCode.Boolean)
                 {
-
                     var cb = AddCheckBox(list, startIndex);
                     gData.Children.Add(cb);
                     generics.Add(cb);
                 }
                 else
                 {
-
                     var cb = AddTextBox(list, startIndex);
                     gData.Children.Add(cb);
                     generics.Add(cb);
@@ -688,6 +758,7 @@ namespace DisplayBorder.Controls
 
             OnSetData?.Invoke(orginType, data);
             ReClaculateName();
+            ClaerSelectItem();
         }
         private void ClaerSelectItem()
         {
@@ -722,82 +793,15 @@ namespace DisplayBorder.Controls
         //当拷贝时
         private void Btn_Copy(object sender, RoutedEventArgs e)
         {
-            if (selectedItemTemp == null) return;
-            AddChildren(selectedItemTemp); 
             btnCopy.Visibility = Visibility.Hidden;
-            ClaerSelectItem(); 
+            if (selectedItemTemp == null) return; 
+            AddChildren(selectedItemTemp);
+            ClaerSelectItem();
         } 
         //控件加载时
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (orginType == null) return;
-            gOper.Visibility = isList ? Visibility.Visible : Visibility.Collapsed;
-            gInfos.Visibility = Visibility.Collapsed;
-            if (!isList) CreateControls(gData, WindowHelper.GetTypeDatas(orginType, CheckProperty, target));
-            else
-            {
-                if (orginType.IsGenericType)
-                {
-                    //对泛型 
-                    if (orginType.GenericTypeArguments.Length != 1)
-                    {
-                        throw new Exception("目前只对单个泛型集合进行处理");
-                    }
-                    genericArgument = orginType.GenericTypeArguments[0];
-                }
-                else
-                {
-                    //数组
-                    genericArgument = orginType.GetArrayElementType();
-                }
-                TypeCode code = Type.GetTypeCode(genericArgument);
-                var list = (IList)data;
-                if (list.Count == 0) return;
-                if (generics == null) generics = new List<UIElement>();
-                if (code == TypeCode.Object)
-                {
-                    for (int i = 0; i < list.Count; i++)
-                    {
-                        var item = list[i];
-                        var dc = GetGenericControl(i, item, genericArgument, true);
-                        gData.Children.Add(dc);
-                        generics.Add(dc);
-                    }
-                    gData.Background = new SolidColorBrush(Colors.GreenYellow);
-                }
-                else
-                {
-                    if (genericArgument.IsEnum)
-                    {
-                        for (int i = 0; i < list.Count; i++)
-                        {
-                            var cb = GetComboBox(list, i);
-                            gData.Children.Add(cb);
-                            generics.Add(cb);
-                        }
-                    }
-                    else if (code == TypeCode.Boolean)
-                    {
-                        for (int i = 0; i < list.Count; i++)
-                        {
-                            var checb = AddCheckBox(list, i);
-                            gData.Children.Add(checb);
-                            generics.Add(checb);
-                        }
-                    }
-                    else
-                    {
-                        //todo :对每种类型做不同的正则表达式
-                        for (int i = 0; i < list.Count; i++)
-                        {
-                            var txt = AddTextBox(list, i);
-                            gData.Children.Add(txt);
-                            generics.Add(txt);
-                        }
-                    }
-                }
-                Title = string.Format(Title, $"[{((IList)data).Count}]");
-            }
+           if(isList) Title = string.Format(Title, $"[{((IList)data).Count}]");
         }
         //展开 收起
         private void Btn_Show(object sender, RoutedEventArgs e)

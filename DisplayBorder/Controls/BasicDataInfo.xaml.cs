@@ -66,7 +66,11 @@ namespace DisplayBorder.Controls
                         }
                     }
                 }
-                chart.CoreChart.Update();
+                try
+                {
+                    chart.CoreChart.Update(); 
+                }
+                catch { }
             }
             private Chart GetChart(DataType dataType, List<ChartBasicInfo> infos = null)
             {
@@ -155,7 +159,7 @@ namespace DisplayBorder.Controls
                             series.DataLabelsPaint = DataLabelFontFamily;
                             series.DataLabelsPosition = PolarLabelsPosition.Outer;
                             //series.DataLabelsFormatter = p => $"{value.Name}_{p.PrimaryValue} / {p.StackedValue?.Total} ({p.StackedValue.Share:P2})";
-                            series.DataLabelsFormatter = p => $"{value.Name}({p.StackedValue.Share:P2})";
+                            series.DataLabelsFormatter = p => $"{value.Name}[{p.PrimaryValue}]({p.StackedValue.Share:P2})";
                             series.TooltipLabelFormatter = p => $"{value.Name}_{p.PrimaryValue} / {p.StackedValue?.Total} ({p.StackedValue.Share:P2})";
                             series.DataLabelsSize = FontSize;
                         });
@@ -257,15 +261,17 @@ namespace DisplayBorder.Controls
             double offset = 0;
             public void Update()
             {
-                grid.Visibility = Visibility.Visible; 
+             
                 if (grid.Items  != null)
                 { 
                     if (scrollViewer == null)
                     {
-                        scrollViewer = ControlHelper.GetVisualChild<ScrollViewer>(grid); 
+                        scrollViewer = ControlHelper.GetVisualChild<ScrollViewer>(grid);
+                        if (scrollViewer == null) return;
                         scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                         scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                     }
+                    grid.Visibility = Visibility.Visible;
                     if (scrollViewer.ScrollableHeight == 0) return;
                     if(offset >= scrollViewer.ScrollableHeight)
                     {
@@ -273,7 +279,7 @@ namespace DisplayBorder.Controls
                     }
                     else 
                     {
-                        offset +=0.5d;
+                        offset +=0.2d;
                     } 
                     scrollViewer.ScrollToVerticalOffset(offset);
                 }
@@ -288,38 +294,38 @@ namespace DisplayBorder.Controls
             InitializeComponent();
             Unloaded += (s, e) =>
             {
-                //intervalToken.Cancel();
-                if (TickTimer != null)
-                {
-                    TickTimer.Stop();
-                    TickTimer = null; 
-                }
+                intervalToken.Cancel();
+                //if (TickTimer != null)
+                //{
+                //    TickTimer.Stop();
+                //    TickTimer = null; 
+                //}
             };
         }
-        //CancellationTokenSource intervalToken = new CancellationTokenSource(); 
-        DispatcherTimer tickTimer  ;
+        CancellationTokenSource intervalToken = new CancellationTokenSource();
+        //DispatcherTimer tickTimer  ;
 
         public string Title
         {
             get => title; set
             {
                 title = value;
-                txtTitle.Text = value;
+                txtTitle.Text = value.Replace("\r\n","");
             }
         }
 
-        public DispatcherTimer TickTimer
-        {
-            get
-            {
-                if (tickTimer == null)
-                {
-                    tickTimer = new DispatcherTimer();
-                }
-                return tickTimer;
-            }
-            set => tickTimer = value;
-        }
+        //public DispatcherTimer TickTimer
+        //{
+        //    get
+        //    {
+        //        if (tickTimer == null)
+        //        {
+        //            tickTimer = new DispatcherTimer();
+        //        }
+        //        return tickTimer;
+        //    }
+        //    set => tickTimer = value;
+        //}
 
         public void SetDataControl(List<ChartBasicInfo> datas, DataType dataType, int refreshTime,object data =null)
         {
@@ -332,45 +338,59 @@ namespace DisplayBorder.Controls
                 case DataType.线状图: 
                 case DataType.柱状图:
                     ChartInfo ci = new ChartInfo(dataType, datas);
-                    g1.Children.Add(ci);
-
-                    TickTimer.Interval = TimeSpan.FromMilliseconds(1000);
-                    TickTimer.Tick += (s, e) =>
-                    {
-                        ci.Update();
-                    };
-                    TickTimer.Start();
-                    #region 异步先暂时保留,等有用的时候再放开
-                    //Task.Run(async () =>
+                    g1.Children.Add(ci); 
+                    //TickTimer.Interval = TimeSpan.FromMilliseconds(1000);
+                    //TickTimer.Tick += (s, e) =>
                     //{
-                    //    await Task.Delay(1000);
-                    //    while (true)
-                    //    {
-                    //        if (intervalToken.IsCancellationRequested)
-                    //        {
-                    //            break;
-                    //        }
-                    //        Console.WriteLine("更新数据");
-                    //        Application.Current.Dispatcher.Invoke(new Action(() =>
-                    //        {
-                    //            ci.Update();
-                    //        }));
-                    //        await Task.Delay(refreshTime);
-                    //    }
-                    //}, intervalToken.Token);
-                    #endregion 
+                    //    ci.Update();
+                    //};
+                    //TickTimer.Start(); 
+                    Task.Run(async () =>
+                    {
+                        await Task.Delay(200);
+                        while (true)
+                        {
+                            if (intervalToken.IsCancellationRequested)
+                            {
+                                break;
+                            } 
+                            Application.Current?.Dispatcher?.Invoke(new Action(() =>
+                            {
+                                ci.Update();
+                            }));
+                            await Task.Delay(refreshTime);
+                        }
+                    }, intervalToken.Token);  
                     break;
                 case DataType.表格:
                     if(data is DataTable dt)
                     {
                         DataGridInfo di = new DataGridInfo(dt);
                         g1.Children.Add(di);
-                        TickTimer.Interval = TimeSpan.FromMilliseconds(1000);
-                        TickTimer.Tick += (s, e) =>
+
+                        Task.Run(async () =>
                         {
-                            di.Update();
-                        };
-                        TickTimer.Start();
+                            await Task.Delay(200);
+                            while (true)
+                            {
+                                if (intervalToken.IsCancellationRequested)
+                                {
+                                    break;
+                                }
+                           
+                                Application.Current?.Dispatcher?.Invoke(new Action(() =>
+                                {
+                                    di.Update();
+                                }));
+                                await Task.Delay(200);
+                            }
+                        }, intervalToken.Token);
+                        //TickTimer.Interval = TimeSpan.FromMilliseconds(200);
+                        //TickTimer.Tick += (s, e) =>
+                        //{
+                        //    di.Update();
+                        //};
+                        //TickTimer.Start();
                     } 
                     break;
                 case DataType.标签组:
@@ -381,9 +401,6 @@ namespace DisplayBorder.Controls
             } 
         }
 
-        private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
-        {
-
-        }
+ 
     }
 }

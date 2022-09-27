@@ -25,17 +25,32 @@ namespace DisplayBorder.View
     /// </summary>
     public partial class DataGirdWindow : Window, IControlData
     {
+
+        public DataGirdWindow()
+        {
+            InitializeComponent();
+            dg1.SelectionChanged += Dg1_SelectionChanged;
+            selectionTemp = null;
+            KeyDown += (s, e) =>
+            {
+                if (e.Key == Key.Escape)
+                {
+                    Close();
+                }
+            };
+        }
+
         private Type genericArgument;
         private Type collType;
-        private object selectionTemp; 
+        private object selectionTemp;
         private object typeData;
 
         public object TypeData
         {
             get => typeData; set
             {
-                typeData = value; 
-            } 
+                typeData = value;
+            }
         }
         public bool OnlyWacth { get; set; }
 
@@ -49,14 +64,6 @@ namespace DisplayBorder.View
         /// </summary>
         public Type CollType => collType;
 
- 
-
-        public DataGirdWindow()
-        {
-            InitializeComponent();
-            dg1.SelectionChanged += Dg1_SelectionChanged;
-            selectionTemp = null;
-        }
 
         private void Dg1_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

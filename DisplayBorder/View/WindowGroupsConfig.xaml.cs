@@ -353,7 +353,7 @@ namespace DisplayBorder.View
             if(CacheTc != null)
             {
                 MessageBoxResult result = MessageBox.Ask($"是否删除'{CacheTc.groupViewModel.CurrentGroup.GroupName}'");
-                if(result == MessageBoxResult.Yes)
+                if(result == MessageBoxResult.OK)
                 {
                     groups.Remove(cacheTc.groupViewModel.CurrentGroup);
                     C1.Children.Remove((UIElement)CacheTc.Parent);
@@ -375,8 +375,8 @@ namespace DisplayBorder.View
         private void Btn_SwitchDirection(object sender, RoutedEventArgs e)
         { 
             if (CacheTc != null)
-            { 
-                var dir = TitleControl.DirectionArrow.LeftUp;
+            {
+                TitleControl.DirectionArrow dir  ;
                 if(CacheTc.Direction == TitleControl.DirectionArrow.LeftUp)
                 {
                     dir = TitleControl.DirectionArrow.LeftDown;
@@ -436,9 +436,21 @@ namespace DisplayBorder.View
             ScrollViewer sv = new  ScrollViewer();
             sv.Margin = new  Thickness(5);
             grid.Children.Add(sv);
-       
-            ClassControl cc = new ClassControl(typeof(List<Group>), true, groups);
-            sv.Content=(cc);
+            LoadingLine loading = new LoadingLine();
+            sv.Content = loading;
+            ClassControl cc = null;
+
+            Application.Current.Dispatcher.BeginInvoke(new Action(async () =>
+            {
+                await Task.Delay(1000);
+                cc = new ClassControl(typeof(List<Group>), true, groups.Clone());
+
+                sv.Content = (cc);
+            }));
+
+
+
+
 
             window.Closing += (ws, we) =>
             {
@@ -446,6 +458,8 @@ namespace DisplayBorder.View
                 if(result == MessageBoxResult.Yes)
                 {
                     GlobalPara.Groups = (List<Group>)cc.Data;
+                    ClearCanvs();
+                    LoadGroup();
                 }
                 else if ( result == MessageBoxResult.Cancel)
                 {
@@ -470,44 +484,51 @@ namespace DisplayBorder.View
                 } 
             }
             else
-            { 
-                if (C1.Children.Count > 2)
-                {
-                    foreach (var border in cacheBorder)
-                    { 
-                        C1.Children.Remove(border);
-                    } 
-                    img.Source = null;
-                    groups.Clear();
-                }
+            {
+                ClearCanvs();
                 try
                 {
-                    SetImgSource();
-                    foreach (var group in GlobalPara.Groups)
-                    {
-                        CreateTitle(group);
-                    }
-                    groups =  new List<Group>(GlobalPara.Groups);
-           
-                    Growl.Info(GlobalPara.Groups.Count == 0 ?"创建成功":"打开成功");
-                    
+                    LoadGroup();
+
+                    Growl.Info(GlobalPara.Groups.Count == 0 ? "创建成功" : "打开成功");
+
                 }
                 catch (Exception ex)
-                { 
+                {
                     Growl.Error($"打开文件失败,可能是路径配置错误,其他信息'{ex.Message}'");
                 }
-              
+
             }
-          
+
+        }
+
+        private void LoadGroup()
+        {
+            SetImgSource();
+            foreach (var group in GlobalPara.Groups)
+            {
+                CreateTitle(group);
+            }
+            groups = new List<Group>(GlobalPara.Groups);
+        }
+
+        private void ClearCanvs()
+        {
+            if (C1.Children.Count > 2)
+            {
+                foreach (var border in cacheBorder)
+                {
+                    C1.Children.Remove(border);
+                }
+                img.Source = null;
+                groups.Clear();
+            }
         }
 
         private void Btn_SaveGroupsData(object sender, RoutedEventArgs e)
-        {
-            if(groups.Count > 0)
-            { 
-                GlobalPara.Groups = new List<Group>( groups);
-                Growl.Info("保存成功!");
-            }
+        { 
+            GlobalPara.Groups = new List<Group>( groups);
+            Growl.Info("保存成功!");　
         }
 
         private void Btn_OpenConfig(object sender, RoutedEventArgs e)
