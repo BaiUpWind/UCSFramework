@@ -27,6 +27,7 @@
                 <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
                 <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
                 <Setter Property="IsHitTestVisible" Value="False"/>
+                <Setter Property="BorderThickness" Value="0"/>
                 <!--<Setter Property="Margin" Value="2"/>-->
             </Style> 
             <Style TargetType="DataGridColumnHeader">
@@ -37,7 +38,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="DataGridColumnHeader">
-                            <Border x:Name="BackgroundBorder"  
+                            <Border x:Name="BackgroundBorder"  CornerRadius="10"
                                Width="Auto" Margin="5">
                                 <Grid Background="#3F0057AD" >
                                     <Grid.ColumnDefinitions>
@@ -46,7 +47,7 @@
                                     <ContentPresenter  Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
                                     <Path x:Name="SortArrow" Visibility="Collapsed" Data="M0,0 L1,0 0.5,1 z" Stretch="Fill"  Grid.Column="2" Width="8" Height="6" Fill="White" Margin="0,0,50,0" 
-                                VerticalAlignment="Center" RenderTransformOrigin="1,1" />
+                                      VerticalAlignment="Center" RenderTransformOrigin="1,1" />
                                     <!--<Rectangle Width="1" Fill="#FF7EAFE0" HorizontalAlignment="Right" Grid.ColumnSpan="1" />-->
                                 </Grid>
                             </Border>
@@ -85,16 +86,14 @@
             <RowDefinition Height="9*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-            <TextBlock HorizontalAlignment="Center" Margin="0,5,0,0"    x:Name="txtTitle"  VerticalAlignment="Center"  Foreground="#000075" FontSize="{DynamicResource TabFontSize}">统计信息</TextBlock>
+            <Border Style="{StaticResource BorderTitle}" ></Border>
+            <TextBlock HorizontalAlignment="Center"     x:Name="txtTitle"  VerticalAlignment="Center"  Foreground="#000075" FontSize="{DynamicResource TabFontSize}">统计信息</TextBlock>
         </Grid>
 
-        <Grid Grid.Row="1"  Margin="10,0,10,10">
+        <Grid Grid.Row="1"  >
             <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
-            <Grid x:Name="g1">
-               
-                  <hc:WaterfallPanel Groups="3">
-
+            <Grid x:Name="g1"> 
+                  <hc:WaterfallPanel Groups="3" Visibility="Hidden"> 
                     <Border Background="#265CADFF" Margin="5" >
                         <StackPanel Margin="5" Orientation="Horizontal">
                             <Image  Source="/Image/管理.png" Width="100" Height="100"/>
@@ -107,13 +106,7 @@
                         </StackPanel>
                     </Border>
  
-                </hc:WaterfallPanel>
-               
-
-
-                
-               
-                
+                </hc:WaterfallPanel> 
             </Grid>
         </Grid>
     </Grid>

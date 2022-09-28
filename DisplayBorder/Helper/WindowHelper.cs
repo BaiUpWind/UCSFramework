@@ -1260,19 +1260,7 @@ namespace DisplayBorder
     }
 
 
-    public static class TypeExMothod
-    {
-        public static Type GetArrayElementType(this Type t)
-        {
-            if (!t.IsArray) return null;
 
-            string tName = t.FullName.Replace("[]", string.Empty);
-
-            Type elType = t.Assembly.GetType(tName);
-
-            return elType;
-        }
-    }
 
     public class TypeData
     {
@@ -1290,7 +1278,6 @@ namespace DisplayBorder
         public bool IsGeneric;
         public Type ObjectType;
         public Type GenericType; 
-        public Regex InputRegex;
         public Attribute CustomAttr;
         public string NickName = string.Empty;
         public double Width = double.NaN;

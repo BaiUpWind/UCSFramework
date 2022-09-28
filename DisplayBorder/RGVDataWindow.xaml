@@ -11,98 +11,25 @@
         mc:Ignorable="d"
         d:DesignHeight="1080" d:DesignWidth="1920"  
         MinWidth="800" MinHeight="600"
-        WindowStyle="None" ResizeMode="NoResize"
+        WindowStyle="None" ResizeMode="CanMinimize"
         Title="RGVDataWindow" Height="600" Width="800"  
        MouseLeftButtonDown="Window_MouseLeftButtonDown" SizeChanged="Window_SizeChanged" KeyDown="Window_KeyDown" ShowInTaskbar="False" 
         >
-    <Window.Resources>
-        <!--静态资源-->
-        <!--<ImageBrush x:Key="leftImage" ImageSource="images/leftImage.png"/>
-        <ImageBrush x:Key="leftImageSub" ImageSource=" images/leftImageSub.png"/>
-        <ImageBrush x:Key="topImage" ImageSource=" images/topImage.png"/>-->
-
-        <!--下拉列表样式-->
-      
-
-       
-
-        <!--顶部单选按钮样式-->
-        <!--<Style x:Key="RadioButtonStyle" TargetType="{x:Type RadioButton}">
-            <Setter Property="Width" Value="180"/>
-            <Setter Property="FontSize" Value="22"/>
-            <Setter Property="Foreground" Value="#4B8EC4"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="MinHeight" Value="50"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type RadioButton}">
-                        <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
-                            <Border x:Name="border2"/>
-                            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}"
-                                              Content="{TemplateBinding Content}" Grid.Column="1" 
-                                              ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" 
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                              Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="HasContent" Value="True">
-                                <Setter Property="FocusVisualStyle">
-                                    <Setter.Value>
-                                        <Style>
-                                            <Setter Property="Control.Template">
-                                                <Setter.Value>
-                                                    <ControlTemplate>
-                                                        <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="True" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                                                    </ControlTemplate>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="Padding" Value="4,-1,0,0"/>
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="{x:Null}"/>
-
-                            <Trigger Property="IsChecked" Value="true">
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="Background" TargetName="border2" Value="{StaticResource ResourceKey=topImage}">
-                                    --><!--<Setter.Value>
-                                        <ImageBrush ImageSource="./images/back.png" />
-                                    </Setter.Value>--><!--
-                                </Setter>
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="false">
-                                <Setter Property="Background" TargetName="border2" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="#4B8EC4"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>-->
-
+    <Window.Resources> 
         <Style x:Key="NameTextTtile" TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontSize" Value="32"/>
-        </Style>
-
- 
-
+        </Style> 
+       
     </Window.Resources>
     <Grid>
         <Canvas Grid.ColumnSpan="2">
             <Canvas.Background>
                 <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                    <GradientStop Offset="0" Color="#FF176AD2"/>
-                    <GradientStop Offset="1" Color="#FF1184B7"/>
+                    <GradientStop Offset="0" Color="#72176AD2"/>
+                    <GradientStop Offset="1" Color="#3F1184B7"/>
                 </LinearGradientBrush>
             </Canvas.Background>
         </Canvas>
@@ -189,7 +116,7 @@
             <Grid Grid.Row="1"  >
                 <Grid.RowDefinitions>
                     <RowDefinition Height=" 4*"></RowDefinition>
-                    <RowDefinition Height=" 7.5*" ></RowDefinition>
+                    <RowDefinition Height=" 7.9*" ></RowDefinition>
                 </Grid.RowDefinitions>
                 <!--系统信息-->
                 <Grid Grid.Row="0">
@@ -199,7 +126,7 @@
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.Column="0" Margin="15">
-                        <Border    Style="{StaticResource BorderStyle}"/>
+                        <Border   Style="{StaticResource BorderStyle}"/>
                         <Border   Margin="15"    Background="#b1dffc" BorderThickness="2"  BorderBrush="#144aad" CornerRadius="10" />
 
                         <ScrollViewer Margin="30" HorizontalScrollBarVisibility="Auto" x:Name="sv" >
@@ -235,7 +162,7 @@
                             <TextBlock Text="工艺名称"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"/>
                         </Border>
                         <Border Grid.Column="0" Grid.Row="2"  Style="{StaticResource BorderStyle}">
-                            <TextBlock Text="读取数量"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"  />
+                            <TextBlock Text="设备数量"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"  />
                         </Border>
                         <Border Grid.Column="0" Grid.Row="3" Style="{StaticResource BorderStyle}">
                             <TextBlock Text="当前读取"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}" />
@@ -269,31 +196,36 @@
                     </Grid.RowDefinitions>
 
 
-                    <Grid Grid.Column="0" Grid.Row="0" x:Name="G1" >
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="2.5*"></RowDefinition>
-                            <RowDefinition Height="9*"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
-                        </Grid>
-
-                        <Grid Grid.Row="1"  Margin="10,0,10,10">
-                            <Border Grid.Column="0" Grid.Row="0"  Style="{StaticResource BorderStyle2}"   />
-                            <Grid x:Name="g1">
-
-                            </Grid>
-                        </Grid>
+                    <Grid Grid.Column="0" Grid.Row="0" x:Name="G1"  Margin="10,10,10,10" >
+                        <Controls:BasicDataInfo   />
                     </Grid>
-                    <Grid Grid.Column="1" Grid.Row="0" x:Name="G2" >
+
+                    <Grid Grid.Column="1" Grid.Row="0" x:Name="G2"  Margin="10,10,10,10" >
+                        <Controls:BasicDataInfo   />
+                    </Grid>
+
+                    <Grid Grid.Column="2" Grid.Row="0" x:Name="G3"  Margin="10,10,10,10" >
+                        <Controls:BasicDataInfo   />
+                    </Grid>
+                    <Grid Grid.Column="0" Grid.Row="1" x:Name="G4"  Margin="10,10,10,10" >
+                        <Controls:BasicDataInfo   />
+                    </Grid>
+
+                    <Grid Grid.Column="1" Grid.Row="1" x:Name="G5"  Margin="10,10,10,10" >
+                        <Controls:BasicDataInfo   />
+                    </Grid>
+
+                    <Grid Grid.Column="2" Grid.Row="1" x:Name="G6"  Margin="10,10,10,10" >
+                        <Controls:BasicDataInfo   />
+                    </Grid>
+                    <!--<Grid Grid.Column="1" Grid.Row="0" x:Name="G2" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="2.5*"></RowDefinition>
                             <RowDefinition Height="9*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
-                            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
+                            <Border Style="{StaticResource BorderTitle}" Margin="10,10,10,0"></Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">信息数据</TextBlock>
                         </Grid>
 
                         <Grid Grid.Row="1"  Margin="10,0,10,10">
@@ -309,8 +241,8 @@
                             <RowDefinition Height="9*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
-                            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
+                            <Border Style="{StaticResource BorderTitle}" Margin="10,10,10,0"></Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">信息数据</TextBlock>
                         </Grid>
 
                         <Grid Grid.Row="1"  Margin="10,0,10,10">
@@ -326,8 +258,8 @@
                             <RowDefinition Height="9*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
-                            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
+                            <Border Style="{StaticResource BorderTitle}" Margin="10,10,10,0"></Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">信息数据</TextBlock>
                         </Grid>
 
                         <Grid Grid.Row="1"  Margin="10,0,10,10">
@@ -343,8 +275,8 @@
                             <RowDefinition Height="9*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
-                            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
+                            <Border Style="{StaticResource BorderTitle}" Margin="10,10,10,0"></Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">信息数据</TextBlock>
                         </Grid>
 
                         <Grid Grid.Row="1"  Margin="10,0,10,10">
@@ -360,8 +292,8 @@
                             <RowDefinition Height="9*"></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
-                            <Border Background="#9bddff" Margin="10,10,10,0"></Border>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">库位信息</TextBlock>
+                            <Border Style="{StaticResource BorderTitle}" Margin="10,10,10,0"></Border>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#000075" FontSize="28">信息数据</TextBlock>
                         </Grid>
 
                         <Grid Grid.Row="1"  Margin="10,0,10,10">
@@ -370,7 +302,7 @@
 
                             </Grid>
                         </Grid>
-                    </Grid>
+                    </Grid>-->
                 </Grid>
             </Grid>
 

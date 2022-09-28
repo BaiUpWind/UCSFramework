@@ -149,12 +149,11 @@
     <Compile Include="Controls\TitleControl.xaml.cs">
       <DependentUpon>TitleControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ElementAdorner\CanvasHelper.cs" />
-    <Compile Include="ElementAdorner\ElementAdorner.cs" />
-    <Compile Include="ElementAdorner\ThumbAngle.cs" />
+    <Compile Include="Controls\ElementAdorner\CanvasHelper.cs" />
+    <Compile Include="Controls\ElementAdorner\ElementAdorner.cs" />
+    <Compile Include="Controls\ElementAdorner\ThumbAngle.cs" />
     <Compile Include="Events\OnCanvasChildrenClickArgs.cs" />
     <Compile Include="Events\OnOpenNewWindowArgs.cs" />
-    <Compile Include="Events\OnUserInputArgs.cs" />
     <Compile Include="Events\OnValueChangedArgs.cs" />
     <Compile Include="GlobalPara.cs" />
     <Compile Include="Helper\ControlHelper.cs" />
@@ -163,7 +162,6 @@
       <DependentUpon>RGVDataWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\MainViewModel.cs" />
-    <Compile Include="ViewModel\MixerViewModel.cs" />
     <Compile Include="ViewModel\WindowStateViewModel.cs" />
     <Compile Include="View\DataGirdWindow.xaml.cs">
       <DependentUpon>DataGirdWindow.xaml</DependentUpon>
@@ -174,10 +172,7 @@
     <Compile Include="View\WindowGroupsConfig.xaml.cs">
       <DependentUpon>WindowGroupsConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModel\DeviceViewModel.cs" />
-    <Compile Include="ViewModel\GroupsViewModel.cs" />
     <Compile Include="ViewModel\GroupViewModel.cs" />
-    <Compile Include="ViewModel\OperationViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\WindowSourceDataView.xaml.cs">
       <DependentUpon>WindowSourceDataView.xaml</DependentUpon>

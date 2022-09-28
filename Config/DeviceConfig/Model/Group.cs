@@ -92,38 +92,7 @@ namespace DeviceConfig
                 return 0;
             }
         }
-    
-
-       
-
-        [JsonIgnore]
-        [Obsolete("暂时弃用 20220831")]
-        /// <summary>
-        /// 当前正在扫描的设备名称
-        /// </summary>
-        public string IsRunningDeviceName
-        {
-            get
-            {
-                if (DeviceConfigs == null)
-                {
-                    return "没有设备";
-                }
-                var result = DeviceConfigs.Where(a => a.IsRunning).FirstOrDefault();
-                if (result == null)
-                {
-                    return "无";
-                }
-                return $"[{result.DeviceId}]{result.DeviceName}";
-            }
-
-        }
-
-
-        [JsonIgnore]
-        [Hide]
-        [Obsolete("暂时弃用 20220831")]
-        public IList<Device> DeviceConfigs { get; set; }
+     
 
         [Control("DeviceInfos", "设备集合", ControlType.Collection, GenerictyType: typeof(DeviceInfo), FieldName: nameof(DeviceInfos))]
         [NickName("设备集合")]

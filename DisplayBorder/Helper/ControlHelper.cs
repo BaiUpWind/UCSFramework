@@ -7,6 +7,7 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using LiveChartsCore.SkiaSharpView.WPF;
 using SkiaSharp; 
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -99,6 +100,10 @@ namespace DisplayBorder
             cc.SetDataControl(null, dataType, refreshTime, dataTable);
             panel.Children.Add(cc);
         }
+
+        public static BasicDataInfo CreateDataControl(DataTable data,DataType dataType,string title=null,int refreshTime = 1000) 
+        =>  new BasicDataInfo(data, dataType, title, refreshTime);
+       
 
         /// <summary>
         /// 获取元素节点下的子元素

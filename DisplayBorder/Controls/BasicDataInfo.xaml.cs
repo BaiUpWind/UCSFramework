@@ -7,6 +7,7 @@ using LiveChartsCore.SkiaSharpView.WPF;
 using SkiaSharp;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
@@ -25,28 +26,95 @@ using System.Windows.Threading;
 
 namespace DisplayBorder.Controls
 {
+
     /// <summary>
     /// BasicDataInfo.xaml 的交互逻辑
     /// </summary>
     public partial class BasicDataInfo : UserControl
     {
-        public class ChartInfo
+        public abstract class DataInfoBase
+        {
+            /// <summary>
+            /// 设置这个控件显示的信息数据
+            /// <para>这个object 是[<see cref="DataTable"/>]暂时先不改，先用object吧，20220928</para>
+            /// </summary>
+            /// <param name="dataInfo"></param>
+            public abstract void SetDataInfo(object dataInfo);
+            /// <summary>
+            /// 更新一次
+            /// </summary>
+            public abstract void Update();
+
+            public abstract void Clear();
+            protected abstract FrameworkElement Control { get; }
+
+            public static implicit operator FrameworkElement(DataInfoBase baseinfo) => baseinfo.Control;
+        }
+        public sealed class ChartInfo : DataInfoBase
         {
             public ChartInfo(DataType dataType, List<ChartBasicInfo> infos)
             {
                 Infos = infos;
                 this.dataType = dataType;
-                chart = GetChart(dataType, infos);
+                chart = GetChart(dataType, Infos);
+                chart.Loaded += (s, e) =>
+                {
+                    if (chart.Parent is Panel p)
+                    {
+                        parent = p;
+                    }
+                }; 
             }
             private Chart chart;
             private List<ChartBasicInfo> Infos;
             private DataType dataType;
+            private Panel parent;
+            private double FontSize => GlobalPara.GridFontSize;
+            protected override FrameworkElement Control => chart;
+            public override void Update()
+            {
+                //IntrnalUpdate();
+            }
+            public override void SetDataInfo(object dataInfo)
+            {
+                if (dataInfo is DataTable dt  )
+                { 
+                    List<ChartBasicInfo> infos = dt.GetChartBasicInfos();
+                  
+                    if (infos == null) return;
+                    if (Infos.Count == 0)
+                    {
+                        Infos = infos;
 
-            public Chart Chart => chart;
+                        chart = GetChart(dataType, Infos);
+                        parent?.Children.Add(chart);
+                    } 
+                    for (int i = 0; i < Infos.Count; i++)
+                    { 
+                        Infos[i].Value = infos[i].Value;
+                    } 
+                    IntrnalUpdate();
+                }
+            }
+            public override void Clear()
+            {
+                Infos.Clear();
 
-            private static double FontSize => GlobalPara.GridFontSize  ;
-
-            public void Update()
+                if (parent != null)
+                {
+                    var pie = parent.Children.GetControl<PieChart>();
+                    if (pie != null)
+                    {
+                        parent.Children.Remove(pie);
+                    }
+                    var c = parent.Children.GetControl<CartesianChart>();
+                    if (c != null)
+                    {
+                        parent.Children.Remove(c);
+                    }
+                }
+            }
+            private void IntrnalUpdate()
             {
                 if (Infos == null) return;
                 if (Infos.Count == 0) return;
@@ -68,13 +136,14 @@ namespace DisplayBorder.Controls
                 }
                 try
                 {
-                    chart.CoreChart.Update(); 
+                    chart.CoreChart.Update();
                 }
-                catch { }
+                catch { /*这里有个CoreChart还未准备好的错误*/ }
             }
             private Chart GetChart(DataType dataType, List<ChartBasicInfo> infos = null)
             {
                 Chart chart = null;
+                Binding bind = new Binding();
                 switch (dataType)
                 {
                     case DataType.饼状图:
@@ -82,6 +151,8 @@ namespace DisplayBorder.Controls
                         if (chart is PieChart pie)
                         {
                             pie.Series = CreateSeries(infos, dataType);
+                            //bind .Source = CreateSeries(infos, dataType);
+                            //pie.SetBinding(PieChart.SeriesProperty, bind);
                             pie.SizeChanged += (s, e) =>
                             {
                                 foreach (var item in pie.Series)
@@ -92,18 +163,20 @@ namespace DisplayBorder.Controls
                                     }
                                 }
                             };
-                        } 
+                        }
                         break;
                     case DataType.线状图:
                         chart = new CartesianChart();
                         if (chart is CartesianChart line)
                         {
                             line.Series = CreateSeries(infos, dataType);
+                            //bind.Source = CreateSeries(infos, dataType);
+                            //line.SetBinding(CartesianChart.SeriesProperty, bind);
                             line.SizeChanged += (s, e) =>
                             {
                                 if (line.Series is LineSeries<ChartBasicInfo> lineSeriser)
                                 {
-                                    lineSeriser.DataLabelsSize = FontSize; 
+                                    lineSeriser.DataLabelsSize = FontSize;
                                 }
                             };
                         }
@@ -114,6 +187,8 @@ namespace DisplayBorder.Controls
                         if (chart is CartesianChart c)
                         {
                             c.Series = CreateSeries(infos, dataType);
+                            //bind.Source = CreateSeries(infos, dataType);
+                            //c.SetBinding(CartesianChart.SeriesProperty, bind);
                             c.SizeChanged += (s, e) =>
                             {
                                 foreach (var item in c.Series)
@@ -126,7 +201,7 @@ namespace DisplayBorder.Controls
                                     {
                                         cb.DataLabelsSize = FontSize;
                                     }
-                                } 
+                                }
                             };
                         }
                         break;
@@ -201,7 +276,6 @@ namespace DisplayBorder.Controls
                 }
                 return result;
             }
-
             private ColumnSeries<double> GetMaxColumns(List<ChartBasicInfo> infos)
              => new ColumnSeries<double>
              {
@@ -226,44 +300,28 @@ namespace DisplayBorder.Controls
                 }
                 return result;
             }
-
-            public static implicit operator FrameworkElement(ChartInfo chart) => chart.Chart;
-        }
-
-        public class DataGridInfo
+        } 
+        public sealed class DataGridInfo : DataInfoBase
         {
             public DataGridInfo(DataTable dt)
-            { 
-                grid = new DataGrid(); 
-                DataView dv = new DataView(dt);
-                grid.ItemsSource = dv;
-                grid.Visibility = Visibility.Hidden;
-                //grid.SelectedCellsChanged += (s, e) =>
-                //{
-                //    if (scrollViewer == null) return;
-                //    DataGridCellInfo info = new DataGridCellInfo(grid.SelectedItem, grid.Columns[0]);
-                //    var target = info.Column.GetCellContent(info.Item);
-
-                //    var currentPosY = scrollViewer.VerticalOffset;
-                //    var currentPosX = scrollViewer.HorizontalOffset;
-                //    //获取目标控件相对scrollViewer位置
-                //    var point = new Point(currentPosX, currentPosY);   
-                //    var tarPos = target.TransformToVisual(scrollViewer).Transform(point);
-                //    scrollViewer.ScrollToVerticalOffset(tarPos.Y);
-                //};
+            {
+                grid = new DataGrid
+                {
+                    Visibility = Visibility.Hidden
+                };
+                SetDataGridItems(dt);
             }
 
+            private double offset = 0;
             private readonly DataGrid grid;
-            private  ScrollViewer scrollViewer;
-            public DataGrid GridInfo => grid;
+            private ScrollViewer scrollViewer;
+            private DataView dv;
 
-         
-            double offset = 0;
-            public void Update()
+            protected override FrameworkElement Control => grid;
+            public override void Update()
             {
-             
-                if (grid.Items  != null)
-                { 
+                if (grid.Items != null)
+                {
                     if (scrollViewer == null)
                     {
                         scrollViewer = ControlHelper.GetVisualChild<ScrollViewer>(grid);
@@ -273,134 +331,240 @@ namespace DisplayBorder.Controls
                     }
                     grid.Visibility = Visibility.Visible;
                     if (scrollViewer.ScrollableHeight == 0) return;
-                    if(offset >= scrollViewer.ScrollableHeight)
+                    if (offset >= scrollViewer.ScrollableHeight)
                     {
-                        offset = 0; 
+                        offset = 0;
                     }
-                    else 
+                    else
                     {
-                        offset +=0.2d;
-                    } 
+                        offset += 0.2d;
+                    }
                     scrollViewer.ScrollToVerticalOffset(offset);
                 }
             }
+            public override void SetDataInfo(object dataInfo)
+            {
+                if (dataInfo is DataTable dt)
+                {
+                    SetDataGridItems(dt);
+                }
+            }
 
-            public static implicit operator FrameworkElement(DataGridInfo grid) =>  grid.grid ;
+            //public class datagirdviewmodle : INotifyPropertyChanged
+            //{
+            //    private DataTable data;
+
+            //    public DataTable Data
+            //    {
+            //        get => data; set
+            //        { 
+            //            data = value;
+            //            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Data)));
+            //        } 
+            //    }
+
+            //    public event PropertyChangedEventHandler PropertyChanged;
+            //}
+            //datagirdviewmodle vm;
+            private void SetDataGridItems(DataTable dt)
+            {  
+                if (grid.ItemsSource == null)
+                {
+                    dv = new DataView(dt);
+                    grid.ItemsSource = dv;
+              
+                    //vm = new datagirdviewmodle();
+                    //vm.Data = dt;
+                    ////Binding bind = new Binding();
+                    ////bind.Source = vm.Data;
+                    //grid.DataContext = vm;
+                    //grid.SetBinding(ItemsControl.ItemsSourceProperty, "Data");
+                }
+                else
+                {
+                   //就不做刷新了
+                }
+            }
+            public override void Clear()
+            {
+                grid.ItemsSource = null;
+            }
         }
 
-        private string title;
+
         public BasicDataInfo()
         {
             InitializeComponent();
             Unloaded += (s, e) =>
             {
                 intervalToken.Cancel();
-                //if (TickTimer != null)
-                //{
-                //    TickTimer.Stop();
-                //    TickTimer = null; 
-                //}
             };
         }
-        CancellationTokenSource intervalToken = new CancellationTokenSource();
-        //DispatcherTimer tickTimer  ;
+        public BasicDataInfo(DataTable data, DataType dataType, string title = null, int refreshTime = 1000)
+        {
+            InitializeComponent();
+            this.dataType = dataType;
+            Unloaded += (s, e) =>
+            {
+                intervalToken.Cancel();
+            };
+            IsVisibleChanged += (s, e) =>
+            {
+                if (this.Visibility  == Visibility.Visible)
+                {
+                    IsRunning = true;
+                }
+                else
+                {
+                    IsRunning = false;
+                    dataInfo.Clear();
+                }
+            };  
+            Init(data, dataType, title, refreshTime); 
+        } 
+        private CancellationTokenSource intervalToken = new CancellationTokenSource();
+        private string title;
+        private bool isRunning;
+        private DataInfoBase dataInfo = null;
+        private readonly DataType dataType; 
+        public DataType DataType => dataType;
 
         public string Title
         {
             get => title; set
             {
                 title = value;
-                txtTitle.Text = value.Replace("\r\n","");
+                txtTitle.Text = value.Replace("\r\n", "");
             }
         }
 
-        //public DispatcherTimer TickTimer
-        //{
-        //    get
-        //    {
-        //        if (tickTimer == null)
-        //        {
-        //            tickTimer = new DispatcherTimer();
-        //        }
-        //        return tickTimer;
-        //    }
-        //    set => tickTimer = value;
-        //}
-
-        public void SetDataControl(List<ChartBasicInfo> datas, DataType dataType, int refreshTime,object data =null)
+        public bool IsRunning
+        {
+            get => isRunning; set
+            {
+                isRunning = value;
+                if (!value)
+                { 
+                    intervalToken.Cancel();
+                }
+                else if(intervalToken.IsCancellationRequested)
+                {
+                    intervalToken = new CancellationTokenSource();
+                }
+            }
+        }
+        /// <summary>
+        /// 初始化
+        /// </summary> 
+        private void Init(DataTable data, DataType dataType, string title, int refreshTime)
         {
             g1.Children.Clear();
             if (refreshTime == 0) refreshTime = 1000;
+            Title = title;
+            //这里表格暂时用固定死的时间方式
+            refreshTime = dataType == DataType.表格 ? 200 : refreshTime;
 
             switch (dataType)
             {
-                case DataType.饼状图: 
-                case DataType.线状图: 
+                case DataType.饼状图:
+                case DataType.线状图:
                 case DataType.柱状图:
-                    ChartInfo ci = new ChartInfo(dataType, datas);
-                    g1.Children.Add(ci); 
-                    //TickTimer.Interval = TimeSpan.FromMilliseconds(1000);
-                    //TickTimer.Tick += (s, e) =>
-                    //{
-                    //    ci.Update();
-                    //};
-                    //TickTimer.Start(); 
-                    Task.Run(async () =>
-                    {
-                        await Task.Delay(200);
-                        while (true)
-                        {
-                            if (intervalToken.IsCancellationRequested)
-                            {
-                                break;
-                            } 
-                            Application.Current?.Dispatcher?.Invoke(new Action(() =>
-                            {
-                                ci.Update();
-                            }));
-                            await Task.Delay(refreshTime);
-                        }
-                    }, intervalToken.Token);  
+                    //单行的数据 才能 图表统计　
+                   　
+                        dataInfo = new ChartInfo(dataType, data.GetChartBasicInfos());
+                 　
                     break;
                 case DataType.表格:
-                    if(data is DataTable dt)
-                    {
-                        DataGridInfo di = new DataGridInfo(dt);
-                        g1.Children.Add(di);
-
-                        Task.Run(async () =>
-                        {
-                            await Task.Delay(200);
-                            while (true)
-                            {
-                                if (intervalToken.IsCancellationRequested)
-                                {
-                                    break;
-                                }
-                           
-                                Application.Current?.Dispatcher?.Invoke(new Action(() =>
-                                {
-                                    di.Update();
-                                }));
-                                await Task.Delay(200);
-                            }
-                        }, intervalToken.Token);
-                        //TickTimer.Interval = TimeSpan.FromMilliseconds(200);
-                        //TickTimer.Tick += (s, e) =>
-                        //{
-                        //    di.Update();
-                        //};
-                        //TickTimer.Start();
-                    } 
+                    dataInfo = new DataGridInfo(data);
                     break;
                 case DataType.标签组:
 
                     break;
                 default:
                     break;
-            } 
+            }
+            if (dataInfo != null)
+            {
+                Task.Run(async () =>
+                {
+                    await Task.Delay(200);
+                    while (true)
+                    {
+                        if (intervalToken.IsCancellationRequested)
+                        {
+                            break;
+                        }
+                        Application.Current?.Dispatcher?.Invoke(new Action(() =>
+                        {
+                            dataInfo.Update();
+                        }));
+                        await Task.Delay(refreshTime);
+                    }
+                }, intervalToken.Token);
+                g1.Children.Add(dataInfo);
+            }
+            else
+            {
+                //todo:创建一个默认的错误信息展示图
+            }
+
+        }
+         
+        public void SetDatas(object data)
+        {
+            if (dataInfo != null)
+            { 
+                dataInfo.SetDataInfo(data);
+            }
+        }
+        public void SetDataControl(List<ChartBasicInfo> datas, DataType dataType, int refreshTime, object data = null)
+        {
+            g1.Children.Clear();
+            if (refreshTime == 0) refreshTime = 1000;
+
+            refreshTime = dataType == DataType.表格 ? 200 : refreshTime;
+        
+            switch (dataType)
+            {
+                case DataType.饼状图:
+                case DataType.线状图:
+                case DataType.柱状图:
+                    dataInfo = new ChartInfo(dataType, datas); 
+                    break;
+                case DataType.表格:
+                    if (data is DataTable dt)
+                    {
+                        dataInfo = new DataGridInfo(dt); 
+                    }
+                    break;
+                case DataType.标签组:
+
+                    break;
+                default:
+                    break;
+            }
+            //if (dataInfo != null)
+            //{
+            //    Task.Run(async () =>
+            //    {
+            //        await Task.Delay(200);
+            //        while (true)
+            //        {
+            //            if (intervalToken.IsCancellationRequested)
+            //            {
+            //                break;
+            //            }
+            //            Application.Current?.Dispatcher?.Invoke(new Action(() =>
+            //            {
+            //                dataInfo.Update();
+            //            }));
+            //            await Task.Delay(refreshTime);
+            //        }
+            //    }, intervalToken.Token);
+            //    g1.Children.Add(dataInfo);
+            //}
         }
 
- 
+
     }
 }

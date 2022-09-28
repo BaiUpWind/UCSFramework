@@ -1,13 +1,8 @@
 ﻿using CommonApi;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DisplayBorder.Events
 {
-    public class OnValueChangedArgs : BaseEventArgs
+    internal class OnValueChangedArgs : BaseEventArgs
     {
         public static int EventID = typeof(OnValueChangedArgs).GetHashCode();
 

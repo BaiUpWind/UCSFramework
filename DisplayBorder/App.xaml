@@ -23,27 +23,31 @@
              StartupUri="RGVDataWindow.xaml">
   <Application.Resources>
     <ResourceDictionary>
-      <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
-        <Setter Property="Background" Value="#5cadff">
-        </Setter>
-        <Setter Property="Margin" Value="5">
-        </Setter>
-        <Setter Property="Effect">
-          <Setter.Value>
-            <DropShadowEffect Color="#0057ad" ShadowDepth="12" BlurRadius="25" Opacity="0.8" Direction="270" />
-          </Setter.Value>
-        </Setter>
-      </Style>
-      <Style x:Key="BorderStyle2" TargetType="{x:Type Border}">
-        <Setter Property="Background" Value="#99ccff">
-        </Setter>
-        <Setter Property="Opacity" Value="0.55" />
-        <Setter Property="Effect">
-          <Setter.Value>
-            <DropShadowEffect Color="#0057ad" ShadowDepth="25" BlurRadius="25" Opacity="0.8" Direction="270" />
-          </Setter.Value>
-        </Setter>
-      </Style>
+        <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="#5cadff"/>
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="#0057ad" ShadowDepth="10" BlurRadius="25" Opacity="0.55" Direction="270" />
+                    </Setter.Value>
+                </Setter>
+        </Style>
+        <Style x:Key="BorderStyle2" TargetType="{x:Type Border}">
+                <Setter Property="Background" Value="#99ccff"/> 
+                <Setter Property="Opacity" Value="0.8" />
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Effect">
+                    <Setter.Value>
+                        <DropShadowEffect Color="#0057ad" ShadowDepth="10" BlurRadius="25" Opacity="0.8" Direction="270" />
+                    </Setter.Value>
+                </Setter>
+        </Style>
+        <Style x:Key="BorderTitle" TargetType="{x:Type Border}">
+            <Setter Property="Background" Value="#FF479CF1"/>
+            <Setter Property="Opacity" Value="0.95" />
+            <Setter Property="CornerRadius" Value="10"/>
+        </Style>
       <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml">

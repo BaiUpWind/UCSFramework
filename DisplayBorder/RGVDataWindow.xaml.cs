@@ -24,6 +24,7 @@ using DisplayBorder.View;
 using DisplayBorder.ViewModel;
 using HandyControl.Controls;
 using MessageBox = HandyControl.Controls.MessageBox;
+ 
 
 
 namespace DisplayBorder
@@ -46,6 +47,12 @@ namespace DisplayBorder
             Loaded += (s, e) =>
             {
                 CreateInfos();
+                foreach (var grid in grids)
+                {
+                    grid.RowDefinitions.Clear();
+                    grid.ColumnDefinitions.Clear();
+                    grid.Children.Clear(); 
+                }
                 //GlobalPara.EventManager.Subscribe(OnValueChangedArgs.EventID, OnGroupsValueChanged);
             };
             Unloaded += (s, e) =>
@@ -102,8 +109,7 @@ namespace DisplayBorder
         private bool isAuto;
         private BitmapSource BackImage => mainImg.Source as BitmapSource;
         private TitleControl currentSelectedTitle;
-        private CancellationTokenSource MainCancellToken = new CancellationTokenSource();
-        private Task MainTask;
+        private CancellationTokenSource MainCancellToken = new CancellationTokenSource(); 
         private bool isRunning;
 
         /// <summary>
@@ -168,6 +174,10 @@ namespace DisplayBorder
                 grid.RowDefinitions.Clear();
                 grid.ColumnDefinitions.Clear();
                 grid.Children.Clear();
+                //for (int i = 0; i < grids.Length; i++)
+                //{
+                //    grids[i].Children.SetVisibility(Visibility.Collapsed); 
+                //}
             } 
         }
         /// <summary>
@@ -202,7 +212,8 @@ namespace DisplayBorder
                     //continue; 
                     //------------
                     //提前中断
-                    if (MainCancellToken.IsCancellationRequested) break; 
+                    if (MainCancellToken.IsCancellationRequested) break;
+                    int index = 0;
                     foreach (var deviceInfo in group.DeviceInfos)
                     {
                         //提前中断
@@ -210,8 +221,8 @@ namespace DisplayBorder
                         AsyncRunUI(() =>
                         {
                             Main.CurrentRunDeviceName = deviceInfo.DeviceInfoName;
-                            //------------ 测试代码
-                           
+                            ClearGirds();
+                            #region 测试代码 
                             //ClearGirds();
                             //Random random = new Random();
                             //for (int i = 0; i < 6; i++)
@@ -222,17 +233,13 @@ namespace DisplayBorder
                             //    ChartControlHelper.CreateChartConrotl(grids[i], dt,"测试界面");
 
                             //}
-                            //--------------
-                        });
-                        //是否初次创建控件
-                        bool isFirstCreate = false;
+                            #endregion
+                        }); 
                         CancellationTokenSource intervalToken = new CancellationTokenSource();
                         CancellationTokenSource delayToken = new CancellationTokenSource();
                         Task task = Task.Run(async () =>
                         { 
                             Console.WriteLine($"{deviceInfo.DeviceInfoName}获取数据刷新");
-                         
-
                             while (true)
                             {
                                 if (MainCancellToken.IsCancellationRequested)
@@ -241,76 +248,54 @@ namespace DisplayBorder
                                     AsyncRunUI(() =>
                                     {
                                         ClearGirds();
-                                    }); 
+                                    });
                                     intervalToken.Cancel();
                                     delayToken.Cancel();
                                 }
                                 if (intervalToken.IsCancellationRequested) break;
-                                if (!isFirstCreate)
-                                {
-                                    //读取数据并且加载对应的控件
-                                    AsyncRunUI(() =>
+
+                                //读取数据并且加载对应的控件
+                                AsyncRunUI(() =>
+                                { 
+                                    var results = deviceInfo.Operation.GetResults();
+                                    for (int i = 0; i < results.Count; i++)
                                     {
-                                        if (!isFirstCreate) ClearGirds();
-                                        var results = deviceInfo.Operation.GetResults();
-                                        for (int i = 0; i < results.Count; i++)
-                                        {
-                                            if (i > grids.Length) break;
-                                            var result = results[i];
-                                            if (result == null) continue;
+                                        if (i > grids.Length) break;
+                                        var result = results[i];
+                                        if (result == null) continue;
 
-                                            if (result is SQLResult sqlr)
+                                        if (result is SQLResult sqlr && sqlr.Data is DataTable dt)
+                                        { 
+                                            dt.TableName = "myTable"; 
+                                            var dc = grids[i].Children.GetControl<BasicDataInfo>();
+                                            if (dc == null || dc.DataType != sqlr.SelectType)
                                             {
-                                                if (!isFirstCreate)
-                                                {
-                                                    if (sqlr.Data is DataTable dt)
-                                                    {
-                                                        if (dt.Columns.Count > 0 && dt.Rows.Count > 0 && dt.Rows.Count == 1)
-                                                        {
-                                                            //单行的数据 只做 图表统计
-                                                            List<ChartBasicInfo> chartInfos = new List<ChartBasicInfo>();
-                                                            for (int c = 0; c < dt.Columns.Count; c++)
-                                                            {
-                                                                chartInfos.Add(new ChartBasicInfo()
-                                                                {
-                                                                    Name = dt.Columns[c].ColumnName,
-                                                                    Value = double.Parse((dt.Rows[0].ItemArray[c]).ToString())
-                                                                });
-                                                            }
-                                                            ControlHelper.CreateChartConrotl(grids[i], chartInfos, sqlr.SelectType, sqlr.Title, deviceInfo.RefreshInterval);
-                                                            #region 测试代码 
-                                                            ClassControl cc = new ClassControl(chartInfos.GetType(), true, chartInfos);
-                                                            SourceDataView.AddControl(cc);
-                                                            #endregion
-                                                        }
-                                                        else if (dt.Columns.Count > 0 && dt.Rows.Count > 0 && dt.Rows.Count > 1 && sqlr.SelectType == DataType.表格)
-                                                        {
-                                                            ControlHelper.CreateDataGridConrotl(grids[i], dt, DataType.表格, sqlr.Title, deviceInfo.RefreshInterval);
-                                                        }
-                                                    }
-
-
-                                                }
+                                                //创建对应的控件
+                                                dc = ControlHelper.CreateDataControl(dt, sqlr.SelectType, sqlr.Title, deviceInfo.RefreshInterval);
+                                                grids[i].Children.Add(dc);
                                             }
+                                            else
+                                            {
+                                                //使对应的控件显示，并且赋予新的数据源
+                                                dc.SetDatas(dt);
+                                            }
+                                            if (dc.Visibility!= Visibility.Visible) dc.Visibility = Visibility.Visible;
                                         } 
-                                        isFirstCreate = true;
-                                    });
-                                }
-                           
+                                    }
+
+                                }); 
                                 Console.WriteLine($"[{DateTime.Now}]{deviceInfo.DeviceInfoName}刷新");
                                 if (deviceInfo.RefreshInterval == 0) deviceInfo.RefreshInterval = 1000;
-                                await Task.Delay(deviceInfo.RefreshInterval);
+                                await Task.Delay(1000);
                             }
                         }, intervalToken.Token);
 
                         try
-                        {
-                            
-                            await Task.Delay(deviceInfo.StayTime , delayToken.Token);
+                        { 
+                            await Task.Delay(deviceInfo.StayTime  , delayToken.Token);
                         }
                         catch 
-                        {
-
+                        { 
                             //引发异常 终止等待 
                             Console.WriteLine("引发异常 终止等待 ");
                             break;
@@ -318,6 +303,7 @@ namespace DisplayBorder
                         if(!intervalToken.IsCancellationRequested)
                             intervalToken.Cancel();
                         Console.WriteLine($"{deviceInfo.DeviceInfoName}终止任务");
+                        index++;
                     }
                 }
                 await Task.Delay(500);
@@ -355,7 +341,7 @@ namespace DisplayBorder
 
             SourceDataView.Claer();
 
-            MainTask = Task.Run(() =>
+            Task.Run(() =>
             {
                 Run();
             }, MainCancellToken.Token);
