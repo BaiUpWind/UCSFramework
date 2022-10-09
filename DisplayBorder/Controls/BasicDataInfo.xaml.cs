@@ -391,6 +391,25 @@ namespace DisplayBorder.Controls
             }
         }
 
+        public sealed class LableInfo : DataInfoBase
+        {
+            protected override FrameworkElement Control => throw new NotImplementedException();
+
+            public override void Clear()
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void SetDataInfo(object dataInfo)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Update()
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public BasicDataInfo()
         {

@@ -57,7 +57,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="125" />
                     <ColumnDefinition Width="8*" />
-                    <ColumnDefinition Width="125" />
+                    <!--<ColumnDefinition Width="125" />-->
                 </Grid.ColumnDefinitions>
                 
 
@@ -104,7 +104,7 @@
 
                 </Grid>
 
-                <Grid Grid.Column="2">
+                <!--<Grid Grid.Column="2">
 
                     <Grid>
                         <Grid.RowDefinitions>
@@ -122,7 +122,7 @@
                     </Grid>
                     
                     
-                </Grid>
+                </Grid>-->
             </Grid>
 
             <Grid Grid.Row="2">

@@ -27,10 +27,7 @@
     <Grid>
         <Canvas Grid.ColumnSpan="2">
             <Canvas.Background>
-                <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                    <GradientStop Offset="0" Color="#72176AD2"/>
-                    <GradientStop Offset="1" Color="#3F1184B7"/>
-                </LinearGradientBrush>
+                <ImageBrush ImageSource="\Resources\Image\背景5.jpeg"/>
             </Canvas.Background>
         </Canvas>
 
@@ -125,11 +122,11 @@
                         <ColumnDefinition  Width="1*" ></ColumnDefinition>
                     </Grid.ColumnDefinitions>
 
-                    <Grid Grid.Column="0" Margin="15">
+                    <Grid Grid.Column="0" Margin="15,15,15,0">
                         <Border   Style="{StaticResource BorderStyle}"/>
-                        <Border   Margin="15"    Background="#b1dffc" BorderThickness="2"  BorderBrush="#144aad" CornerRadius="10" />
+                        <Border   Margin="15"   Opacity="0.25" Background="#b1dffc" BorderThickness="2"  BorderBrush="#144aad" CornerRadius="10" />
 
-                        <ScrollViewer Margin="30" HorizontalScrollBarVisibility="Auto" x:Name="sv" >
+                        <ScrollViewer   Margin="30" HorizontalScrollBarVisibility="Auto" x:Name="sv" >
                             <Canvas  x:Name="C1"  Background="Transparent" Focusable="True" 
                                     HorizontalAlignment="Left"  VerticalAlignment="Top"  
                                         Height="{Binding ElementName=mainImg,Path=ActualHeight}"
@@ -143,7 +140,7 @@
                             </Canvas>
                         </ScrollViewer>
                     </Grid>
-                    <Grid Grid.Column="1" Margin="15">
+                    <Grid Grid.Column="1" Margin="15,15,15,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"></ColumnDefinition>
                             <ColumnDefinition Width="2*"></ColumnDefinition>
@@ -155,31 +152,31 @@
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         <!--边框-->
-                        <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource BorderStyle}">
-                            <TextBlock Text="产线名称"  Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"/>
-                        </Border>
-                        <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyle}">
-                            <TextBlock Text="工艺名称"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"/>
-                        </Border>
-                        <Border Grid.Column="0" Grid.Row="2"  Style="{StaticResource BorderStyle}">
-                            <TextBlock Text="设备数量"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"  />
-                        </Border>
-                        <Border Grid.Column="0" Grid.Row="3" Style="{StaticResource BorderStyle}">
-                            <TextBlock Text="当前读取"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}" />
-                        </Border>
+                        <Border Grid.Column="0" Grid.Row="0" Style="{StaticResource BorderStyle}"/>
+                        <TextBlock  Grid.Column="0" Grid.Row="0" Text="产线名称"  Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"/>
 
-                        <Border Grid.Column="1" Grid.Row="0"  Style="{StaticResource BorderStyle}">
-                            <TextBlock Text="{Binding Main.SysConfig.Title}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
-                        </Border>
-                        <Border Grid.Column="1" Grid.Row="1"  Style="{StaticResource BorderStyle}">
-                            <TextBlock Text="{Binding Main.RunGroup.GroupName}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
-                        </Border>
-                        <Border Grid.Column="1" Grid.Row="2"  Style="{StaticResource BorderStyle}">
-                            <TextBlock Text="{Binding Main.RunGroup.DeviceCount}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
-                        </Border>
-                        <Border Grid.Column="1" Grid.Row="3"  Style="{StaticResource BorderStyle}">
-                            <TextBlock Text="{Binding Main.CurrentRunDeviceName}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
-                        </Border>
+                        <Border Grid.Column="0" Grid.Row="1" Style="{StaticResource BorderStyle}"/>
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="工艺名称"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"/>
+
+                        <Border Grid.Column="0" Grid.Row="2"  Style="{StaticResource BorderStyle}"/>
+                        <TextBlock  Grid.Column="0" Grid.Row="2" Text="设备数量"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"  />
+
+                        <Border Grid.Column="0" Grid.Row="3" Style="{StaticResource BorderStyle}"/>
+                        <TextBlock  Grid.Column="0" Grid.Row="3" Text="当前读取"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}" />
+
+
+                        <Border Grid.Column="1" Grid.Row="0"  Style="{StaticResource BorderStyle}"/>
+                        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Main.SysConfig.Title}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
+
+                        <Border Grid.Column="1" Grid.Row="1"  Style="{StaticResource BorderStyle}"/>
+                        <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Main.RunGroup.GroupName}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
+
+                        <Border Grid.Column="1" Grid.Row="2"  Style="{StaticResource BorderStyle}"/>
+                        <TextBlock   Grid.Column="1" Grid.Row="2" Text="{Binding Main.RunGroup.DeviceCount}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
+
+                        <Border Grid.Column="1" Grid.Row="3"  Style="{StaticResource BorderStyle}"/>
+                        <TextBlock  Grid.Column="1" Grid.Row="3" Text="{Binding Main.CurrentRunDeviceName}"   Style="{StaticResource NameTextTtile}" FontSize="{ DynamicResource TitleFontSize}"></TextBlock>
+
                     </Grid>
                 </Grid>
 

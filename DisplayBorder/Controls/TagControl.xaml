@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="DisplayBorder.Controls.TagControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DisplayBorder.Controls"
+             mc:Ignorable="d">
+    <Grid>
+        <Border Background="#595CADFF"    >
+            <StackPanel Margin="5" Orientation="Horizontal">
+                <Image  Source="/Resources/Image/discount.png" Width="100" Height="100"/>
+                <Border>
+                    <Grid   >
+                        <TextBlock  FontSize="22"  FontWeight="Bold"  >名称</TextBlock>
+                        <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

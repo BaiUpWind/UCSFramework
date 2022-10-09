@@ -27,6 +27,7 @@
                 <Setter Property="Background" Value="#5cadff"/>
                 <Setter Property="Margin" Value="5"/>
                 <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="Opacity" Value="0.75"/>
                 <Setter Property="Effect">
                     <Setter.Value>
                         <DropShadowEffect Color="#0057ad" ShadowDepth="10" BlurRadius="25" Opacity="0.55" Direction="270" />
