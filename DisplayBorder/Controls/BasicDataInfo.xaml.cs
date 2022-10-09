@@ -391,7 +391,7 @@ namespace DisplayBorder.Controls
             }
         }
 
-        public sealed class LableInfo : DataInfoBase
+        public sealed class TagInfo : DataInfoBase
         {
             protected override FrameworkElement Control => throw new NotImplementedException();
 

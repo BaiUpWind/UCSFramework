@@ -41,6 +41,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -54,6 +55,7 @@
     <Compile Include="DeviceConfig\Attributes\ConvertTypeAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\DependOnAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\Control\ShowIfAttribute.cs" />
+    <Compile Include="DeviceConfig\Attributes\FileSelector.cs" />
     <Compile Include="DeviceConfig\Attributes\HideAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\InstanceAttribute.cs" />
     <Compile Include="DeviceConfig\Attributes\NickNameAttribute.cs" />

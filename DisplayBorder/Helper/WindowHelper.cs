@@ -1045,6 +1045,7 @@ namespace DisplayBorder
                         if(nickName != null && nickName is NickNameAttribute nna)
                         {
                             typeData.NickName = nna.NickName;
+                            typeData.ToolTip = nna.ToolTip;
                         }
                     }
                   
@@ -1059,9 +1060,15 @@ namespace DisplayBorder
                             ObjectType = pi.PropertyType,
                             Name = pi.Name,
                             TypeCode = typeCode,
-                            CustomAttr = but.First()
+                            ButtonAttr = but.First()
                         });
-                    } 
+                    }
+                    //获取文件选择器 有更优的方式
+                    var fileSelector = attrs.Where(a => a is FileSelectorAttribute);
+                    if(fileSelector.Count() > 0)
+                    {
+                        typeData.FileSelectorAttr = fileSelector.FirstOrDefault();
+                    }
 
                     if (pi.PropertyType.IsAbstract)
                     {
@@ -1156,7 +1163,7 @@ namespace DisplayBorder
                             ObjectType = field.FieldType,
                             Name = field.Name,
                             TypeCode = typeCode,
-                            CustomAttr = but.First()
+                            ButtonAttr = but.First()
                         });
                     }
 
@@ -1278,8 +1285,10 @@ namespace DisplayBorder
         public bool IsGeneric;
         public Type ObjectType;
         public Type GenericType; 
-        public Attribute CustomAttr;
+        public Attribute ButtonAttr;
+        public Attribute FileSelectorAttr;
         public string NickName = string.Empty;
+        public string ToolTip = string.Empty;
         public double Width = double.NaN;
         public double Height = double.NaN;
     }

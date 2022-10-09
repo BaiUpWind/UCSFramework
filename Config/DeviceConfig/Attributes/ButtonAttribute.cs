@@ -12,13 +12,17 @@ namespace   DeviceConfig
     {
         private readonly string name;
         private readonly string methodName;
+        private readonly string memberName;
 
-        public ButtonAttribute(string Name,string MethodName)
+        public ButtonAttribute(string Name,string MethodName, string MemberName =null)
         {
             name = Name;
             methodName = MethodName;
+            this.memberName = MemberName;
         }
         public string Name => name;
         public string MethodName => methodName;
+
+        public string MemberName => memberName;
     }
 }

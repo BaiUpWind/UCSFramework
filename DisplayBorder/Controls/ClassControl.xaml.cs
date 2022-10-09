@@ -20,6 +20,7 @@ using DisplayBorder.Events;
 using DisplayBorder.View;
 using HandyControl.Controls;
 using HandyControl.Tools;
+using Microsoft.Win32;
 using ComboBox = System.Windows.Controls.ComboBox;
 using MessageBox = HandyControl.Controls.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
@@ -233,32 +234,62 @@ namespace DisplayBorder.Controls
                             txt.Document = new FlowDocument();
                             txt.Document.LineHeight = 2;
                             var txtValue = GetValue(td.Name)?.ToString();
-                            if(txtValue != null)
+                            if (txtValue != null)
                             {
-                                Paragraph paragraph = new Paragraph();  
+                                Paragraph paragraph = new Paragraph();
                                 paragraph.Inlines.Add(txtValue);
                                 txt.Document.Blocks.Add(paragraph);
-                            } 
-                            txt.BorderThickness =  new Thickness(0.2);
+                            }
+                            txt.BorderThickness = new Thickness(0.2);
                             txt.BorderBrush = new SolidColorBrush(Colors.Black);
                             txt.TextChanged += (ts, te) =>
                             {
                                 try
                                 {
                                     //todo:这里类型会有不同的适配
-                                    if (ts is RichTextBox txtBox )  // && !string.IsNullOrEmpty(te.Changes))
+                                    if (ts is RichTextBox txtBox)  // && !string.IsNullOrEmpty(te.Changes))
                                     {
                                         TextRange textRange = new TextRange(txtBox.Document.ContentStart, txtBox.Document.ContentEnd);
                                         //这里在存入时 会把 \r\n 符号也存入进去 ,所以在使用的时候注意repalce掉
-                                        SetValue(td.Name, Convert.ChangeType(textRange.Text.Replace("\r\n",""), td.ObjectType));
+                                        SetValue(td.Name, Convert.ChangeType(textRange.Text.Replace("\r\n", ""), td.ObjectType));
                                     }
                                 }
                                 catch (Exception ex)
                                 {
                                     MessageBox.Info($"请输入正确的类型'{td.ObjectType}',\n\r 错误信息:'{ex.Message}' \r\n 内部信息:'{ex.InnerException.Message}'", "输入提示");
-                                    txt.Document.Blocks.Clear(); 
+                                    txt.Document.Blocks.Clear();
                                 }
                             };
+                            if(td.FileSelectorAttr != null && td.FileSelectorAttr is FileSelectorAttribute attr)
+                            { 
+                                txt.IsReadOnly = true; 
+                                txt.MouseDoubleClick += (ds, de) =>
+                                {
+                                    if (ds is RichTextBox txtBox)
+                                    { 
+                                        txtBox.Document.Blocks.Clear();
+                                        OpenFileDialog dialog = new OpenFileDialog
+                                        {
+                                            InitialDirectory = GlobalPara.SysPath,
+                                            Multiselect = true,//该值确定是否可以选择多个文件
+                                            Title = "请选择文件",
+                                            Filter = "文件(*." + attr.FileType + ")|*." + attr.FileType + "|所有文件(*.*)|*.*"
+                                        };
+                                        if (dialog.ShowDialog() == true)
+                                        {
+                                            Paragraph paragraph = new Paragraph();
+                                            paragraph.Inlines.Add(dialog.FileName);
+                                            txtBox.Document.Blocks.Add(paragraph);
+
+                                            TextRange textRange = new TextRange(txtBox.Document.ContentStart, txtBox.Document.ContentEnd);
+                                            txt.ToolTip = textRange.Text = GetValue(td.Name)?.ToString();// objType.GetProperty(fileTarget.Name).GetValue(target, null)?.ToString();
+
+                                            SetValue(td.Name, dialog.FileName);
+                                        }
+                                    }
+                                };
+                            }
+                     
                         }
                         break;
                     case ClassControlType.CheckBox:
@@ -415,10 +446,11 @@ namespace DisplayBorder.Controls
                         break;
                     case ClassControlType.Button:
                         control = new Button();
-                        if(control is Button btnClick && td.CustomAttr != null && td.CustomAttr is ButtonAttribute ba)
+                        if(control is Button btnClick && td.ButtonAttr != null && td.ButtonAttr is ButtonAttribute ba)
                         { 
                             MethodInfo mif = null;
-                            if(string.IsNullOrEmpty(ba.MethodName))
+                            
+                            if(string.IsNullOrWhiteSpace(ba.MethodName))
                             {
                                 break;
                             }
@@ -428,6 +460,26 @@ namespace DisplayBorder.Controls
                                 {
                                     mif = method;
                                 }
+                            }
+                            dynamic member =null;
+                            if(!string.IsNullOrWhiteSpace(ba.MemberName))
+                            {
+                                //获取属性
+                                foreach (var prop in orginType.GetProperties())
+                                {
+                                    if(prop.Name == ba.MemberName)
+                                    {
+                                        member = prop;
+                                    }
+                                }
+                                //获取字段
+                                foreach (var field in orginType.GetFields())
+                                {
+                                    if(field.Name == ba.MemberName)
+                                    {
+                                        member = field;
+                                    }
+                                } 
                             }
                             btnClick.Content = ba.Name;
                             btnClick.Click += (s, e) =>
@@ -450,7 +502,31 @@ namespace DisplayBorder.Controls
                                     }
                                     else
                                     {
-                                        MessageBox.Show($"不支持的结果:'{result}'");
+                                        if (member == null)
+                                        {
+                                            MessageBox.Show($"不支持的结果:'{result}'");
+                                        }
+                                        else
+                                        {
+                                            if(result.GetType() == typeof(string))
+                                            {
+                                                if (member is PropertyInfo pi)
+                                                {
+                                                    pi.SetValue(Data, result);
+                                                }
+                                                else if (member is FieldInfo fi)
+                                                {
+                                                    fi.SetValue(Data, result);
+                                                    
+                                                }
+                                            }
+                                            else
+                                            {
+                                                MessageBox.Show($"目前只对字符串类型进行赋值,目标类型'{result}'");
+                                            }
+                                           
+                                        }
+                                    
                                     }
                                     Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                                     {
@@ -486,6 +562,10 @@ namespace DisplayBorder.Controls
                     {
                         x += 5;
                     }
+                    if (!string.IsNullOrWhiteSpace(td.ToolTip))
+                    {
+                        control.ToolTip = td.ToolTip;
+                    }
                     control.HorizontalAlignment = HorizontalAlignment.Left;
                     control.VerticalAlignment = VerticalAlignment.Stretch;
                     control.Margin = new Thickness(15, 0, 0, 0); 
@@ -514,6 +594,8 @@ namespace DisplayBorder.Controls
                        //自动缩放
                         childen.Add(control);
                     }
+                    
+
                     stackPanel.Background = new SolidColorBrush(Colors.LightCyan);
                     stackPanel.Margin = new Thickness(2,5,2,5);
                     stackPanel.Children.Add(control);

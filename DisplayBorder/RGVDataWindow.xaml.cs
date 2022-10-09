@@ -106,6 +106,12 @@ namespace DisplayBorder
         /// 存放当前所有组的控件信息
         /// </summary>
         private readonly Dictionary<int, TitleControl> DicTitleContorl = new Dictionary<int, TitleControl>();
+        /// <summary>
+        /// 缓存异常状态的图片
+        /// <para>key :图片路径</para>
+        /// <para>value :创建好的图片</para>
+        /// </summary>
+        private readonly Dictionary<string, BitmapImage> dicStatusImg = new Dictionary<string, BitmapImage>();
         private bool isAuto;
         private BitmapSource BackImage => mainImg.Source as BitmapSource;
         private TitleControl currentSelectedTitle;
@@ -193,6 +199,35 @@ namespace DisplayBorder
         private async void Run()
         {
             IsRunning = true;
+
+            //绑定状态事件
+            //foreach (var title in DicTitleContorl.Values)
+            //{
+            //    var group = title.GroupInfo;
+            //    foreach (var device in group.DeviceInfos)
+            //    {
+            //        if(device.Operation is DataBaseOperation dbo)
+            //        {
+            //            dbo.OnStatusChangedEvent += (s, e) =>
+            //            {
+            //                if(e != null && !string.IsNullOrWhiteSpace(e.ImagePath))
+            //                {
+            //                    try
+            //                    {
+            //                        SetImgSource(TryGetBitmapImage(e.ImagePath));
+            //                    }
+            //                    catch  
+            //                    {
+            //                        SetImgSource();
+            //                    } 
+            //                }
+            //            };
+            //        }
+            //    }
+            //}
+
+
+            //主线程刷新
             while (!MainCancellToken.IsCancellationRequested)
             {
                 if (DicTitleContorl == null || DicTitleContorl.Count == 0)continue; 
@@ -387,7 +422,7 @@ namespace DisplayBorder
             }
         }
         /// <summary>
-        /// 设置图片源
+        /// 设置图片源(默认图片)
         /// </summary>
         private void SetImgSource()
         {
@@ -395,18 +430,55 @@ namespace DisplayBorder
             {
                 try
                 {
-                    mainImg.Source = new BitmapImage(new Uri(GlobalPara.SysConfig.BackImagPath, UriKind.Absolute));
-                    if (mainImg.Source is BitmapSource bitmap)
-                    {
-                        mainImg.Width = bitmap.Width;
-                        mainImg.Height = bitmap.Height;
-                    }
+                    SetImgSource( TryGetBitmapImage(GlobalPara.SysConfig.BackImagPath));
                 }
                 catch (Exception ex)
                 {
                     Growl.Error($"打开图片失败!请检查配置文件\n\r其他信息'{ex.Message}'");
                 }
             }
+        }
+
+        /// <summary>
+        /// 设置当前背景图片源
+        /// </summary>
+        /// <param name="image"></param>
+        private void SetImgSource(BitmapImage image)
+        {
+            mainImg.Source = image;
+            if (mainImg.Source is BitmapSource bitmap)
+            {
+                mainImg.Width = bitmap.Width;
+                mainImg.Height = bitmap.Height;
+            }
+        }
+
+        /// <summary>
+        /// 尝试从缓存中获取图像，在没有的情况下重新根据路径创建，
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception">路径为空或者 创建错误的情况下抛出异常 </exception>
+        private BitmapImage TryGetBitmapImage(string path)
+        {
+            if (!string.IsNullOrWhiteSpace(path))
+            {
+                if (!dicStatusImg.TryGetValue(path, out BitmapImage image))
+                {
+                    try
+                    {
+                        //没有获取到的情况下 ，重新创建并且加新的键值对
+                        image = new BitmapImage(new Uri(path, UriKind.Absolute));
+                        dicStatusImg.Add(path, image);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception($"创建图片失败,'{ex.Message}'");
+                    }
+                }
+                return image;
+            }
+            throw new Exception("创建图片失败,路径为空");
         }
 
         #region 平滑的方式 定位到滚动条位置 
