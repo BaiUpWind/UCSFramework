@@ -1,4 +1,5 @@
 ﻿using DeviceConfig;
+using DisplayBorder.Model;
 using DisplayBorder.ViewModel;
 using System;
 using System.Collections.Generic;

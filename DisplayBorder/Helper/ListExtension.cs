@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace DisplayBorder
 {
@@ -91,5 +92,7 @@ namespace DisplayBorder
             }
             return result;
         }
+
+        public static   bool IsKeyDown(this KeyEventArgs e, Key target) => e.Key == target || e.SystemKey == target;
     }
 }

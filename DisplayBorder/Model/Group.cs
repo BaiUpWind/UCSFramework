@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DeviceConfig;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,13 +7,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace DeviceConfig
+namespace DisplayBorder.Model
 {
     /// <summary>
     /// 组/车间 的配置 最顶级的单位
-    /// </summary>  
-    public class Group 
-    { 
+    /// </summary>   
+    public class Group
+    {
         /// <summary>
         /// 组编号
         /// </summary>  
@@ -25,15 +26,15 @@ namespace DeviceConfig
         [Control("GroupName", "工艺名称", ControlType.TextBox)]
         [NickName("工艺名称")]
         public string GroupName { get; set; }
- 
+
 
         #region 控件位置属性 
- 
-         
+
+
         [Control("LinePathColor", "线条颜色", ControlType.ColorPicker, FieldName: nameof(LinePathColor))]
         [NickName("线条颜色")]
         public Color LinePathColor { get; set; } = Colors.Blue;
-       
+
         [Control("FontColor", "字体颜色", ControlType.ColorPicker, FieldName: nameof(FontColor))]
         [NickName("字体颜色")]
         public Color FontColor { get; set; } = Colors.White;
@@ -91,12 +92,12 @@ namespace DeviceConfig
                 return 0;
             }
         }
-     
+
 
         [Control("DeviceInfos", "设备集合", ControlType.Collection, GenerictyType: typeof(DeviceInfo), FieldName: nameof(DeviceInfos))]
         [NickName("设备集合")]
         public List<DeviceInfo> DeviceInfos { get; set; }
 
-       
+
     }
 }

@@ -82,7 +82,7 @@
    
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="1.2*"></RowDefinition>
             <RowDefinition Height="9*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
@@ -109,18 +109,8 @@
                             </Border>
                         </StackPanel>
                     </Border>
-                    <Border Background="#265CADFF" Margin="5" >
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <Image  Source="/Resources/Image/discount.png" Width="100" Height="100"/>
-                            <Border>
-                                <Grid >
-                                    <TextBlock  FontSize="22" HorizontalAlignment="Left">总货位数</TextBlock>
-                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-                    <local:TagControl   />
+                   
+                  
                 </hc:WaterfallPanel> 
             </Grid>
         </Grid>

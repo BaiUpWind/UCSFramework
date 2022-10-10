@@ -150,16 +150,14 @@ namespace DisplayBorder.Controls
                         chart = new PieChart();
                         if (chart is PieChart pie)
                         {
-                            pie.Series = CreateSeries(infos, dataType);
-                            //bind .Source = CreateSeries(infos, dataType);
-                            //pie.SetBinding(PieChart.SeriesProperty, bind);
+                            pie.Series = CreateSeries(infos, dataType);  
                             pie.SizeChanged += (s, e) =>
                             {
                                 foreach (var item in pie.Series)
                                 {
                                     if (item is PieSeries<ChartBasicInfo> ps)
                                     {
-                                        ps.DataLabelsSize = FontSize;
+                                        ps.DataLabelsSize = FontSize-1;
                                     }
                                 }
                             };
@@ -169,9 +167,7 @@ namespace DisplayBorder.Controls
                         chart = new CartesianChart();
                         if (chart is CartesianChart line)
                         {
-                            line.Series = CreateSeries(infos, dataType);
-                            //bind.Source = CreateSeries(infos, dataType);
-                            //line.SetBinding(CartesianChart.SeriesProperty, bind);
+                            line.Series = CreateSeries(infos, dataType); 
                             line.SizeChanged += (s, e) =>
                             {
                                 if (line.Series is LineSeries<ChartBasicInfo> lineSeriser)
@@ -186,9 +182,7 @@ namespace DisplayBorder.Controls
                         chart = new CartesianChart();
                         if (chart is CartesianChart c)
                         {
-                            c.Series = CreateSeries(infos, dataType);
-                            //bind.Source = CreateSeries(infos, dataType);
-                            //c.SetBinding(CartesianChart.SeriesProperty, bind);
+                            c.Series = CreateSeries(infos, dataType); 
                             c.SizeChanged += (s, e) =>
                             {
                                 foreach (var item in c.Series)
@@ -232,11 +226,11 @@ namespace DisplayBorder.Controls
                         {
                             series.Name = $"{value.Name}'{value.Value}'";
                             series.DataLabelsPaint = DataLabelFontFamily;
-                            series.DataLabelsPosition = PolarLabelsPosition.Outer;
+                            series.DataLabelsPosition = PolarLabelsPosition.Middle;
                             //series.DataLabelsFormatter = p => $"{value.Name}_{p.PrimaryValue} / {p.StackedValue?.Total} ({p.StackedValue.Share:P2})";
-                            series.DataLabelsFormatter = p => $"{value.Name}[{p.PrimaryValue}]({p.StackedValue.Share:P2})";
+                            series.DataLabelsFormatter = p => $"{value.Name} ({p.StackedValue.Share:P1})";
                             series.TooltipLabelFormatter = p => $"{value.Name}_{p.PrimaryValue} / {p.StackedValue?.Total} ({p.StackedValue.Share:P2})";
-                            series.DataLabelsSize = FontSize;
+                            series.DataLabelsSize = FontSize-1;
                         });
 
 
@@ -489,8 +483,7 @@ namespace DisplayBorder.Controls
                 case DataType.线状图:
                 case DataType.柱状图:
                     //单行的数据 才能 图表统计　
-                   　
-                        dataInfo = new ChartInfo(dataType, data.GetChartBasicInfos());
+                    dataInfo = new ChartInfo(dataType, data.GetChartBasicInfos());
                  　
                     break;
                 case DataType.表格:

@@ -17,6 +17,7 @@ using DeviceConfig;
 using DeviceConfig.Core;
 using DisplayBorder.Controls;
 using DisplayBorder.Events;
+using DisplayBorder.Model;
 using DisplayBorder.ViewModel;
 using HandyControl.Controls;
 using MessageBox = HandyControl.Controls.MessageBox;

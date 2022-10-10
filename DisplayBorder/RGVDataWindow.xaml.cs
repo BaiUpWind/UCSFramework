@@ -20,6 +20,7 @@ using DeviceConfig;
 using DeviceConfig.Core;
 using DisplayBorder.Controls;
 using DisplayBorder.Events;
+using DisplayBorder.Model;
 using DisplayBorder.View;
 using DisplayBorder.ViewModel;
 using HandyControl.Controls;
@@ -89,7 +90,7 @@ namespace DisplayBorder
                 point.PrimaryValue = info.Value;
                 point.SecondaryValue = point.Context.Entity.EntityIndex;
             }));
-            grids = new Grid[] { G1, G2, G3, G4, G5, G6 };
+            grids = new Grid[] { G1, G2, G3 };//, G4, G5, G6 };
             ClearGirds();
              
         }
@@ -201,149 +202,157 @@ namespace DisplayBorder
             IsRunning = true;
 
             //绑定状态事件
-            //foreach (var title in DicTitleContorl.Values)
-            //{
-            //    var group = title.GroupInfo;
-            //    foreach (var device in group.DeviceInfos)
-            //    {
-            //        if(device.Operation is DataBaseOperation dbo)
-            //        {
-            //            dbo.OnStatusChangedEvent += (s, e) =>
-            //            {
-            //                if(e != null && !string.IsNullOrWhiteSpace(e.ImagePath))
-            //                {
-            //                    try
-            //                    {
-            //                        SetImgSource(TryGetBitmapImage(e.ImagePath));
-            //                    }
-            //                    catch  
-            //                    {
-            //                        SetImgSource();
-            //                    } 
-            //                }
-            //            };
-            //        }
-            //    }
-            //}
-
-
-            //主线程刷新
-            while (!MainCancellToken.IsCancellationRequested)
+            foreach (var title in DicTitleContorl.Values)
             {
-                if (DicTitleContorl == null || DicTitleContorl.Count == 0)continue; 
-                //提前中断
-                if (MainCancellToken.IsCancellationRequested) break;
-                foreach (var titleControl in DicTitleContorl.Values)
-                { 
-                    var group = titleControl.GroupInfo;
-                    AsyncRunUI(() =>
+                var group = title.GroupInfo;
+                foreach (var device in group.DeviceInfos)
+                {
+                    if (device.Operation is DataBaseOperation dbo)
                     {
-                        CurrentSelectedTitle = titleControl; 
-                    });
-                    if (group.DeviceInfos == null) continue;
-
-                    //----------- 测试代码
-                    //await Task.Delay(3000);
-                    //continue; 
-                    //------------
-                    //提前中断
-                    if (MainCancellToken.IsCancellationRequested) break;
-                    int index = 0;
-                    foreach (var deviceInfo in group.DeviceInfos)
-                    {
-                        //提前中断
-                        if (MainCancellToken.IsCancellationRequested) break;
-                        AsyncRunUI(() =>
+                        dbo.OnStatusChangedEvent += (s, e) =>
                         {
-                            Main.CurrentRunDeviceName = deviceInfo.DeviceInfoName;
-                            ClearGirds();
-                            #region 测试代码 
-                            //ClearGirds();
-                            //Random random = new Random();
-                            //for (int i = 0; i < 6; i++)
-                            //{
-                            //    var index = random.Next(0, 3);
-                            //    DataType dt = (DataType)index;
-
-                            //    ChartControlHelper.CreateChartConrotl(grids[i], dt,"测试界面");
-
-                            //}
-                            #endregion
-                        }); 
-                        CancellationTokenSource intervalToken = new CancellationTokenSource();
-                        CancellationTokenSource delayToken = new CancellationTokenSource();
-                        Task task = Task.Run(async () =>
-                        { 
-                            Console.WriteLine($"{deviceInfo.DeviceInfoName}获取数据刷新");
-                            while (true)
+                            if (e != null && !string.IsNullOrWhiteSpace(e.ImagePath))
                             {
-                                if (MainCancellToken.IsCancellationRequested)
+                                try
                                 {
-                                    //终止异步
-                                    AsyncRunUI(() =>
-                                    {
-                                        ClearGirds();
-                                    });
-                                    intervalToken.Cancel();
-                                    delayToken.Cancel();
+                                    SetImgSource(TryGetBitmapImage(e.ImagePath));
                                 }
-                                if (intervalToken.IsCancellationRequested) break;
-
-                                //读取数据并且加载对应的控件
-                                AsyncRunUI(() =>
-                                { 
-                                    var results = deviceInfo.Operation.GetResults();
-                                    for (int i = 0; i < results.Count; i++)
-                                    {
-                                        if (i > grids.Length) break;
-                                        var result = results[i];
-                                        if (result == null) continue;
-
-                                        if (result is SQLResult sqlr && sqlr.Data is DataTable dt)
-                                        { 
-                                            dt.TableName = "myTable"; 
-                                            var dc = grids[i].Children.GetControl<BasicDataInfo>();
-                                            if (dc == null || dc.DataType != sqlr.SelectType)
-                                            {
-                                                //创建对应的控件
-                                                dc = ControlHelper.CreateDataControl(dt, sqlr.SelectType, sqlr.Title, deviceInfo.RefreshInterval);
-                                                grids[i].Children.Add(dc);
-                                            }
-                                            else
-                                            {
-                                                //使对应的控件显示，并且赋予新的数据源
-                                                dc.SetDatas(dt);
-                                            }
-                                            if (dc.Visibility!= Visibility.Visible) dc.Visibility = Visibility.Visible;
-                                        } 
-                                    }
-
-                                }); 
-                                Console.WriteLine($"[{DateTime.Now}]{deviceInfo.DeviceInfoName}刷新");
-                                if (deviceInfo.RefreshInterval == 0) deviceInfo.RefreshInterval = 1000;
-                                await Task.Delay(1000);
+                                catch
+                                {
+                                    SetImgSource();
+                                }
                             }
-                        }, intervalToken.Token);
-
-                        try
-                        { 
-                            await Task.Delay(deviceInfo.StayTime  , delayToken.Token);
-                        }
-                        catch 
-                        { 
-                            //引发异常 终止等待 
-                            Console.WriteLine("引发异常 终止等待 ");
-                            break;
-                        } 
-                        if(!intervalToken.IsCancellationRequested)
-                            intervalToken.Cancel();
-                        Console.WriteLine($"{deviceInfo.DeviceInfoName}终止任务");
-                        index++;
+                        };
                     }
                 }
-                await Task.Delay(500);
             }
+
+            try
+            {
+                //主线程刷新
+                while (!MainCancellToken.IsCancellationRequested)
+                {
+                    if (DicTitleContorl == null || DicTitleContorl.Count == 0) continue;
+                    //提前中断
+                    if (MainCancellToken.IsCancellationRequested) break;
+                    foreach (var titleControl in DicTitleContorl.Values)
+                    {
+                        var group = titleControl.GroupInfo;
+                        AsyncRunUI(() =>
+                        {
+                            CurrentSelectedTitle = titleControl;
+                        });
+                        if (group.DeviceInfos == null) continue;
+
+                        //----------- 测试代码
+                        //await Task.Delay(3000);
+                        //continue; 
+                        //------------
+                        //提前中断
+                        if (MainCancellToken.IsCancellationRequested) break;
+                        int index = 0;
+                        foreach (var deviceInfo in group.DeviceInfos)
+                        {
+                            //提前中断
+                            if (MainCancellToken.IsCancellationRequested) break;
+                            AsyncRunUI(() =>
+                            {
+                                Main.CurrentRunDeviceName = deviceInfo.DeviceInfoName;
+                                ClearGirds();
+                                #region 测试代码 
+                                //ClearGirds();
+                                //Random random = new Random();
+                                //for (int i = 0; i < 6; i++)
+                                //{
+                                //    var index = random.Next(0, 3);
+                                //    DataType dt = (DataType)index;
+
+                                //    ChartControlHelper.CreateChartConrotl(grids[i], dt,"测试界面");
+
+                                //}
+                                #endregion
+                            });
+                            CancellationTokenSource intervalToken = new CancellationTokenSource();
+                            CancellationTokenSource delayToken = new CancellationTokenSource();
+                            Task task = Task.Run(async () =>
+                            {
+                                Console.WriteLine($"{deviceInfo.DeviceInfoName}获取数据刷新");
+                                while (true)
+                                { 
+                                    if (intervalToken.IsCancellationRequested) break;
+                                    if (MainCancellToken.IsCancellationRequested)
+                                    {
+                                        //终止异步
+                                        AsyncRunUI(() =>
+                                        {
+                                            ClearGirds();
+                                        });
+                                        intervalToken.Cancel();
+                                        delayToken.Cancel();
+                                    }
+                                    //读取数据并且加载对应的控件
+                                    AsyncRunUI(() =>
+                                    {
+                                        var results = deviceInfo.Operation.GetResults();
+                                        for (int i = 0; i < results.Count; i++)
+                                        {
+                                            if (i == grids.Length) break;
+                                            var result = results[i];
+                                            if (result == null) continue;
+
+                                            if (result is SQLResult sqlr && sqlr.Data is DataTable dt)
+                                            {
+                                                dt.TableName = "myTable";
+                                                var dc = grids[i].Children.GetControl<BasicDataInfo>();
+                                                if (dc == null || dc.DataType != sqlr.SelectType)
+                                                {
+                                                    //创建对应的控件
+                                                    dc = ControlHelper.CreateDataControl(dt, sqlr.SelectType, sqlr.Title, deviceInfo.RefreshInterval);
+                                                    grids[i].Children.Add(dc);
+                                                }
+                                                else
+                                                {
+                                                    //使对应的控件显示，并且赋予新的数据源
+                                                    dc.SetDatas(dt);
+                                                }
+                                                if (dc.Visibility != Visibility.Visible) dc.Visibility = Visibility.Visible;
+                                            }
+                                        }
+
+                                    });
+                                    Console.WriteLine($"[{DateTime.Now}]{deviceInfo.DeviceInfoName}刷新");
+                                    if (deviceInfo.RefreshInterval == 0) deviceInfo.RefreshInterval = 1000;
+                                    await Task.Delay(deviceInfo.RefreshInterval);
+                                }
+                            }, intervalToken.Token);
+
+                            try
+                            {
+                                await Task.Delay(deviceInfo.StayTime, delayToken.Token);
+                            }
+                            catch
+                            {
+                                //引发异常 终止等待 
+                                Console.WriteLine("引发异常 终止等待2 ");
+                                break;
+                            }
+                            if (!intervalToken.IsCancellationRequested)
+                                intervalToken.Cancel();
+                            Console.WriteLine($"{deviceInfo.DeviceInfoName}终止任务");
+                            index++;
+                        }
+                    }
+                    await Task.Delay(500, MainCancellToken.Token);
+                }
+            }
+            catch
+            {
+                //  
+                Console.WriteLine("引发异常 终止等待1");
+            }
+            
             IsRunning = false;
+            
         }
       
         /// <summary>
@@ -461,29 +470,30 @@ namespace DisplayBorder
         /// <exception cref="Exception">路径为空或者 创建错误的情况下抛出异常 </exception>
         private BitmapImage TryGetBitmapImage(string path)
         {
-            if (!string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrWhiteSpace(path))
             {
-                if (!dicStatusImg.TryGetValue(path, out BitmapImage image))
-                {
-                    try
-                    {
-                        //没有获取到的情况下 ，重新创建并且加新的键值对
-                        image = new BitmapImage(new Uri(path, UriKind.Absolute));
-                        dicStatusImg.Add(path, image);
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception($"创建图片失败,'{ex.Message}'");
-                    }
-                }
-                return image;
+                throw new Exception("创建图片失败,路径为空"); 
             }
-            throw new Exception("创建图片失败,路径为空");
+            if (!dicStatusImg.TryGetValue(path, out BitmapImage image))
+            {
+                try
+                {
+                    //没有获取到的情况下 ，重新创建并且加新的键值对
+                    image = new BitmapImage(new Uri(path, UriKind.Absolute));
+                    dicStatusImg.Add(path, image);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"创建图片失败,'{ex.Message}'");
+                }
+            }
+            return image;
         }
 
         #region 平滑的方式 定位到滚动条位置 
         /// <summary>
         /// 存放 scroll viewer 异步任务
+        /// <para> 这里不需要这么麻烦浪费空间，得优化(20221010)</para>
         /// </summary>
         private readonly Dictionary<int, CancellationTokenSource> DicSvTask = new Dictionary<int, CancellationTokenSource>();
         private void StopAllSvTask()
@@ -507,6 +517,7 @@ namespace DisplayBorder
             var currentPosX = sv.HorizontalOffset;
             //获取目标控件相对scrollViewer位置
             var point = new Point(currentPosX - 25, currentPosY - 25);
+            if(point.X <=0 || point.Y <=0) return;
             //获取目标相对sv的位置
             var tarPos = target.TransformToVisual(sv).Transform(point);
             if (sv.ScrollableHeight == 0) tarPos.Y = 0;
@@ -613,16 +624,8 @@ namespace DisplayBorder
         //打开配置窗口
         private void Btn_Click_OpenConfig(object sender, RoutedEventArgs e)
         {
-            WindowGroupsConfig wgc = new WindowGroupsConfig();
-            MainCancellToken.Cancel();
-            wgc.WindowState = WindowState.Maximized;
-            wgc.WindowStartupLocation = WindowStartupLocation.CenterScreen; 
-            wgc.Closing += (ws, we) =>
-            {
-                MainCancellToken = new CancellationTokenSource();
-                CreateInfos();
-            };
-            wgc.ShowDialog();
+            //WindowGroupsConfig wgc = new WindowGroupsConfig();
+       
         }
         //鼠标拖拽
         private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -638,7 +641,7 @@ namespace DisplayBorder
             double tabsize = ((ActualWidth / 12) / 3 * 2) / 4;
             System.Windows.Application.Current.Resources.Remove("TabFontSize");
             System.Windows.Application.Current.Resources.Add("TabFontSize", tabsize);
-            double gridsize = ((ActualWidth / 12) / 3 * 2) / 5 * 0.8;
+            double gridsize = ((ActualWidth / 12) / 3 * 2) / 5 * 1.3;
             System.Windows.Application.Current.Resources.Remove("GridFontSize");
             System.Windows.Application.Current.Resources.Add("GridFontSize", gridsize);
             GlobalPara.TitleFontSize = titlesize;
@@ -650,7 +653,7 @@ namespace DisplayBorder
             Application.Current.Resources.Add("TitleTickness", mg);
 
         }
-        //当组集合数据发生变化时
+        //当组集合数据发生变化时 (弃用 20221010)
         private async void OnGroupsValueChanged(object sender, BaseEventArgs e)
         {
             if (e is OnValueChangedArgs args && args.Value is IList<Group>)
@@ -668,7 +671,37 @@ namespace DisplayBorder
                 CreateInfos();
             }
         }
-        #endregion 
+
+        //按键监视
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.IsKeyDown(Key.F1))
+            {
+                SourceDataView.Show();
+            }
+            else if (e.IsKeyDown(Key.F10))
+            {
+                var wgc = WindowHelper.GetSingleWindow<WindowGroupsConfig>();
+                MainCancellToken.Cancel();
+                wgc.WindowState = WindowState.Maximized;
+                wgc.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                wgc.Closing += (ws, we) =>
+                {
+                    MainCancellToken.Cancel();
+                    MainCancellToken = new CancellationTokenSource();
+                    CreateInfos();
+                };
+                wgc.ShowDialog();
+            }
+            else if (e.IsKeyDown(Key.F2))
+            {
+                MainCancellToken.Cancel();
+            }
+
+        }
+
+  
+        #endregion
         #region 调试代码
         private WindowSourceDataView sourceDataView;
         WindowSourceDataView SourceDataView
@@ -682,13 +715,7 @@ namespace DisplayBorder
                 return sourceDataView;
             }
         }
-        private void Window_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.F1)
-            {
-                SourceDataView.Show();
-            }
-        }
+     
         #endregion
 
 

@@ -17,9 +17,9 @@ namespace DeviceConfig.Core
             if (ConnectConfig is DataBaseConnectCfg dbcc)
             {
                 CreateType(dbcc);
-                //thCheck = new Thread(Check);
-                //isChecked = true;
-                //thCheck.Start();
+                thCheck = new Thread(Check);
+                isChecked = true;
+                thCheck.Start();
                 return;
             }
            throw new ArgumentException("创建数据库操作实例失败!");

@@ -1,6 +1,7 @@
 ﻿using CommonApi;
 using DeviceConfig;
 using DeviceConfig.Core;
+using DisplayBorder.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using HandyControl.Controls;

@@ -87,10 +87,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringResources.cs" />
     <Compile Include="TCP\ClientTest.cs" />
-    <Compile Include="Utility\Extensions\ListExtension.cs" />
-    <Compile Include="Utility\Json\JsonHelper.cs" />
-    <Compile Include="Utility\Json\PolyConverter.cs" />
-    <Compile Include="Utility\Utility.Marshal.cs" />
+    <Compile Include="Utilitys\Encryption\Cryptography.cs" />
+    <Compile Include="Utilitys\Extensions\ListExtension.cs" />
+    <Compile Include="Utilitys\Json\JsonHelper.cs" />
+    <Compile Include="Utilitys\Json\PolyConverter.cs" />
+    <Compile Include="Utilitys\Utility.Marshal.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Lib\HslCommunication.dll" />
@@ -102,10 +103,10 @@
     <Folder Include="Define\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utility\Utility.StringFormat.cs" />
+    <Compile Include="Utilitys\Utility.StringFormat.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Utility\Utility.Reflection.cs" />
+    <Compile Include="Utilitys\Utility.Reflection.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

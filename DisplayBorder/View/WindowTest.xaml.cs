@@ -32,6 +32,7 @@ using SkiaSharp;
 using System.ComponentModel;
 using GalaSoft.MvvmLight;
 using System.Collections.ObjectModel;
+using DisplayBorder.Model;
 
 namespace DisplayBorder.View
 {

@@ -260,7 +260,7 @@ namespace CommonApi
                     {
                         return DateTime.ParseExact(dateString, "yyyyMMdd    HHmmss", System.Globalization.CultureInfo.CurrentCulture);
                     }
-                    catch (Exception ex)
+                    catch 
                     {
 
                     }
@@ -268,7 +268,7 @@ namespace CommonApi
                     {
                         return DateTime.ParseExact(dateString, "yyyyMMdd0000HHmmss", System.Globalization.CultureInfo.CurrentCulture);
                     }
-                    catch (Exception ex)
+                    catch 
                     {
 
                     }
@@ -279,7 +279,7 @@ namespace CommonApi
                     {
                         return DateTime.ParseExact(dateString, "yyyy-MM-dd", System.Globalization.CultureInfo.CurrentCulture);
                     }
-                    catch (Exception ex)
+                    catch 
                     {
 
                     }
@@ -287,7 +287,7 @@ namespace CommonApi
                     {
                         return DateTime.ParseExact(dateString, "yyyy/MM/dd", System.Globalization.CultureInfo.CurrentCulture);
                     }
-                    catch (Exception ex)
+                    catch 
                     {
 
                     }
@@ -298,7 +298,7 @@ namespace CommonApi
                     {
                         return DateTime.ParseExact(dateString, "yyyyMMdd", System.Globalization.CultureInfo.CurrentCulture);
                     }
-                    catch (Exception ex)
+                    catch 
                     {
 
                     }

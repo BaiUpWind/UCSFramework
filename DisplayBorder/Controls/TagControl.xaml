@@ -8,7 +8,7 @@
     <Grid>
         <Border Background="#595CADFF"    >
             <StackPanel Margin="5" Orientation="Horizontal">
-                <Image  Source="/Resources/Image/discount.png" Width="100" Height="100"/>
+                <Image  Source="/Resources/Image/discount.png" MaxWidth="80" MaxHeight="80"/>
                 <Border>
                     <Grid   >
                         <TextBlock  FontSize="22"  FontWeight="Bold"  >名称</TextBlock>

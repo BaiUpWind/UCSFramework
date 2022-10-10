@@ -1263,6 +1263,34 @@ namespace DisplayBorder
             };
         }
 
+        private static Dictionary<string, Window> dicCacheWindow = new Dictionary<string, Window>();
+        public static Window GetSingleWindow<T>(/* bool init = false*/) where T : Window ,new()
+        {
+            string fullName = typeof(T).FullName;
+            if (string.IsNullOrEmpty(fullName))
+            {
+                return null;
+            }
+            if(!dicCacheWindow.TryGetValue(fullName,out Window window) )//&& !init)
+            {
+                window = new T();
+                dicCacheWindow.Add(fullName, window);
+            }
+            //if (init && window != null)
+            //{
+            //    window.Close();
+            //    window = new T();
+            //    dicCacheWindow.Remove(fullName);
+            //    dicCacheWindow.Add(fullName, window); 
+            //}
+            window.Closing += (s, e) =>
+            {
+                window.Hide();
+                e.Cancel = true;
+            };
+
+            return window;
+        }
         #endregion
     }
 
