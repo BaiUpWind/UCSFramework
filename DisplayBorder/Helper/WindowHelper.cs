@@ -1,4 +1,5 @@
-﻿using DeviceConfig;
+﻿using CommonApi.Utilitys.Encryption;
+using DeviceConfig;
 using DisplayBorder.Controls;
 using DisplayBorder.View;
 using HandyControl.Controls;
@@ -8,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -15,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using ComboBox = System.Windows.Controls.ComboBox;
 using MessageBox = HandyControl.Controls.MessageBox;
@@ -482,6 +485,7 @@ namespace DisplayBorder
                             switch (attr.ControlType)
                             {
                                 case ControlType.TextBox:
+                                case ControlType.PassWord:
                                     listElements.Add( TextBox(target, objType, propInfo, sp, attr));
                                     break;
                                 case ControlType.ComboBox:
@@ -859,12 +863,22 @@ namespace DisplayBorder
             txtBox.HorizontalAlignment = HorizontalAlignment.Left;
             txtBox.Tag = attr.Name;
             txtBox.Width = 240;
-            txtBox.Text = objType.GetProperty(propInfo.Name).GetValue(target, null)?.ToString();
+            
             txtBox.VerticalContentAlignment=  VerticalAlignment.Top;
             txtBox.HorizontalContentAlignment = HorizontalAlignment.Left;
             if (attr.Width != 0) txtBox.Width = attr.Width;
             if (attr.Height != 0)  txtBox.Height = attr.Height ;
-               
+            bool isPD =false;
+            var str = objType.GetProperty(propInfo.Name).GetValue(target, null)?.ToString();
+            if (attr.ControlType == ControlType.PassWord)
+            {
+                isPD = true;
+                str = Cryptography.DecryptString(attr.EncryptType, str);
+                txtBox.MaxLength = attr.MaxLenght;
+                
+            } 
+            txtBox.Text = str;
+             
             //根据值发生变化时 自动将值附上去
             txtBox.TextChanged += (sender, e) =>
             { 
@@ -875,8 +889,13 @@ namespace DisplayBorder
                         if (string.IsNullOrEmpty(t.Text)) return;
                         if (t.Tag.ToString() == propInfo.Name)
                         {
+                            var inputxt = t.Text;
+                            if (isPD)
+                            {
+                                inputxt = Cryptography.EncryptString(attr.EncryptType, inputxt);
+                            }
                             //todo:这里需要根据类型获取对应的输入限制
-                            propInfo.SetValue(target, Convert.ChangeType(t.Text, propInfo.PropertyType));
+                            propInfo.SetValue(target, Convert.ChangeType(inputxt, propInfo.PropertyType));
                         }
                     }
                 }
@@ -1291,6 +1310,30 @@ namespace DisplayBorder
 
             return window;
         }
+
+
+        public static void WindowShake(Window window = null)
+        {
+            if (window == null)
+                if (Application.Current.Windows.Count > 0)
+                    window = Application.Current.Windows.OfType<Window>().FirstOrDefault(o => o.IsActive);
+
+            var doubleAnimation = new DoubleAnimation
+            {
+                From = window.Left,
+                To = window.Left + 15,
+                Duration = TimeSpan.FromMilliseconds(50),
+                AutoReverse = true,
+                RepeatBehavior = new RepeatBehavior(3),
+                FillBehavior = FillBehavior.Stop
+            };
+            window.BeginAnimation(Window.LeftProperty, doubleAnimation);
+            //var wavUri = new Uri(@"pack://application:,,,/WPFDevelopers;component/Resources/Audio/shake.wav");
+            //var streamResource = Application.GetResourceStream(wavUri);
+            //var player1 = new SoundPlayer(streamResource.Stream);
+            //player1.Play();
+        }
+
         #endregion
     }
 

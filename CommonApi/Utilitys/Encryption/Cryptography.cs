@@ -181,6 +181,102 @@ namespace CommonApi.Utilitys.Encryption
             return decode;
         }
         #endregion
+
+
+        /// <summary>
+        /// 将输入的字符串 直接和加密后的做对比
+        /// </summary>
+        /// <param name="enType">加密的类型</param>
+        /// <param name="enStr">已经加密后的字符串</param>
+        /// <param name="inputStr">新输入的字符串</param>
+        /// <returns></returns>
+        public static bool ValiDate(EncryptType enType, string enStr, string inputStr)
+        {
+            if (string.IsNullOrWhiteSpace(enStr))
+            {
+                return false;
+            }
+            switch (enType)
+            {
+                case EncryptType.SHA1:
+                    return SHA1Encrypt(inputStr.Trim()) == enStr;
+                case EncryptType.MD5:
+                    return MD5Encrypt(inputStr.Trim()) == enStr;
+                case EncryptType.DES:
+                    return DESEncrypt(inputStr.Trim()) == enStr;
+                case EncryptType.Base64:
+                    return Base64Encrypt(inputStr.Trim()) == enStr;
+                default:
+                    return false;
+            }
+        }
+
+        public static string EncryptString(EncryptType encryptType,string input)
+        {
+            try
+            { 
+                switch (encryptType)
+                {
+                    case EncryptType.SHA1:
+                        return SHA1Encrypt(input); 
+                    case EncryptType.MD5:
+                        return MD5Encrypt(input); 
+                    case EncryptType.DES:
+                        return DESEncrypt(input);
+                    case EncryptType.Base64:
+                        return Base64Encrypt(input);
+                    default: 
+                        return string.Empty;
+                }
+            }
+            catch  
+            { 
+                return string.Empty;
+            }
+        }
+
+        public static string DecryptString(EncryptType encryptType,string cryptStr)
+        {
+            try
+            {
+                switch (encryptType)
+                {
+                    case EncryptType.SHA1: 
+                    case EncryptType.MD5:
+                        return cryptStr;
+                    case EncryptType.DES:
+                        return DESDecrypt(cryptStr);
+                    case EncryptType.Base64:
+                        return Base64Decrypt(cryptStr);
+                    default:
+                        return string.Empty;
+                }
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+    }
+
+    public enum EncryptType
+    {
+        /// <summary>
+        /// 不可逆
+        /// </summary>
+        SHA1,
+        /// <summary>
+        /// 不可逆
+        /// </summary>
+        MD5,
+        /// <summary>
+        /// 可
+        /// </summary>
+        DES,
+        /// <summary>
+        /// 可
+        /// </summary>
+        Base64
     }
 
 }

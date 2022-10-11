@@ -39,9 +39,10 @@ namespace DisplayBorder.View
             SetControlEnable(false);
             ShowNonClientArea = false;
             //DataContext = ViewModelLocator.Instance;
+        
             Loaded += (s, e) =>
             {
-
+               
                 GlobalPara.EventManager.Subscribe(OnCanvasChildrenClickArgs.EventID, OnClickChildren);
 
                 foreach (var item in C1.Children)
@@ -58,14 +59,56 @@ namespace DisplayBorder.View
                     img.Width = bitmap.Width;
                     img.Height = bitmap.Height;
                 }
+
+                //Visibility = Visibility.Hidden; 
+              
+             
+                
+
             };
 
             Unloaded += (s, e) =>
             {  
                 GlobalPara.EventManager.Unsubscribe(OnCanvasChildrenClickArgs.EventID, OnClickChildren);
             };
+
+            var login = new LoginWindow(CommonApi.Utilitys.Encryption.EncryptType.DES, GlobalPara.SysConfig.PassWord);
+
+            if (login.ShowDialog() ?? false)
+            {
+                //Visibility = Visibility.Visible;
+                ShowDialog();
+            }
+            else
+            {
+                Close();
+            }
             #region 弃用代码
 
+            //IsVisibleChanged += (s, e) =>
+            //{
+            //    if(Visibility == Visibility.Visible && !isVerify)
+            //    { 
+            //        Hide();
+
+            //        var login = new LoginWindow();
+            //        login.Closing += (ls, le) =>
+            //        {
+            //            Close();
+            //        };
+            //        var dialog = login.ShowDialog();
+            //        if ( dialog ?? false)
+            //        {
+            //            isVerify = true;
+            //            Show();
+            //            login.Close();
+            //        } 
+            //    }
+            //    else// if(isVerify &&( Visibility == Visibility.Hidden || Visibility == Visibility.Collapsed))
+            //    {
+            //        isVerify = false;
+            //    }
+            //};
 
             //当窗体大小发生变化时同时改变 图像的宽度 暂时弃用
             //SizeChanged += (s, e) =>
@@ -86,7 +129,7 @@ namespace DisplayBorder.View
             //    //g3.SetValue(Canvas.LeftProperty, 45d);
 
             //};
-        
+
             //img.SizeChanged += (s, e) =>
             //{
             //    if (CacheTc != null)
@@ -95,10 +138,10 @@ namespace DisplayBorder.View
 
             //        var xfactor = (BackImage.PixelWidth / img.Width);
             //        var yfactor  = (BackImage.PixelHeight / img.Height);
-                
+
             //        var x = CacheTc.ImagePixelPoint.X / xfactor;
             //        var y = CacheTc.ImagePixelPoint.Y / yfactor;
-          
+
             //        CacheTc.Parent.SetValue(Canvas.LeftProperty, x  );
             //        CacheTc.Parent.SetValue(Canvas.TopProperty, y  );
 
@@ -115,9 +158,8 @@ namespace DisplayBorder.View
         /// <summary>
         /// 当前选中的可拖拽border装饰器
         /// </summary>
-        private ElementAdorner cacheEa; 
+        private ElementAdorner cacheEa;
         private TitleControl cacheTc;
-
         private BitmapSource BackImage => img.Source as BitmapSource;
         /// <summary>
         /// 当前选中的标题控件

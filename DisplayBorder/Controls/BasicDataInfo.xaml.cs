@@ -412,6 +412,13 @@ namespace DisplayBorder.Controls
             {
                 intervalToken.Cancel();
             };
+            /*
+             * 显示信息  职位 人员 电话
+             * 
+             * 产量 , 货位剩余数量, 报警的核心重要的几个 
+             *  
+             * 
+             */
         }
         public BasicDataInfo(DataTable data, DataType dataType, string title = null, int refreshTime = 1000)
         {

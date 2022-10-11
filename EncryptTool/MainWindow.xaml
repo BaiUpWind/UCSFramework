@@ -1,0 +1,153 @@
+﻿<Window x:Class="EncryptTool.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EncryptTool" xmlns:myc="clr-namespace:EncryptTool.Controls"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+         ResizeMode="CanMinimize"
+        Title="MainWindow" Height="600" Width="800">
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0 1 0 0"/>
+    </WindowChrome.WindowChrome>
+    <myc:WindowAcrylicBlur.WindowAcrylicBlur>
+        <myc:WindowAcrylicBlur BlurColor="AliceBlue" Opacity="0.6"/>
+    </myc:WindowAcrylicBlur.WindowAcrylicBlur>
+    <Window.Resources>
+        <Style  x:Key="NewButton" TargetType="Button" >
+            <Setter Property="Foreground" Value="#303133" />
+            <Setter Property="Padding" Value="3" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="MinWidth" Value="30" />
+            <Setter Property="MinHeight" Value="28" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid Background="Transparent">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal" />
+                                    <VisualState x:Name="MouseOver">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PART_ContentPresenter" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PART_ContentPresenter" />
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0" To="0.3" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PART_ContentPresenter" />
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="FocusStates">
+                                    <VisualState x:Name="Focused" />
+                                    <VisualState x:Name="Unfocused" />
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Rectangle Fill="Transparent" />
+                            <ContentPresenter x:Name="PART_ContentPresenter" Opacity="0.7" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid  >
+        <Grid> 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="29"></RowDefinition>
+                <RowDefinition Height="9*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0"  > 
+                <StackPanel  WindowChrome.IsHitTestVisibleInChrome="True" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource NewButton}"   HorizontalAlignment="Right" Width="20" Height="20"  Margin="0,0,5,0" Click="Btn_Mini"   >
+                        <Button.Content>
+                            <TextBlock Text="&#x1F5D5;" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"  Cursor="Hand" FontFamily="Segoe UI Symbol"></TextBlock>
+                        </Button.Content>
+                    </Button>
+
+                    <Button Style="{StaticResource NewButton}"  Width="20" Height="20"  HorizontalAlignment="Right"     Margin="0,0,5,0" Click="Btn_Max"   >
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="&#x1F5D6;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
+                                <TextBlock Text="&#x1F5D7;" Visibility="Collapsed" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                    <Button Style="{StaticResource NewButton}"   Width="20" Height="20"  HorizontalAlignment="Right"    Margin="0,0,5,0" Click="Btn_Close" >
+                        <Button.Content>
+                            <TextBlock Text="&#x1F5D9;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
+                        </Button.Content>
+                        </Button>
+                </StackPanel>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="125"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0"  Margin="5">
+                    <Border    Background="White"  >
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.8" Direction="180" />
+                        </Border.Effect>
+                    </Border>
+                    <TextBlock HorizontalAlignment="Center" FontSize="19" VerticalAlignment="Top">源文</TextBlock>
+                    <RichTextBox   Name="rtxtOgrin" Margin="5,25,5,5" FontSize="17">
+                            
+                    </RichTextBox>
+                    
+                </Grid>
+                <Grid Grid.Column="1" Margin="5">
+                    <Border    Background="White"  >
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.8" Direction="180" />
+                        </Border.Effect>
+                    </Border>
+                    <TextBlock HorizontalAlignment="Center" FontSize="19" VerticalAlignment="Top">结果</TextBlock>
+                    <RichTextBox x:Name="rtxtResult" Margin="5,25,5,5" FontSize="17">
+
+                    </RichTextBox>
+                </Grid>
+                <Grid Grid.Column="2" Margin="5">
+                    <Border    Background="White"  >
+                        <Border.Effect>
+                            <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.8" Direction="180" />
+                        </Border.Effect>
+                    </Border>
+                    <StackPanel Margin="0,25,0,25">
+                        <TextBlock Margin="15,15,0,0">加密方式</TextBlock>
+                        <ComboBox Margin="15,0,15,15" x:Name="cmbEncryptType"/> 
+                        <Border  BorderThickness="1" Margin="15,10,15,10"></Border>
+                        <Button Content="加密" Margin="15"  Cursor="Hand" Name="btnEncrypt" Click="Btn_EnOrDecrypt"></Button>
+                        <Button Content="解密" Margin="15" Cursor="Hand" Name="btnDecrypt" Click="Btn_EnOrDecrypt"></Button>
+                        <Button Content="清空" Margin="15" Cursor="Hand" Name="btnClear" Click="Btn_Clear"></Button>
+                        <CheckBox Name="cbIncludeLineFeed" Margin="15" Content="包含换行" />
+                        <CheckBox Name="cbIncludeEmpty" Margin="15" Content="包含空格" />
+                    </StackPanel>
+
+                </Grid>
+            </Grid>
+            <Grid Grid.Row="2">
+                <Border Margin="5" Background="AliceBlue">
+                    <Border.Effect>
+                        <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.8" Direction="180" />
+                    </Border.Effect>
+                </Border>
+                <ListBox Margin="6" x:Name="listInfo"  >
+                   
+
+                </ListBox>
+            </Grid>
+        </Grid> 
+    </Grid>
+</Window>

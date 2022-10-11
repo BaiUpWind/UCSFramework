@@ -13,13 +13,13 @@
         <Grid Background="Transparent" >
             <Border   BorderBrush="CornflowerBlue" Background="CornflowerBlue" ></Border>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,0,0">
-                <Button  BorderThickness="0" HorizontalAlignment="Right"   Margin="0,0,5,0" Command="{Binding MinimizeCmd}"  >
+                <Button Style="{DynamicResource WindowButtonStyle}" HorizontalAlignment="Right"   Margin="0,0,5,0" Command="{Binding MinimizeCmd}"  >
                     <Button.Content>
                         <TextBlock Text="&#x1F5D5;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
                     </Button.Content>
                 </Button>
 
-                <Button  BorderThickness="0" HorizontalAlignment="Right"   Margin="0,0,5,0"  Command="{Binding MaximizeCmd}" >
+                <Button  Style="{DynamicResource WindowButtonStyle}" HorizontalAlignment="Right"   Margin="0,0,5,0"  Command="{Binding MaximizeCmd}" >
                     <Button.Content>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="&#x1F5D6;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
@@ -28,7 +28,7 @@
                     </Button.Content>
                 </Button>
 
-                <Button  BorderThickness="0"  HorizontalAlignment="Right"   Margin="0,0,5,0" Click="Btn_Click">
+                <Button Style="{DynamicResource WindowButtonStyle}"  HorizontalAlignment="Right"   Margin="0,0,5,0" Click="Btn_Click">
                     <Button.Content>
                         <TextBlock Text="&#x1F5D9;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
                     </Button.Content>

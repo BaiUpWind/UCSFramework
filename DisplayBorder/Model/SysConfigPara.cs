@@ -1,4 +1,5 @@
-﻿using DeviceConfig;
+﻿using CommonApi.Utilitys.Encryption;
+using DeviceConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace DisplayBorder.Model
     {
         private string groupsFilePath;
         private string backImagPath;
+        private string passWord = "lpzlRMWity8=";
 
         /// <summary>
         /// 标题
@@ -71,5 +73,17 @@ namespace DisplayBorder.Model
             set => backImagPath = value;
         }
 
+        [Control("PassWord", "密码", ControlType.PassWord,MaxLenght:6)]
+        public string PassWord
+        {
+            get
+            {
+                return  passWord;
+            }
+            set
+            {
+                passWord =value;
+            }
+        }  
     }
 }

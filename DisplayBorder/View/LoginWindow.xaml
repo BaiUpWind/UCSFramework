@@ -4,16 +4,37 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DisplayBorder.View"
-        xmlns:wpfdev="clr-namespace:DisplayBorder.Controls"
+        xmlns:myc="clr-namespace:DisplayBorder.Controls" xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d" 
-        Title="LoginWindow"   Height="450" Width="600"  >
+         DataContext="{Binding  Source={StaticResource Locator }}"
+         MouseLeftButtonDown="Window_MouseLeftButtonDown"  WindowStyle="None" 
+        Title="LoginWindow"   Height="350" Width="400" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize"  >
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="0 1 0 0"/>
     </WindowChrome.WindowChrome>
-    <wpfdev:WindowAcrylicBlur.WindowAcrylicBlur>
-        <wpfdev:WindowAcrylicBlur BlurColor="AliceBlue" Opacity="0.2"/>
-    </wpfdev:WindowAcrylicBlur.WindowAcrylicBlur> 
+    <myc:WindowAcrylicBlur.WindowAcrylicBlur>
+        <myc:WindowAcrylicBlur BlurColor="AliceBlue" Opacity="0.2"/>
+    </myc:WindowAcrylicBlur.WindowAcrylicBlur> 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel HorizontalAlignment="Right" 
+                        Orientation="Horizontal"
+                        WindowChrome.IsHitTestVisibleInChrome="True">
+            <Button Style="{DynamicResource WindowButtonStyle}" Content="&#x1F5D5;" Margin="0,0,5,0" Command="{Binding  WindowState.MinimizeCmd}"  Cursor="Hand"/>
+            <Button Style="{DynamicResource WindowButtonStyle}" Content="&#x1F5D9;" Command="{Binding  WindowState.CloseCmd}"  Cursor="Hand"/>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <!--<Border Width="80" Background="AliceBlue" Margin="0,0,0,20"> 
+                <Image Source="/tb7.ico"  Width="80" Height="80" />
+            </Border>--> 
+            <TextBlock FontSize="32" HorizontalAlignment="Center" Margin="0,0,0,10">输入密码</TextBlock>
+            <hc:PinBox Length="6" Name="pbPassword"  Completed="PinBox_Completed"  Margin="0,0,0,40" PasswordChar="●"  />
+        </StackPanel>
     </Grid>
 </Window>

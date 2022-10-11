@@ -635,6 +635,9 @@ namespace DisplayBorder
         //窗体大小发生变化时
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            double nameSize = ((ActualWidth / 12) / 3 * 2) / 2;
+            System.Windows.Application.Current.Resources.Remove("NameFontSize");
+            System.Windows.Application.Current.Resources.Add("NameFontSize", nameSize);
             double titlesize = ((ActualWidth / 12) / 3 * 2) / 3;
             System.Windows.Application.Current.Resources.Remove("TitleFontSize");
             System.Windows.Application.Current.Resources.Add("TitleFontSize", titlesize);
@@ -681,7 +684,7 @@ namespace DisplayBorder
             }
             else if (e.IsKeyDown(Key.F10))
             {
-                var wgc = WindowHelper.GetSingleWindow<WindowGroupsConfig>();
+                var wgc =  new WindowGroupsConfig();
                 MainCancellToken.Cancel();
                 wgc.WindowState = WindowState.Maximized;
                 wgc.WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -691,7 +694,14 @@ namespace DisplayBorder
                     MainCancellToken = new CancellationTokenSource();
                     CreateInfos();
                 };
-                wgc.ShowDialog();
+                //try
+                //{
+                //    wgc.ShowDialog();
+                //}
+                //catch  
+                //{ 
+                //}
+               
             }
             else if (e.IsKeyDown(Key.F2))
             {

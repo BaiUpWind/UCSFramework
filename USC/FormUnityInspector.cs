@@ -21,10 +21,10 @@ namespace USC
             InitializeComponent();
             //Auto (typeof(Data),false );
 
-            DropControl dc = new DropControl(typeof(DeviceConfig.Group), true);
-            dc.Name = "top";
-            dc.Dock = DockStyle.Fill;
-            inspector.Controls.Add(dc);
+            //DropControl dc = new DropControl(typeof(Group), true);
+            //dc.Name = "top";
+            //dc.Dock = DockStyle.Fill;
+            //inspector.Controls.Add(dc);
 
 
         }

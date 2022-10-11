@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DisplayBorder.View" 
         xmlns:elementadorner="clr-namespace:DisplayBorder"  
-        DataContext="{Binding  Source={StaticResource Locator }}"
+           DataContext="{Binding  Source={StaticResource Locator }}"
         x:Class="DisplayBorder.View.WindowGroupsConfig"
         mc:Ignorable="d" WindowStyle="None"
         Title="WindowGroupsConfig" Height="450" Width="800" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+ 
     <hc:TransitioningContentControl >
-        <Grid Background="#005cb8">
+        <Grid Background="#FF005CB8"  >
             <Grid.RowDefinitions>
                 <RowDefinition Height="45"></RowDefinition> 
                 <RowDefinition Height="10*"></RowDefinition>
@@ -28,14 +29,14 @@
                     <!--<Button Content="test"  Margin="15,0,0,0" Click="Btn_Test" ></Button>--> 
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal" HorizontalAlignment="Right">
-                   
-                    <Button  BorderThickness="0" HorizontalAlignment="Right"   Margin="0,0,5,0" Command="{Binding  WindowState.MinimizeCmd}"  >
+
+                    <Button   Style="{DynamicResource WindowButtonStyle}"    HorizontalAlignment="Right"   Margin="0,0,5,0" Command="{Binding  WindowState.MinimizeCmd}"  >
                         <Button.Content>
                             <TextBlock Text="&#x1F5D5;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
                         </Button.Content>
                     </Button>
 
-                    <Button  BorderThickness="0" HorizontalAlignment="Right"   Margin="0,0,5,0"  Command="{Binding WindowState.MaximizeCmd}" >
+                    <Button  Style="{DynamicResource WindowButtonStyle}" HorizontalAlignment="Right"   Margin="0,0,5,0"  Command="{Binding WindowState.MaximizeCmd}" >
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="&#x1F5D6;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
@@ -44,7 +45,7 @@
                         </Button.Content>
                     </Button>
 
-                    <Button  BorderThickness="0"  HorizontalAlignment="Right"   Margin="0,0,5,0" Command="{Binding  WindowState.CloseCmd}" >
+                    <Button  Style="{DynamicResource WindowButtonStyle}"  HorizontalAlignment="Right"   Margin="0,0,5,0" Command="{Binding  WindowState.CloseCmd}" >
                         <Button.Content>
                             <TextBlock Text="&#x1F5D9;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
                         </Button.Content>

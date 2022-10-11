@@ -301,29 +301,16 @@
     <Resource Include="Resources\Ico\tb7.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Image\背景.jpg" />
     <Resource Include="tb7.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Image\管理.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Image\背景2.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\背景3.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\背景4.jpeg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\背景5.jpeg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Image\背景6.jpeg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Image\discount.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Image\主背景.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\SkiaSharp.NativeAssets.macOS.2.88.2\build\net462\SkiaSharp.NativeAssets.macOS.targets" Condition="Exists('..\packages\SkiaSharp.NativeAssets.macOS.2.88.2\build\net462\SkiaSharp.NativeAssets.macOS.targets')" />

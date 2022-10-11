@@ -6,15 +6,24 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hc="https://handyorg.github.io/handycontrol"
-        xmlns:local="clr-namespace:DisplayBorder" xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
-    DataContext="{Binding  Source={StaticResource Locator }}"
+        xmlns:local="clr-namespace:DisplayBorder"
+        xmlns:myc="clr-namespace:DisplayBorder.Controls"
+        xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+        DataContext="{Binding  Source={StaticResource Locator }}"
         mc:Ignorable="d"
         d:DesignHeight="1080" d:DesignWidth="1920"  
         MinWidth="800" MinHeight="600"
-        WindowStyle="None" ResizeMode="CanMinimize"
+        WindowStyle="None"  
         Title="RGVDataWindow" Height="600" Width="800"  
-       MouseLeftButtonDown="Window_MouseLeftButtonDown" SizeChanged="Window_SizeChanged" KeyDown="Window_KeyDown" ShowInTaskbar="False" 
-        >
+        MouseLeftButtonDown="Window_MouseLeftButtonDown" SizeChanged="Window_SizeChanged" 
+       KeyDown="Window_KeyDown"   >
+    <!--<WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0 1 0 0"/>
+    </WindowChrome.WindowChrome>
+    <myc:WindowAcrylicBlur.WindowAcrylicBlur>
+        <myc:WindowAcrylicBlur BlurColor="AliceBlue" Opacity="0.2"/>
+    </myc:WindowAcrylicBlur.WindowAcrylicBlur>-->
+    
     <Window.Resources> 
         <Style x:Key="NameTextTtile" TargetType="TextBlock">
             <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -25,57 +34,52 @@
        
     </Window.Resources>
     <Grid>
-        <Canvas Grid.ColumnSpan="2">
+        <Canvas Grid.ColumnSpan="2" Opacity="1">
             <Canvas.Background>
-                <ImageBrush ImageSource="\Resources\Image\背景5.jpeg"/>
+                <ImageBrush ImageSource="\Resources\Image\主背景.jpg"/>
             </Canvas.Background>
         </Canvas>
 
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition Height="1.42*"></RowDefinition>
+                <RowDefinition Height="10*"></RowDefinition>
                 <!--<RowDefinition Height="25"></RowDefinition>-->
             </Grid.RowDefinitions>
 
             <!--导航条-->
-            <Border Grid.Row="0" Background="#003870"/>
+            <Border Grid.Row="0" Background="#003870" Opacity="0"/>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition  ></ColumnDefinition>
                     <ColumnDefinition ></ColumnDefinition>
-                    <ColumnDefinition ></ColumnDefinition>
-
+                    <ColumnDefinition ></ColumnDefinition> 
                 </Grid.ColumnDefinitions>
-
-                <!--标题处-->
-                <!--<Border  BorderThickness="1"  Background="#003870"     />-->
-
-
-                <!--导航栏背景图片-->
-                <!--<Border Grid.Column="1"  Background="#003870"  />-->
-
-                <!--<Border BorderThickness="1 1 1 0"  BorderBrush="#FF17BBD2"/>-->
-
-
-                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+ 
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <lvc:CartesianChart Visibility="Hidden"/>
                     <TextBlock x:Name="txtTime" Text="1997-12-25 00:00:00" Margin="15" FontSize="{ DynamicResource TitleFontSize}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"></TextBlock>
                 </StackPanel>
 
                 <!--标题-->
-                <TextBlock Text="JSH数据监控" Foreground="#d6ebff" Grid.Column="1"
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Text="JSH数据监控" Margin="0,0,0,0" Foreground="#d6ebff"   Grid.Row="1"
                     FontFamily="fonts/#iconfont"
-                    FontSize="48" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <TextBlock.Effect>
-                        <DropShadowEffect Color="#0985d3"  Direction="1" ShadowDepth="3"/>
-                    </TextBlock.Effect>
-                </TextBlock>
-
-
+                    FontSize="{ DynamicResource NameFontSize}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Color="#0985d3"  Direction="1" ShadowDepth="3"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                </Grid>
+             
                 <!--按钮-->
-                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right"   >
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right"  VerticalAlignment="Top"  >
                     <Button  Visibility="Collapsed"  FontSize="18" Background="#005cb8" Margin="5"  ToolTip="打开系统设置" Click="Btn_Click_OpenConfig"
                         Width="60" Height="50" BorderThickness="0"  >
                         <Button.Content>
@@ -110,7 +114,7 @@
             </Grid>
 
             <!--显示界面-->
-            <Grid Grid.Row="1"  >
+            <Grid Grid.Row="1" Margin="25,0,30,22"  >
                 <Grid.RowDefinitions>
                     <RowDefinition Height=" 1*"></RowDefinition>
                     <RowDefinition Height=" 1*" ></RowDefinition>
@@ -124,7 +128,7 @@
 
                     <Grid Grid.Column="0" Margin="15,15,15,0">
                         <Border   Style="{StaticResource BorderStyle}"/>
-                        <Border   Margin="15"   Opacity="0.25" Background="#b1dffc" BorderThickness="2"  BorderBrush="#144aad" CornerRadius="10" />
+                        <Border   Margin="15"   Opacity="0.15" Background="#b1dffc" BorderThickness="2"  BorderBrush="#144aad" CornerRadius="5" />
 
                         <ScrollViewer   Margin="30" HorizontalScrollBarVisibility="Auto" x:Name="sv" >
                             <Canvas  x:Name="C1"  Background="Transparent" Focusable="True" 
@@ -146,7 +150,7 @@
                             <RowDefinition Height="1.5*"></RowDefinition>
                             <RowDefinition Height="1*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="0" Margin="15,15,15,0">
+                        <Grid Grid.Row="0" Margin="12,15,10,0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="1*"></ColumnDefinition>
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
@@ -185,48 +189,64 @@
 
                         </Grid>
 
-                        <Grid Grid.Row="1" Margin="15,15,15,5">
+                        <Grid Grid.Row="1" Margin="15,5,15,5">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="3*"></RowDefinition>
                                 <RowDefinition Height="9*"></RowDefinition>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
-                                <Border  Background="#FF479CF1" Opacity="0.95" CornerRadius="10,10,0,0" ></Border>
+                                <Border  Background="#FF479CF1" Opacity="0.75" CornerRadius="5,5,0,0" ></Border>
                                 <TextBlock   Style="{StaticResource NameTextTtile}"        FontSize="{DynamicResource TabFontSize}">班次信息</TextBlock>
                             </Grid>
                             <Grid Grid.Row="1">
-                                <Border Grid.Column="0" Grid.Row="0"  Background="#99ccff" Opacity="0.50" CornerRadius="0,0,10,10" >
+                                <Border Grid.Column="0" Grid.Row="0"  Background="#99ccff" Opacity="0.35" CornerRadius="0,0,5,5" >
                                     <Border.Effect>
                                         <DropShadowEffect Color="#0057ad" ShadowDepth="10" BlurRadius="25" Opacity="0.8" Direction="270" />
                                     </Border.Effect>
                                 </Border>
                                 <Grid>
-                                    <hc:WaterfallPanel Groups="3">
-                                        <Border Background="#595CADFF"   Margin="15" >
-                                            <StackPanel Margin="5" Orientation="Vertical">
-                                                <TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>
-                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White"  VerticalAlignment="Bottom" HorizontalAlignment="Left">张三三</TextBlock>
-                                            </StackPanel>
-                                        </Border>
-                                        <Border Background="#595CADFF"   Margin="15" >
-                                            <StackPanel Margin="5" Orientation="Vertical">
-                                                <TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>
-                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White"  VerticalAlignment="Bottom" HorizontalAlignment="Left">张三三</TextBlock>
-                                            </StackPanel>
-                                        </Border>
-                                        <Border Background="#595CADFF"   Margin="15" >
-                                            <StackPanel Margin="5" Orientation="Vertical">
-                                                <TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>
-                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White"  VerticalAlignment="Bottom" HorizontalAlignment="Left">张三三</TextBlock>
-                                            </StackPanel>
-                                        </Border>
+                                    <hc:WaterfallPanel Groups="1">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Background="#595CADFF"   Margin="15,5,5,5" >
+                                                
+                                                    <!--<TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>-->
+                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" FontWeight="Bold"  VerticalAlignment="Center" HorizontalAlignment="Left">ME</TextBlock>
+                                               
+                                            </Border>
+                                            <Border Background="#595CADFF"   Margin="5,5,5,5" >
+                                               
+                                                    <!--<TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>-->
+                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left">张三三</TextBlock>
+                                          
+                                            </Border>
+                                            <Border Background="#595CADFF"   Margin="5,5,5,5" >
+                                                 
+                                                    <!--<TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>-->
+                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" FontWeight="Bold"  VerticalAlignment="Bottom" HorizontalAlignment="Left">12345678910</TextBlock>
+                                         
+                                            </Border>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Background="#595CADFF"   Margin="15,5,5,5" >
 
+                                                <!--<TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>-->
+                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" FontWeight="Bold"  VerticalAlignment="Center" HorizontalAlignment="Left">ME</TextBlock>
 
+                                            </Border>
+                                            <Border Background="#595CADFF"   Margin="5,5,5,5" >
 
+                                                <!--<TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>-->
+                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left">张三三</TextBlock>
 
+                                            </Border>
+                                            <Border Background="#595CADFF"   Margin="5,5,5,5" >
 
+                                                <!--<TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>-->
+                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" FontWeight="Bold"  VerticalAlignment="Bottom" HorizontalAlignment="Left">12345678910</TextBlock>
+
+                                            </Border>
+                                        </StackPanel>
                                     </hc:WaterfallPanel>
-
                                 </Grid>
                             </Grid>
 
@@ -248,15 +268,15 @@
                     </Grid.RowDefinitions>
 
 
-                    <Grid Grid.Column="0" Grid.Row="0" x:Name="G1"  Margin="10,10,10,10" >
+                    <Grid Grid.Column="0" Grid.Row="0"   x:Name="G1"  Margin="15,10,10,15" >
                         <Controls:BasicDataInfo   />
                     </Grid>
 
-                    <Grid Grid.Column="1" Grid.Row="0" x:Name="G2"  Margin="10,10,10,10" >
+                    <Grid Grid.Column="1" Grid.Row="0" x:Name="G2"  Margin="10,10,10,15" >
                         <Controls:BasicDataInfo   />
                     </Grid>
 
-                    <Grid Grid.Column="2" Grid.Row="0" x:Name="G3"  Margin="10,10,10,10" >
+                    <Grid Grid.Column="2" Grid.Row="0" x:Name="G3"  Margin="10,10,10,15" >
                         <Controls:BasicDataInfo   />
                     </Grid>
                     <!--<Grid Grid.Column="0" Grid.Row="1" x:Name="G4"  Margin="10,10,10,10" >

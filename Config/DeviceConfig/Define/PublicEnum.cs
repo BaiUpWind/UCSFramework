@@ -41,6 +41,8 @@
         /// </summary>
         Collection,
 
+        PassWord
+
     }
 
     /// <summary>
