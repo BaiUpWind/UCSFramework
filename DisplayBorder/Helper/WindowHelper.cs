@@ -1260,7 +1260,7 @@ namespace DisplayBorder
                         typeData.ControlType = ClassControlType.TextBox;
                     }
                 } 
-                td = typedatas.ToArray();
+                td = typedatas.ToArray();//
             }
             return td;
         }
