@@ -152,7 +152,7 @@ namespace DisplayBorder.View
             //    }
             //};
             #endregion
-            GlobalPara.Init();
+   
     
         }
         /// <summary>

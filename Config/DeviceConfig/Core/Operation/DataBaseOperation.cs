@@ -163,6 +163,7 @@ namespace DeviceConfig.Core
                    
                     if (currentStatus != resultValue)
                     {
+                        //获取异常状态的图片
                         var  statusModel =  StatusCheck.StatusModels.Find(a => a.Value == resultValue);
                         if (statusModel != null)
                         {
@@ -223,6 +224,7 @@ namespace DeviceConfig.Core
         [NickName("对应值")]
         public int Value { get; set; } = 1;
 
+        [NickName("状态描述")]
         public string Description { get; set; }
 
         [NickName("状态图片", "双击选择文件路径")]

@@ -1,17 +1,12 @@
 ﻿using CommonApi;
-using DeviceConfig;
+using CommonApi.Event;
+using DisplayBorder.Events;
+using DisplayBorder.Model;
+using GalaSoft.MvvmLight;
+using HandyControl.Controls;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks; 
-using CommonApi.Event;
-using DisplayBorder.ViewModel;
-using DisplayBorder.Events;
-using HandyControl.Controls;
-using GalaSoft.MvvmLight;
-using DisplayBorder.Model;
 
 namespace DisplayBorder
 {

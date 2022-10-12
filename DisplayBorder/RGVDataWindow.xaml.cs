@@ -67,7 +67,7 @@ namespace DisplayBorder
             };
             dateTimeTimer.Tick += (s, e) =>
             {
-                txtTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                txtTime.Text = DateTime.Now.ToString("yyyy年-MM月-dd日 HH时:mm分:ss秒");
             };
             dateTimeTimer.Start();
             #endregion

@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("DisplayBorder")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("湖北精实机电科技优先公司")]
+[assembly: AssemblyCompany("湖北精实机电科技有限公司")]
 [assembly: AssemblyProduct("DisplayBorder")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]

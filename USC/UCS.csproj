@@ -139,10 +139,6 @@
       <Project>{BD924948-6B92-4517-B504-08695586D011}</Project>
       <Name>Config</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Modle\Modle.csproj">
-      <Project>{AD6905AE-EE45-46D2-9699-6E2C69678D67}</Project>
-      <Name>Modle</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Initialization\" />

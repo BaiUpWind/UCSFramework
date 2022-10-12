@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
+﻿using CommonApi;
 using CommonApi.Event;
-using CommonApi;
-using Modle;
+using System;
+using System.Windows.Forms;
 
 namespace USC
 {
@@ -61,7 +57,7 @@ namespace USC
         {
             eventManager.Fire(this, OnClickEventArgs.Create("你好"));
         }
-        test t = new test();
+        //test t = new test();
         private void button1_Click(object sender, EventArgs e)
         {
     

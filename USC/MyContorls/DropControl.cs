@@ -84,11 +84,13 @@ namespace USC.MyContorls
         /// <summary>
         /// 当折叠时 传出当前控件,宽和高
         /// </summary>
-        public event Action<object, int,int> OnFold;
+        //public event Action<object, int,int> OnFold;
 
+#pragma warning disable CS0108 // 成员隐藏继承的成员；缺少关键字 new
         public event Action<object, int, int> OnSizeChanged;
- 
-     
+#pragma warning restore CS0108 // 成员隐藏继承的成员；缺少关键字 new
+
+
         public string Title
         {
             get => title; set

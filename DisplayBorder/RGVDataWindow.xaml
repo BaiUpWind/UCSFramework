@@ -16,7 +16,7 @@
         WindowStyle="None"  
         Title="RGVDataWindow" Height="600" Width="800"  
         MouseLeftButtonDown="Window_MouseLeftButtonDown" SizeChanged="Window_SizeChanged" 
-       KeyDown="Window_KeyDown"   >
+       KeyDown="Window_KeyDown" Background="#02FFFFFF"   >
     <!--<WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="0 1 0 0"/>
     </WindowChrome.WindowChrome>
@@ -59,7 +59,7 @@
  
                 <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
                     <lvc:CartesianChart Visibility="Hidden"/>
-                    <TextBlock x:Name="txtTime" Text="1997-12-25 00:00:00" Margin="15" FontSize="{ DynamicResource TitleFontSize}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"></TextBlock>
+                    <TextBlock x:Name="txtTime" Text="1997-12-25 00:00:00" Margin="15" FontSize="{ DynamicResource TabFontSize}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"></TextBlock>
                 </StackPanel>
 
                 <!--标题-->
@@ -68,12 +68,12 @@
                         <RowDefinition></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    
+
                     <TextBlock Text="JSH数据监控" Margin="0,0,0,0" Foreground="#d6ebff"   Grid.Row="1"
-                    FontFamily="fonts/#iconfont"
-                    FontSize="{ DynamicResource NameFontSize}" VerticalAlignment="Center" HorizontalAlignment="Center">
+                         
+                        FontSize="{ DynamicResource NameFontSize}" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBlock.Effect>
-                            <DropShadowEffect Color="#0985d3"  Direction="1" ShadowDepth="3"/>
+                            <DropShadowEffect Color="#0985d3"  BlurRadius="1" Direction="270" ShadowDepth="2" />
                         </TextBlock.Effect>
                     </TextBlock>
                 </Grid>
@@ -195,7 +195,7 @@
                                 <RowDefinition Height="9*"></RowDefinition>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
-                                <Border  Background="#FF479CF1" Opacity="0.75" CornerRadius="5,5,0,0" ></Border>
+                                <Border  Background="#FF479CF1" Opacity="0.85" CornerRadius="5,5,0,0" ></Border>
                                 <TextBlock   Style="{StaticResource NameTextTtile}"        FontSize="{DynamicResource TabFontSize}">班次信息</TextBlock>
                             </Grid>
                             <Grid Grid.Row="1">
@@ -210,19 +210,19 @@
                                             <Border Background="#595CADFF"   Margin="15,5,5,5" >
                                                 
                                                     <!--<TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>-->
-                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" FontWeight="Bold"  VerticalAlignment="Center" HorizontalAlignment="Left">ME</TextBlock>
+                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White"    VerticalAlignment="Center" HorizontalAlignment="Left">ME</TextBlock>
                                                
                                             </Border>
                                             <Border Background="#595CADFF"   Margin="5,5,5,5" >
                                                
                                                     <!--<TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>-->
-                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left">张三三</TextBlock>
+                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White"   VerticalAlignment="Center" HorizontalAlignment="Left">张三三</TextBlock>
                                           
                                             </Border>
                                             <Border Background="#595CADFF"   Margin="5,5,5,5" >
                                                  
                                                     <!--<TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>-->
-                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" FontWeight="Bold"  VerticalAlignment="Bottom" HorizontalAlignment="Left">12345678910</TextBlock>
+                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White"    VerticalAlignment="Bottom" HorizontalAlignment="Left">12345678910</TextBlock>
                                          
                                             </Border>
                                         </StackPanel>
@@ -230,19 +230,19 @@
                                             <Border Background="#595CADFF"   Margin="15,5,5,5" >
 
                                                 <!--<TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>-->
-                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" FontWeight="Bold"  VerticalAlignment="Center" HorizontalAlignment="Left">ME</TextBlock>
+                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White"    VerticalAlignment="Center" HorizontalAlignment="Left">ME</TextBlock>
 
                                             </Border>
                                             <Border Background="#595CADFF"   Margin="5,5,5,5" >
 
                                                 <!--<TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>-->
-                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Left">张三三</TextBlock>
+                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White"   VerticalAlignment="Center" HorizontalAlignment="Left">张三三</TextBlock>
 
                                             </Border>
                                             <Border Background="#595CADFF"   Margin="5,5,5,5" >
 
                                                 <!--<TextBlock  FontSize="{ DynamicResource GridFontSize}" Foreground="White" FontWeight="Bold"  >名称</TextBlock>-->
-                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" FontWeight="Bold"  VerticalAlignment="Bottom" HorizontalAlignment="Left">12345678910</TextBlock>
+                                                <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White"    VerticalAlignment="Bottom" HorizontalAlignment="Left">12345678910</TextBlock>
 
                                             </Border>
                                         </StackPanel>
