@@ -21,6 +21,7 @@ using DeviceConfig.Core;
 using DisplayBorder.Controls;
 using DisplayBorder.Events;
 using DisplayBorder.Model;
+using DisplayBorder.Properties;
 using DisplayBorder.View;
 using DisplayBorder.ViewModel;
 using HandyControl.Controls;
@@ -43,8 +44,8 @@ namespace DisplayBorder
             DataContext = ViewModelLocator.Instance;
             Main = ViewModelLocator.Instance.Main;
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            //ShowNonClientArea = false;
-
+            Btn_Click_FullSwitch(btn_fullSwitch, null);
+            BackGroundDefault = imgBackGround.Source as BitmapSource;
             Loaded += (s, e) =>
             {
                 CreateInfos();
@@ -54,11 +55,11 @@ namespace DisplayBorder
                     grid.ColumnDefinitions.Clear();
                     grid.Children.Clear(); 
                 }
-                //GlobalPara.EventManager.Subscribe(OnValueChangedArgs.EventID, OnGroupsValueChanged);
+                GlobalPara.EventManager.Subscribe(OnValueChangedArgs.EventID, OnGroupsValueChanged);
             };
             Unloaded += (s, e) =>
             {
-                //GlobalPara.EventManager.Unsubscribe(OnValueChangedArgs.EventID, OnGroupsValueChanged);
+                GlobalPara.EventManager.Unsubscribe(OnValueChangedArgs.EventID, OnGroupsValueChanged);
             };
             #region 时间定时器
             var dateTimeTimer = new DispatcherTimer
@@ -67,7 +68,7 @@ namespace DisplayBorder
             };
             dateTimeTimer.Tick += (s, e) =>
             {
-                txtTime.Text = DateTime.Now.ToString("yyyy年-MM月-dd日 HH时:mm分:ss秒");
+                txtTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             };
             dateTimeTimer.Start();
             #endregion
@@ -94,9 +95,7 @@ namespace DisplayBorder
             ClearGirds();
              
         }
-        Grid[] grids;
-
-     
+        Grid[] grids; 
         #region 字段&属性  
         /// <summary>
         /// 检查恢复为自定定时器
@@ -115,6 +114,7 @@ namespace DisplayBorder
         private readonly Dictionary<string, BitmapImage> dicStatusImg = new Dictionary<string, BitmapImage>();
         private bool isAuto;
         private BitmapSource BackImage => mainImg.Source as BitmapSource;
+        private BitmapSource BackGroundDefault; 
         private TitleControl currentSelectedTitle;
         private CancellationTokenSource MainCancellToken = new CancellationTokenSource(); 
         private bool isRunning;
@@ -244,6 +244,10 @@ namespace DisplayBorder
                         });
                         if (group.DeviceInfos == null) continue;
 
+                        #region 获取人员信息
+                        SetManInfo(group);
+                        #endregion
+
                         //----------- 测试代码
                         //await Task.Delay(3000);
                         //continue; 
@@ -278,8 +282,7 @@ namespace DisplayBorder
                             {
                                 Console.WriteLine($"{deviceInfo.DeviceInfoName}获取数据刷新");
                                 while (true)
-                                { 
-                                    if (intervalToken.IsCancellationRequested) break;
+                                {
                                     if (MainCancellToken.IsCancellationRequested)
                                     {
                                         //终止异步
@@ -290,6 +293,8 @@ namespace DisplayBorder
                                         intervalToken.Cancel();
                                         delayToken.Cancel();
                                     }
+                                    if (intervalToken.IsCancellationRequested) break;
+
                                     //读取数据并且加载对应的控件
                                     AsyncRunUI(() =>
                                     {
@@ -354,7 +359,39 @@ namespace DisplayBorder
             IsRunning = false;
             
         }
-      
+
+        private void SetManInfo(Group group)
+        {
+            var groupManInfo = GlobalPara.ClassInfos?.Where(a => a.GroupID == group.GroupID)?.ToArray();
+            AsyncRunUI(() =>
+            { 
+                if (groupManInfo != null && groupManInfo.Count() > 0)
+                {
+                    spMan1.Visibility = Visibility.Visible;
+                    spMan2.Visibility = Visibility.Visible;
+
+                    Main.Man1 = groupManInfo[0];
+                    if (Main.Man1.IsHidden)
+                    {
+                        spMan1.Visibility = Visibility.Hidden;
+                    }
+                    if (groupManInfo.Length > 1)
+                    {
+                        Main.Man2 = groupManInfo[1];
+                        if (Main.Man2.IsHidden)
+                        {
+                            spMan2.Visibility = Visibility.Hidden;
+                        }
+                    }
+                }
+                else
+                {
+                    spMan1.Visibility = Visibility.Hidden;
+                    spMan2.Visibility = Visibility.Hidden;
+                }
+            });
+        }
+
         /// <summary>
         /// 创建显示区信息
         /// </summary>
@@ -383,7 +420,7 @@ namespace DisplayBorder
                 CreateTitle(group);
             }
 
-            SourceDataView.Claer();
+            //SourceDataView.Claer();
 
             Task.Run(() =>
             {
@@ -657,21 +694,32 @@ namespace DisplayBorder
 
         }
         //当组集合数据发生变化时 (弃用 20221010)
-        private async void OnGroupsValueChanged(object sender, BaseEventArgs e)
+        private  void OnGroupsValueChanged(object sender, BaseEventArgs e)
         {
-            if (e is OnValueChangedArgs args && args.Value is IList<Group>)
-            {
-                MainCancellToken.Cancel();
-                if (IsRunning)
-                {
-                    await Task.Run(async () =>
-                     {
-                         while (IsRunning) { await Task.Delay(500); }
+            //if (e is OnValueChangedArgs args && args.Value is IList<Group>)
+            //{
+            //    MainCancellToken.Cancel();
+            //    if (IsRunning)
+            //    {
+            //        await Task.Run(async () =>
+            //         {
+            //             while (IsRunning) { await Task.Delay(500); }
 
-                     });
+            //         });
+            //    }
+            //    MainCancellToken = new CancellationTokenSource();
+            //    CreateInfos();
+            //}
+            if (e is OnValueChangedArgs args && args.Value is SysConfigPara scp)
+            {
+                try
+                {
+                    imgBackGround.Source =  TryGetBitmapImage(scp.SysBackImagPath);
                 }
-                MainCancellToken = new CancellationTokenSource();
-                CreateInfos();
+                catch (Exception)
+                {
+                    imgBackGround.Source = BackGroundDefault;
+                } 
             }
         }
 
@@ -680,12 +728,18 @@ namespace DisplayBorder
         {
             if (e.IsKeyDown(Key.F1))
             {
+                
                 SourceDataView.Show();
+            }
+            else if (e.IsKeyDown(Key.F2))
+            {
+                SetWindow.Show();
             }
             else if (e.IsKeyDown(Key.F10))
             {
-                var wgc =  new WindowGroupsConfig();
                 MainCancellToken.Cancel();
+                ClearGirds();
+                var wgc =  new WindowGroupsConfig();
                 wgc.WindowState = WindowState.Maximized;
                 wgc.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                 wgc.Closing += (ws, we) =>
@@ -694,6 +748,7 @@ namespace DisplayBorder
                     MainCancellToken = new CancellationTokenSource();
                     CreateInfos();
                 };
+                wgc.StartLogin();
                 //try
                 //{
                 //    wgc.ShowDialog();
@@ -701,7 +756,7 @@ namespace DisplayBorder
                 //catch  
                 //{ 
                 //}
-               
+
             }
             else if (e.IsKeyDown(Key.F2))
             {
@@ -723,6 +778,19 @@ namespace DisplayBorder
                     sourceDataView = new WindowSourceDataView();
                 }
                 return sourceDataView;
+            }
+        }
+
+        UserSetWindow setWindow;
+        UserSetWindow SetWindow
+        {
+            get
+            {
+                if(setWindow == null)
+                {
+                    setWindow = new UserSetWindow();
+                }
+                return setWindow;
             }
         }
      

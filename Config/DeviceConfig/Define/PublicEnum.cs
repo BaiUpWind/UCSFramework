@@ -14,6 +14,10 @@
         /// </summary>
         ComboBox,
         /// <summary>
+        /// 单选框
+        /// </summary>
+        CheckBox,
+        /// <summary>
         /// 按钮,
         /// </summary>
         Button,

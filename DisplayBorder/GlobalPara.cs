@@ -40,6 +40,10 @@ namespace DisplayBorder
         /// 组文件路径(默认路径)
         /// </summary>
         public readonly static string GroupsFilePath = ConfigsPath + "\\Groups.cfg";
+        /// <summary>
+        /// 人员配置路径(默认路径)
+        /// </summary>
+        public readonly static string ClassesFilePath = ConfigsPath + "\\Classes.cfg";
         public readonly static string BackImageFilePath = ConfigsPath + "\\背景图片.jpg";
 
 
@@ -47,6 +51,7 @@ namespace DisplayBorder
         private static IList<Group> groups;
         private static EventManager eventManager;
         private static SysConfigPara sysConfig;
+        private static IList<ClassInfo> classInfo;
         public static void Init()
         {
             CheckPath(SysPath);
@@ -120,6 +125,37 @@ namespace DisplayBorder
                     sysConfig = value;
                     JsonHelper.WriteJson(sysConfig, ConfigPath);
                     EventManager.Fire(null, OnValueChangedArgs.Create(sysConfig));
+                }
+            }
+        }
+
+        public static IList<ClassInfo> ClassInfos
+        {
+            get
+            {
+
+                if (classInfo == null)
+                {
+                    try
+                    {
+                        classInfo = JsonHelper.ReadJson<IList<ClassInfo>>(ClassesFilePath, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        classInfo = null;
+                        MessageBox.Error($"班次信息文件配置损坏,\n\r具体信息'{ex.Message}'");
+                        return null;
+                    }
+                }
+                return classInfo;
+            }
+            set
+            {
+                if (value != null)
+                {
+                    classInfo = value;
+                    JsonHelper.WriteJson(classInfo, ClassesFilePath);
+                    EventManager.Fire(null, OnValueChangedArgs.Create(classInfo));
                 }
             }
         }

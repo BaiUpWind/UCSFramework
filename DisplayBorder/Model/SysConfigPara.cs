@@ -23,6 +23,9 @@ namespace DisplayBorder.Model
         [Control("Title", "标题", ControlType.TextBox)]
         public string Title { get; set; }
 
+        [Control("SysBackImagPath", "主界面背景图片", ControlType.TextBox)]
+        [Control("FileChosee3", null, ControlType.FilePathSelector, FieldName: nameof(SysBackImagPath), FileType: "jpg")]
+        public string SysBackImagPath { get; set; }
         /// <summary>
         /// 描述
         /// </summary>
@@ -84,6 +87,7 @@ namespace DisplayBorder.Model
             {
                 passWord =value;
             }
-        }  
+        }
+
     }
 }

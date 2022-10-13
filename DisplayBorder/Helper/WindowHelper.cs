@@ -16,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
@@ -597,6 +598,42 @@ namespace DisplayBorder
                                     //sp.Children.Add(sp2);
                                     #endregion
                                     break;
+                                case ControlType.CheckBox:
+                                    CheckBox check = new CheckBox();
+                                    check.Margin = new Thickness(5);
+                                    check.HorizontalAlignment = HorizontalAlignment.Left;
+                                    check.Tag = attr.Name; 
+
+                                    check.VerticalContentAlignment = VerticalAlignment.Top;
+                                    check.HorizontalContentAlignment = HorizontalAlignment.Left;
+                                    if (attr.Width != 0) check.Width = attr.Width;
+                                    if (attr.Height != 0) check.Height = attr.Height; 
+                                    
+                                    check.IsChecked = (bool)objType.GetProperty(propInfo.Name).GetValue(target, null) ;
+
+                                    //根据值发生变化时 自动将值附上去
+                                    check.Checked += (sender, e) =>
+                                    { 
+                                        if (sender is CheckBox c)
+                                        { 
+                                            if (c.Tag.ToString() == propInfo.Name)
+                                            {  
+                                                propInfo.SetValue(target, Convert.ChangeType(c.IsChecked, propInfo.PropertyType));
+                                            }
+                                        } 
+                                    };
+                                    check.Unchecked += (sender, e) =>
+                                    {
+                                        if (sender is CheckBox c)
+                                        {
+                                            if (c.Tag.ToString() == propInfo.Name)
+                                            {
+                                                propInfo.SetValue(target, Convert.ChangeType(c.IsChecked, propInfo.PropertyType));
+                                            }
+                                        }
+                                    };
+                                    sp.Children.Add(check);
+                                    break;
                             }
                         }
                     }
@@ -933,7 +970,8 @@ namespace DisplayBorder
                         {
                             fileTarget = pif;
                         }
-                    } 
+                    }
+
                     //双击事件
                     txt.MouseDoubleClick += (s, e) =>
                     {
@@ -953,10 +991,20 @@ namespace DisplayBorder
 
                             }
                         }
-                    };
+                    }; 
+                    txt.AddHandler(UIElement.MouseDownEvent, 
+                    new System.Windows.Input.MouseButtonEventHandler((s,e) =>
+                    {
+                        if (e.ChangedButton == System.Windows.Input.MouseButton.Right)
+                        { 
+                            txt.Text = string.Empty;
+                            txt.ToolTip = "双击选择文件路径！";
+                        }
+                    }), true); 
                 }
             }
         }
+    
         /// <summary>
         /// 生成一个按钮,带调用事件的按钮
         /// </summary> 

@@ -1,4 +1,5 @@
 ﻿using DeviceConfig;
+using DisplayBorder.Events;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,10 @@ namespace DisplayBorder.Model
     /// </summary>   
     public class Group
     {
+        public Group()
+        {
+            GlobalPara.EventManager.Fire(this, OnGroupCreateArgs.Create(this));
+        }
         /// <summary>
         /// 组编号
         /// </summary>  

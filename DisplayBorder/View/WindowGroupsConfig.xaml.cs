@@ -72,17 +72,8 @@ namespace DisplayBorder.View
                 GlobalPara.EventManager.Unsubscribe(OnCanvasChildrenClickArgs.EventID, OnClickChildren);
             };
 
-            var login = new LoginWindow(CommonApi.Utilitys.Encryption.EncryptType.DES, GlobalPara.SysConfig.PassWord);
+           
 
-            if (login.ShowDialog() ?? false)
-            {
-                //Visibility = Visibility.Visible;
-                ShowDialog();
-            }
-            else
-            {
-                Close();
-            }
             #region 弃用代码
 
             //IsVisibleChanged += (s, e) =>
@@ -167,7 +158,7 @@ namespace DisplayBorder.View
         public TitleControl CacheTc  {  get => cacheTc; set =>  cacheTc = value; }
 
         public ElementAdorner CacheEa { get => cacheEa; set => cacheEa = value; }
-
+       
         private List<Group> groups = new List<Group>();
         private List<Border> cacheBorder = new List<Border>();
 
@@ -266,7 +257,19 @@ namespace DisplayBorder.View
             #endregion
         }
 
-
+        public void StartLogin()
+        {
+            var login = new LoginWindow(CommonApi.Utilitys.Encryption.EncryptType.DES, GlobalPara.SysConfig.PassWord);
+            if (login.ShowDialog() ?? false)
+            {
+                //Visibility = Visibility.Visible;
+                ShowDialog();
+            }
+            else
+            {
+                Close();
+            }
+        }
         private void SetImgSource()
         {
             if (!string.IsNullOrEmpty(GlobalPara.SysConfig.BackImagPath) )

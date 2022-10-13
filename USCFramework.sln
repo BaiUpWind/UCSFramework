@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EncryptTool", "EncryptTool\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBHelper", "DBHelper\DBHelper.csproj", "{9728346D-FC7A-4597-BAA5-2D8AA23A9D79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\ConsoleTest.csproj", "{0BC6D08C-34A8-4D62-A57A-B2AFEDE5B9DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,14 @@ Global
 		{9728346D-FC7A-4597-BAA5-2D8AA23A9D79}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9728346D-FC7A-4597-BAA5-2D8AA23A9D79}.Release|x86.ActiveCfg = Release|x86
 		{9728346D-FC7A-4597-BAA5-2D8AA23A9D79}.Release|x86.Build.0 = Release|x86
+		{0BC6D08C-34A8-4D62-A57A-B2AFEDE5B9DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BC6D08C-34A8-4D62-A57A-B2AFEDE5B9DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BC6D08C-34A8-4D62-A57A-B2AFEDE5B9DA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0BC6D08C-34A8-4D62-A57A-B2AFEDE5B9DA}.Debug|x86.Build.0 = Debug|Any CPU
+		{0BC6D08C-34A8-4D62-A57A-B2AFEDE5B9DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BC6D08C-34A8-4D62-A57A-B2AFEDE5B9DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BC6D08C-34A8-4D62-A57A-B2AFEDE5B9DA}.Release|x86.ActiveCfg = Release|Any CPU
+		{0BC6D08C-34A8-4D62-A57A-B2AFEDE5B9DA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

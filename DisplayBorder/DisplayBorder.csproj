@@ -157,11 +157,13 @@
     <Compile Include="Controls\ElementAdorner\ThumbAngle.cs" />
     <Compile Include="Controls\Windows\WindowAcrylicBlur.cs" />
     <Compile Include="Events\OnCanvasChildrenClickArgs.cs" />
+    <Compile Include="Events\OnGroupCreateArgs.cs" />
     <Compile Include="Events\OnOpenNewWindowArgs.cs" />
     <Compile Include="Events\OnValueChangedArgs.cs" />
     <Compile Include="GlobalPara.cs" />
     <Compile Include="Helper\ControlHelper.cs" />
     <Compile Include="Helper\ListExtension.cs" />
+    <Compile Include="Model\ClassInfo.cs" />
     <Compile Include="Model\DeviceInfo.cs" />
     <Compile Include="Model\Group.cs" />
     <Compile Include="Model\SysConfigPara.cs" />
@@ -178,6 +180,9 @@
     </Compile>
     <Compile Include="View\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserSetWindow.xaml.cs">
+      <DependentUpon>UserSetWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\WindowGroupsConfig.xaml.cs">
       <DependentUpon>WindowGroupsConfig.xaml</DependentUpon>
@@ -236,6 +241,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\LoginWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserSetWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

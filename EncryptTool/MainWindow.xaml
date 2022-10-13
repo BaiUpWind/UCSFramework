@@ -60,73 +60,26 @@
     </Window.Resources>
     <Grid  >
         <Grid> 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="29"></RowDefinition>
-                <RowDefinition Height="9*"></RowDefinition>
-                <RowDefinition Height="2*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0"  > 
-                <StackPanel  WindowChrome.IsHitTestVisibleInChrome="True" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource NewButton}"   HorizontalAlignment="Right" Width="20" Height="20"  Margin="0,0,5,0" Click="Btn_Mini"   >
-                        <Button.Content>
-                            <TextBlock Text="&#x1F5D5;" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"  Cursor="Hand" FontFamily="Segoe UI Symbol"></TextBlock>
-                        </Button.Content>
-                    </Button>
-
-                    <Button Style="{StaticResource NewButton}"  Width="20" Height="20"  HorizontalAlignment="Right"     Margin="0,0,5,0" Click="Btn_Max"   >
-                        <Button.Content>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="&#x1F5D6;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
-                                <TextBlock Text="&#x1F5D7;" Visibility="Collapsed" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
-                            </StackPanel>
-                        </Button.Content>
-                    </Button>
-
-                    <Button Style="{StaticResource NewButton}"   Width="20" Height="20"  HorizontalAlignment="Right"    Margin="0,0,5,0" Click="Btn_Close" >
-                        <Button.Content>
-                            <TextBlock Text="&#x1F5D9;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
-                        </Button.Content>
-                        </Button>
-                </StackPanel>
-            </Grid>
+            <Grid.RowDefinitions> 
+                <RowDefinition Height="9*"></RowDefinition> 
+            </Grid.RowDefinitions> 
+            
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition Width="125"></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition> 
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0"  Margin="5">
-                    <Border    Background="White"  >
-                        <Border.Effect>
-                            <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.8" Direction="180" />
-                        </Border.Effect>
-                    </Border>
-                    <TextBlock HorizontalAlignment="Center" FontSize="19" VerticalAlignment="Top">源文</TextBlock>
-                    <RichTextBox   Name="rtxtOgrin" Margin="5,25,5,5" FontSize="17">
-                            
-                    </RichTextBox>
-                    
-                </Grid>
-                <Grid Grid.Column="1" Margin="5">
-                    <Border    Background="White"  >
-                        <Border.Effect>
-                            <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.8" Direction="180" />
-                        </Border.Effect>
-                    </Border>
-                    <TextBlock HorizontalAlignment="Center" FontSize="19" VerticalAlignment="Top">结果</TextBlock>
-                    <RichTextBox x:Name="rtxtResult" Margin="5,25,5,5" FontSize="17">
+           
 
-                    </RichTextBox>
-                </Grid>
-                <Grid Grid.Column="2" Margin="5">
-                    <Border    Background="White"  >
-                        <Border.Effect>
+                <Grid Grid.Column="0" Margin="5,0,5,0" WindowChrome.IsHitTestVisibleInChrome="True">
+                    <Border  >
+                        <!--<Border.Effect>
                             <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.8" Direction="180" />
-                        </Border.Effect>
+                        </Border.Effect>-->
                     </Border>
                     <StackPanel Margin="0,25,0,25">
                         <TextBlock Margin="15,15,0,0">加密方式</TextBlock>
-                        <ComboBox Margin="15,0,15,15" x:Name="cmbEncryptType"/> 
+                        <ComboBox Margin="15,0,15,15" x:Name="cmbEncryptType"/>
                         <Border  BorderThickness="1" Margin="15,10,15,10"></Border>
                         <Button Content="加密" Margin="15"  Cursor="Hand" Name="btnEncrypt" Click="Btn_EnOrDecrypt"></Button>
                         <Button Content="解密" Margin="15" Cursor="Hand" Name="btnDecrypt" Click="Btn_EnOrDecrypt"></Button>
@@ -136,18 +89,88 @@
                     </StackPanel>
 
                 </Grid>
-            </Grid>
-            <Grid Grid.Row="2">
-                <Border Margin="5" Background="AliceBlue">
-                    <Border.Effect>
-                        <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.8" Direction="180" />
-                    </Border.Effect>
-                </Border>
-                <ListBox Margin="6" x:Name="listInfo"  >
-                   
 
-                </ListBox>
+                <Grid Grid.Column="1" Background="White">
+                   
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="29"></RowDefinition>
+                        <RowDefinition Height="9*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" Background="White" >
+                         
+                        <StackPanel  WindowChrome.IsHitTestVisibleInChrome="True" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Style="{StaticResource NewButton}"   HorizontalAlignment="Right" Width="20" Height="20"  Margin="0,0,5,0" Click="Btn_Mini"   >
+                                <Button.Content>
+                                    <TextBlock Text="&#x1F5D5;" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"  Cursor="Hand" FontFamily="Segoe UI Symbol"></TextBlock>
+                                </Button.Content>
+                            </Button>
+
+                            <Button Style="{StaticResource NewButton}"  Width="20" Height="20"  HorizontalAlignment="Right"     Margin="0,0,5,0" Click="Btn_Max"   >
+                                <Button.Content>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="&#x1F5D6;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
+                                        <TextBlock Text="&#x1F5D7;" Visibility="Collapsed" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
+                                    </StackPanel>
+                                </Button.Content>
+                            </Button>
+
+                            <Button Style="{StaticResource NewButton}"   Width="20" Height="20"  HorizontalAlignment="Right"    Margin="0,0,5,0" Click="Btn_Close" >
+                                <Button.Content>
+                                    <TextBlock Text="&#x1F5D9;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="32"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" Margin="10,0,0,0"> 
+                           <TextBlock  VerticalAlignment="Center" FontSize="32">字符串加密/解密</TextBlock>                        
+                        </Grid>
+                        <Grid Grid.Row="1" Margin="0,20,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition ></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0"  Margin="5">
+                                <Border    Background="White"  >
+                                    <!--<Border.Effect>
+                                    <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.8" Direction="180" />
+                                </Border.Effect>-->
+                                </Border>
+                                <TextBlock HorizontalAlignment="Center" FontSize="19" VerticalAlignment="Top">源文</TextBlock>
+                                <RichTextBox   Name="rtxtOgrin" Margin="5,25,5,5" FontSize="17">
+
+                                </RichTextBox>
+
+                            </Grid>
+                            <Grid Grid.Column="1" Margin="5">
+                                <Border    Background="White"  >
+                                    <!--<Border.Effect>
+                                    <DropShadowEffect Color="Black" ShadowDepth="5" BlurRadius="10" Opacity="0.8" Direction="180" />
+                                </Border.Effect>-->
+                                </Border>
+                                <TextBlock HorizontalAlignment="Center" FontSize="19" VerticalAlignment="Top">结果</TextBlock>
+                                <RichTextBox x:Name="rtxtResult" Margin="5,25,5,5" FontSize="17">
+
+                                </RichTextBox>
+                            </Grid>
+                        </Grid> 
+                    </Grid>
+
+                    <Grid Grid.Row="2">
+                        <ListBox Margin="10,5,10,5" x:Name="listInfo"  />
+
+                    </Grid>
+                </Grid>
+                
+             
+             
             </Grid>
+        
         </Grid> 
     </Grid>
 </Window>

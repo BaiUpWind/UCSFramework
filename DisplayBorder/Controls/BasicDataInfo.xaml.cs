@@ -157,7 +157,7 @@ namespace DisplayBorder.Controls
                                 {
                                     if (item is PieSeries<ChartBasicInfo> ps)
                                     {
-                                        ps.DataLabelsSize = FontSize-1;
+                                        ps.DataLabelsSize = FontSize-4.5d;
                                     }
                                 }
                             };

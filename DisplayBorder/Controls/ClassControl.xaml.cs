@@ -234,7 +234,7 @@ namespace DisplayBorder.Controls
                             txt.Document = new FlowDocument();
                             txt.Document.LineHeight = 2;
                             var txtValue = GetValue(td.Name)?.ToString();
-                            if (txtValue != null)
+                            if (!string.IsNullOrWhiteSpace(txtValue))
                             {
                                 Paragraph paragraph = new Paragraph();
                                 paragraph.Inlines.Add(txtValue);
@@ -279,15 +279,26 @@ namespace DisplayBorder.Controls
                                         {
                                             Paragraph paragraph = new Paragraph();
                                             paragraph.Inlines.Add(dialog.FileName);
-                                            txtBox.Document.Blocks.Add(paragraph);
-
-                                            TextRange textRange = new TextRange(txtBox.Document.ContentStart, txtBox.Document.ContentEnd);
-                                            txt.ToolTip = textRange.Text = GetValue(td.Name)?.ToString();// objType.GetProperty(fileTarget.Name).GetValue(target, null)?.ToString();
+                                            txt.Document.Blocks.Add(paragraph);
 
                                             SetValue(td.Name, dialog.FileName);
+
+                                            //TextRange textRange = new TextRange(txtBox.Document.ContentStart, txtBox.Document.ContentEnd);
+                                            txt.ToolTip =  GetValue(td.Name)?.ToString();// objType.GetProperty(fileTarget.Name).GetValue(target, null)?.ToString();
+
+                                     
                                         }
                                     }
                                 };
+                                txt.AddHandler(MouseDownEvent,
+                                new MouseButtonEventHandler((s, e) =>
+                                {
+                                    if (e.ChangedButton == MouseButton.Right)
+                                    { 
+                                        txt.Document.Blocks.Clear();
+                                        txt.ToolTip = "双击选择文件路径";
+                                    }
+                                }), true);
                             }
                      
                         }
@@ -298,6 +309,10 @@ namespace DisplayBorder.Controls
                         {
                             cb.IsChecked = (GetValue(td.Name)  !=null && (bool)GetValue(td.Name));
                             cb.Checked += (s, e) =>
+                            {
+                                SetValue(td.Name, cb.IsChecked);
+                            };
+                            cb.Unchecked += (s, e) =>
                             {
                                 SetValue(td.Name, cb.IsChecked);
                             };

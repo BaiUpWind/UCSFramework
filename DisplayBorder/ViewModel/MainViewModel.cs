@@ -18,11 +18,14 @@ namespace DisplayBorder.ViewModel
         private SysConfigPara sysConfig;
         private Group runGroup;
         private string currentRunDeviceName;
+        private ClassInfo man1;
+        private ClassInfo man2;
+
         public MainViewModel()
         {
             GlobalPara.EventManager.Subscribe(OnValueChangedArgs.EventID, OnSysConfigChanged);
             SysConfig = GlobalPara.SysConfig;
-             
+
         }
 
 
@@ -32,7 +35,7 @@ namespace DisplayBorder.ViewModel
         public SysConfigPara SysConfig
         {
             get => sysConfig; set
-            { 
+            {
                 sysConfig = value;
                 RaisePropertyChanged();
             }
@@ -52,13 +55,31 @@ namespace DisplayBorder.ViewModel
         public string CurrentRunDeviceName
         {
             get => currentRunDeviceName; set
-            { 
+            {
                 currentRunDeviceName = value;
                 RaisePropertyChanged();
             }
         }
 
-      
+        public ClassInfo Man1
+        {
+            get => man1; set
+            {
+                man1 = value;
+                RaisePropertyChanged();
+            }
+
+        }
+        public ClassInfo Man2
+        {
+            get => man2; set
+            {
+                man2 = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
         //----------------重写
 
