@@ -66,7 +66,8 @@ namespace DeviceConfig.Core
             }
             return results;
         }
-   
+
+ 
         /// <summary>
         /// 连接
         /// </summary>

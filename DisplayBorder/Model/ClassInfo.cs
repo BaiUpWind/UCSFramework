@@ -14,7 +14,7 @@ namespace DisplayBorder.Model
     {
         public int GroupID { get; set; }
 
-        [Control("IsHidden", "隐藏", ControlType.CheckBox)]
+        [Control("IsHidden", "隐藏显示", ControlType.CheckBox)]
         public bool IsHidden { get; set; } = false;
 
         [NickName("职称")]

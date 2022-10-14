@@ -25,7 +25,7 @@
                     <Button Content="保存" Margin="15,0,0,0" Click="Btn_SaveGroupsData"></Button>
                     <Button Content="组详情(窗口)" Margin="15,0,0,0" Click="Btn_GroupsDetails" ></Button>
                     <Button Content="组详情(控件)" Margin="15,0,0,0" Click="Btn_GroupsDetialC" ></Button>
-                    <Button Content="配置文件"  Margin="15,0,0,0" Click="Btn_OpenConfig" ></Button> 
+                    <Button Content="配置文件"  Margin="15,0,0,0" Click="Btn_OpenConfig" ></Button>  
                     <!--<Button Content="test"  Margin="15,0,0,0" Click="Btn_Test" ></Button>--> 
                 </StackPanel>
                 <StackPanel  Orientation="Horizontal" HorizontalAlignment="Right">
@@ -75,9 +75,10 @@
                         <StackPanel  x:Name="opSP">
                             <Button x:Name="btnDelete" Content="删除工艺" Margin="0,5,0,0" Click="Btn_DeleteGroup"></Button>
                             <Button x:Name="btnModify" Content="修改工艺" Margin="0,5,0,0" Click="Btn_ModifyGroup"></Button>
+                          
                         </StackPanel>
-                        <Border Margin="15,10,15,10" BorderBrush="LightBlue" BorderThickness="1"/>
-
+                        <Border Margin="15,10,15,10" BorderBrush="LightBlue" BorderThickness="1"/> 
+                        <Button x:Name="btnMarker" Content="标记区域" Margin="0,5,0,0" Click="Btn_MarkerArea" Visibility="Collapsed" />
                     </StackPanel>
                  
 
@@ -89,10 +90,13 @@
                     <ScrollViewer   HorizontalScrollBarVisibility="Auto"  Margin="5" Background="Gray"  >
                         <Canvas  x:Name="C1"  Background="Gray" Focusable="True" 
                                        HorizontalAlignment="Left"  VerticalAlignment="Top"  
+                                 MouseMove="Canvas_MouseMove" MouseDown="Canvas_MouseDown"
+                                 MouseUp="Canvas_MouseUp"
                                  Height="{Binding ElementName=img,Path=ActualHeight}"
                                  Width="{Binding ElementName=img,Path=ActualWidth}">
                                 <elementadorner:CanvasHelper/>
                                 <Grid    x:Name="g3"  >
+                  
                                 <Border BorderBrush="Blue" BorderThickness="1"></Border>
                                     <Image  x:Name="img" MouseMove="Image_MouseMove" 
                                             MouseLeave="img_MouseLeave"  

@@ -17,16 +17,16 @@ namespace DeviceConfig.Core
             if (ConnectConfig is DataBaseConnectCfg dbcc)
             {
                 CreateType(dbcc);
-                thCheck = new Thread(Check);
-                isChecked = true;
-                thCheck.Start();
+                //thCheck = new Thread(Check);
+                //isChecked = true;
+                //thCheck.Start();
                 return;
             }
            throw new ArgumentException("创建数据库操作实例失败!");
         }
         private DBUnitiyBase db;
-        private readonly Thread thCheck;
-        private bool isChecked;
+        //private readonly Thread thCheck;
+        //private bool isChecked;
         private int currentStatus;
         /// <summary>
         /// 状态检查
@@ -60,9 +60,9 @@ namespace DeviceConfig.Core
         }
 
         public override void Disconnected()
-        { 
+        {
             db.CurrentConnection.Close();
-            isChecked = false;
+            //isChecked = false;
         } 
    
         protected override ResultBase Read(object cmd)
@@ -79,6 +79,9 @@ namespace DeviceConfig.Core
                     ErrorCheck(sqlcmd); 
                     var data = db.GetDataTable(sqlcmd.CommandStr.ToString().Replace("\r\n", ""), System.Data.CommandType.Text);
                     sqlcmd.Result.Data = data;
+
+                    // 读取异常状态
+                    Check();
                     return sqlcmd.Result;
                 }
                 catch 
@@ -89,6 +92,7 @@ namespace DeviceConfig.Core
             return null; 
         }
 
+        
         private static void ErrorCheck(SQLCmd sqlcmd)
         {
             if (sqlcmd.CommandStr.ToString().ToLower().Contains("update"))
@@ -152,19 +156,20 @@ namespace DeviceConfig.Core
             if (db == null) return;
             currentStatus = StatusCheck.DefualtValue.Value;
             StatusCheck.AliveSql = StatusCheck.AliveSql.Replace("\r\n", "");
-            while (true)
-            {
-                if (!isChecked) continue; 
+            //while (true)
+            //{
+                //if (!isChecked) continue; 
                 try
                 {
+
                     var result = db.GetScalar(StatusCheck.AliveSql, System.Data.CommandType.Text);
                     //当前的值
                     int resultValue = int.Parse(result.ToString());
-                   
+
                     if (currentStatus != resultValue)
                     {
                         //获取异常状态的图片
-                        var  statusModel =  StatusCheck.StatusModels.Find(a => a.Value == resultValue);
+                        var statusModel = StatusCheck.StatusModels.Find(a => a.Value == resultValue);
                         if (statusModel != null)
                         {
                             currentStatus = resultValue;
@@ -176,18 +181,17 @@ namespace DeviceConfig.Core
                             OnStatusChangedEvent?.Invoke(this, StatusCheck.DefualtValue);
                             Console.WriteLine($"未找到对应的statusModel,resultValue'{resultValue}'");
                         }
-                    } 
-
-                    if (StatusCheck.CheckInterval == 0) StatusCheck.CheckInterval = 1000;
-                    Thread.Sleep(StatusCheck.CheckInterval);
+                    }
+                    //if (StatusCheck.CheckInterval == 0) StatusCheck.CheckInterval = 1000;
+                    //Thread.Sleep(StatusCheck.CheckInterval);
                 }
                 catch (Exception ex)
                 {
                     //出现未知错误 3秒后再试
                     Console.WriteLine($"状态检查时：出现未知错误'{ex.Message}'");
-                    Thread.Sleep(3000);
+                    //Thread.Sleep(3000);
                 } 
-            }
+            //}
         }
          
     }
@@ -209,8 +213,8 @@ namespace DeviceConfig.Core
         /// <summary>
         /// 检测间隔
         /// </summary>
-        [NickName("检测间隔（毫秒）")]
-        public int CheckInterval { get; set; } = 1000;
+        //[NickName("检测间隔（毫秒）")]
+        //public int CheckInterval { get; set; } = 1000;
 
         [NickName("状态组")]
         public List<StatusModel> StatusModels { get; set; } 

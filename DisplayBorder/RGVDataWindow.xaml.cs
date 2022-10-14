@@ -172,6 +172,23 @@ namespace DisplayBorder
                 SetScrollViewerPos(value);
             }
         }
+
+
+        UserSetWindow setWindow;
+        /// <summary>
+        /// 人员信息编辑
+        /// </summary>
+        UserSetWindow SetWindow
+        {
+            get
+            {
+                if (setWindow == null)
+                {
+                    setWindow = new UserSetWindow();
+                }
+                return setWindow;
+            }
+        }
         #endregion
         #region 内部方法
         private void ClearGirds()
@@ -294,11 +311,10 @@ namespace DisplayBorder
                                         delayToken.Cancel();
                                     }
                                     if (intervalToken.IsCancellationRequested) break;
-
+                                    var results = deviceInfo.Operation.GetResults();
                                     //读取数据并且加载对应的控件
                                     AsyncRunUI(() =>
-                                    {
-                                        var results = deviceInfo.Operation.GetResults();
+                                    { 
                                         for (int i = 0; i < results.Count; i++)
                                         {
                                             if (i == grids.Length) break;
@@ -499,7 +515,7 @@ namespace DisplayBorder
             }
         }
 
-        /// <summary>
+        /// <summary>       
         /// 尝试从缓存中获取图像，在没有的情况下重新根据路径创建，
         /// </summary>
         /// <param name="path"></param>
@@ -554,7 +570,7 @@ namespace DisplayBorder
             var currentPosX = sv.HorizontalOffset;
             //获取目标控件相对scrollViewer位置
             var point = new Point(currentPosX - 25, currentPosY - 25);
-            if(point.X <=0 || point.Y <=0) return;
+            //if(point.X <=0 || point.Y <=0) return;
             //获取目标相对sv的位置
             var tarPos = target.TransformToVisual(sv).Transform(point);
             if (sv.ScrollableHeight == 0) tarPos.Y = 0;
@@ -726,12 +742,21 @@ namespace DisplayBorder
         //按键监视
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.IsKeyDown(Key.F1))
-            {
-                
-                SourceDataView.Show();
-            }
-            else if (e.IsKeyDown(Key.F2))
+            //if (e.IsKeyDown(Key.F1))
+            //{
+
+            //    SourceDataView.Show();
+            //}
+            //else 
+            //if (e.IsKeyDown(Key.F3))
+            //{
+            //    SetImgSource(TryGetBitmapImage(@"E:\Demo\USCFramework\DisplayBorder\bin\Debug\Configs\高温一.png"));
+            //}
+            //if (e.IsKeyDown(Key.F4))
+            //{
+            //    SetImgSource();
+            //}
+            if (e.IsKeyDown(Key.F2))
             {
                 SetWindow.Show();
             }
@@ -768,31 +793,19 @@ namespace DisplayBorder
   
         #endregion
         #region 调试代码
-        private WindowSourceDataView sourceDataView;
-        WindowSourceDataView SourceDataView
-        {
-            get
-            {
-                if (sourceDataView == null)
-                {
-                    sourceDataView = new WindowSourceDataView();
-                }
-                return sourceDataView;
-            }
-        }
+        //private WindowSourceDataView sourceDataView;
+        //WindowSourceDataView SourceDataView
+        //{
+        //    get
+        //    {
+        //        if (sourceDataView == null)
+        //        {
+        //            sourceDataView = new WindowSourceDataView();
+        //        }
+        //        return sourceDataView;
+        //    }
+        //}
 
-        UserSetWindow setWindow;
-        UserSetWindow SetWindow
-        {
-            get
-            {
-                if(setWindow == null)
-                {
-                    setWindow = new UserSetWindow();
-                }
-                return setWindow;
-            }
-        }
      
         #endregion
 

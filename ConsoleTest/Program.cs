@@ -18,7 +18,7 @@ namespace ConsoleTest
     internal class Program
     {
 
-        static string imgUrl = "https://cdn.discordapp.com/attachments/596288454435012608/865847644852846602/r4TuyS5.png";
+         
         public readonly static string SysPath = Directory.GetCurrentDirectory().ToString();
         public readonly static string SavePath = SysPath  +@"\img\";
         public readonly static string DbPath = SysPath + @"\sesedb";

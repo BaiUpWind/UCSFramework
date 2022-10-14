@@ -280,13 +280,9 @@ namespace DisplayBorder.Controls
                                             Paragraph paragraph = new Paragraph();
                                             paragraph.Inlines.Add(dialog.FileName);
                                             txt.Document.Blocks.Add(paragraph);
-
                                             SetValue(td.Name, dialog.FileName);
-
                                             //TextRange textRange = new TextRange(txtBox.Document.ContentStart, txtBox.Document.ContentEnd);
                                             txt.ToolTip =  GetValue(td.Name)?.ToString();// objType.GetProperty(fileTarget.Name).GetValue(target, null)?.ToString();
-
-                                     
                                         }
                                     }
                                 };

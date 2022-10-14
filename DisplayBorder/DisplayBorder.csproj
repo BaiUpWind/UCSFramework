@@ -161,6 +161,7 @@
     <Compile Include="Events\OnOpenNewWindowArgs.cs" />
     <Compile Include="Events\OnValueChangedArgs.cs" />
     <Compile Include="GlobalPara.cs" />
+    <Compile Include="Helper\BitmapHelper.cs" />
     <Compile Include="Helper\ControlHelper.cs" />
     <Compile Include="Helper\ListExtension.cs" />
     <Compile Include="Model\ClassInfo.cs" />

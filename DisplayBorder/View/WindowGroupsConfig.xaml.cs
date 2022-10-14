@@ -1,33 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections.Generic; 
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.Windows.Threading;
+using System.Windows.Shell;
 using CommonApi;
-using DeviceConfig;
-using DeviceConfig.Core;
 using DisplayBorder.Controls;
 using DisplayBorder.Events;
+using DisplayBorder.Helper;
 using DisplayBorder.Model;
-using DisplayBorder.ViewModel;
 using HandyControl.Controls;
+using MyWindows;
 using MessageBox = HandyControl.Controls.MessageBox;
 using ScrollViewer = System.Windows.Controls.ScrollViewer;
 using Window = HandyControl.Controls.Window;
- 
 
 namespace DisplayBorder.View
 {
- 
+
     /// <summary>
     /// WindowGroupsConfig.xaml 的交互逻辑
     /// </summary>
@@ -72,8 +67,13 @@ namespace DisplayBorder.View
                 GlobalPara.EventManager.Unsubscribe(OnCanvasChildrenClickArgs.EventID, OnClickChildren);
             };
 
-           
-
+            KeyDown += WindowGroupsConfig_KeyDown;
+            MouseDown += WindowGroupsConfig_MouseDown;
+            imgWindow.Closing += (s, e) =>
+            {
+                imgWindow.Hide();
+                e.Cancel = true;
+            };
             #region 弃用代码
 
             //IsVisibleChanged += (s, e) =>
@@ -143,9 +143,15 @@ namespace DisplayBorder.View
             //    }
             //};
             #endregion
-   
-    
+
+            rec.Stroke = Brushes.Red;
+            rec.StrokeThickness = 0;
+            C1.Children.Add(rec);
         }
+
+ 
+
+
         /// <summary>
         /// 当前选中的可拖拽border装饰器
         /// </summary>
@@ -521,7 +527,7 @@ namespace DisplayBorder.View
         {
             if (!CheckSysConfig()) return;  
             MessageBoxResult result;
-            if (C1.Children.Count > 2  && GlobalPara.Groups != groups)
+            if (C1.Children.Count > 3  && GlobalPara.Groups != groups)
             {
                 result = MessageBox.Ask($"当前操作未保存\n\r是否打开新的文件", "警告");
                 if (result != MessageBoxResult.OK)
@@ -627,7 +633,138 @@ namespace DisplayBorder.View
          
         }
 
-     
+        //标记这个工艺所在图片的区域
+        private void Btn_MarkerArea(object sender, RoutedEventArgs e)
+        {
+            isMakering = true;
+            f = false;
+        }
+        Rectangle rec = new Rectangle();
+      
+        bool isMakering = false;
+        bool isMouseDown =false;
+        public Point startPoint;
+        private void Canvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            if ( isMakering && isMouseDown)
+            {
+                var rect = new Rect(startPoint, e.GetPosition(C1));
+               
+                rec.Margin = new Thickness(rect.Left, rect.Top, 0, 0);
+                rec.Width = rect.Width;
+                rec.Height = rect.Height;
+            } 
+        }
+
+        private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (isMakering)
+            {
+                startPoint = e.GetPosition(C1); 
+                rec.StrokeThickness = 1;
+                isMouseDown = true;
+            } 
+        }
+
+        private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            isMakering = isMouseDown = false;
+        }
+        private void WindowGroupsConfig_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Right)
+            {
+                rec.Width = 0;
+                rec.Height = 0;
+            }
+        }
+        Window imgWindow = new Window()
+        {
+            Content = new Image()
+            {
+                Margin = new Thickness(25), 
+            }, 
+        };
+        bool f;
+        System.Drawing.Color lastColor;
+        private void WindowGroupsConfig_KeyDown(object sender, KeyEventArgs e)
+        {
+            //if (e.IsKeyDown(Key.F1))
+            //{
+            //查看截取出来的图片
+            if (rec.Width > 0 && rec.Height > 0)
+            {
+                Point point1 = rec.TransformToAncestor(C1).Transform(new Point(0, 0));
+                var image = img.Source as BitmapSource;
+                var scaleX = image.PixelWidth / img.Width;
+                var scaleY = image.PixelHeight / img.Height;
+                int x = (int)(point1.X * scaleX);
+                int y = (int)(point1.Y * scaleY);
+                int width = (int)(rec.Width * scaleX);
+                int height = (int)(rec.Height * scaleY);
+                BitmapSource newBitmapSource =
+                     BitmapHelper.CutImage(img.Source as BitmapSource,
+                     new Int32Rect(x, y, width, height));
+
+
+
+                System.Drawing.Color color;
+                System.Drawing.Color orginColor;
+
+
+                if (e.IsKeyDown(Key.F1))
+                {
+                    color = System.Drawing.Color.FromArgb(255, 255, 0, 0);
+                    lastColor = System.Drawing.Color.FromArgb(255, 0, 255, 0);
+                }
+                else
+                {
+                    color = System.Drawing.Color.FromArgb(255, 0, 255, 0);
+                    lastColor = System.Drawing.Color.FromArgb(255, 255, 0, 0);
+
+                }
+
+                if (!f)
+                {
+                    orginColor = System.Drawing.Color.FromArgb(0, 255, 255, 255);
+                    f = true;
+                }
+                else
+                {
+                    orginColor = lastColor;
+                }
+
+                SetImgCorlor(image, x, y, width, height, color, orginColor);
+
+
+                //if (imgWindow.Visibility != Visibility.Visible)
+                //{
+                //    imgWindow.Show();
+                //}
+                //if (imgWindow.Content is Image im)
+                //{
+                //    im.Source = newBitmapSource;
+                //} 
+            }
+            //} 
+
+        }
+
+        private void SetImgCorlor(BitmapSource image, int x, int y, int width, int height, System.Drawing.Color red, System.Drawing.Color black)
+        {
+            var bitmap = BitmapHelper.ImageSourceToBitmap(image);
+            for (int i = x; i < width + x; i++)
+            {
+                for (int j = y; j < height + y; j++)
+                {
+                    System.Drawing.Color pixelColor = bitmap.GetPixel(i, j);
+                    if (pixelColor == black)
+                        bitmap.SetPixel(i, j, red);
+                }
+            }
+            img.Source = null;
+            img.Source = BitmapHelper.BitmapToBitmapImage(bitmap);
+        }
     }
 
 
