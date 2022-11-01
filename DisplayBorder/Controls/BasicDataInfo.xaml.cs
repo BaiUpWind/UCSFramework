@@ -428,18 +428,18 @@ namespace DisplayBorder.Controls
             {
                 intervalToken.Cancel();
             };
-            IsVisibleChanged += (s, e) =>
-            {
-                if (this.Visibility  == Visibility.Visible)
-                {
-                    IsRunning = true;
-                }
-                else
-                {
-                    IsRunning = false;
-                    dataInfo.Clear();
-                }
-            };  
+            //IsVisibleChanged += (s, e) =>
+            //{
+            //    if (this.Visibility  == Visibility.Visible)
+            //    {
+            //        IsRunning = true;
+            //    }
+            //    else
+            //    {
+            //        IsRunning = false;
+            //        dataInfo.Clear();
+            //    }
+            //};  
             Init(data, dataType, title, refreshTime); 
         } 
         private CancellationTokenSource intervalToken = new CancellationTokenSource();

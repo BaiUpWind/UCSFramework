@@ -49,7 +49,7 @@ namespace DisplayBorder.View
                 cmbGroupNames.SelectedIndex = 0;
              
             }
-         
+        
         }
         private int selectedId;
         private List<ClassInfo> cloneClassInfo;

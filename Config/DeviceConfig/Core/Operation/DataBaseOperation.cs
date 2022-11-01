@@ -144,7 +144,7 @@ namespace DeviceConfig.Core
                         break;
                 }
                 ConnectConfig = dataBase;
-                return;
+                return; 
             }
             throw new ArgumentException("创建数据库操作实例失败!"); 
         }

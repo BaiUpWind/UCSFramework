@@ -61,6 +61,7 @@ namespace DisplayBorder
             {
                 GlobalPara.EventManager.Unsubscribe(OnValueChangedArgs.EventID, OnGroupsValueChanged);
             };
+
             #region 时间定时器
             var dateTimeTimer = new DispatcherTimer
             {
@@ -311,9 +312,10 @@ namespace DisplayBorder
                                         delayToken.Cancel();
                                     }
                                     if (intervalToken.IsCancellationRequested) break;
+                             
                                     var results = deviceInfo.Operation.GetResults();
                                     //读取数据并且加载对应的控件
-                                    AsyncRunUI(() =>
+                                    AsyncRunUI(async () =>
                                     { 
                                         for (int i = 0; i < results.Count; i++)
                                         {
@@ -324,19 +326,24 @@ namespace DisplayBorder
                                             if (result is SQLResult sqlr && sqlr.Data is DataTable dt)
                                             {
                                                 dt.TableName = "myTable";
+                                                //这里可以根据类型去获取对应的控件 ，避免重复生成，浪费资源，减少闪烁
+                                                //在ClearGirds 选择不移除控件，而是收起控件，重复使用
                                                 var dc = grids[i].Children.GetControl<BasicDataInfo>();
                                                 if (dc == null || dc.DataType != sqlr.SelectType)
                                                 {
                                                     //创建对应的控件
                                                     dc = ControlHelper.CreateDataControl(dt, sqlr.SelectType, sqlr.Title, deviceInfo.RefreshInterval);
                                                     grids[i].Children.Add(dc);
+                                                    await Task.Delay(200);
+                                                    dc.SetDatas(dt);
                                                 }
                                                 else
                                                 {
                                                     //使对应的控件显示，并且赋予新的数据源
                                                     dc.SetDatas(dt);
+                                                 
                                                 }
-                                                if (dc.Visibility != Visibility.Visible) dc.Visibility = Visibility.Visible;
+                                                //if (dc.Visibility != Visibility.Visible) dc.Visibility = Visibility.Visible;
                                             }
                                         }
 
@@ -344,6 +351,7 @@ namespace DisplayBorder
                                     Console.WriteLine($"[{DateTime.Now}]{deviceInfo.DeviceInfoName}刷新");
                                     if (deviceInfo.RefreshInterval == 0) deviceInfo.RefreshInterval = 1000;
                                     await Task.Delay(deviceInfo.RefreshInterval);
+                                    break;//暂时跳出 不作数据刷新处理 2022 10 17
                                 }
                             }, intervalToken.Token);
 
@@ -759,6 +767,8 @@ namespace DisplayBorder
             if (e.IsKeyDown(Key.F2))
             {
                 SetWindow.Show();
+                SetWindow.Hide();
+                SetWindow.Show(); 
             }
             else if (e.IsKeyDown(Key.F10))
             {
