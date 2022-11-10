@@ -19,7 +19,7 @@ namespace DBHelper
     /// <summary>
     /// 获取数据库访问实例，需要访问则继承这个类
     /// </summary>
-    public abstract class GetDBBase : IDisposable
+    public abstract class GetDBBase 
     {
         public GetDBBase(DBType type, string connStr)
         {
@@ -41,9 +41,22 @@ namespace DBHelper
         }
 
         protected DBUnitiyBase db;
-        public void Dispose()
+
+        public void SetConnStr(string connStr) => db.ConnStr = connStr;
+        public bool TestConnected()
         {
-            if (db.CurrentConnection != null)
+            if (db == null) return false;
+            try
+            {
+                db.CurrentConnection.Open();
+                return true;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
             {
                 db.CurrentConnection.Close();
                 db.CurrentConnection.Dispose();

@@ -59,7 +59,7 @@ namespace DBHelper
         /// <summary>
         /// 给当前DbCommand对象赋值,并且OpenConnection();
         /// </summary>
-        void SetCommandAndOpenConnect(string sqlText, CommandType cmdType, params DbParameter[] param)
+        void SetCommandAndOpenConnect(string sqlText,CommandType cmdType = CommandType.Text, params DbParameter[] param)
         {
             //按说赋值Connection,CommandType,是不用多次赋值的
             DbCommandObj.CommandType = cmdType;
@@ -75,7 +75,7 @@ namespace DBHelper
         /// <summary>
         /// 执行一条指定命令类型(SQL语句或存储过程等)的SQL语句,返回所影响行数
         /// </summary>
-        public int ExecNonQuery(string sqlText, CommandType cmdType, params DbParameter[] param)
+        public int ExecNonQuery(string sqlText, CommandType cmdType = CommandType.Text, params DbParameter[] param)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace DBHelper
         /// <summary>
         /// 获得DataReader对象
         /// </summary>
-        public DbDataReader GetDataReader(string sqlText, CommandType cmdType, params DbParameter[] param)
+        public DbDataReader GetDataReader(string sqlText,CommandType cmdType = CommandType.Text, params DbParameter[] param)
         {
             try
             {
@@ -138,7 +138,7 @@ namespace DBHelper
         /// <summary>
         /// 执行一条SQL语句返回DataSet对象
         /// </summary>
-        public DataSet GetDataSet(string sqlText, CommandType cmdType, params DbParameter[] param)
+        public DataSet GetDataSet(string sqlText,CommandType cmdType = CommandType.Text, params DbParameter[] param)
         {
             try
             {
@@ -158,7 +158,7 @@ namespace DBHelper
             }
         }
 
-        public DataTable GetDataTable(string sqlText, CommandType cmdType, params DbParameter[] param)
+        public DataTable GetDataTable(string sqlText,CommandType cmdType = CommandType.Text, params DbParameter[] param)
         {
             try
             {
@@ -186,7 +186,7 @@ namespace DBHelper
         /// <param name="index">DataSet的索引</param>
         /// <param name="param">传入参数</param>
         /// <returns></returns>
-        public List<T> GetDataList<T>(string sqlText, CommandType cmdType, int index = 0, params DbParameter[] param)
+        public List<T> GetDataList<T>(string sqlText,CommandType cmdType = CommandType.Text, int index = 0, params DbParameter[] param) where T :class ,new()
         {
             try
             {
@@ -217,7 +217,7 @@ namespace DBHelper
         /// <summary>
         /// 获得首行首列
         /// </summary>
-        public object GetScalar(string sqlText, CommandType cmdType, params DbParameter[] param)
+        public object GetScalar(string sqlText,CommandType cmdType = CommandType.Text, params DbParameter[] param)
         {
             try
             {
@@ -295,7 +295,7 @@ namespace DBHelper
         /// <param name="p_DataSet">DataSet</param>
         /// <param name="p_TableIndex">待转换数据表索引</param>
         /// <returns>实体类</returns>
-        public T DataSetToEntity<T>(DataSet p_DataSet, int p_TableIndex)
+        public T DataSetToEntity<T>(DataSet p_DataSet, int p_TableIndex) where T : class, new()
         {
             if (p_DataSet == null || p_DataSet.Tables.Count < 0)
                 return default(T);
@@ -330,7 +330,7 @@ namespace DBHelper
         /// <param name="p_DataSet">DataSet</param>
         /// <param name="p_TableIndex">待转换数据表索引</param>
         /// <returns>实体类列表</returns>
-        public IList<T> DataSetToEntityList<T>(DataSet p_DataSet, int p_TableIndex)
+        public IList<T> DataSetToEntityList<T>(DataSet p_DataSet, int p_TableIndex) where T : class, new()
         {
             if (p_DataSet == null || p_DataSet.Tables.Count < 0)
                 return default(IList<T>);
