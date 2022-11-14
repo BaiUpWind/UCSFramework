@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,6 +49,8 @@ namespace DBHelper
             if (db == null) return false;
             try
             {
+                if (db.CurrentConnection.State == System.Data.ConnectionState.Open) return true;
+                db.CurrentConnection.ConnectionString = db.ConnStr ;
                 db.CurrentConnection.Open();
                 return true;
             }

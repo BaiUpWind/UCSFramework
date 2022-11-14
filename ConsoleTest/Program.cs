@@ -8,10 +8,13 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace ConsoleTest
 {
@@ -27,12 +30,7 @@ namespace ConsoleTest
         {
             Console.WriteLine("Hello, World!");
 
-            var dirName = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-
-            if (!Directory.Exists(SavePath + dirName))
-            {
-                Directory.CreateDirectory(SavePath + dirName);
-            }
+       
             SQLiteConnection connection = null;
             try
             {
@@ -48,15 +46,29 @@ namespace ConsoleTest
 
             var timestampStr = config.AppSettings.Settings["timestamp"].Value;
             var maxcount = config.AppSettings.Settings["maxcount"].Value;
+            var channelid = config.AppSettings.Settings["channelid"].Value;
             if (string.IsNullOrWhiteSpace(timestampStr))
             {
                 timestampStr = "0";
+            }
+            var dirName = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            var dicPath = SavePath + $"{dirName}"  ;
+            if (!Directory.Exists(dicPath))
+            {
+                Directory.CreateDirectory(dicPath);
             }
 
             if (!long.TryParse(timestampStr, out long timestamp)) return;
 
             string sql = @"select a.name,a.size,a.url,a.type,b.timestamp from attachments a join messages b  on a.message_id = b.message_id
                            where b.timestamp > "+ timestamp + " and a.type like '%image%'  order by b.timestamp  limit " + maxcount + "";
+
+            sql = $@"select a.name,a.size,a.url,a.type,b.timestamp from attachments a, messages b ,channels c
+                where a.message_id = b.message_id and b.channel_id = c.id and b.timestamp > {timestamp} and substr(a.type,0,6) = 'image' 
+                and c.id = '{channelid}'
+                order by b.timestamp limit {maxcount}";
+
+
             SQLiteCommand cmd = new SQLiteCommand();
             SQLiteDataAdapter adapter = new SQLiteDataAdapter();
             cmd.CommandText = sql;

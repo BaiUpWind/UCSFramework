@@ -7,9 +7,9 @@
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
          ResizeMode="CanMinimize"
         Title="MainWindow" Height="600" Width="800">
-    <WindowChrome.WindowChrome>
+    <!--<WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="0 1 0 0"/>
-    </WindowChrome.WindowChrome>
+    </WindowChrome.WindowChrome>-->
     <myc:WindowAcrylicBlur.WindowAcrylicBlur>
         <myc:WindowAcrylicBlur BlurColor="AliceBlue" Opacity="0.6"/>
     </myc:WindowAcrylicBlur.WindowAcrylicBlur>
