@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Spire.Doc;
+using Spire.Doc.Fields;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -15,6 +17,7 @@ using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ConsoleTest
 {
@@ -26,11 +29,26 @@ namespace ConsoleTest
         public readonly static string SavePath = SysPath  +@"\img\";
         public readonly static string DbPath = SysPath + @"\sesedb";
         public readonly static Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+        public readonly static string DicPath = @"E:\Demo\USCFramework\ConsoleTest\bin\Debug\img\20221114_173242";
+
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hello, World!");
+            var infos = GetAllFileInfo(new DirectoryInfo(DicPath), new List<FileInfo>());
 
-       
+            List<Bitmap> listImag = new List<Bitmap>();
+            foreach (var item in infos)
+            {
+                listImag.Add(new Bitmap(item.FullName));
+            }
+
+            SaveWord(listImag, @"E:\Demo\USCFramework\ConsoleTest\bin\Debug\img\m.docx");
+
+            Console.ReadKey();
+
+            return;
             SQLiteConnection connection = null;
             try
             {
@@ -78,13 +96,17 @@ namespace ConsoleTest
             adapter.Fill(ds);
             var list = DataSetToEntityList<ImageInfo>(ds, 0);
             int failCount = 0;
+            List<Bitmap> bitmaps = new List<Bitmap>();
             foreach (var item in list)
             { 
                 using (WebClient webClient = new WebClient())
                 {
                     try
                     {
-                        webClient.DownloadFile(item.URL, SavePath + dirName + "\\" + item.NAME);
+                        var fileName = SavePath + dirName + "\\" + item.NAME;
+                        webClient.DownloadFile(item.URL, fileName);
+                        Bitmap image = new Bitmap(fileName);
+                        bitmaps.Add(image);
                         Console.WriteLine($"获取成功'{item.NAME}'");
                         failCount = 0;
                     }
@@ -102,8 +124,37 @@ namespace ConsoleTest
             } 
             config.AppSettings.Settings["timestamp"].Value = list[list.Count - 1].TIMESTAMP.ToString();
             config.Save();
+            SaveWord(bitmaps, SavePath + dirName + "\\"+"m.docx");
             Console.WriteLine("Finishied,按任意键关闭!"); 
             Console.ReadKey();
+        }
+
+        public static void SaveWord(List<Bitmap> bitmaps,string path)
+        {
+            if (bitmaps == null || bitmaps.Count == 0) return;
+            Document doc = new Document();
+            foreach (var item in bitmaps)
+            {
+               var section =  doc.AddSection();
+                section.AddParagraph();
+                section.Paragraphs[0].AppendPicture(item);
+             
+            }
+            doc.SaveToFile(path);
+        }
+        static List<System.IO.FileInfo> GetAllFileInfo(System.IO.DirectoryInfo dir,List<FileInfo> FileList)
+        {
+            System.IO.FileInfo[] allFile = dir.GetFiles();
+            foreach (System.IO.FileInfo file in allFile)
+            {
+                FileList.Add(file);
+            }
+            System.IO.DirectoryInfo[] allDir = dir.GetDirectories();
+            foreach (System.IO.DirectoryInfo d in allDir)
+            {
+                GetAllFileInfo(d, FileList);
+            }
+            return FileList;
         }
         /// <summary>
         /// DataSet转换为实体列表
