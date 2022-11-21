@@ -16,7 +16,7 @@ namespace DeviceConfig.Core
         {
             if (ConnectConfig is DataBaseConnectCfg dbcc)
             {
-                CreateType(dbcc);
+                CreateType(dbcc); 
                 //thCheck = new Thread(Check);
                 //isChecked = true;
                 //thCheck.Start();
@@ -31,7 +31,8 @@ namespace DeviceConfig.Core
         /// <summary>
         /// 状态检查
         /// </summary>
-        public StatusCheck StatusCheck { get; set; }
+        [Control("StatusCheck", "状态检查", ControlType.Data, GenerictyType: typeof(StatusCheck), FieldName: nameof(StatusCheck))]
+        public StatusCheck StatusCheck { get; set; }  
         /// <summary>
         /// 当状态发生变化时
         /// </summary>
@@ -202,12 +203,14 @@ namespace DeviceConfig.Core
         /// 检测sql语句
         /// </summary>
         [NickName("检测语句","这里的返回结果是首行首列，注意编写规则!")]
+        [Control("AliveSql", "检测语句", ControlType.TextBox)]
         public string AliveSql { get; set; }
 
         /// <summary>
         /// 正常值
         /// </summary>
         [NickName("默认值","当检测语句的结果与默认值不匹配时，则去状态中找到对应的状态展示")]
+        [Control("DefualtValue","默认值", ControlType.Data, GenerictyType: typeof(StatusModel), FieldName: nameof(DefualtValue))]
         public StatusModel DefualtValue { get; set; }  
 
         /// <summary>
@@ -217,6 +220,7 @@ namespace DeviceConfig.Core
         //public int CheckInterval { get; set; } = 1000;
 
         [NickName("状态组")]
+        [Control("StatusModels", "状态组", ControlType.Collection, GenerictyType: typeof(StatusModel), FieldName: nameof(StatusModels))]
         public List<StatusModel> StatusModels { get; set; } 
     }
 
@@ -226,13 +230,17 @@ namespace DeviceConfig.Core
         //public StatusType StatusType { get; set; }
 
         [NickName("对应值")]
+        [Control("Value", "对应值", ControlType.TextBox)]
         public int Value { get; set; } = 1;
 
         [NickName("状态描述")]
+        [Control("Description", "状态描述", ControlType.TextBox)]
         public string Description { get; set; }
 
         [NickName("状态图片", "双击选择文件路径")]
         [FileSelector("Jpge")]
+        [Control("ImagePath", "图片配置路径", ControlType.TextBox)]
+        [Control("ImagePath", null, ControlType.FilePathSelector, FieldName: nameof(ImagePath), FileType: "jpg")]
         public string ImagePath { get; set; }
 
        

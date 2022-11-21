@@ -54,11 +54,11 @@ namespace DisplayBorder.View
                     img.Width = bitmap.Width;
                     img.Height = bitmap.Height;
                 }
-
+                btnAdd.IsEnabled = false;
                 //Visibility = Visibility.Hidden; 
-              
-             
-                
+
+
+
 
             };
 
@@ -165,7 +165,7 @@ namespace DisplayBorder.View
 
         public ElementAdorner CacheEa { get => cacheEa; set => cacheEa = value; }
        
-        private List<Group> groups = new List<Group>();
+        private List<Group> groups ;
         private List<Border> cacheBorder = new List<Border>();
 
         private void SetControlEnable(bool value)
@@ -543,6 +543,7 @@ namespace DisplayBorder.View
                     LoadGroup();
 
                     Growl.Info(GlobalPara.Groups.Count == 0 ? "创建成功" : "打开成功");
+                    btnAdd.IsEnabled = true;
 
                 }
                 catch (Exception ex)
@@ -557,11 +558,11 @@ namespace DisplayBorder.View
         private void LoadGroup()
         {
             SetImgSource();
+            groups = new List<Group>();
             foreach (var group in GlobalPara.Groups)
             {
                 CreateTitle(group);
             }
-            groups = new List<Group>(GlobalPara.Groups);
         }
 
         private void ClearCanvs()
@@ -573,14 +574,21 @@ namespace DisplayBorder.View
                     C1.Children.Remove(border);
                 }
                 img.Source = null;
-                groups.Clear();
+                groups?.Clear();
             }
         }
 
         private void Btn_SaveGroupsData(object sender, RoutedEventArgs e)
         { 
+            if(groups == null)
+            {
+                MessageBox.Show("并未打开任何配置文件，请先单击打开按钮！", "提示信息", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
             GlobalPara.Groups = new List<Group>( groups);
-            Growl.Info("保存成功!");　
+            Growl.Info("保存成功!");
+            groups = null;
+            btnAdd.IsEnabled = false;
         }
 
         private void Btn_OpenConfig(object sender, RoutedEventArgs e)

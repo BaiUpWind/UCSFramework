@@ -799,9 +799,18 @@ namespace DisplayBorder
             }
 
         }
-
-  
+        //单击班次信息时
+        private void Class_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(e.LeftButton == MouseButtonState.Pressed)
+            {
+                SetWindow.Show();
+                SetWindow.Hide();
+                SetWindow.Show();
+            }
+        }
         #endregion
+
         #region 调试代码
         //private WindowSourceDataView sourceDataView;
         //WindowSourceDataView SourceDataView
@@ -816,7 +825,7 @@ namespace DisplayBorder
         //    }
         //}
 
-     
+
         #endregion
 
 

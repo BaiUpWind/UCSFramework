@@ -119,45 +119,7 @@ namespace DeviceConfig.Core
                 throw  ex;
             }
         }
-
-     
-        #region 暂时弃用 2022年8月5日 07:49:50
-
-
-        //#region 创建连接
-        ///// <summary>
-        ///// 获取所有连接
-        ///// <para></para>
-        ///// <see cref=" Utility.Reflection.GetInheritors"/>
-        ///// </summary>
-        ///// <returns></returns>
-        //public ClassData GetConnections() => Utility.Reflection.GetClassData<ConnectionConfigBase>();
-        ///// <summary>
-        /////  创建一个连接
-        ///// </summary>
-        ///// <param name="name"></param> 
-        //public void CreataConnection(string name) => connectConfig = Utility.Reflection.CreateObjectShortName<ConnectionConfigBase>(name);
-
-        //#endregion
-
-        //#region 指令创建 
-        ///// <summary>
-        ///// 获取所有指令
-        ///// <para></para>
-        ///// <see cref=" Utility.Reflection.GetInheritors"/>
-        ///// </summary>
-        ///// <returns></returns>
-        //public ClassData GetCommands() => Utility.Reflection.GetClassData<CommandBase>( ); 
-
-        ///// <summary>
-        ///// 创建读取指令
-        ///// </summary>
-        ///// <param name="name"></param>
-        //public void CreateCommand(string name) =>  Command = Utility.Reflection.CreateObjectShortName<CommandBase>(name); 
-        //#endregion
-
-
-        #endregion
+         
 
     }
 }

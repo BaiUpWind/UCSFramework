@@ -196,7 +196,7 @@
                                 <RowDefinition Height="9*"></RowDefinition>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
-                                <Border  Background="#FF479CF1" Opacity="0.85" CornerRadius="5,5,0,0" ></Border>
+                                <Border  Background="#FF479CF1" Opacity="0.85" CornerRadius="5,5,0,0"  MouseDown="Class_MouseDown" ToolTip="单击进行编辑"></Border>
                                 <TextBlock   Style="{StaticResource NameTextTtile}"        FontSize="{DynamicResource TabFontSize}">班次信息</TextBlock>
                             </Grid>
                             <Grid Grid.Row="1">

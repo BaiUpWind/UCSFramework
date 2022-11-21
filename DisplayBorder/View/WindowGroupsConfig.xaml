@@ -67,7 +67,7 @@
                         <RowDefinition Height="25"></RowDefinition>
                         <RowDefinition></RowDefinition>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" FontSize="18" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">组操作</TextBlock>
+                    <TextBlock Grid.Row="0" FontSize="18" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center">工艺操作</TextBlock>
                     <Border Grid.Row="1" BorderThickness="1" Margin="5" BorderBrush="White"  CornerRadius="5"></Border>
                     <StackPanel  Grid.Row="1" Orientation="Vertical" >
                         <Button  x:Name="btnAdd" Content="添加工艺" Margin="0,15,0,0" Click="Btn_ClickAddGroup"></Button>

@@ -674,12 +674,13 @@ namespace DisplayBorder
             }
             else
             {
-                btnData.Content = data == null ? "错误!" : data;
+                btnData.Content = data ?? "错误!";
             }
          
-            btnData.IsEnabled = data != null;
+            btnData.IsEnabled = !objType.IsAbstract || data != null;
             if (btnData.IsEnabled)
             {
+                btnData.Content =  attr.LabelName  ?? attr.Name;
                 btnData.Click += (s, e) =>
                 {
 

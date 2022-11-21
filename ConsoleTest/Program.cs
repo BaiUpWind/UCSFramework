@@ -23,24 +23,23 @@ namespace ConsoleTest
         public readonly static string DbPath = SysPath + @"\sesedb";
         public readonly static Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
 
-        public readonly static string DicPath = @"D:\Code\UCSFramework\ConsoleTest\bin\Debug\img\20221114_194108";
+        public readonly static string DicPath = @"";
 
 
         static void Main(string[] args)
         {
             Console.WriteLine("Hello, World!");
-            var infos = GetAllFileInfo(new DirectoryInfo(DicPath), new List<FileInfo>());
+            //var infos = GetAllFileInfo(new DirectoryInfo(DicPath), new List<FileInfo>());
+             
 
-            //PDF(SavePath + "\\A1.pdf", infos.Select(a => a.FullName).ToList());
+            //object path = SavePath + "A1.doc";
 
-            object path = SavePath + "A1.doc";
+            //SaveToDoc(path, infos.Select(a => a.FullName).ToList());
 
-            SaveToDoc(path, infos.Select(a => a.FullName).ToList());
+            //Console.WriteLine("ok");
+            //Console.ReadKey();
 
-            Console.WriteLine("ok");
-            Console.ReadKey();
-
-            return;
+            //return;
             SQLiteConnection connection = null;
             try
             {
@@ -55,8 +54,11 @@ namespace ConsoleTest
             }
             Console.WriteLine("数据库打开成功!");
 
+            //时间戳
             var timestampStr = config.AppSettings.Settings["timestamp"].Value;
+            //获取最大数量
             var maxcount = config.AppSettings.Settings["maxcount"].Value;
+            //频道id
             var channelid = config.AppSettings.Settings["channelid"].Value;
             if (string.IsNullOrWhiteSpace(timestampStr))
             {
@@ -71,10 +73,7 @@ namespace ConsoleTest
 
             if (!long.TryParse(timestampStr, out long timestamp)) return;
 
-            string sql = @"select a.name,a.size,a.url,a.type,b.timestamp from attachments a join messages b  on a.message_id = b.message_id
-                           where b.timestamp > "+ timestamp + " and a.type like '%image%'  order by b.timestamp  limit " + maxcount + "";
-
-            sql = $@"select a.name,a.size,a.url,a.type,b.timestamp from attachments a, messages b ,channels c
+            string  sql = $@"select a.name,a.size,a.url,a.type,b.timestamp from attachments a, messages b ,channels c
                 where a.message_id = b.message_id and b.channel_id = c.id and b.timestamp > {timestamp} and substr(a.type,0,6) = 'image' 
                 and a.size < 1048576 and c.id = '{channelid}'
                 order by b.timestamp limit {maxcount}";
@@ -97,8 +96,7 @@ namespace ConsoleTest
                     try
                     {
                         var fileName = SavePath + dirName + "\\" + item.NAME;
-                        webClient.DownloadFile(item.URL, fileName);
-                        //Bitmap image = new Bitmap(fileName);
+                        webClient.DownloadFile(item.URL, fileName); 
                         imgPaths.Add(fileName);
                         Console.WriteLine($"获取成功'{item.NAME}'");
                         failCount = 0;
@@ -123,59 +121,7 @@ namespace ConsoleTest
             Console.ReadKey();
         }
 
-        /// <summary>
-        /// 将多张图片合成到一个PDF内，完美填充页，页大小(mm)为图片大小(mm)
-        /// </summary>
-        /// <param name="输出目录">最终的PDF输出目录</param>
-        /// <param name="图片路径">图片的路径集合</param>
-        public static void PDF(string 输出目录, List<string> 图片路径)
-        {
-            Dictionary<string, float[]> dic = new Dictionary<string, float[]>();
-            //获取PDF页的实际长宽(mm)
-            float[] xy = new float[2];
-            foreach (var item in 图片路径)
-            {
-                xy = new float[2];
-                using (FileStream fs = new FileStream(item, FileMode.Open))
-                {
-                    System.Drawing.Image img = System.Drawing.Image.FromStream(fs);
-                    int w = img.Width;
-                    int h = img.Height;
-                    float w_dpi = img.HorizontalResolution;//水平分辨率
-                    float h_dpi = img.VerticalResolution;//垂直分辨率
-                    xy[0] = (float)(w * 25.4 / w_dpi * 2.83462677);//PDF实际宽度(mm)要乘2.83462677
-                    xy[1] = (float)(h * 25.4 / h_dpi * 2.83462677);
-                    dic.Add(item, xy);
-                }
-            }
-
-            //创建页属性对象，Rectangle：设置长宽，最后4个0设置左右上下边距
-            iTextSharp.text.Document document = new iTextSharp.text.Document(new iTextSharp.text.Rectangle(0, 0, xy[0], xy[1]), 0, 0, 0, 0);
-            using (FileStream fs = new FileStream(输出目录, FileMode.Create))
-            {
-                iTextSharp.text.pdf.PdfWriter.GetInstance(document, fs);//将页设置与PDF输出流合并
-                document.Open();//打开PDF
-                                //插入图片，一个图片占满一页
-                for (int i = 0; i < 图片路径.Count; i++)
-                {
-                    string imgPath = 图片路径[i];
-                    using (FileStream imgFs = new FileStream(imgPath, FileMode.Open))
-                    {
-                        iTextSharp.text.Image img = iTextSharp.text.Image.GetInstance(imgFs);//从流读取图片
-                                                                                             //img.Alignment = Element.ALIGN_CENTER;//图片居中
-                        if (dic.TryGetValue(imgPath, out   xy))
-                        {
-                            img.ScaleAbsolute(xy[0], xy[1]);//设置图片大小
-                            document.NewPage();//创建新页，并指向新页
-                            document.Add(img);//往新页中添加图片
-                            imgFs.Close();//重要，防止内存溢出，必要时可调用GC强制等待清理
-                        }
-                    }
-                }
-                document.Close();//关闭PDF
-            }
-        }
-
+  
         public static void SaveToDoc(object filePath, List<string> imgPaths)
         {
             MSWord.Application wordApp;                   //Word应用程序变量
