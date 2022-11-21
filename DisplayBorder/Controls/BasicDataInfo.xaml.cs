@@ -496,9 +496,7 @@ namespace DisplayBorder.Controls
                 case DataType.表格:
                     dataInfo = new DataGridInfo(data);
                     break;
-                case DataType.标签组:
-
-                    break;
+             
                 default:
                     break;
             }
@@ -556,9 +554,7 @@ namespace DisplayBorder.Controls
                         dataInfo = new DataGridInfo(dt); 
                     }
                     break;
-                case DataType.标签组:
-
-                    break;
+             
                 default:
                     break;
             }

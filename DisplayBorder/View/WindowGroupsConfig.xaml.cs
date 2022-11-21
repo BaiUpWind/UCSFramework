@@ -460,7 +460,7 @@ namespace DisplayBorder.View
         } 
         private void Btn_GroupsDetails(object sender, RoutedEventArgs e)
         {
-            if (groups.Count > 0)
+            if (groups != null && groups.Count > 0)
             {
                 WindowHelper.CreateDataGirdWindow<DataGirdWindow>(groups, titleName: "组的详细信息",oldWindow:null, onClose: () =>
                 {
@@ -475,7 +475,7 @@ namespace DisplayBorder.View
 
         private void Btn_GroupsDetialC(object sender, RoutedEventArgs e)
         {
-            if(groups.Count == 0)
+            if(groups==null  || groups.Count == 0)
             {
                 Growl.Warning($"未找到任何组的信息");
                 return;
