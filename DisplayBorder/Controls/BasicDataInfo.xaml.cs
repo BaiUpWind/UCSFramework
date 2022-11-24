@@ -1,4 +1,4 @@
-﻿using DeviceConfig;
+﻿using DeviceConfig; 
 using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,7 +23,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Threading;
+using System.Windows.Threading; 
 
 namespace DisplayBorder.Controls
 {
@@ -63,7 +64,9 @@ namespace DisplayBorder.Controls
                     {
                         parent = p;
                     }
-                }; 
+              
+                };
+                chart.Foreground = new SolidColorBrush(Colors.White);
             }
             private Chart chart;
             private List<ChartBasicInfo> Infos;
@@ -129,7 +132,7 @@ namespace DisplayBorder.Controls
                         {
                             if (item is ColumnSeries<double> cs)
                             {
-                                cs.Values = CreateMaxValue(Infos.Count, (int)(Infos.Max(a => a.Value) + Infos.Max(a => a.Value) * 0.4));
+                                cs.Values = CreateMaxValue(Infos.Count, (int)(Infos.Max(a => a.Value.CastTo(0d)) + Infos.Max(a =>  a.Value.CastTo(0d) ) * 0.4));
                             }
                         }
                     }
@@ -150,14 +153,17 @@ namespace DisplayBorder.Controls
                         chart = new PieChart();
                         if (chart is PieChart pie)
                         {
-                            pie.Series = CreateSeries(infos, dataType);  
+                            pie.Series = CreateSeries(infos, dataType);
+                            pie.InitialRotation = -90;
                             pie.SizeChanged += (s, e) =>
                             {
                                 foreach (var item in pie.Series)
                                 {
                                     if (item is PieSeries<ChartBasicInfo> ps)
                                     {
-                                        ps.DataLabelsSize = FontSize-4.5d;
+                                        ps.DataLabelsSize = FontSize ;
+                                       
+                                        //ps.DataLabelsPaint = new SolidColorPaint() { Color = SKColors.White, FontFamily = "Microsoft YaHei UI", };
                                     }
                                 }
                             };
@@ -173,6 +179,7 @@ namespace DisplayBorder.Controls
                                 if (line.Series is LineSeries<ChartBasicInfo> lineSeriser)
                                 {
                                     lineSeriser.DataLabelsSize = FontSize;
+                                    //lineSeriser.DataLabelsPaint = new SolidColorPaint() { Color = SKColors.White, FontFamily = "Microsoft YaHei UI", };
                                 }
                             };
                         }
@@ -190,10 +197,12 @@ namespace DisplayBorder.Controls
                                     if (item is ColumnSeries<double> cs)
                                     {
                                         cs.DataLabelsSize = FontSize;
+                                        //cs.DataLabelsPaint = new SolidColorPaint() { Color = SKColors.White, FontFamily = "Microsoft YaHei UI", };
                                     }
                                     else if (item is ColumnSeries<ChartBasicInfo> cb)
                                     {
                                         cb.DataLabelsSize = FontSize;
+                                        //cb.DataLabelsPaint = new SolidColorPaint() { Color = SKColors.White, FontFamily = "Microsoft YaHei UI", };
                                     }
                                 }
                             };
@@ -214,23 +223,25 @@ namespace DisplayBorder.Controls
                     Color = SKColors.Black,
                     FontFamily = "Microsoft YaHei UI",
                 };
-                int max = (int)(infos.Max(a => a.Value) + infos.Max(a => a.Value) * 0.4);
+                int max = (int)(infos.Max(a => a.Value.CastTo(0d)) + infos.Max(a => a.Value.CastTo(0d)) * 0.4);
                 IEnumerable<ISeries> result = null;
                 switch (dataType)
                 {
                     case DataType.饼状图:
 
                         //如果集合的数量发生变化 ,图像是不会发生改动的
-
+                        int index = 0;
                         result = infos.AsLiveChartsPieSeries((value, series) =>
                         {
                             series.Name = $"{value.Name}'{value.Value}'";
                             series.DataLabelsPaint = DataLabelFontFamily;
                             series.DataLabelsPosition = PolarLabelsPosition.Middle;
                             //series.DataLabelsFormatter = p => $"{value.Name}_{p.PrimaryValue} / {p.StackedValue?.Total} ({p.StackedValue.Share:P2})";
-                            series.DataLabelsFormatter = p => $"{value.Name} ({p.StackedValue.Share:P1})";
+                             series.DataLabelsFormatter = p => $"{value.Name}_{p.PrimaryValue}";// ({p.StackedValue.Share:P1})";
                             series.TooltipLabelFormatter = p => $"{value.Name}_{p.PrimaryValue} / {p.StackedValue?.Total} ({p.StackedValue.Share:P2})";
                             series.DataLabelsSize = FontSize-1;
+                            series.Fill = GetNext(index);
+                            index++;
                         });
 
 
@@ -274,7 +285,7 @@ namespace DisplayBorder.Controls
              => new ColumnSeries<double>
              {
                  IsHoverable = false,
-                 Values = CreateMaxValue(infos.Count, (int)(infos.Max(a => a.Value) + infos.Max(a => a.Value) * 0.4)),
+                 Values = CreateMaxValue(infos.Count, (int)(infos.Max(a => a.Value.CastTo(0d)) + infos.Max(a => a.Value.CastTo(0d)) * 0.4)),
                  Stroke = null,
                  Fill = new SolidColorPaint(new SKColor(30, 30, 30, 30)),
                  IgnoresBarPosition = true,
@@ -283,7 +294,7 @@ namespace DisplayBorder.Controls
             private Axis[] GetXAxis(List<ChartBasicInfo> infos)
             => new Axis[] { new Axis { NameTextSize = FontSize, TextSize = FontSize, Labels = infos.Select(a => a.Name).ToArray(), LabelsPaint = new SolidColorPaint() { Color = SKColors.Black, FontFamily = "Microsoft YaHei UI", }, } };
             private Axis[] GetYAxis(List<ChartBasicInfo> infos)
-            => new Axis[] { new Axis { MinLimit = 0, MaxLimit = (int)(infos.Max(a => a.Value) + infos.Max(a => a.Value) * 0.4), MinStep = 1 } };
+            => new Axis[] { new Axis { MinLimit = 0, MaxLimit = (int)(infos.Max(a => a.Value.CastTo(0d)) + infos.Max(a => a.Value.CastTo(0d)) * 0.4), MinStep = 1 } };
 
             private double[] CreateMaxValue(int lenght, double maxValue)
             {
@@ -293,6 +304,19 @@ namespace DisplayBorder.Controls
                     result[i] = maxValue;
                 }
                 return result;
+            }
+            private SolidColorPaint GetNext(int index)
+            {
+                switch (index)
+                {
+                    case 0: return new SolidColorPaint(SKColors.DeepSkyBlue);
+                    case 1: return new SolidColorPaint(SKColors.LawnGreen);
+                    case 2: return new SolidColorPaint(SKColors.LightYellow);
+                    case 3: return new SolidColorPaint(SKColors.LightPink);
+                    default:
+                        return new SolidColorPaint(SKColors.White);
+                     
+                }
             }
         } 
         public sealed class DataGridInfo : DataInfoBase
@@ -386,23 +410,115 @@ namespace DisplayBorder.Controls
         }
 
         public sealed class TagInfo : DataInfoBase
-        {
-            protected override FrameworkElement Control => throw new NotImplementedException();
+        { 
+            public TagInfo(DataTable infos)
+            {
+                border = new Border()
+                {
+                    Margin=  new Thickness(5)
+                };
+
+                HandyControl.Controls. WaterfallPanel sp = new HandyControl.Controls.WaterfallPanel();
+                sp.Groups = infos.Columns.Count;
+                sp.Orientation = Orientation.Vertical;
+                border.Child = sp; 
+                dataInfos = infos.GetChartBasicInfos(); 
+                int index = 0;
+                foreach (var item in dataInfos)
+                {
+                    var tag = new TagControl() ; 
+                    string[] cns = infos.Columns[index].ColumnName.Split('_');
+                    if(cns.Length > 1 )
+                    {
+                        //解析背景颜色
+                        var colorName =  Array.Find(cns, a => a.Contains("Color"));
+                        if (!string.IsNullOrWhiteSpace(colorName))
+                        {
+                            var cName = colorName.Split('=')[1];
+                            var color = GetColor(cName);
+                            tag.TagValueColor = tag.TagHeadColor = color;
+                        }
+                        //解析字体颜色
+                        var fc = Array.Find(cns, a => a.Contains("Fc"));
+                        if (!string.IsNullOrWhiteSpace(fc))
+                        {
+                            var cName = fc.Split('=')[1];
+                            tag.TagValueTextColor = tag.TagHeadTextColor = GetColor(cName);
+                        }
+                    }
+                    item.Name = cns[0];
+                    tag.SetValue(DataContextProperty, item);  
+                    sp.Children.Add(tag) ;
+                    index++;
+                }
+                
+                //因为 waterfall 控件 不能控制宽度，所以得自己计算一下
+                border.SizeChanged += (s, e) =>
+                {
+                    foreach (var item in sp.Children)
+                    {
+                        if(item is TagControl tag)
+                        {
+                            tag.Width = border.ActualWidth - border.Margin.Left; 
+                            //根据表情数量判断字体大小
+                            tag.TagFontSize = sp.Children.Count > 6 ? GlobalPara.GridFontSize : GlobalPara.TabFontSize+4d;
+                            
+                        }
+                    }
+                };
+            }
+            private Border border;
+            private List<ChartBasicInfo> dataInfos;
+            protected override FrameworkElement Control => border;
 
             public override void Clear()
             {
-                throw new NotImplementedException();
+                foreach (var item in dataInfos)
+                {
+                    item.Value = 0;
+                }
             }
 
             public override void SetDataInfo(object dataInfo)
             {
-                throw new NotImplementedException();
+                if (dataInfo is DataTable dt && dt.Rows.Count == 1  )
+                {
+                    var newData = dt.GetChartBasicInfos();
+                    for (int i = 0; i < dataInfos.Count; i++)
+                    {
+                        dataInfos[i].Value = newData[i].Value;
+                    }
+                }
             }
 
             public override void Update()
             {
-                throw new NotImplementedException();
+             
             }
+
+            private Color GetColor(string name)
+            { 
+                switch (name)
+                {
+                    case "白色":
+                        return  (Colors.White);
+                    case "黄色":
+                        return  (Colors.Yellow);
+                    case "绿色":
+                        return  (Colors.Green);
+                    case "浅绿色":
+                        return  (Colors.LightGreen);
+                    case "红色":
+                        return  (Colors.Red);
+                    case "浅灰色":
+                        return (Colors.LightGray);
+                    case "灰色":
+                        return (Colors.Gray);
+                    default:
+                        return  (Colors.White); 
+                }
+            }
+        
         }
 
         public BasicDataInfo()
@@ -411,14 +527,7 @@ namespace DisplayBorder.Controls
             Unloaded += (s, e) =>
             {
                 intervalToken.Cancel();
-            };
-            /*
-             * 显示信息  职位 人员 电话
-             * 
-             * 产量 , 货位剩余数量, 报警的核心重要的几个 
-             *  
-             * 
-             */
+            }; 
         }
         public BasicDataInfo(DataTable data, DataType dataType, string title = null, int refreshTime = 1000)
         {
@@ -496,7 +605,9 @@ namespace DisplayBorder.Controls
                 case DataType.表格:
                     dataInfo = new DataGridInfo(data);
                     break;
-             
+                case DataType.标签:
+                    dataInfo = new TagInfo(data );
+                    break;
                 default:
                     break;
             }

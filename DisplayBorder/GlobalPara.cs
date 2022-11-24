@@ -174,8 +174,17 @@ namespace DisplayBorder
                 return eventManager;
             }
         }
+        /// <summary>
+        /// 最大号
+        /// </summary>
         public static double TitleFontSize { get; set; }
+        /// <summary>
+        /// 中等号
+        /// </summary>
         public static double TabFontSize { get;  set;  }
+        /// <summary>
+        /// 最小号
+        /// </summary>
         public static double GridFontSize { get; set; } = 9;
  
 

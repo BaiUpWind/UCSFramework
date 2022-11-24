@@ -256,7 +256,13 @@ namespace CommonApi
                 GetInheritors(t, ref cd);
                 return cd;
             }
-
+            public static List<string> GetClassDataName(Type t)
+            {
+                if (t == null) return null;
+                ClassData cd = new ClassData();
+                GetInheritors(t, ref cd);
+                return GetAllImplement(cd, true);
+            }
             /// <summary>
             /// 获取该类所有实现类的全名称
             /// </summary>
@@ -270,17 +276,17 @@ namespace CommonApi
                 return GetAllImplement(cd);
             }
 
-            private static List<string> GetAllImplement(ClassData cd, List<string> classFullName = null)
+            private static List<string> GetAllImplement(ClassData cd, bool shotOrFull = false, List<string> classFullName = null)
             {
                 if (cd == null) return null;
-                if (classFullName == null) classFullName = new List<string>(); 
+                if (classFullName == null) classFullName = new List<string>();
                 if (cd.ClassType.IsAbstract)
                 {
                     foreach (var item in cd.ChildrenTypes)
                     {
                         if (item.IsAbstract)
                         {
-                            var result = GetAllImplement(cd.Children.Where(a => a.ClassType == item).FirstOrDefault(), classFullName);
+                            var result = GetAllImplement(cd.Children.Where(a => a.ClassType == item).FirstOrDefault(), shotOrFull, classFullName);
                             if (result == null)
                             {
                                 classFullName.AddRange(result);
@@ -288,13 +294,14 @@ namespace CommonApi
                         }
                         else
                         {
-                            classFullName.Add(item.FullName);
+
+                            classFullName.Add(shotOrFull ? item.Name : item.FullName);
                         }
                     }
                 }
                 else
                 {
-                    classFullName.Add(cd.ClassType.FullName);
+                    classFullName.Add(shotOrFull ? cd.ClassType.Name : cd.ClassType.FullName);
                 }
                 return classFullName;
             }

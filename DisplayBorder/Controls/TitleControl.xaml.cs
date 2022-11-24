@@ -70,7 +70,8 @@ namespace DisplayBorder.Controls
             get => isSelected; set
             {
                 isSelected = value;
-                bSelected.Visibility = value ? Visibility.Visible : Visibility.Hidden;
+                //暂时不显示选中边框 2022-11-22
+                //bSelected.Visibility = value ? Visibility.Visible : Visibility.Hidden;
             }
         }
         /// <summary>

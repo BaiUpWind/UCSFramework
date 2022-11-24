@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="ControlHelper.WPF.ClassControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ControlHelper.WPF"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="400" Loaded="UserControl_Loaded"  Background="White">
+    <Grid  >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" Name="gTitle" Margin="5"  Background="Cornsilk" >
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                <Button    BorderThickness="0.5" BorderBrush="Black" FontSize="20"     Margin="0,0,10,0" Click="Btn_Show" >
+                    <Button.Content>
+                        <TextBlock Text="↓"  HorizontalAlignment="Center"  VerticalAlignment="Center"></TextBlock>
+                    </Button.Content>
+
+                </Button>
+                <TextBlock x:Name="lblTitle" Margin="10,0,0,0" VerticalAlignment="Center"  >asdasdas</TextBlock>
+
+
+            </StackPanel>
+
+            <Button   Name="btnCopy"  BorderThickness="0.5" BorderBrush="Black" FontSize="20" ToolTip="复制这个值"   HorizontalAlignment="Right"   Margin="0,0,10,0" Click="Btn_Copy" >
+                <Button.Content>
+                    <TextBlock Text="C"  HorizontalAlignment="Center"  VerticalAlignment="Center"></TextBlock>
+                </Button.Content>
+            </Button>
+
+        </Grid>
+        <Grid Grid.Row="1"  Name="gInfos" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="9*"></RowDefinition>
+                    <RowDefinition  Height="1*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" >
+                    <StackPanel Margin="5" Name="gData" Background="Gray" Orientation="Vertical">
+
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Row="1" Name="gOper"  Background="Cornsilk"  >
+                    <TextBlock x:Name="lblSelectedInfo" Margin="10,0,0,0" Text="当前选择" TextAlignment="Center" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal"  >
+                        <!--<Button x:Name="btnPaste"  BorderThickness="0.5"  BorderBrush="Black"  ToolTip="粘贴数据"    Margin="0,0,10,0" Click="Btn_Paste"  >
+                            <Button.Content>
+                                <TextBlock Text="P" FontSize="20" HorizontalAlignment="Center"  VerticalAlignment="Center"></TextBlock>
+                            </Button.Content>
+                        </Button>-->
+                        <Button    BorderThickness="0.5" BorderBrush="Black"      Margin="0,0,10,0" Click="Btn_Add"  >
+                            <Button.Content>
+                                <TextBlock Text="&#x002B;" FontSize="20" HorizontalAlignment="Center"  VerticalAlignment="Center"></TextBlock>
+                            </Button.Content>
+
+                        </Button>
+                        <Button  BorderThickness="0.5"  BorderBrush="Black"     Margin="0,0,10,0" Click="Btn_Sub"  >
+                            <Button.Content>
+                                <TextBlock Text="&#x2212;" FontSize="20" HorizontalAlignment="Center"  VerticalAlignment="Center"></TextBlock>
+                            </Button.Content>
+                        </Button>
+
+                    </StackPanel>
+                </Grid>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</UserControl>

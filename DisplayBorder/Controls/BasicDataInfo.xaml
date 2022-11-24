@@ -63,7 +63,7 @@
             </Style> 
             <Style TargetType="DataGridCell">
                 <Setter Property="FontSize" Value="{DynamicResource GridFontSize}"/>
-                <Setter Property="Margin"   Value="2"/>
+                <Setter Property="Margin"   Value="2"/> 
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="DataGridCell">
@@ -88,7 +88,7 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Border  Background="#FF479CF1" Opacity="0.75" CornerRadius="5,5,0,0" ></Border>
-            <TextBlock HorizontalAlignment="Center"     x:Name="txtTitle"  VerticalAlignment="Center"  Foreground="#000075" FontSize="{DynamicResource TabFontSize}">统计信息</TextBlock>
+            <TextBlock HorizontalAlignment="Center"     x:Name="txtTitle"  VerticalAlignment="Center"  Foreground="#000075" FontSize="{DynamicResource TitleFontSize}">统计信息</TextBlock>
         </Grid>
 
         <Grid Grid.Row="1"  >
@@ -97,22 +97,19 @@
                     <DropShadowEffect Color="#0057ad" ShadowDepth="10" BlurRadius="25" Opacity="0.8" Direction="270" />
                 </Border.Effect>
             </Border>
-            <Grid x:Name="g1"> 
-                  <hc:WaterfallPanel Groups="3"  >
-                    <Border Background="#595CADFF"   Margin="5" >
-                        <StackPanel Margin="5" Orientation="Horizontal">
-                            <Image  Source="/Resources/Image/discount.png" Width="100" Height="100"/>
-                            <Border>
-                                <Grid >
-                                    <TextBlock  FontSize="22" HorizontalAlignment="Left" FontWeight="Bold"  >总货位数</TextBlock>
-                                    <TextBlock FontSize=" 32" VerticalAlignment="Bottom" HorizontalAlignment="Right"  >1145012</TextBlock>
-                                </Grid>
-                            </Border>
-                        </StackPanel>
-                    </Border>
-                   
-                  
-                </hc:WaterfallPanel> 
+            <Grid x:Name="g1"  >
+                <Border Margin="5"  >
+
+                    <hc:WaterfallPanel Orientation="Vertical" Groups="6"  >
+                        <local:TagControl  /> 
+                        <local:TagControl />
+                        <local:TagControl />
+                        <local:TagControl />
+                        <local:TagControl />
+                        <local:TagControl />
+                    </hc:WaterfallPanel>
+
+                </Border> 
             </Grid>
         </Grid>
     </Grid>

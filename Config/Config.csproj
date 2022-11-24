@@ -89,6 +89,10 @@
       <Project>{66852c25-75f4-40ef-93de-a0e1dee46324}</Project>
       <Name>CommonApi</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DBHelper\DBHelper.csproj">
+      <Project>{9728346D-FC7A-4597-BAA5-2D8AA23A9D79}</Project>
+      <Name>DBHelper</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

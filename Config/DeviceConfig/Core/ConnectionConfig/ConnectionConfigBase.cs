@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommonApi;
+﻿using DBHelper;
+using System;
 
 namespace DeviceConfig.Core
 {
@@ -39,11 +35,11 @@ namespace DeviceConfig.Core
             if (tag == null) return null;
             switch (tag.DbType)
             {
-                case   CommonApi.DBHelper.DBType.Oracle :
+                case   DBType.Oracle :
                     return string.Format("Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={0})(PORT={1}))(CONNECT_DATA=(SERVICE_NAME={2})));User Id={3};Password={4}", tag.DbIp, tag.DbPort, tag.DbName, tag.DbUserName, tag.DbPassWord);
-                case   CommonApi.DBHelper.DBType.SqlServer :
+                case   DBType.SqlServer :
                     return string.Format("server={0}; uid={1}; pwd={2};database={3}", tag.DbIp, tag.DbUserName, tag.DbPassWord, tag.DbName);
-                case   CommonApi.DBHelper.DBType.MySql :
+                case    DBType.MySql :
                     return string.Format("server={0};database={1}; uid={2};pwd ={3}", tag.DbIp, tag.DbName, tag.DbUserName, tag.DbPassWord);
             }
             throw new Exception($"错误的数据库类型{tag.DbType}");

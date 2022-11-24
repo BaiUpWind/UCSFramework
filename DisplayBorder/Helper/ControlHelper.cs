@@ -1,25 +1,37 @@
 ﻿using DeviceConfig;
 using DisplayBorder.Controls;
-using LiveChartsCore;
-using LiveChartsCore.Measure;
-using LiveChartsCore.SkiaSharpView;
-using LiveChartsCore.SkiaSharpView.Painting;
-using LiveChartsCore.SkiaSharpView.WPF;
-using SkiaSharp; 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Media;
 
 namespace DisplayBorder
 {
-    public class ChartBasicInfo
-    { 
-        public string Name { get; set; } = "";
-        public double Value { get; set; }
+    public class ChartBasicInfo : INotifyPropertyChanged
+    {
+        private string name = "";
+        private object value;
+
+        public string Name
+        {
+            get => name; set { 
+                
+                name = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs( nameof(Name)));  
+            }
+
+
+        }
+        public object Value
+        {
+            get => value; set { this.value = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Value)));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
     public static class ControlHelper
     { 

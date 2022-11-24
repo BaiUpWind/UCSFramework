@@ -89,7 +89,7 @@ namespace DisplayBorder
             LiveChartsCore.LiveCharts.Configure(config =>
             config.HasMap<ChartBasicInfo>((info, point) =>
             {
-                point.PrimaryValue = info.Value;
+                point.PrimaryValue = info.Value.CastTo(0d);
                 point.SecondaryValue = point.Context.Entity.EntityIndex;
             }));
             grids = new Grid[] { G1, G2, G3 };//, G4, G5, G6 };
@@ -329,7 +329,7 @@ namespace DisplayBorder
                                                 //这里可以根据类型去获取对应的控件 ，避免重复生成，浪费资源，减少闪烁
                                                 //在ClearGirds 选择不移除控件，而是收起控件，重复使用
                                                 var dc = grids[i].Children.GetControl<BasicDataInfo>();
-                                                if (dc == null || dc.DataType != sqlr.SelectType)
+                                                if (dc == null  )
                                                 {
                                                     //创建对应的控件
                                                     dc = ControlHelper.CreateDataControl(dt, sqlr.SelectType, sqlr.Title, deviceInfo.RefreshInterval);
@@ -351,7 +351,7 @@ namespace DisplayBorder
                                     Console.WriteLine($"[{DateTime.Now}]{deviceInfo.DeviceInfoName}刷新");
                                     if (deviceInfo.RefreshInterval == 0) deviceInfo.RefreshInterval = 1000;
                                     await Task.Delay(deviceInfo.RefreshInterval);
-                                    break;//暂时跳出 不作数据刷新处理 2022 10 17
+                                    //break;//暂时跳出 不作数据刷新处理 2022 10 17
                                 }
                             }, intervalToken.Token);
 

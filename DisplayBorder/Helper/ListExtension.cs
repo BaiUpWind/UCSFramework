@@ -42,7 +42,21 @@ namespace DisplayBorder
             var str = JsonConvert.SerializeObject(obj);
             return (T)JsonConvert.DeserializeObject(str, targetType);
         }
+        public static T CastTo<T>(this object value, T defaultValue)
+        {
+            Type typeFromHandle = typeof(T);
+            object obj;
+            try
+            {
+                obj = (typeFromHandle.IsEnum ? Enum.Parse(typeFromHandle, value.ToString()) : Convert.ChangeType(value, typeFromHandle));
+            }
+            catch
+            {
+                obj = defaultValue;
+            }
 
+            return (T)obj;
+        }
         /// <summary>
         /// 返回第一个匹配的结果
         /// </summary>
@@ -86,7 +100,7 @@ namespace DisplayBorder
                     result.Add(new ChartBasicInfo()
                     {
                         Name = data.Columns[c].ColumnName,
-                        Value = double.Parse((data.Rows[0].ItemArray[c]).ToString())
+                        Value =  data.Rows[0].ItemArray[c]  
                     });
                 }
             }

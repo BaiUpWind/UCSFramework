@@ -1,4 +1,4 @@
-﻿using CommonApi.DBHelper;
+﻿using DBHelper;
 
 namespace DeviceConfig.Core
 {

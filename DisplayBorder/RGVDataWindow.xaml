@@ -207,33 +207,46 @@
                                 </Border>
                                 <Grid>
                                     <hc:WaterfallPanel Groups="1">
-                                        <StackPanel Orientation="Horizontal" Name="spMan1" >
-                                            <Border Background="#595CADFF"   Margin="15,5,5,5" >
+
+                                        <Grid Name="spMan1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*" ></ColumnDefinition>
+                                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                                <ColumnDefinition Width="7*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Border Background="#595CADFF" Grid.Column="0"   Margin="15,5,5,5" >
                                                 <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" Text="{Binding Main.Man1.Position}"    VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
                                             </Border>
-                                            <Border Background="#595CADFF"   Margin="5,5,5,5" >
+                                            <Border Background="#595CADFF"  Grid.Column="1"   Margin="5,5,5,5" >
                                                 <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White"  Text="{Binding Main.Man1.Name}"  VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
-                                          
+
                                             </Border>
-                                            <Border Background="#595CADFF"   Margin="5,5,5,5" >
+                                            <Border Background="#595CADFF"  Grid.Column="2"   Margin="5,5,5,5" >
                                                 <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White"  Text="{Binding Main.Man1.TelelPhone}"    VerticalAlignment="Bottom" HorizontalAlignment="Left"></TextBlock>
-                                         
+
                                             </Border>
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal" Name="spMan2">
-                                            <Border Background="#595CADFF"   Margin="15,5,5,5"   >
+                                        </Grid>
+
+                                        <Grid  Name="spMan2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*" ></ColumnDefinition>
+                                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                                <ColumnDefinition Width="7*"></ColumnDefinition>
+                                            </Grid.ColumnDefinitions>
+                                            <Border Background="#595CADFF" Grid.Column="0"   Margin="15,5,5,5"   >
                                                 <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" Text="{Binding Main.Man2.Position}"   VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 
                                             </Border>
-                                            <Border Background="#595CADFF"   Margin="5,5,5,5" >
+                                            <Border Background="#595CADFF" Grid.Column="1"   Margin="5,5,5,5" >
                                                 <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White" Text="{Binding Main.Man2.Name}"  VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
 
                                             </Border>
-                                            <Border Background="#595CADFF"   Margin="5,5,5,5" >
+                                            <Border Background="#595CADFF" Grid.Column="2"   Margin="5,5,5,5" >
                                                 <TextBlock FontSize="{ DynamicResource TitleFontSize}"  Foreground="White"  Text="{Binding Main.Man2.TelelPhone}"  VerticalAlignment="Bottom" HorizontalAlignment="Left"></TextBlock>
 
                                             </Border>
-                                        </StackPanel>
+                                        </Grid>
                                     </hc:WaterfallPanel>
                                 </Grid>
                             </Grid>

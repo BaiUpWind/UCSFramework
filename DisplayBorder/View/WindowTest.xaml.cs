@@ -79,7 +79,7 @@ namespace DisplayBorder.View
             LiveChartsCore.LiveCharts.Configure(config =>
             config.HasMap<ChartBasicInfo>((info, point) =>
             {
-                point.PrimaryValue = info.Value;
+                point.PrimaryValue = info.Value.CastTo(0d);
                 point.SecondaryValue = point.Context.Entity.EntityIndex;
             }));
             var datas = new List<DataGridInfo>();

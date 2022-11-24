@@ -13,13 +13,13 @@ namespace DBHelper
         /// </summary>
         /// <param name="connStr"></param>
         public SqliteHelp(string connStr) : base("data source = " + connStr)
-        { 
+        {
             if (!File.Exists(connStr))
             {
                 throw new Exception($"丢失系统文件{connStr}");
             }
         }
-   
+
         SQLiteConnection _DBConnectionObj;
         SQLiteCommand _DbCommandObj;
         SQLiteDataAdapter _DbDataAdapterObj;
@@ -63,7 +63,7 @@ namespace DBHelper
 
         public override void MultiInsertData(DataSet ds)
         {
-           
+
         }
     }
 }
