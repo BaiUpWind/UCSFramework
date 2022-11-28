@@ -196,11 +196,11 @@ namespace DisplayBorder.View
             double rx = 20, ry = 20;
             if (g.PosX >= 0)
             {
-                rx = g.PosX / (BackImage.PixelWidth / img.Width);
+                rx = g.PosX;// * (img.ActualWidth /BackImage.PixelWidth );
             }
             if (g.PosY >= 0)
             {
-                ry = g.PosY / (BackImage.PixelHeight / img.Height);
+                ry = g.PosY;// * (img.ActualHeight/BackImage.PixelHeight  );
             }
 
             border.SetValue(Canvas.LeftProperty, rx);
@@ -249,8 +249,8 @@ namespace DisplayBorder.View
                 if (CacheTc != null)
                 {
                     var pos2 = CacheTc.TransformToAncestor(C1).Transform(new Point(0, 0));
-                    var x = pos2.X * BackImage.PixelWidth / img.Width;
-                    var y = pos2.Y * BackImage.PixelHeight / img.Height;
+                    var x = pos2.X;// * (img.ActualWidth / BackImage.PixelWidth);
+                    var y = pos2.Y;// * (img.ActualHeight / BackImage.PixelHeight);
                     CacheTc.ImagePixelPoint = new Point(x, y);
                     lblTimgpos.Text = $"图像 X:{x:0} Y:{y:0}";
                     //保存所在的图像位置
@@ -286,8 +286,8 @@ namespace DisplayBorder.View
                     if (img.Source is BitmapSource bitmap)
                     {
                         lblresolution.Text = $"分辨率{bitmap.PixelWidth}*{bitmap.PixelHeight}";
-                        img.Width = bitmap.Width;
-                        img.Height = bitmap.Height; 
+                        img.Width = bitmap.PixelWidth;
+                        img.Height = bitmap.PixelHeight;
                     } 
                 }
                 catch (Exception ex)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
@@ -170,7 +171,7 @@ namespace DisplayBorder
                 currentSelectedTitle = value;
                 currentSelectedTitle.IsSelected = true;
                 Main.RunGroup = currentSelectedTitle.GroupInfo;
-                SetScrollViewerPos(value);
+                //SetScrollViewerPos(value);
             }
         }
 
@@ -439,6 +440,7 @@ namespace DisplayBorder
             //开始创建
             SetImgSource();
             if (mainImg.Source == null) return;
+
             foreach (var group in groups)
             {
                 CreateTitle(group);
@@ -456,28 +458,36 @@ namespace DisplayBorder
                 tc.SwitchDricetion((TitleControl.DirectionArrow)g.Direction);
                 Border border = new Border
                 {
-                    Width = g.CWidth,
-                    Height = g.CHeight,
+                    Width = g.CWidth ,
+                    Height = g.CHeight  ,
                     Child = tc,
-                    //ToolTip = "单击查看"
+                    VerticalAlignment = VerticalAlignment.Top,
+                    HorizontalAlignment = HorizontalAlignment.Left, 
                 };
-
+                 
                 double rx = 20, ry = 20;
                 if (g.PosX >= 0)
                 {
-                    rx = g.PosX / (BackImage.PixelWidth / mainImg.Width);
+                    rx = g.PosX * (mainImg.ActualWidth / BackImage.PixelWidth);
+
                 }
                 if (g.PosY >= 0)
                 {
-                    ry = g.PosY / (BackImage.PixelHeight / mainImg.Height);
+                    ry = g.PosY * (mainImg.ActualHeight / BackImage.PixelHeight);
                 }
-                border.SetValue(Canvas.LeftProperty, rx);
-                border.SetValue(Canvas.TopProperty, ry);
+
+                //border.SetValue(Canvas.LeftProperty, rx);
+                //border.SetValue(Canvas.TopProperty, ry); 
+
+                border.RenderTransform = new TranslateTransform(rx, ry);
+
+                //因为坐标对不上 这里就暂时去掉了 不做这个处理 20221124
                 //添加到对应的集合
-                C1.Children.Add(border);
-                var al = AdornerLayer.GetAdornerLayer(border);
-                var adorner = new ElementAdorner(border);
-                al.Add(adorner);
+                //C1.Children.Add(border);
+
+                //var al = AdornerLayer.GetAdornerLayer(border);
+                //var adorner = new ElementAdorner(border);
+                //al.Add(adorner);
                 DicTitleContorl.Add(g.GroupID, tc);
                 #region 事件
                 //border.MouseDown += (ms, me) =>
@@ -518,8 +528,8 @@ namespace DisplayBorder
             mainImg.Source = image;
             if (mainImg.Source is BitmapSource bitmap)
             {
-                mainImg.Width = bitmap.Width;
-                mainImg.Height = bitmap.Height;
+                //mainImg.Width = bitmap.Width;
+                //mainImg.Height = bitmap.Height;
             }
         }
 
@@ -715,6 +725,25 @@ namespace DisplayBorder
             Thickness mg = new Thickness(10, titlesize + 25, 10, 10);
             Application.Current.Resources.Remove("TitleTickness");
             Application.Current.Resources.Add("TitleTickness", mg);
+
+            //计算坐标 不作处理 20221124
+            //foreach (var item in DicTitleContorl.Values)
+            //{
+            //    var border = (Border)item.Parent;
+            //    var g = item.groupViewModel.CurrentGroup;
+
+            //    double rx = 20, ry = 20;
+            //    if (g.PosX >= 0)
+            //    {
+            //        rx = g.PosX * (mainImg.ActualWidth / BackImage.PixelWidth);
+
+            //    }
+            //    if (g.PosY >= 0)
+            //    {
+            //        ry = g.PosY * (mainImg.ActualHeight / BackImage.PixelHeight);
+            //    } 
+            //    border.RenderTransform = new TranslateTransform(rx, ry);
+            //}
 
         }
         //当组集合数据发生变化时 (弃用 20221010)

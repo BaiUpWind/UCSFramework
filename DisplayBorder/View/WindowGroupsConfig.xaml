@@ -100,7 +100,7 @@
                                 <Border BorderBrush="Blue" BorderThickness="1"></Border>
                                     <Image  x:Name="img" MouseMove="Image_MouseMove" 
                                             MouseLeave="img_MouseLeave"  
-                                            Stretch="Fill"  > 
+                                            Stretch="UniformToFill"  > 
                                     </Image> 
                                 </Grid>
                             </Canvas> 
