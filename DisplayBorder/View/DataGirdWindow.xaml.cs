@@ -212,8 +212,6 @@ namespace DisplayBorder.View
                     else
                     {
                         //修改
-
-
                         Growl.InfoGlobal( "修改成功!");
                     }
 

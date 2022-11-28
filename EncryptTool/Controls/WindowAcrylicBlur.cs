@@ -78,7 +78,7 @@ namespace EncryptTool.Controls
                 return new Version(major, minor, build, revision);
             }
             catch (Exception)
-            {
+            {                                                                             
                 return new Version(0, 0, 0, 0);
             }
             finally
