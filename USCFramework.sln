@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlHelper", "ControlHelper\ControlHelper.csproj", "{52A80BDA-F87C-47A7-892C-89CC0B8102D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayConveyer", "BatteryTest_WPF\DisplayConveyer.csproj", "{A18C9D8F-3013-4BB3-BA38-9D617712FF26}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayConveyer", "DisplayConveyer\DisplayConveyer.csproj", "{A18C9D8F-3013-4BB3-BA38-9D617712FF26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
