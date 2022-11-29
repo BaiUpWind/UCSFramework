@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "ConsoleTest\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlHelper", "ControlHelper\ControlHelper.csproj", "{52A80BDA-F87C-47A7-892C-89CC0B8102D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DisplayConveyer", "BatteryTest_WPF\DisplayConveyer.csproj", "{A18C9D8F-3013-4BB3-BA38-9D617712FF26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,14 @@ Global
 		{52A80BDA-F87C-47A7-892C-89CC0B8102D2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{52A80BDA-F87C-47A7-892C-89CC0B8102D2}.Release|x86.ActiveCfg = Release|Any CPU
 		{52A80BDA-F87C-47A7-892C-89CC0B8102D2}.Release|x86.Build.0 = Release|Any CPU
+		{A18C9D8F-3013-4BB3-BA38-9D617712FF26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A18C9D8F-3013-4BB3-BA38-9D617712FF26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A18C9D8F-3013-4BB3-BA38-9D617712FF26}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A18C9D8F-3013-4BB3-BA38-9D617712FF26}.Debug|x86.Build.0 = Debug|Any CPU
+		{A18C9D8F-3013-4BB3-BA38-9D617712FF26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A18C9D8F-3013-4BB3-BA38-9D617712FF26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A18C9D8F-3013-4BB3-BA38-9D617712FF26}.Release|x86.ActiveCfg = Release|Any CPU
+		{A18C9D8F-3013-4BB3-BA38-9D617712FF26}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
