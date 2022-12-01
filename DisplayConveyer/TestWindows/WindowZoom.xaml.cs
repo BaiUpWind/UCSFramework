@@ -105,9 +105,24 @@ namespace DisplayConveyer
                     }
                 }
             };
-        }
+     
 
-  
+        }
+        public void SetMouseEL(UIElement uiEle)
+        {
+            if (uiEle == null) return;
+            uiEle.MouseEnter += (s, e) =>
+            {
+                var frameUI = s as FrameworkElement;
+                txtInfo.Text = $"宽：{frameUI.Width},高：{frameUI.Height} ";
+            };
+            uiEle.MouseLeave += (s, e) =>
+            {
+                txtInfo.Text = string.Empty;
+            };
+        }
+   
+
         private void IniLogics()
         {
             logics = new List<BeltLogic>();
@@ -123,16 +138,16 @@ namespace DisplayConveyer
             {
                 var logic = new BeltLogic(item); 
                 //计算逃逸的方向
-                logic.WholeBelts.RunWayDirection = count == 0? 0 :2;  
+                logic.WholeBelts.RunWayDirection = count == 0? 0 :2;
                 //如果是最后一个时 则让它居中显示
-                if (lastMid && index == GlobalPara.Config.Belts.Count -1)
+                if (lastMid && index == GlobalPara.Config.Belts.Count - 1)
                 {
                     x = 1920 / 2 - (logic.WholeBelts.Width * ScaleMultipty / 2);
                     count = 1;
-                } 
+                }
                 logic.WholeBelts.RenderTransform = new MatrixTransform(ScaleMultipty, 0, 0, ScaleMultipty, x, y);
                 x += (logic.WholeBelts.Width + 15) * ScaleMultipty;
-                tempWidth += (logic.WholeBelts.Width + 15) * ScaleMultipty;
+                tempWidth += (logic.WholeBelts.Width + 15)  ;
                 logics.Add(logic);
                 if(count == 1)
                 { 
@@ -150,9 +165,9 @@ namespace DisplayConveyer
                 index++;
                 gd.Children.Add(logic.WholeBelts);
             }
-            gd.Width = maxW+15;
+            gd.Width = maxW  ;
             gd.Height = maxH;
-            gd.RenderTransform = new TranslateTransform(0, 0);
+            gd.RenderTransform = new TranslateTransform(0, 0); 
             Start();
             GlobalPara.RecordTime();
             DispatcherTimer timer = new DispatcherTimer
@@ -210,7 +225,7 @@ namespace DisplayConveyer
                 {
                     if (store.IsFather)
                     {
-                        cacheMatirx = (store.RenderTransform as MatrixTransform).Matrix;
+                        cacheMatirx = store.CurrentMatrix;
                         foreach (var item in logics)
                         {
                             if (item.WholeBelts == store) continue;
@@ -220,9 +235,10 @@ namespace DisplayConveyer
                             });
                         }
                         gd.Children.Remove(store);
-                        dp.Children.Add(store);
+                        ((UIElement)dp.Parent).Visibility = Visibility.Visible;
                         dp.Visibility = Visibility.Visible;
-
+                        dp.Children.Add(store);
+                        dp.Width = store.Width;
                         store.Scale(0.5, 15, 15, (s, e) =>
                         {
 
@@ -247,7 +263,7 @@ namespace DisplayConveyer
                         cv.Children.Add(store);
                         currentChildren = store;
                         cv.Visibility = Visibility.Visible;
-                
+                        ((UIElement)cv.Parent).Visibility = Visibility.Visible;
                         store.MoveTo(15, 15, (s, e) =>
                         {
                             cvMove.CanInput = true;
@@ -255,6 +271,11 @@ namespace DisplayConveyer
                         });
                     }
                 }
+            }
+            catch (NullReferenceException ex)
+            {
+                MessageBox.Show("别点太快了");
+                IniLogics();
             }
             catch (Exception ex) 
             {
@@ -279,11 +300,13 @@ namespace DisplayConveyer
                             item.WholeBelts.RunOutSide(false, (s, e) =>
                             {
                                 dp.Visibility = Visibility.Collapsed;
-                            });
+                            }); 
                         }
+                       ((UIElement)dp.Parent).Visibility = Visibility.Collapsed;
                         dp.Children.Remove(store);
                         gd.Children.Add(store);
                         gd.Visibility = Visibility.Visible;
+                     
                         dpMove.ReSet();
                         store.Scale(-0.5, cacheMatirx.OffsetX, cacheMatirx.OffsetY, (s, e) =>
                         {
@@ -301,19 +324,26 @@ namespace DisplayConveyer
                     else if (store.FatherDone)
                     {
                         cv.Visibility = Visibility.Collapsed;
+                        ((UIElement)cv.Parent).Visibility = Visibility.Collapsed;
                         cv.Children.Remove(store);
                         currentFather.store.Children.Add(store);
                         dp.Visibility = Visibility.Visible;
-                        store.Zoomed = false;
+                     
                         cvMove.ReSet();
                         store.MoveTo(store.CurrentMatrix, cacheChildrenMatrix, (s, e) =>
                         {
+                            store.Zoomed = false;
                             cvMove.CanInput = false;
                             currentChildren = null;
                         });
 
                     }
                 }
+            }
+            catch (NullReferenceException ex)
+            {
+                MessageBox.Show("别点太快了");
+                IniLogics();
             }
             catch (Exception ex)
             {

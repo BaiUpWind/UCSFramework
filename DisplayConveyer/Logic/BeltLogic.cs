@@ -57,13 +57,20 @@ namespace DisplayConveyer.Logic
                 belt.Title = editor.Title;
                 belt.ReadTableName = editor.ReadTableName;  
                 belt.RenderTransform = new MatrixTransform(1d, 0, 0, 1d, left, 15d); 
+
+
                 left += (belt.Width + 15d) ;
                 top = belt.Height > top ? belt.Height : top;
+                
                 WholeBelts.store.Children.Add(belt);
                 DicBelts.Add(id, belt);
                 id++;
             }
-            WholeBelts.Width = left;
+            foreach (FrameworkElement item in WholeBelts.store.Children)
+            {
+                item.Height = top;
+            }
+            WholeBelts.Width = left+15;
             WholeBelts.store.Height = top + 35d;
             WholeBelts.Height  = WholeBelts.store.Height + Math.Ceiling(WholeBelts.txtTitle.FontSize * WholeBelts.txtTitle.FontFamily.LineSpacing);
 

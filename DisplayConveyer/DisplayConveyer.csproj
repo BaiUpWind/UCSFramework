@@ -18,7 +18,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -64,7 +64,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AllBeltsWindow.xaml.cs">
+    <Compile Include="TestWindows\AllBeltsWindow.xaml.cs">
       <DependentUpon>AllBeltsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Config\MainConfig.cs" />
@@ -74,21 +74,24 @@
     <Compile Include="Logic\BeltLogic.cs" />
     <Compile Include="Model\BeltEditor.cs" />
     <Compile Include="Model\BeltReadPlc.cs" />
-    <Compile Include="StorageLocation.xaml.cs">
+    <Compile Include="TestWindows\StorageLocation.xaml.cs">
       <DependentUpon>StorageLocation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UC_Storages.xaml.cs">
+    <Compile Include="TestWindows\StoragesShowWindow.xaml.cs">
+      <DependentUpon>StoragesShowWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TestWindows\UC_Storages.xaml.cs">
       <DependentUpon>UC_Storages.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\JsonHelper.cs" />
-    <Compile Include="WindowZoom.xaml.cs">
+    <Compile Include="TestWindows\WindowZoom.xaml.cs">
       <DependentUpon>WindowZoom.xaml</DependentUpon>
     </Compile>
-    <Page Include="AllBeltsWindow.xaml">
+    <Page Include="TestWindows\AllBeltsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="TestWindows\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -96,19 +99,23 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="TestWindows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="StorageLocation.xaml">
+    <Page Include="TestWindows\StorageLocation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UC_Storages.xaml">
+    <Page Include="TestWindows\StoragesShowWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="TestWindows\UC_Storages.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="WindowZoom.xaml">
+    <Page Include="TestWindows\WindowZoom.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -149,6 +156,10 @@
     <Resource Include="背景.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Config\Config.csproj">
+      <Project>{bd924948-6b92-4517-b504-08695586d011}</Project>
+      <Name>Config</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ControlHelper\ControlHelper.csproj">
       <Project>{52a80bda-f87c-47a7-892c-89cc0b8102d2}</Project>
       <Name>ControlHelper</Name>
@@ -157,6 +168,9 @@
       <Project>{9728346d-fc7a-4597-baa5-2d8aa23a9d79}</Project>
       <Name>DBHelper</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -103,7 +103,9 @@ namespace DisplayConveyer
         private bool zoomed;
 
         public event Action<UC_Storages> OnZoomIn;
-        public event Action<UC_Storages> OnZoomOut; 
+        public event Action<UC_Storages> OnZoomOut;
+        public event Action OnMouseSelected;
+        public event Action OnMouseUnselect;
         private readonly List<BeltEditor> beltDatas;
         private readonly Dictionary<string, Border> dicBelts = new Dictionary<string, Border>();
         public UC_Storages()
@@ -116,13 +118,22 @@ namespace DisplayConveyer
             #region 事件 
             MouseEnter += (s, e) =>
             {
-                if (FatherDone) bSelected.Visibility = Visibility.Visible;
                 SaveTime();
+                if (FatherDone)
+                {
+                    bSelected.Visibility = Visibility.Visible;
+                    OnMouseSelected?.Invoke();
+                }
             };
             MouseLeave += (s, e) =>
             {
-                if (FatherDone) bSelected.Visibility = Visibility.Collapsed;
-                SaveTime(); 
+                SaveTime();
+                if (FatherDone)
+                {
+                    bSelected.Visibility = Visibility.Collapsed;
+                    OnMouseUnselect?.Invoke();
+                }
+
             };
             MouseDown += (s, e) =>
             {

@@ -11,7 +11,10 @@ namespace DisplayConveyer.Config
     public class MainConfig
     {
         [NickName("缩放比例")]
+        [Hide]
         public double SacleRatio { get; set; } = .5d;
+        [NickName("滑动速度")]
+        public float SlideSpeed { get; set; } = 20f;
         [NickName("启用超时","当多少秒没有操作后就返回到主界面")]
         public bool EnableTimeOut { get; set; }
         [NickName("超时时间（毫秒）")]
