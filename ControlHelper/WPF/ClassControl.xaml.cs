@@ -63,7 +63,7 @@ namespace ControlHelper.WPF
             lblSelectedInfo.Text = string.Empty;
 
             btnCopy.Visibility = Visibility.Hidden;
-
+ 
             #region load
 
             if (orginType == null) return;
@@ -147,6 +147,7 @@ namespace ControlHelper.WPF
                 }
             }
             #endregion
+      
         }
          
         private object target;
@@ -551,7 +552,7 @@ namespace ControlHelper.WPF
 
                         }
                         break;
-                }
+                } 
                 if (control != null)
                 {
                     int x = 0;
@@ -905,6 +906,7 @@ namespace ControlHelper.WPF
         //控件加载时
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            Btn_Show(btnShow, null);
             if (isList) Title = string.Format(Title, $"[{((IList)data).Count}]");
         }
         //展开 收起

@@ -14,7 +14,7 @@ namespace  DeviceConfig.Core
         /// </summary>
         [Control("Title", "结果标题", ControlType.TextBox)]
         [NickName("结果标题")]
-        public string Title { get; set; } = "统计信息";
+        public virtual string Title { get; set; } = "统计信息";
 
         /// <summary>
         /// 结果显示选择类型
@@ -22,18 +22,12 @@ namespace  DeviceConfig.Core
         /// </summary>
         [Control("SelectType", "结果显示图像", ControlType.ComboBox, EnumType: typeof(DataType))]
         [NickName("结果显示图像")]
-        public DataType SelectType { get; set; } = 0;
+        public virtual DataType SelectType { get; set; } = 0;
         /// <summary>
         /// 数据,原始数据
         /// </summary>
         [JsonIgnore]
         [Hide]
-        public object Data { get; set; } = null;
-        /// <summary>
-        /// 解析完成后的数据
-        /// </summary>
-        [JsonIgnore]
-        [Hide]
-        public object FinalData { get; set; } = null; 
+        public virtual object Data { get; set; } = null; 
     }
 }

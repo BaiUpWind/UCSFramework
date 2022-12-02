@@ -64,6 +64,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ElementAdorner\ElementAdorner.cs" />
+    <Compile Include="Controls\ElementAdorner\ThumbAngle.cs" />
+    <Compile Include="Controls\UC_DeviceBase.xaml.cs">
+      <DependentUpon>UC_DeviceBase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\AreaData.cs" />
+    <Compile Include="Model\DeviceData.cs" />
     <Compile Include="TestWindows\AllBeltsWindow.xaml.cs">
       <DependentUpon>AllBeltsWindow.xaml</DependentUpon>
     </Compile>
@@ -87,6 +94,14 @@
     <Compile Include="TestWindows\WindowZoom.xaml.cs">
       <DependentUpon>WindowZoom.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\UIElementMove.cs" />
+    <Compile Include="View\EditorWindow.xaml.cs">
+      <DependentUpon>EditorWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Controls\UC_DeviceBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TestWindows\AllBeltsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -116,6 +131,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TestWindows\WindowZoom.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -169,8 +188,6 @@
       <Name>DBHelper</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
