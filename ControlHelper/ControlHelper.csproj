@@ -54,6 +54,7 @@
     <Compile Include="Attributes\ColumonFeedAttribute.cs" />
     <Compile Include="Attributes\ComboTypeAttribute.cs" />
     <Compile Include="Attributes\ConvertTypeAttribute.cs" />
+    <Compile Include="Attributes\DataGridAttribute.cs" />
     <Compile Include="Attributes\DependOnAttribute.cs" />
     <Compile Include="Attributes\DgvColumnsHeadAttribute.cs" />
     <Compile Include="Attributes\FileSelectorAttribute.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Attributes\SetValueAttribute.cs" />
     <Compile Include="Attributes\SizeAttribute.cs" />
     <Compile Include="Attributes\SplitAttribute.cs" />
+    <Compile Include="Interfaces\IMsgShow.cs" />
     <Compile Include="Model\RangedFloat.cs" />
     <Compile Include="ObjectExtension.cs" />
     <Compile Include="ControlHepler.cs" />

@@ -1,4 +1,5 @@
-﻿using DeviceConfig;
+﻿using ControlHelper.Attributes;
+using DeviceConfig;
 using DisplayBorder.Events;
 using Newtonsoft.Json;
 using System;

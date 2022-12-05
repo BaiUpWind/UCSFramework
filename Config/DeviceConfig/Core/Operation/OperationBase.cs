@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ControlHelper.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -95,13 +96,13 @@ namespace DeviceConfig.Core
                     if (att is DependOnAttribute depend)
                     {
                         //创建连接
-                        connectConfig = Activator.CreateInstance(depend.Conn) as ConnectionConfigBase;
+                        connectConfig = Activator.CreateInstance(depend.ConfigType) as ConnectionConfigBase;
                         //创建指令
                         //var  commandType = Activator.CreateInstance(depend.Command) as CommandBase;
                         if (Commands == null)
                         {
                             //创建指令集合
-                            var reslut = Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[] { depend.Command }));
+                            var reslut = Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[] { depend.Type2 }));
                             Commands = reslut;
                             //获取当前类的字段
                             //var property = GetType().GetProperty(nameof(Commands)); 

@@ -50,16 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DeviceConfig\Attributes\ButtonAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\Control\ControlAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\ConvertTypeAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\DependOnAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\Control\ShowIfAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\FileSelector.cs" />
-    <Compile Include="DeviceConfig\Attributes\HideAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\InstanceAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\NickNameAttribute.cs" />
-    <Compile Include="DeviceConfig\Attributes\SizeAttribute.cs" />
+    <Compile Include="DeviceConfig\ControlAttribute.cs" />
     <Compile Include="DeviceConfig\Core\Command\CommandBase.cs" />
     <Compile Include="DeviceConfig\Core\Command\PLCCmd.cs" />
     <Compile Include="DeviceConfig\Core\Command\SiemensCmd.cs" />
@@ -88,6 +79,10 @@
     <ProjectReference Include="..\CommonApi\CommonApi.csproj">
       <Project>{66852c25-75f4-40ef-93de-a0e1dee46324}</Project>
       <Name>CommonApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ControlHelper\ControlHelper.csproj">
+      <Project>{52a80bda-f87c-47a7-892c-89cc0b8102d2}</Project>
+      <Name>ControlHelper</Name>
     </ProjectReference>
     <ProjectReference Include="..\DBHelper\DBHelper.csproj">
       <Project>{9728346D-FC7A-4597-BAA5-2D8AA23A9D79}</Project>

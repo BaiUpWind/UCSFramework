@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ControlHelper.Model
 {
@@ -19,27 +15,19 @@ namespace ControlHelper.Model
         /// <summary>
         /// 识别需要生成的对应控件类型
         /// </summary>
-        public ClassControlType ControlType;
-        /// <summary>
-        /// 是否为基类型
-        /// </summary>
-        public bool IsObject;
+        public ClassControlType ControlType; 
         /// <summary>
         /// 是否为集合
         /// </summary>
         public bool IsList;
         /// <summary>
-        /// 是否为泛型类型
+        /// 使用数据网格显示集合
         /// </summary>
-        public bool IsGeneric;
+        public bool UseDataGrid;
         /// <summary>
-        /// 基类型
+        /// 类型
         /// </summary>
-        public Type ObjectType;
-        /// <summary>
-        /// 泛型类型
-        /// </summary>
-        public Type GenericType;
+        public Type ObjectType; 
         /// <summary>
         /// 是否包号的按钮属性
         /// </summary>
@@ -48,6 +36,10 @@ namespace ControlHelper.Model
         /// 是否包含了文件选择器属性
         /// </summary>
         public Attribute FileSelectorAttr;
+        /// <summary>
+        /// 是否只读
+        /// </summary>
+        public bool IsReadOnly;
         /// <summary>
         /// 别名
         /// </summary>

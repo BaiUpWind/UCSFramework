@@ -10,6 +10,7 @@ namespace DeviceConfig
 {
     /// <summary>
     /// 使用哪种控件 
+    /// 应该被弃用,太杂了
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method, Inherited = false, AllowMultiple = true)] 
     public class ControlAttribute : BaseAttribute

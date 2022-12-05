@@ -183,6 +183,8 @@ namespace ControlHelper.WPF
 
         public Action<Type, object> OnSetData;
 
+        public event Action<object> NewData;
+
         public string Title
         {
             get => title; set
@@ -207,6 +209,7 @@ namespace ControlHelper.WPF
             {
                 orginType.GetProperty(name, BindingFlags.Instance | BindingFlags.Public)?.SetValue(Data, value);
                 OnSetData?.Invoke(orginType.GetProperty(name, BindingFlags.Instance | BindingFlags.Public)?.PropertyType, value);
+                NewData?.Invoke(Data);
             }
             else
             {
@@ -320,7 +323,15 @@ namespace ControlHelper.WPF
                         break;
                     case ClassControlType.List:
                     case ClassControlType.Class:
-                        control = GetGenericControl(i, GetValue(td.Name), td.ObjectType, CheckProperty, td.NickName);
+                        if (td.ControlType == ClassControlType.List && td.UseDataGrid)
+                        {
+                            //网格
+                            control = new  DataGrid();
+                        }
+                        else
+                        { 
+                            control = GetGenericControl(i, GetValue(td.Name), td.ObjectType, CheckProperty, td.NickName);
+                        }
                         if (control is ClassControl dc)
                         {
                             dc.Background = new SolidColorBrush(Colors.Tan);
@@ -581,6 +592,7 @@ namespace ControlHelper.WPF
                     {
                         control.ToolTip = td.ToolTip;
                     }
+                    control.IsEnabled = !td.IsReadOnly;
                     control.HorizontalAlignment = HorizontalAlignment.Left;
                     control.VerticalAlignment = VerticalAlignment.Stretch;
                     control.Margin = new Thickness(15, 0, 0, 0);

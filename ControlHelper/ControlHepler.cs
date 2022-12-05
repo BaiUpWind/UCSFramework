@@ -34,17 +34,12 @@ namespace ControlHelper
                     var attrs = pi.GetCustomAttributes();
                     if (attrs.Count() > 0)
                     {
-                        if (attrs.Where(a => a is HideAttribute).Count() > 0)
+                        if (attrs.Where(a => a is HideAttribute).Any())
                         {
                             continue;
                         }
                     }
-                    TypeCode typeCode = Type.GetTypeCode(pi.PropertyType);
-                    var convert = attrs.Where(a => a is ConvertTypeAttribute).Select(a => a as ConvertTypeAttribute).ToList();
-                    if (convert.Any())
-                    {
-                        typeCode = Type.GetTypeCode(convert[0].TargetType);
-                    }
+                    TypeCode typeCode = Type.GetTypeCode(pi.PropertyType); 
                     Console.WriteLine($"当前属性名称'{pi.Name}',类型'{typeCode}'");
                     TypeData typeData = new TypeData()
                     {
@@ -66,6 +61,15 @@ namespace ControlHelper
                             typeData.NickName = nna.NickName;
                             typeData.ToolTip = nna.ToolTip;
                         }
+
+                        var convert = attrs.Where(a => a is ConvertTypeAttribute).FirstOrDefault();
+                        if (convert != null && convert is ConvertTypeAttribute cta)
+                        {
+                            typeCode = typeData.TypeCode  = Type.GetTypeCode(cta.TargetType);
+                            typeData.ObjectType = cta.TargetType;
+                        }
+                        typeData.IsReadOnly = attrs.Where(a => a is ReadOnlyAttribute).Any();
+                        
                     }
 
                     typedatas.Add(typeData);
@@ -88,10 +92,10 @@ namespace ControlHelper
                     {
                         typeData.FileSelectorAttr = fileSelector.FirstOrDefault();
                     }
-
+                    //如果是 抽象的
                     if (pi.PropertyType.IsAbstract)
                     {
-                        if (attrs.Where(a => a is InstanceAttribute).Count() > 0)
+                        if (attrs.Where(a => a is InstanceAttribute).Any())
                         {
                             typeData.ObjectType = pi.GetValue(target).GetType();
                             typeData.ControlType = ClassControlType.Class;
@@ -103,22 +107,24 @@ namespace ControlHelper
                     }
                     else if (pi.PropertyType.IsEnum)
                     {
+                        //枚举
                         typeData.ControlType = ClassControlType.ComboBox;
                     }
                     else if (typeCode == TypeCode.Object)
                     {
-                        if (attrs.Where(a => a is InstanceAttribute).Count() > 0)
+                        //基类
+                        if (attrs.Where(a => a is InstanceAttribute).Any())
                         {
                             typeData.ObjectType = pi.GetValue(target).GetType();
                         }
-
                         if (pi.PropertyType.Name == "Color")
                         {
                             typeData.ControlType = ClassControlType.Empty;
                             continue;
                         }
-                        typeData.IsList =  Reflection.IsList(typeData.ObjectType);
-                        typeData.IsObject = true;
+                        typeData.IsList = Reflection.IsList(typeData.ObjectType);
+                        typeData.UseDataGrid = typeData.IsList && attrs.Where(a => a is DataGridAttribute).Any();
+
                         //这里只用两种可能,因为只对未知的类型和集合类型进行拆解
                         typeData.ControlType = typeData.IsList ? ClassControlType.List : ClassControlType.Class;
                     }
@@ -137,130 +143,134 @@ namespace ControlHelper
             {
                 throw new Exception("先别用字段的,获取字段跟属性一样一样,暂时把属性的搞完先,再搞字段的");
                 //获取公共的字段
-                var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public);
+                #region 先不用
 
-                List<TypeData> typedatas = new List<TypeData>();
-                for (int i = 0; i < fields.Length; i++)
-                {
-                    FieldInfo field = fields[i];
-                    var attrs = field.GetCustomAttributes();
-                    if (attrs.Count() > 0)
-                    {
-                        if (attrs.Where(a => a is HideAttribute).Count() > 0)
-                        {
-                            continue;
-                        }
-                    }
+            
+                //var fields = type.GetFields(BindingFlags.Instance | BindingFlags.Public);
 
-                    TypeCode typeCode = Type.GetTypeCode(field.FieldType);
-                    var convert = attrs.Where(a => a is ConvertTypeAttribute).Select(a => a as ConvertTypeAttribute).ToList();
-                    if (convert.Any())
-                    {
-                        typeCode = Type.GetTypeCode(convert[0].TargetType);
-                    }
-                    Console.WriteLine($"当前字段名称'{field.Name}',类型'{typeCode}'");
-                    var typeData = new TypeData()
-                    {
-                        Name = field.Name,
-                        TypeCode = typeCode,
-                        ObjectType = field.FieldType
-                    };
+                //List<TypeData> typedatas = new List<TypeData>();
+                //for (int i = 0; i < fields.Length; i++)
+                //{
+                //    FieldInfo field = fields[i];
+                //    var attrs = field.GetCustomAttributes();
+                //    if (attrs.Count() > 0)
+                //    {
+                //        if (attrs.Where(a => a is HideAttribute).Count() > 0)
+                //        {
+                //            continue;
+                //        }
+                //    }
 
-                    var size = attrs.Where(a => a is SizeAttribute).First();
-                    if (size != null && size is SizeAttribute wh)
-                    {
-                        typeData.Width = wh.Width;
-                        typeData.Height = wh.Height;
-                    }
-                    typedatas.Add(typeData);
-                    var but = attrs.Where(a => a is ButtonAttribute);
-                    if (but.Count() > 0)
-                    {
-                        typedatas.Add(new TypeData()
-                        {
-                            ControlType = ClassControlType.Button,
-                            ObjectType = field.FieldType,
-                            Name = field.Name,
-                            TypeCode = typeCode,
-                            ButtonAttr = but.First()
-                        });
-                    }
+                //    TypeCode typeCode = Type.GetTypeCode(field.FieldType);
+                //    var convert = attrs.Where(a => a is ConvertTypeAttribute).Select(a => a as ConvertTypeAttribute).ToList();
+                //    if (convert.Any())
+                //    {
+                //        typeCode = Type.GetTypeCode(convert[0].TargetType);
+                //    }
+                //    Console.WriteLine($"当前字段名称'{field.Name}',类型'{typeCode}'");
+                //    var typeData = new TypeData()
+                //    {
+                //        Name = field.Name,
+                //        TypeCode = typeCode,
+                //        ObjectType = field.FieldType
+                //    };
 
-                    if (field.FieldType.IsAbstract)
-                    {
-                        typeData.ControlType = ClassControlType.ComboBoxImplement;
-                    }
-                    else if (field.FieldType.IsEnum)
-                    {
-                        typeData.ControlType = ClassControlType.ComboBox;
-                    }
-                    else if (typeCode == TypeCode.Object)
-                    {
-                        if (attrs.Where(a => a is InstanceAttribute).Count() > 0)
-                        {
-                            typeData.ObjectType = field.GetValue(target).GetType();
-                        }
+                //    var size = attrs.Where(a => a is SizeAttribute).First();
+                //    if (size != null && size is SizeAttribute wh)
+                //    {
+                //        typeData.Width = wh.Width;
+                //        typeData.Height = wh.Height;
+                //    }
+                //    typedatas.Add(typeData);
+                //    var but = attrs.Where(a => a is ButtonAttribute);
+                //    if (but.Count() > 0)
+                //    {
+                //        typedatas.Add(new TypeData()
+                //        {
+                //            ControlType = ClassControlType.Button,
+                //            ObjectType = field.FieldType,
+                //            Name = field.Name,
+                //            TypeCode = typeCode,
+                //            ButtonAttr = but.First()
+                //        });
+                //    }
 
-                        if (field.FieldType.Name == "Color")
-                        {
-                            typeData.ControlType = ClassControlType.Empty;
-                            continue;
-                        }
+                //    if (field.FieldType.IsAbstract)
+                //    {
+                //        typeData.ControlType = ClassControlType.ComboBoxImplement;
+                //    }
+                //    else if (field.FieldType.IsEnum)
+                //    {
+                //        typeData.ControlType = ClassControlType.ComboBox;
+                //    }
+                //    else if (typeCode == TypeCode.Object)
+                //    {
+                //        if (attrs.Where(a => a is InstanceAttribute).Count() > 0)
+                //        {
+                //            typeData.ObjectType = field.GetValue(target).GetType();
+                //        }
 
-                        {
-                            typeData.IsList = Reflection.IsList(field.FieldType);
-                            typeData.IsObject = true;
-                            //这里只用两种可能,因为只对未知的类型和集合类型进行拆解
-                            typeData.ControlType = typeData.IsList ? ClassControlType.List : ClassControlType.Class;
-                        }
-                        #region 创建对应的实例 好像没啥用....
-                        ////创建实例
-                        //object target = Activator.CreateInstance(type, para);
-                        //var value = field.GetValue(target);
-                        //if (islist)
-                        //{
-                        //    //对集合创建实例
-                        //    if (value == null)
-                        //    {
-                        //        if (field.FieldType.IsGenericType)
-                        //        {
-                        //            if (field.FieldType.GenericTypeArguments.Length != 1)
-                        //            {
-                        //                throw new Exception("目前只对单个泛型集合进行处理");
-                        //            }
-                        //            typeData.IsGeneric = true;
-                        //            typeData.GenericType = field.FieldType.GenericTypeArguments[0];
-                        //            //泛型集合 只对单个泛型进行操作
-                        //            var generics = typeof(List<>).MakeGenericType(field.FieldType.GenericTypeArguments);
-                        //            value = Activator.CreateInstance(generics); 
-                        //        }
-                        //        else
-                        //        {
-                        //            //数组
-                        //            value = Activator.CreateInstance(field.FieldType, 0);  
-                        //        }
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    //对类型进行处理
-                        //    if (value == null)
-                        //    {
-                        //        value = Activator.CreateInstance(field.FieldType);
-                        //    }
-                        //}
-                        #endregion
-                    }
-                    else if (typeCode == TypeCode.Boolean)
-                    {
-                        typeData.ControlType = ClassControlType.CheckBox;
-                    }
-                    else
-                    {
-                        typeData.ControlType = ClassControlType.TextBox;
-                    }
-                }
-                td = typedatas.ToArray();//
+                //        if (field.FieldType.Name == "Color")
+                //        {
+                //            typeData.ControlType = ClassControlType.Empty;
+                //            continue;
+                //        }
+
+                //        {
+                //            typeData.IsList = Reflection.IsList(field.FieldType);
+                //            typeData.IsObject = true;
+                //            //这里只用两种可能,因为只对未知的类型和集合类型进行拆解
+                //            typeData.ControlType = typeData.IsList ? ClassControlType.List : ClassControlType.Class;
+                //        }
+                //        #region 创建对应的实例 好像没啥用....
+                //        ////创建实例
+                //        //object target = Activator.CreateInstance(type, para);
+                //        //var value = field.GetValue(target);
+                //        //if (islist)
+                //        //{
+                //        //    //对集合创建实例
+                //        //    if (value == null)
+                //        //    {
+                //        //        if (field.FieldType.IsGenericType)
+                //        //        {
+                //        //            if (field.FieldType.GenericTypeArguments.Length != 1)
+                //        //            {
+                //        //                throw new Exception("目前只对单个泛型集合进行处理");
+                //        //            }
+                //        //            typeData.IsGeneric = true;
+                //        //            typeData.GenericType = field.FieldType.GenericTypeArguments[0];
+                //        //            //泛型集合 只对单个泛型进行操作
+                //        //            var generics = typeof(List<>).MakeGenericType(field.FieldType.GenericTypeArguments);
+                //        //            value = Activator.CreateInstance(generics); 
+                //        //        }
+                //        //        else
+                //        //        {
+                //        //            //数组
+                //        //            value = Activator.CreateInstance(field.FieldType, 0);  
+                //        //        }
+                //        //    }
+                //        //}
+                //        //else
+                //        //{
+                //        //    //对类型进行处理
+                //        //    if (value == null)
+                //        //    {
+                //        //        value = Activator.CreateInstance(field.FieldType);
+                //        //    }
+                //        //}
+                //        #endregion
+                //    }
+                //    else if (typeCode == TypeCode.Boolean)
+                //    {
+                //        typeData.ControlType = ClassControlType.CheckBox;
+                //    }
+                //    else
+                //    {
+                //        typeData.ControlType = ClassControlType.TextBox;
+                //    }
+                //}
+                //td = typedatas.ToArray();//
+                #endregion
             }
             return td;
         }

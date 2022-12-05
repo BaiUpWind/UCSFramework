@@ -69,6 +69,7 @@
     <Compile Include="Controls\UC_DeviceBase.xaml.cs">
       <DependentUpon>UC_DeviceBase.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Logic\ReadStatusLogic.cs" />
     <Compile Include="Model\AreaData.cs" />
     <Compile Include="Model\DeviceData.cs" />
     <Compile Include="TestWindows\AllBeltsWindow.xaml.cs">
@@ -95,6 +96,11 @@
       <DependentUpon>WindowZoom.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utilities\UIElementMove.cs" />
+    <Compile Include="ViewModel\DeviceVeiwModel.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\DeviceDataEditorWindow.xaml.cs">
+      <DependentUpon>DeviceDataEditorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\EditorWindow.xaml.cs">
       <DependentUpon>EditorWindow.xaml</DependentUpon>
     </Compile>
@@ -131,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TestWindows\WindowZoom.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DeviceDataEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

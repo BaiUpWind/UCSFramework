@@ -38,12 +38,27 @@ namespace DisplayConveyer.View
         private UC_DeviceBase selectedDevice;
         private bool inSelector;
         private ClassControl singleDevice  ;
+
+        public List<AreaData> Areas { get;   set; }   
         public EditorWindow()
         {
             InitializeComponent();
             canvasMove = new UIElementMove(canvas, this)
             {
                 CanInput = true,
+            };
+            btnTest.Click += (s, e) =>
+            {
+                Window window = new Window();
+                window.Title = "编辑对应信息";
+                Grid grid = new Grid();
+                grid.Margin = new Thickness(5);
+                window.Content = grid;
+                ScrollViewer sv = new ScrollViewer();
+                sv.Margin = new Thickness(5);
+                grid.Children.Add(sv);
+                sv.Content = new ClassControl(typeof(AreaData));
+                window.ShowDialog();
             };
             btnAddDevice.Click += (s, e) =>
             {
@@ -53,17 +68,17 @@ namespace DisplayConveyer.View
                     {
                         ID = $"A000{i+1}",
                         Name = $"{i + 1}号啊啊",
-                        PosX = (220) * i + 55,
+                        PosX = (120) * i + 155,
                         PosY = 55,
-                        Width = 220,
-                        Height = 70,
-                        FontSize = 32,
+                        Width = 120,
+                        Height = 50,
+                        FontSize = 9,
                     }) ;
                 }
             };
             MouseRightButtonDown += (s, e) =>
             {
-                ClareSelector();
+                ClearSelector();
                 SetSelectControl(null);
                 if (singleDevice != null)
                 {
@@ -98,9 +113,9 @@ namespace DisplayConveyer.View
             btnCopy.Click += (s, e) =>
             {
                 double copyOffset = 25;
-                if (selectedDevice != null)
+                if (selectorList.Count == 0 && selectedDevice != null   )
                 {
-                    //单个复制
+                    //单个复制 
                     var clone = selectedDevice.Data.Clone();
                     clone.Name = $"{clone.Name}_clone";
                     clone.ID = $"{clone.ID}_clone";
@@ -112,10 +127,10 @@ namespace DisplayConveyer.View
                 { 
                     //多选复制
                     List<DeviceData> temp = selectorList.Select(a => a.Data).ToList().Clone();
-                    ClareSelector();
+                    ClearSelector();
                     for (int i = 0; i < temp.Count; i++)
-                    {
-                        var clone = temp[i].Clone();
+                    { 
+                        var clone = temp[i];
                         clone.Name = $"{clone.Name}_clone{(i + 1)}";
                         clone.ID = $"{clone.ID}_clone{(i + 1)}";
                         clone.PosX += copyOffset;
@@ -123,6 +138,10 @@ namespace DisplayConveyer.View
                         AddSelector(CreateDeviceControl(clone));
                     } 
                 }
+            };
+            btnEditAreas.Click += (s, e) =>
+            {
+                DrawerTopInContainer.IsOpen ^= true;
             };
             canvas.MouseDown += Canvas_MouseDown;
             canvas.MouseMove += Canvas_MouseMove;
@@ -149,38 +168,54 @@ namespace DisplayConveyer.View
                 Duration = new Duration(TimeSpan.FromSeconds(0.5d)),
             };
             t.BeginAnimation(TranslateTransform.XProperty, animation);
-            gOper.Children.Add(singleDevice);
+            //gOper.Children.Add(singleDevice);
             Panel.SetZIndex(singleDevice, 99);
             return singleDevice;
         }
-        private UC_DeviceBase CreateDeviceControl(DeviceData data)
+        private ComboBox CreateAreaSelector()
         {
-            UC_DeviceBase device = new UC_DeviceBase(data)
+            ComboBox cmb = new ComboBox();
+            cmb.ItemsSource = Areas.Select(a => $"{a.ID}_{a.Name}").ToArray();
+            cmb.SelectionChanged += (s, e) =>
             {
-                Title = data.Name,
-                Width = data.Width,
-                Height = data.Height,
-                TitleFontSize = data.FontSize,
-                
-            }; 
+                var selectItem = cmb.SelectedItem.ToString().Split('_')[0];
+                if(selectedDevice != null)
+                {
+                    selectedDevice.Data.AreaID =int.Parse(selectItem);
+                }
+            };
+            return cmb;
+        }
+        private UC_DeviceBase CreateDeviceControl(DeviceData data)
+        { 
+            UC_DeviceBase device = new UC_DeviceBase(data); 
             device.MouseDown += (ds, de) =>
             {
+                if(selectedDevice != null && selectedDevice != ds)
+                {
+                    return;
+                }
                 if (selectorList.Count == 0)
                 {
                     var ucdb = ds as UC_DeviceBase;
                     SetSelectControl(ucdb); 
                 }
             };
-            device.SizeChanged += (ds, de) =>
+            device.MouseEnter += (ds, de) =>
             {
-                data.Width = device.ActualWidth;
-                data.Height = device.ActualHeight;
-                device.ToolTip = device.Info;
+                device.borderSelect.Visibility = Visibility.Visible;
             }; 
-            device.SetValue(Canvas.LeftProperty, data.PosX);
-            device.SetValue(Canvas.TopProperty, data.PosY);
+            device.MouseLeave += (ds, de) =>
+            {
+                device.borderSelect.Visibility = Visibility.Collapsed;
+
+            };
+            device.SizeChanged += (ds, de) =>
+            { 
+                device.ToolTip = device.Info;
+            };  
             canvas.Children.Add(device);
-            //这个一定要添加到父容器之后再执行
+            //装饰器 一定要添加到父容器之后再执行
             var al = AdornerLayer.GetAdornerLayer(device);
             var adorner = new ElementAdorner(device);
             adorner.OnThumbMouseDown += (ds, de) =>
@@ -189,11 +224,12 @@ namespace DisplayConveyer.View
                     selectedDevice = de as UC_DeviceBase;
             };
             adorner.OnDrage += (ds, de) =>
-            {
+            { 
                 var pos = device.TransformToAncestor(canvas).Transform(new Point(0, 0));
                 data.PosX = pos.X;
                 data.PosY = pos.Y;
                 device.ToolTip = device.Info;
+                if (selectorList.Count <= 1) return;
                 foreach (var item in selectorList)
                 {
                     if (item == selectedDevice) continue;
@@ -272,9 +308,8 @@ namespace DisplayConveyer.View
                     RemoveSelector(item ); 
                 }
             }
-        } 
-
-        private void ClareSelector()
+        }   
+        private void ClearSelector()
         {
             foreach (var item in selectorList)
             {
@@ -312,7 +347,13 @@ namespace DisplayConveyer.View
             if (ucdb != null)
             {
                 selectedDevice = ucdb;
-                ShowDataInfo(ucdb.Data.GetType(), ucdb.Data);
+                var control = ShowDataInfo(ucdb.Data.GetType(), ucdb.Data);
+                control.NewData += (o) =>
+                {
+                    selectedDevice.ViewModel.Data = o as DeviceData;
+                };
+               gOper.Children.Add(control);
+             
                 SetThumShowOrHide(selectedDevice, true);
             }
         }

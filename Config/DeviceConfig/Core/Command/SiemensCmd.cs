@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ControlHelper.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,19 +9,27 @@ namespace  DeviceConfig.Core
 {
     public sealed class SiemensCmd : PLCCmd
     {
-        [Control("CommandStr","数据解析类型",ControlType.Genericity,GenerictyType: typeof(PLCDBCmd),FieldName:nameof(CommandStr))]
-        [Control("编辑DB块",null,ControlType.Data,GenerictyType: typeof(PLCDBCmd), FieldName:nameof(CommandStr))]
-        [ConvertType(typeof(string))]
-        public override object CommandStr { get  ; set  ; }
 
-        [Control("Result", "创建返回结果类型", ControlType.Data, GenerictyType: typeof(PLCDBResult), FieldName: nameof(Result))]
-        [Instance]
+        //[DataGrid]
+        [ConvertType(typeof(List<DBData>))]
+        public override object CommandStr { get  ; set  ; }
+         
+        [Hide]
         public override ResultBase Result { get; set; } = new PLCDBResult();
     }
 
     public class PLCDBResult : ResultBase
     {
-
+        public override object Data { get  ; set  ; }  
+    }
+    public class DBData
+    {
+        [NickName("设备编号")]
+        public string WorkId { get; set; }
+        [NickName("DB地址")]
+        public string DBAddress { get; set; }
+        [Hide]
+        public short Status { get; set; }
     }
 
     public class PLCDBCmd {

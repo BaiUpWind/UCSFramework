@@ -10,17 +10,17 @@ namespace ControlHelper.Attributes
     {
 
         /// <summary>
-        /// 标记这个类 哪个配置类型 和数据库类型
+        /// 标记这个类 哪个配置类型 和 依赖的第二个类型
         /// </summary>
         /// <param name="configType"></param>
-        /// <param name="dbType"></param>
-        public DependOnAttribute(Type configType, Type dbType)
+        /// <param name="type2"></param>
+        public DependOnAttribute(Type configType, Type type2)
         {
             ConfigType = configType;
-            DBType = dbType;
+            Type2 = type2;
         }
 
         public Type ConfigType { get; }
-        public Type DBType { get; }
+        public Type Type2 { get; }
     }
 }

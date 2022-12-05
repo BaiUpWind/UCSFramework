@@ -1,4 +1,5 @@
 ﻿using DisplayConveyer.Model;
+using DisplayConveyer.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,21 +62,27 @@ namespace DisplayConveyer.Controls
             }
         }
         public DeviceData Data { get; private set; }
-        public string Info => $"宽：{Data.Width}\r\n高：{Data.Height}\r\n 位置X：{Data.PosX}\r\n位置Y：{Data.PosY} ";
+        public DeviceViewModel ViewModel { get; set; }
+       
+        public string Info => $"名称:{Data.Name}\r\n宽：{Data.Width}\r\n高：{Data.Height}\r\n 位置X：{Data.PosX}\r\n位置Y：{Data.PosY} ";
         public UC_DeviceBase(DeviceData data)
         {
             InitializeComponent();
             colorHandle = SetColorThreadUnsafe;
             Data = data;
+            DataContext = ViewModel = new DeviceViewModel(data); 
             Data.StatusChanged += SetColor;
-        } 
+           
+        }
+
+
         /// <summary>
         /// 设置背景色为指定颜色，线程安全
         /// </summary>
         /// <param name="color"></param>
         public void SetColor(Color color)
         {
-            Application.Current?.Dispatcher.BeginInvoke(colorHandle,color);
+            Application.Current?.Dispatcher.BeginInvoke(colorHandle, color);
         }
         /// <summary>
         /// 1-99报警red,100自动Lime,101手动灰色 ,线程安全

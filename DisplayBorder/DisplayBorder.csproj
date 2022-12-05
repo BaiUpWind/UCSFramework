@@ -317,6 +317,10 @@
       <Project>{bd924948-6b92-4517-b504-08695586d011}</Project>
       <Name>Config</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ControlHelper\ControlHelper.csproj">
+      <Project>{52A80BDA-F87C-47A7-892C-89CC0B8102D2}</Project>
+      <Name>ControlHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DBHelper\DBHelper.csproj">
       <Project>{9728346d-fc7a-4597-baa5-2d8aa23a9d79}</Project>
       <Name>DBHelper</Name>

@@ -1,5 +1,7 @@
 ﻿using CommonApi.PLC;
+using ControlHelper.Attributes;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace DeviceConfig.Core
@@ -46,7 +48,31 @@ namespace DeviceConfig.Core
 
         protected override ResultBase Read(object cmd)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (cmd is SiemensCmd sieCmd && sieCmd.CommandStr is IList list)
+                {
+                    if (sieCmd.Result.Data == null)
+                    {
+                        // 这个  CommandStr 就直接包含了结果
+                        sieCmd.Result.Data = sieCmd.CommandStr;
+                    }
+                    foreach (var item in list)
+                    {
+                        if (item is DBData db)
+                        {
+                            // 暂时写死为读取short的 2022 12 05
+                            db.Status = splc.PlcS7.ReadInt16(db.DBAddress).Content;
+                        }
+                    }
+                    return sieCmd.Result;
+                }
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

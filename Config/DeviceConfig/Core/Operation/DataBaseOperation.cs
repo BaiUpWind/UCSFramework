@@ -1,9 +1,7 @@
-﻿
+﻿using ControlHelper.Attributes;
 using DBHelper;
 using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Windows.Forms;
+using System.Collections.Generic; 
 
 namespace DeviceConfig.Core
 {
@@ -17,23 +15,14 @@ namespace DeviceConfig.Core
         {
             if (ConnectConfig is DataBaseConnectCfg dbcc)
             {
-                CreateType(dbcc); 
-                //thCheck = new Thread(Check);
-                //isChecked = true;
-                //thCheck.Start();
+                CreateType(dbcc);  
                 return;
             }
            throw new ArgumentException("创建数据库操作实例失败!");
         }
-        private DBUnitiyBase db;
-        //private readonly Thread thCheck;
-        //private bool isChecked;
-        private int currentStatus;
-        /// <summary>
-        /// 状态检查
-        /// </summary>
-        [Control("StatusCheck", "状态检查", ControlType.Data, GenerictyType: typeof(StatusCheck), FieldName: nameof(StatusCheck))]
-        public StatusCheck StatusCheck { get; set; }  
+        private DBUnitiyBase db; 
+
+      
         /// <summary>
         /// 当状态发生变化时
         /// </summary>
@@ -69,29 +58,37 @@ namespace DeviceConfig.Core
    
         protected override ResultBase Read(object cmd)
         {
-            if (cmd is SQLCmd sqlcmd)
+            try
             {
-                if (ConnectConfig is DataBaseConnectCfg dbcc)
+                if (cmd is SQLCmd sqlcmd)
                 {
-                    db.ConnStr = dbcc.GetConnStr().Replace("\r\n", "");
-                }
-                try
-                {
-                    if (string.IsNullOrEmpty((sqlcmd.CommandStr?.ToString()))) return null;
-                    ErrorCheck(sqlcmd); 
-                    var data = db.GetDataTable(sqlcmd.CommandStr.ToString().Replace("\r\n", ""), System.Data.CommandType.Text);
-                    sqlcmd.Result.Data = data;
+                    if (ConnectConfig is DataBaseConnectCfg dbcc)
+                    {
+                        db.ConnStr = dbcc.GetConnStr().Replace("\r\n", "");
+                    }
+                    try
+                    {
+                        if (string.IsNullOrEmpty((sqlcmd.CommandStr?.ToString()))) return null;
+                        ErrorCheck(sqlcmd);
+                        var data = db.GetDataTable(sqlcmd.CommandStr.ToString().Replace("\r\n", ""), System.Data.CommandType.Text);
+                        sqlcmd.Result.Data = data;
 
-                    // 读取异常状态
-                    Check();
-                    return sqlcmd.Result;
+                        // 读取异常状态
+                        //Check();
+                        return sqlcmd.Result;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
                 }
-                catch 
-                {
-                    return null;
-                } 
+                return null;
             }
-            return null; 
+            catch (Exception ex)
+            { 
+                throw ex;
+            }
+           
         }
 
         
@@ -150,52 +147,59 @@ namespace DeviceConfig.Core
             }
             throw new ArgumentException("创建数据库操作实例失败!"); 
         }
+        #region 状态检查弃用 2022 12 05 不要删除
+        /// <summary>
+        /// 状态检查
+        /// 
+        /// </summary>
+        //[Control("StatusCheck", "状态检查", ControlType.Data, GenerictyType: typeof(StatusCheck), FieldName: nameof(StatusCheck))]
+        //public StatusCheck StatusCheck { get; set; }  
+        //private int currentStatus;
+        //private void Check()
+        //{
+        //    if (StatusCheck == null) return;
+        //    if (string.IsNullOrWhiteSpace(StatusCheck.AliveSql) ) return;
+        //    if (db == null) return;
+        //    currentStatus = StatusCheck.DefualtValue.Value;
+        //    StatusCheck.AliveSql = StatusCheck.AliveSql.Replace("\r\n", "");
+        //    //while (true)
+        //    //{
+        //        //if (!isChecked) continue; 
+        //        try
+        //        {
 
-        private void Check()
-        {
-            if (StatusCheck == null) return;
-            if (string.IsNullOrWhiteSpace(StatusCheck.AliveSql) ) return;
-            if (db == null) return;
-            currentStatus = StatusCheck.DefualtValue.Value;
-            StatusCheck.AliveSql = StatusCheck.AliveSql.Replace("\r\n", "");
-            //while (true)
-            //{
-                //if (!isChecked) continue; 
-                try
-                {
+        //            var result = db.GetScalar(StatusCheck.AliveSql, System.Data.CommandType.Text);
+        //            //当前的值
+        //            int resultValue = int.Parse(result.ToString());
 
-                    var result = db.GetScalar(StatusCheck.AliveSql, System.Data.CommandType.Text);
-                    //当前的值
-                    int resultValue = int.Parse(result.ToString());
-
-                    if (currentStatus != resultValue)
-                    {
-                        //获取异常状态的图片
-                        var statusModel = StatusCheck.StatusModels.Find(a => a.Value == resultValue);
-                        if (statusModel != null)
-                        {
-                            currentStatus = resultValue;
-                            OnStatusChangedEvent?.Invoke(this, statusModel);
-                        }
-                        else
-                        {
-                            //没有找到时 就使用默认值
-                            OnStatusChangedEvent?.Invoke(this, StatusCheck.DefualtValue);
-                            Console.WriteLine($"未找到对应的statusModel,resultValue'{resultValue}'");
-                        }
-                    }
-                    //if (StatusCheck.CheckInterval == 0) StatusCheck.CheckInterval = 1000;
-                    //Thread.Sleep(StatusCheck.CheckInterval);
-                }
-                catch (Exception ex)
-                {
-                    //出现未知错误 3秒后再试
-                    Console.WriteLine($"状态检查时：出现未知错误'{ex.Message}'");
-                    //Thread.Sleep(3000);
-                } 
-            //}
-        }
-         
+        //            if (currentStatus != resultValue)
+        //            {
+        //                //获取异常状态的图片
+        //                var statusModel = StatusCheck.StatusModels.Find(a => a.Value == resultValue);
+        //                if (statusModel != null)
+        //                {
+        //                    currentStatus = resultValue;
+        //                    OnStatusChangedEvent?.Invoke(this, statusModel);
+        //                }
+        //                else
+        //                {
+        //                    //没有找到时 就使用默认值
+        //                    OnStatusChangedEvent?.Invoke(this, StatusCheck.DefualtValue);
+        //                    Console.WriteLine($"未找到对应的statusModel,resultValue'{resultValue}'");
+        //                }
+        //            }
+        //            //if (StatusCheck.CheckInterval == 0) StatusCheck.CheckInterval = 1000;
+        //            //Thread.Sleep(StatusCheck.CheckInterval);
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            //出现未知错误 3秒后再试
+        //            Console.WriteLine($"状态检查时：出现未知错误'{ex.Message}'");
+        //            //Thread.Sleep(3000);
+        //        } 
+        //    //}
+        //}
+        #endregion 
     }
 
     public sealed class StatusCheck

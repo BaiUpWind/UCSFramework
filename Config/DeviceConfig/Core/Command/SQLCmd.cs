@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using ControlHelper.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.Data;
 
 namespace DeviceConfig.Core
 {
 
-    [Require(typeof(SQLResultAnalysis))]
-
+    
     public class SQLCmd : CommandBase
     {
         public SQLCmd()

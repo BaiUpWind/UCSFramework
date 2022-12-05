@@ -241,8 +241,8 @@ internal static class Reflection
                 }
                 else
                 {
-
-                    classFullName.Add(shotOrFull ? item.Name : item.FullName);
+                    if(!classFullName.Contains(shotOrFull ? item.Name : item.FullName))
+                        classFullName.Add(shotOrFull ? item.Name : item.FullName);
                 }
             }
         }
