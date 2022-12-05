@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DisplayConveyer.Model
 {
-    internal class AreaData
+    public class AreaData
     {
         [NickName("区域编号")]
         public uint ID { get; set; }
