@@ -1,4 +1,5 @@
-﻿using DeviceConfig;
+﻿using ControlHelper.Attributes;
+using DeviceConfig;
 using DeviceConfig.Core;
 using Newtonsoft.Json;
 using System;

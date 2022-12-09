@@ -41,6 +41,8 @@ namespace DisplayConveyer
 
         public event Action<object, DragDeltaEventArgs> OnDrage;
 
+        public event Action<object, DragDeltaEventArgs> OnMoveDrage;
+
         public event Action<object, UIElement> OnThumbMouseDown;
          
         public void Show()
@@ -140,6 +142,7 @@ namespace DisplayConveyer
             {
                 var element = AdornedElement as FrameworkElement;
                 if (element == null) return;
+
                 Resize(element);
                 switch (thumb.VerticalAlignment)
                 {
@@ -172,6 +175,7 @@ namespace DisplayConveyer
                 }
 
                 e.Handled = true;
+                OnMoveDrage?.Invoke(element, e);
             };
             return thumb;
         }

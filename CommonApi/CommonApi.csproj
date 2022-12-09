@@ -77,7 +77,6 @@
     <Compile Include="TCP\ClientTest.cs" />
     <Compile Include="Utilitys\Encryption\Cryptography.cs" />
     <Compile Include="Utilitys\Extensions\ListExtension.cs" />
-    <Compile Include="Utilitys\Json\JsonHelper.cs" />
     <Compile Include="Utilitys\Json\PolyConverter.cs" />
     <Compile Include="Utilitys\Utility.Marshal.cs" />
   </ItemGroup>

@@ -12,7 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
+using System.Windows.Media; 
 
 namespace ControlHelper.WPF
 {
@@ -198,7 +198,7 @@ namespace ControlHelper.WPF
 
         public object GenericData => genericData;
 
-        private object GetValue(string name)
+        public object GetValue(string name)
           => CheckProperty
          ? orginType.GetProperty(name, BindingFlags.Instance | BindingFlags.Public)?.GetValue(Data)
          : orginType.GetField(name, BindingFlags.Instance | BindingFlags.Public)?.GetValue(Data);
@@ -217,7 +217,41 @@ namespace ControlHelper.WPF
                 OnSetData?.Invoke(orginType.GetField(name, BindingFlags.Instance | BindingFlags.Public)?.FieldType, value);
             }
         }
-
+        public void SetUIValue(string propName,object value)
+        {
+            try
+            {
+                var sp = (StackPanel)gData.Children[0];
+                foreach (FrameworkElement item in sp.Children)
+                {
+                    if (item.Tag == null) continue;
+                    if (item.Tag.ToString() == propName)
+                    {
+                        if (item is RichTextBox rtxt)
+                        {
+                            rtxt.Document.Blocks.Clear();
+                            Paragraph paragraph = new Paragraph();
+                            paragraph.Inlines.Add(value.ToString());
+                            rtxt.Document.Blocks.Add(paragraph);
+                        }
+                        if (item is TextBox txt)
+                        {
+                            txt.Text = value.ToString();
+                        }
+                        if (item is ComboBox cmb)
+                        {
+                            cmb.SelectedIndex = Convert.ToInt32(value);
+                        }
+                        break;
+                    }
+                }
+            }
+            catch  
+            {
+                
+            }
+        
+        } 
         private void CreateControls(Panel panel, TypeData[] typeDatas)
         {
             panel.Children.Clear();
@@ -256,6 +290,10 @@ namespace ControlHelper.WPF
                                     if (ts is RichTextBox txtBox)  // && !string.IsNullOrEmpty(te.Changes))
                                     {
                                         TextRange textRange = new TextRange(txtBox.Document.ContentStart, txtBox.Document.ContentEnd);
+                                        if (string.IsNullOrEmpty(textRange.Text))
+                                        {
+                                            return;
+                                        }
                                         //这里在存入时 会把 \r\n 符号也存入进去 ,所以在使用的时候注意repalce掉
                                         SetValue(td.Name, Convert.ChangeType(textRange.Text.Replace("\r\n", ""), td.ObjectType));
                                     }
@@ -327,6 +365,17 @@ namespace ControlHelper.WPF
                         {
                             //网格
                             control = new  DataGrid();
+                            if(control is DataGrid dataGrid)
+                            {
+                                var value = GetValue(td.Name);
+                                if(value is IEnumerable ien)
+                                {
+                                    dataGrid.AutoGenerateColumns = true;
+
+                                    dataGrid.ItemsSource = null;
+                                    dataGrid.ItemsSource = ien;
+                                } 
+                            }
                         }
                         else
                         { 
@@ -592,6 +641,7 @@ namespace ControlHelper.WPF
                     {
                         control.ToolTip = td.ToolTip;
                     }
+                    control.Tag = td.Name;
                     control.IsEnabled = !td.IsReadOnly;
                     control.HorizontalAlignment = HorizontalAlignment.Left;
                     control.VerticalAlignment = VerticalAlignment.Stretch;

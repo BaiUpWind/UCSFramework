@@ -20,9 +20,16 @@ namespace DisplayConveyer.Utilities
         private UIElement element;
         private UIElement parent;
 
-        public bool CanInput { get; set; }
+        public enum KeyCode
+        {
+            Left,
+            Middle,
+            Right,
+        }
 
-        public UIElementMove(UIElement element, Window window)
+        public bool CanInput { get; set; }
+        public KeyCode Key { get; private set; }
+        public UIElementMove(UIElement element, Window window, KeyCode key = KeyCode.Middle)
         {
             mymat = new Matrix(1, 0, 0, 1, 0, 0);//存储当前控件位移和比例 
             this.element = element;
@@ -31,8 +38,10 @@ namespace DisplayConveyer.Utilities
             element.MouseWheel += Canvas_MouseWheel;
             element.MouseDown += Canvas_MouseDown;
             element.MouseMove += Canvas_MouseMove;
+            Key = key;
         }
         public void ReSet() => MatrixChange(15, 15, 1);
+  
         public void ReSet(double x,double y) => MatrixChange(x, y, 1);
         private void MatrixChange(double dx, double dy)
         {
@@ -92,8 +101,8 @@ namespace DisplayConveyer.Utilities
 
             var uiEle = sender as UIElement;
             if (uiEle == null) return;
-            if (e.MiddleButton == MouseButtonState.Pressed)
-            {
+            if (CheckPress(e))
+            { 
                 Point currp = e.GetPosition(parent);
                 double dx = currp.X - startpoint.X + currentpoint.X;
                 double dy = currp.Y - startpoint.Y + currentpoint.Y;//总位移等于当前的位移加上已有的位移
@@ -106,11 +115,26 @@ namespace DisplayConveyer.Utilities
         {
             GlobalPara.RecordTime();
             if (!CanInput) return;
-            if (e.MiddleButton == MouseButtonState.Pressed)
+            if (CheckPress(e))
             {
                 startpoint = e.GetPosition(parent);//记录开始位置
                 currentpoint.X = mymat.OffsetX;//记录Canvas当前位移
                 currentpoint.Y = mymat.OffsetY;
+            }
+        }
+
+        private bool CheckPress(MouseEventArgs e)
+        {
+            switch (Key)
+            {
+                case KeyCode.Left:
+                     return e.LeftButton == MouseButtonState.Pressed;
+                case KeyCode.Middle:
+                    return e.MiddleButton == MouseButtonState.Pressed;
+                case KeyCode.Right:
+                    return e.RightButton == MouseButtonState.Pressed;
+                default:
+                    return false;
             }
         }
     }

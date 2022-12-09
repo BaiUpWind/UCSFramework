@@ -63,18 +63,32 @@ namespace DisplayConveyer.Controls
         }
         public DeviceData Data { get; private set; }
         public DeviceViewModel ViewModel { get; set; }
-       
+
+   
+         
         public string Info => $"名称:{Data.Name}\r\n宽：{Data.Width}\r\n高：{Data.Height}\r\n 位置X：{Data.PosX}\r\n位置Y：{Data.PosY} ";
         public UC_DeviceBase(DeviceData data)
         {
             InitializeComponent();
             colorHandle = SetColorThreadUnsafe;
-            Data = data;
-            DataContext = ViewModel = new DeviceViewModel(data); 
+            Data = data; 
+       
+            DataContext = ViewModel = new DeviceViewModel(data);
+            //txtDir.Text = GetDri( Data.ArrowDir);
             Data.StatusChanged += SetColor;
+            //ViewModel.PropertyChanged += ViewModel_PropertyChanged;
            
         }
 
+        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            //if (sender is DeviceViewModel dd )
+            //{
+            //    txtDir.Text = GetDri(dd.Data.ArrowDir);
+            //}
+        }
+ 
+ 
 
         /// <summary>
         /// 设置背景色为指定颜色，线程安全
@@ -103,7 +117,7 @@ namespace DisplayConveyer.Controls
         {
             if (status >= 1 && status <= 99)
             {
-                return Colors.Red;
+                return Colors.Red; 
             }
             else if (status == 100)
             {
@@ -115,6 +129,29 @@ namespace DisplayConveyer.Controls
             }
 
             return Colors.Gray;
+        }
+
+        private string GetDri(Direction dir)
+        {
+            switch (dir)
+            {
+                case Direction.None:
+                    return "•";
+                case Direction.Left:
+                    return "←";
+                case Direction.Up:
+                    return "↑";
+                case Direction.Right:
+                    return "→";
+                case Direction.Down:
+                    return "↓";
+                case Direction.LeftRight:
+                    return "←→";
+                case Direction.UpDown:
+                    return "⇵";
+                default:
+                    return "•";
+            }
         }
     }
 }

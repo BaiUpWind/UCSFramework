@@ -1,5 +1,7 @@
 ﻿using ControlHelper.Attributes;
+using DeviceConfig;
 using DeviceConfig.Core;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +19,10 @@ namespace DisplayConveyer.Model
         //[NickName("顺序")]
         //public int Order { get; set; } 
         [NickName("读取方式")]
-        public OperationBase Operation { get; set; } 
+        [JsonConverter(typeof(PolyConverter))]
+        public OperationBase Operation { get; set; }
+
+        [DataGrid]
         [NickName("设备集合")]
         public List<DeviceData> Devices { get; set; } = new List<DeviceData>();
     }

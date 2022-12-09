@@ -6,24 +6,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CommonApi 
+namespace ControlHelper.Tools
 {
     public class JsonHelper
-    {  
+    {
         /// <summary>
         /// 写入json
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="target"></param>
         /// <param name="path"></param>
-        public static void WriteJson(object target,string path)
+        public static void WriteJson(object target, string path)
         {
             if (!File.Exists(path))
             {
                 File.Create(path).Close();
-            } 
+            }
             File.WriteAllText(path, JsonConvert.SerializeObject(target, Formatting.Indented));
-        } 
+        }
         /// <summary>
         /// 读取一个json文件
         /// </summary>
@@ -33,7 +33,7 @@ namespace CommonApi
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
         public static T ReadJson<T>(string path, bool autoWrite = false)
-        { 
+        {
             if (!File.Exists(path))
             {
                 if (!autoWrite)
@@ -43,24 +43,24 @@ namespace CommonApi
                 else
                 {
                     try
-                    { 
-                        var type = GetCollectionElementType( typeof(T));
-                        if (type !=null )
+                    {
+                        var type = GetCollectionElementType(typeof(T));
+                        if (type != null)
                         {
                             var obj = new List<T>();
                             WriteJson(obj, path);
                         }
                         else
                         {
-                          var  target = Activator.CreateInstance<T>();
+                            var target = Activator.CreateInstance<T>();
                             WriteJson(target, path);
-                        } 
+                        }
                     }
                     catch (Exception ex)
-                    { 
+                    {
                         //可能会有无参构造的类
                         throw ex;
-                    } 
+                    }
                 }
             }
             var txt = File.ReadAllText(path);

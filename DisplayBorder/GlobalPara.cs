@@ -1,5 +1,5 @@
-﻿using CommonApi;
-using CommonApi.Event;
+﻿using CommonApi.Event;
+using ControlHelper.Tools;
 using DisplayBorder.Events;
 using DisplayBorder.Model;
 using GalaSoft.MvvmLight;

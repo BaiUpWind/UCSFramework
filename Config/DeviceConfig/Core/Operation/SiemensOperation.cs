@@ -1,5 +1,6 @@
 ﻿using CommonApi.PLC;
 using ControlHelper.Attributes;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,10 +24,11 @@ namespace DeviceConfig.Core
         }
         private SiemensPlc splc;
 
-        List<SiemensCmd> cmds = new List<SiemensCmd>();
+        SiemensCmd cmds = new SiemensCmd();
 
+        [JsonConverter(typeof(PolyConverter))]
         [Instance]
-        public override object Commands { get => cmds; set=> cmds = value as List<SiemensCmd>; }
+        public override object Commands { get => cmds; set=> cmds = value as  SiemensCmd ; }
 
         public override bool Connect()
         {

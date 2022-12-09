@@ -42,7 +42,7 @@ namespace DeviceConfig.Core
         }
       
         /// <summary>
-        /// 这玩意是个集合[List],存放所有的指令操作和返回结果
+        /// 可以为集合[List],存放指令操作和返回结果
         /// <para>基类型为<see cref="CommandBase"/></para>
         /// </summary>
         [JsonConverter(typeof(PolyConverter))]
@@ -64,6 +64,11 @@ namespace DeviceConfig.Core
                 {
                     results.Add(Read(cmd)); 
                 }
+            }
+            else
+            {
+                //对单个读
+                results.Add(Read(Commands));
             }
             return results;
         }

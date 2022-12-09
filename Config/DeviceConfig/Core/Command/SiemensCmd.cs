@@ -9,10 +9,24 @@ namespace  DeviceConfig.Core
 {
     public sealed class SiemensCmd : PLCCmd
     {
-
-        //[DataGrid]
+        private List<DBData> cmdStr  ;
+         [DataGrid]
         [ConvertType(typeof(List<DBData>))]
-        public override object CommandStr { get  ; set  ; }
+        public override object CommandStr
+        {
+            get
+            {
+                if(cmdStr==null)
+                {
+                    cmdStr = new List<DBData>();
+                }
+                return cmdStr;
+            }
+            set
+            {
+                cmdStr = value as List<DBData>;
+            }
+        }
          
         [Hide]
         public override ResultBase Result { get; set; } = new PLCDBResult();
@@ -31,10 +45,5 @@ namespace  DeviceConfig.Core
         [Hide]
         public short Status { get; set; }
     }
-
-    public class PLCDBCmd {
-
-        [Control("DB","DB块",ControlType.TextBox)]
-        public string DB { get; set; }
-    }
+     
 }

@@ -1,10 +1,7 @@
-﻿using DisplayConveyer.Model;
-using ControlHelper.Attributes;
-using System;
+﻿using ControlHelper.Attributes;
+using DisplayConveyer.Model;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+ 
 
 namespace DisplayConveyer.Config
 {
@@ -15,11 +12,19 @@ namespace DisplayConveyer.Config
         public double SacleRatio { get; set; } = .5d;
         [NickName("滑动速度")]
         public float SlideSpeed { get; set; } = 20f;
-        [NickName("启用超时","当多少秒没有操作后就返回到主界面")]
+
+         
+        #region 弃用
+         
+        [Hide]
+        [NickName("启用超时", "当多少秒没有操作后就返回到主界面")]
         public bool EnableTimeOut { get; set; }
+        [Hide] 
         [NickName("超时时间（毫秒）")]
-        public int TimeOut { get; set; }
+        public int TimeOut { get; set; } 
+        [Hide]
         public List<BeltConfig> Belts { get; set; } = new List<BeltConfig>();
+        #endregion
     }
 
     public class BeltConfig
