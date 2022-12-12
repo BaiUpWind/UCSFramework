@@ -48,13 +48,14 @@ namespace DisplayConveyer.View
         //当前选择的设备
         private FrameworkElement singleDevice  ;
         //新增新建设备界面
-        private StackPanel newCreate;
+        private StackPanel newCreate; 
+        //物流线配置 
+        private ConveyerConfig ConvConfig;
+        private Rectangle rectangleCache;
+
         private List<AreaData> Areas => ConvConfig?.Areas;
 
-        /// <summary>
-        /// 物流线配置
-        /// </summary>
-        private ConveyerConfig ConvConfig;
+
 
         private double CanvasWidth
         { 
@@ -286,7 +287,8 @@ namespace DisplayConveyer.View
                 }
             };
             Loaded += (s, e) =>
-            { 
+            {
+                AddRect();
                 Draw(canvas);
                 EnableMyStackPanel(false);
             };
@@ -334,7 +336,7 @@ namespace DisplayConveyer.View
                     CanvasWidth = ConvConfig.CanvasWidth; 
                     EnableMyStackPanel(true);
                     canvas.Children.Clear();
-                    Draw(canvas);
+                 
                     foreach (var area in Areas)
                     {
                         foreach (var device in area.Devices)
@@ -342,7 +344,7 @@ namespace DisplayConveyer.View
                             CreateDeviceControl(device);
                         }
                     }
-                  
+                    Draw(canvas);
                     btn.Background = new SolidColorBrush(Colors.OrangeRed);
                     btn.Content = "关闭配置";
                     btn.Tag = "close";
@@ -398,6 +400,101 @@ namespace DisplayConveyer.View
                 gOper.Children.Remove(singleDevice);
             }
         }
+        private void AddRect()
+        {
+
+            UIElement rect = GetRect(new RectData()
+            {
+                Width = 380,
+                Height = 380,
+                PosX = 15,
+                PosY= 15,
+                StrokeThickness =2,
+                Name ="高温一"
+            });
+            rect = GetTextBlock(new LabelData()
+            {
+                Text="入化成段上层",
+                FontSize = 16,
+            });
+
+            canvas.Children.Add(rect);
+
+            rect.SetValue(Canvas.LeftProperty, 15d);
+            rect.SetValue(Canvas.TopProperty, 15d);
+            var al = AdornerLayer.GetAdornerLayer(rect);
+            var adorner = new ElementAdorner(rect); 
+            al.Add(adorner);
+   
+            adorner.OnMoveDrage += (s, e) =>
+            {
+                if (rect is TextBlock tb)
+                {
+                    tb.FontSize = (tb.ActualWidth) / 6;
+                }
+            };
+            rect.MouseLeftButtonDown += (s, e) =>
+            {
+                adorner.Show();
+            };
+            rect.MouseRightButtonDown += (s, e) =>
+            {
+                adorner.Hide();
+            };
+        }
+        private TextBlock GetTextBlock(LabelData data)
+        {
+            return new TextBlock()
+            {
+                Text = data.Text,
+                FontSize = data.FontSize,
+            };
+        }
+        private Rectangle GetRect(RectData data)
+        {
+            return new Rectangle()
+            {
+                Width = data.Width,
+                Height = data.Height,
+                Stroke = new SolidColorBrush(Colors.Red),
+                StrokeThickness = data.StrokeThickness,
+        
+            };
+        }
+        private FrameworkElement DrawRect(RectData data)
+        {
+            Grid grid = new Grid(); 
+            grid.Width = data.Width;
+            grid.Height = data.Height;
+            //grid.Background = new SolidColorBrush(Colors.Black);
+
+            TextBlock tb = new TextBlock();
+            tb.Text = data.Name;
+            tb.HorizontalAlignment = HorizontalAlignment.Center;
+            tb.VerticalAlignment = VerticalAlignment.Top;
+            tb.Margin = new Thickness(0, 5, 0, 5);
+            tb.FontSize = 36;
+            Border border = new Border();
+            border.BorderThickness = new Thickness(2);
+            border.BorderBrush = new SolidColorBrush(Colors.Red);
+            border.Child = tb;
+            grid.Children.Add(border);
+
+
+
+            //Rectangle rect = new Rectangle
+            //{
+            //    Stroke = new SolidColorBrush(Colors.Red),
+            //    StrokeThickness = data.StrokeThickness,
+              
+            //};
+            //grid.Children.Add(rect);
+            grid.RenderTransform = new TranslateTransform(data.PosX, data.PosY);
+            Panel.SetZIndex(grid, -99);
+            return grid;
+
+        }
+
         //创建一个选中的设备的信息
         private FrameworkElement CreateDetail(Type type,object data)
         {
@@ -506,7 +603,7 @@ namespace DisplayConveyer.View
                 //装饰器 一定要添加到父容器之后再执行，否则获取不到装饰器的
                 var al = AdornerLayer.GetAdornerLayer(device);
                 var adorner = new ElementAdorner(device);
-                adorner.OnThumbMouseDown += (ds, de) =>
+                adorner.DragStarted += (ds, de) =>
                 {
                     if (selectorList.Count > 1)
                         selectedDevice = de as UC_DeviceBase;
@@ -771,6 +868,7 @@ namespace DisplayConveyer.View
                     StrokeThickness = 0.2d
                 };
                 canvas.Children.Add(line);
+                Panel.SetZIndex(line, -100);
                 allLines.Add(line);
                 currentPosY += scaleY;
                 yCount++;
@@ -790,6 +888,7 @@ namespace DisplayConveyer.View
                     Stroke = gridBrush,
                     StrokeThickness = 0.2d
                 };
+                Panel.SetZIndex(line, -100); 
                 canvas.Children.Add(line);
                 allLines.Add(line);
                 currentPosX += scaleX;

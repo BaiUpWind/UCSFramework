@@ -79,6 +79,8 @@
     <Compile Include="Logic\ReadStatusLogic.cs" />
     <Compile Include="Model\AreaData.cs" />
     <Compile Include="Model\DeviceData.cs" />
+    <Compile Include="Model\LabelData.cs" />
+    <Compile Include="Model\RectData.cs" />
     <Compile Include="PulibcEnum\PublicEnums.cs" />
     <Compile Include="TestWindows\AllBeltsWindow.xaml.cs">
       <DependentUpon>AllBeltsWindow.xaml</DependentUpon>
@@ -102,6 +104,7 @@
     <Compile Include="TestWindows\WindowZoom.xaml.cs">
       <DependentUpon>WindowZoom.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\Extend.cs" />
     <Compile Include="Utilities\UIElementMove.cs" />
     <Compile Include="ViewModel\DeviceVeiwModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

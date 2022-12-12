@@ -25,6 +25,12 @@ namespace DisplayConveyer.Model
         [DataGrid]
         [NickName("设备集合")]
         public List<DeviceData> Devices { get; set; } = new List<DeviceData>();
+
+        [Hide]
+        [NickName("区域标记")]
+        public List<RectData> RectDatas { get; set; } = new List<RectData>();
+
+     
     }
 
     

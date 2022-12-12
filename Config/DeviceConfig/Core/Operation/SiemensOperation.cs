@@ -1,4 +1,5 @@
 ﻿using CommonApi.PLC;
+using Config.DeviceConfig.Models;
 using ControlHelper.Attributes;
 using Newtonsoft.Json;
 using System;
@@ -61,10 +62,11 @@ namespace DeviceConfig.Core
                     }
                     foreach (var item in list)
                     {
-                        if (item is DBData db)
+                        if (item is StatusData db)
                         {
                             // 暂时写死为读取short的 2022 12 05
-                            db.Status = splc.PlcS7.ReadInt16(db.DBAddress).Content;
+                            db.MachineState = splc.PlcS7.ReadInt16(db.MachineAddress).Content;
+                            db.LoadState = splc.PlcS7.ReadInt16(db.LoadDBAddress).Content;
                         }
                     }
                     return sieCmd.Result;

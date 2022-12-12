@@ -1,4 +1,5 @@
-﻿using ControlHelper.Attributes;
+﻿using Config.DeviceConfig.Models;
+using ControlHelper.Attributes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -42,7 +43,7 @@ namespace DisplayConveyer.Model
 
 
         [JsonIgnore]
-        public Action<int> StatusChanged;
+        public Action<StatusData> StatusChanged;
 
       
     }

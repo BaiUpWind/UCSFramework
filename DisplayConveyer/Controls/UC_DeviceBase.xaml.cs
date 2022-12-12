@@ -1,4 +1,5 @@
-﻿using DisplayConveyer.Model;
+﻿using Config.DeviceConfig.Models;
+using DisplayConveyer.Model;
 using DisplayConveyer.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -75,21 +76,10 @@ namespace DisplayConveyer.Controls
        
             DataContext = ViewModel = new DeviceViewModel(data);
             //txtDir.Text = GetDri( Data.ArrowDir);
-            Data.StatusChanged += SetColor;
-            //ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            Data.StatusChanged += StatusSetColor; 
            
         }
-
-        private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            //if (sender is DeviceViewModel dd )
-            //{
-            //    txtDir.Text = GetDri(dd.Data.ArrowDir);
-            //}
-        }
- 
- 
-
+         
         /// <summary>
         /// 设置背景色为指定颜色，线程安全
         /// </summary>
@@ -113,6 +103,19 @@ namespace DisplayConveyer.Controls
         {
             borderStatus.Background = new SolidColorBrush(color);
         }
+        private void StatusSetColor(StatusData state)
+        {
+            if(state == null) return;  
+
+            if(state.MachineState == 100)
+            {
+                SetColor(state.LoadState == 0 ? 100 : 102);
+            }
+            else
+            {
+                SetColor(state.MachineState);
+            }
+        }
         private Color GetColor(int status)
         {
             if (status >= 1 && status <= 99)
@@ -126,6 +129,10 @@ namespace DisplayConveyer.Controls
             else if (status == 101)
             {
                 return Colors.Gray;
+            }
+            else if(status == 102)
+            {
+                return Colors.Yellow;
             }
 
             return Colors.Gray;

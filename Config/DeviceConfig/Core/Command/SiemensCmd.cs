@@ -1,30 +1,27 @@
-﻿using ControlHelper.Attributes;
-using System;
+﻿using Config.DeviceConfig.Models;
+using ControlHelper.Attributes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace  DeviceConfig.Core 
+namespace DeviceConfig.Core
 {
     public sealed class SiemensCmd : PLCCmd
     {
-        private List<DBData> cmdStr  ;
+        private List<StatusData> cmdStr  ;
          [DataGrid]
-        [ConvertType(typeof(List<DBData>))]
+        [ConvertType(typeof(List<StatusData>))]
         public override object CommandStr
         {
             get
             {
-                if(cmdStr==null)
+                if(cmdStr == null)
                 {
-                    cmdStr = new List<DBData>();
+                    cmdStr = new List<StatusData>();
                 }
                 return cmdStr;
             }
             set
             {
-                cmdStr = value as List<DBData>;
+                cmdStr = value as List<StatusData>;
             }
         }
          
@@ -44,6 +41,7 @@ namespace  DeviceConfig.Core
         public string DBAddress { get; set; }
         [Hide]
         public short Status { get; set; }
+ 
     }
      
 }

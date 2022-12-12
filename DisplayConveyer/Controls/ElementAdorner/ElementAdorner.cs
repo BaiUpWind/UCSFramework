@@ -22,6 +22,9 @@ namespace DisplayConveyer
         private readonly Thumb tMove;
         private readonly VisualCollection visualCollection;
 
+        public bool EnableHorizontal { get; set; } = true;
+        public bool EnableVertical { get; set; } = true;
+
         public ElementAdorner(UIElement adornedElement) : base(adornedElement)
         {
             visualCollection = new VisualCollection(this);
@@ -38,12 +41,21 @@ namespace DisplayConveyer
 
             Hide();
         }
-
+        /// <summary>
+        /// 当拖动时发生
+        /// </summary>
         public event Action<object, DragDeltaEventArgs> OnDrage;
+        /// <summary>
+        /// 当移动四个角时发生
+        /// </summary>
 
         public event Action<object, DragDeltaEventArgs> OnMoveDrage;
+        /// <summary>
+        /// 当开始移动时发生
+        /// <para>UIElement 是被装饰的元素</para>
+        /// </summary>
 
-        public event Action<object, UIElement> OnThumbMouseDown;
+        public event Action<object, UIElement> DragStarted;
          
         public void Show()
         { 
@@ -98,7 +110,7 @@ namespace DisplayConveyer
                     VisualTree = GetFactory(GetMoveEllipse())
                 }
             };
-            thumb.DragStarted += (s, e) => { OnThumbMouseDown?.Invoke(s, AdornedElement); };
+            thumb.DragStarted += (s, e) => { DragStarted?.Invoke(s, AdornedElement); };
             thumb.DragDelta += (s, e) =>
             {
                 OnDrage?.Invoke(AdornedElement, e);
@@ -144,36 +156,42 @@ namespace DisplayConveyer
                 if (element == null) return;
 
                 Resize(element);
-                switch (thumb.VerticalAlignment)
-                {
-                    case VerticalAlignment.Bottom:
-                        if (element.Height + e.VerticalChange > ElementMiniSize) element.Height += e.VerticalChange;
-                        break;
-                    case VerticalAlignment.Top:
-                        if (element.Height - e.VerticalChange > ElementMiniSize)
-                        {
-                            element.Height -= e.VerticalChange;
-                            Canvas.SetTop(element, Canvas.GetTop(element) + e.VerticalChange);
-                        }
 
-                        break;
+                if (EnableVertical)
+                {
+                    switch (thumb.VerticalAlignment)
+                    {
+                        case VerticalAlignment.Bottom:
+                            if (element.Height + e.VerticalChange > ElementMiniSize) element.Height += e.VerticalChange;
+                            break;
+                        case VerticalAlignment.Top:
+                            if (element.Height - e.VerticalChange > ElementMiniSize)
+                            {
+                                element.Height -= e.VerticalChange;
+                                Canvas.SetTop(element, Canvas.GetTop(element) + e.VerticalChange);
+                            }
+
+                            break;
+                    }
                 }
 
-                switch (thumb.HorizontalAlignment)
+                if (EnableHorizontal)
                 {
-                    case HorizontalAlignment.Left:
-                        if (element.Width - e.HorizontalChange > ElementMiniSize)
-                        {
-                            element.Width -= e.HorizontalChange;
-                            Canvas.SetLeft(element, Canvas.GetLeft(element) + e.HorizontalChange);
-                        }
+                    switch (thumb.HorizontalAlignment)
+                    {
+                        case HorizontalAlignment.Left:
+                            if (element.Width - e.HorizontalChange > ElementMiniSize)
+                            {
+                                element.Width -= e.HorizontalChange;
+                                Canvas.SetLeft(element, Canvas.GetLeft(element) + e.HorizontalChange);
+                            }
 
-                        break;
-                    case HorizontalAlignment.Right:
-                        if (element.Width + e.HorizontalChange > ElementMiniSize) element.Width += e.HorizontalChange;
-                        break;
-                }
-
+                            break;
+                        case HorizontalAlignment.Right:
+                            if (element.Width + e.HorizontalChange > ElementMiniSize) element.Width += e.HorizontalChange;
+                            break;
+                    }
+                } 
                 e.Handled = true;
                 OnMoveDrage?.Invoke(element, e);
             };

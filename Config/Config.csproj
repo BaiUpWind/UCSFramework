@@ -66,6 +66,7 @@
     <Compile Include="DeviceConfig\Define\PublicEnum.cs" />
     <Compile Include="DeviceConfig\Core\Operation\OperationBase.cs" />
     <Compile Include="DeviceConfig\Core\Operation\DataBaseOperation.cs" />
+    <Compile Include="DeviceConfig\Models\StatusData.cs" />
     <Compile Include="DeviceConfig\PolyConverter.cs" />
     <Compile Include="DeviceConfig\Core\Operation\PLCOperation.cs" />
     <Compile Include="DeviceConfig\Core\Operation\SiemensOperation.cs" />

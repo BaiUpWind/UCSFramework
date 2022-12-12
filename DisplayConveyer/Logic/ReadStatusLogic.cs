@@ -1,9 +1,11 @@
-﻿using ControlHelper.Interfaces;
+﻿using Config.DeviceConfig.Models;
+using ControlHelper.Interfaces;
 using DeviceConfig.Core;
 using DisplayConveyer.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace DisplayConveyer.Logic
 {
@@ -28,40 +30,43 @@ namespace DisplayConveyer.Logic
                     InternalShowMsg($"在'{area.Name}'区域,读取设备信息时发生错误,'{ex.Message}'", 2);
                     continue;
                 }
-                
+                List<StatusData> states = null;
                 foreach (var result in results)
                 {
                     if (result is SQLResult sqlRes && sqlRes.Data is DataTable dt)
-                    {  
+                    {
                         //解析数据库
-                        for (int i = 0; i < dt.Rows.Count; i++)
-                        {
-                            var id = dt.Rows[i]["work_id"]?.ToString();
-                            if (!int.TryParse(dt.Rows[i]["status"]?.ToString(), out int state))
-                            {
-                                state = -1;
-                            }
-                            TryShowStatus(area.Devices, id, state);
-                        }
+                        states = dt.ToEntityList<StatusData>().ToList();  
                     }
-                    else if (result is PLCDBResult plcRes && plcRes.Data is List<DBData> dl)
+                    else if (result is PLCDBResult plcRes && plcRes.Data is List<StatusData> dl)
                     {
                         //解析西门子PLC
-                        foreach (var dbData in dl)
+                        states = dl; 
+                    }
+
+                    //通知UI显示
+                    if (states != null && states.Any())
+                    {
+                        foreach (var state in states)
                         {
-                            TryShowStatus(area.Devices, dbData.WorkId, dbData.Status);
+                            TryShowStatus(area.Devices, state);
                         }
                     }
                 }
             }
         }
 
-        private void TryShowStatus(List<DeviceData> devices, string id, int state)
+        private void TryShowStatus(List<DeviceData> devices, StatusData state )
         {
-            var device = devices.Find(a => a.ID == id);
+            if (state == null)
+            {
+                //todo 将这个为空的信息传出去 出错了
+                return;
+            }
+            var device = devices.Find(a => a.ID == state.WorkId);
             if (device == null)
             {
-                InternalShowMsg($"显示状态时未找到ID为'{id}'的设备;状态为'{state}'", 2);
+                InternalShowMsg($"显示状态时未找到ID为'{state.WorkId}'的设备;状态为'{state}'", 2);
                 return;
             }
             device.StatusChanged?.Invoke(state);
