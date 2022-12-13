@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="Logic\ReadStatusLogic.cs" />
     <Compile Include="Model\AreaData.cs" />
+    <Compile Include="Model\ControlDataBase.cs" />
     <Compile Include="Model\DeviceData.cs" />
     <Compile Include="Model\LabelData.cs" />
     <Compile Include="Model\RectData.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="TestWindows\WindowZoom.xaml.cs">
       <DependentUpon>WindowZoom.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\CreateHelper.cs" />
     <Compile Include="Utilities\Extend.cs" />
     <Compile Include="Utilities\UIElementMove.cs" />
     <Compile Include="ViewModel\DeviceVeiwModel.cs" />

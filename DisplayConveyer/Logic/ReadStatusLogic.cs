@@ -6,24 +6,51 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading;
 
 namespace DisplayConveyer.Logic
 {
     public class ReadStatusLogic: IMsgShow
     {
-
-        List<AreaData> Areas = new List<AreaData>();
-
         public event Action<string, int> ShowMsg;
+      
+        private readonly List<AreaData> Areas;
+        private readonly Thread[] threads;
 
-        public void Read()
+        public ReadStatusLogic(List<AreaData> areas)
         {
-            foreach (var area in Areas)
+            Areas = areas;
+            if (Areas != null && Areas.Any())
             {
-                List<object> results = null;
+                threads = new Thread[Areas.Count];
+                for (int i = 0; i < Areas.Count; i++)
+                {
+                    var area = Areas[i];
+                    threads[i] = new Thread(() => Read(area));
+                    threads[i].IsBackground = true;
+                    threads[i].Start();
+                }
+            }
+        }
+        public void Stop()
+        {
+           if(threads!= null && threads.Length > 0)
+            {
+                for (int i = 0; i < threads.Length; i++)
+                {
+                    threads[i].Abort();
+                }
+            }
+        }
+        private void Read(AreaData area)
+        {
+            OperationConnect(area);
+            while (true)
+            {
+                List<object> results;
                 try
                 {
-                      results = area.Operation.GetResults();
+                    results = area.Operation.GetResults();
                 }
                 catch (Exception ex)
                 {
@@ -36,12 +63,12 @@ namespace DisplayConveyer.Logic
                     if (result is SQLResult sqlRes && sqlRes.Data is DataTable dt)
                     {
                         //解析数据库
-                        states = dt.ToEntityList<StatusData>().ToList();  
+                        states = dt.ToEntityList<StatusData>().ToList();
                     }
                     else if (result is PLCDBResult plcRes && plcRes.Data is List<StatusData> dl)
                     {
-                        //解析西门子PLC
-                        states = dl; 
+                        //解析西门子PLC读取数据
+                        states = dl;
                     }
 
                     //通知UI显示
@@ -53,9 +80,31 @@ namespace DisplayConveyer.Logic
                         }
                     }
                 }
+                //限制最低的间隔为3秒
+                if(area.ReadInterval <= 3000)
+                {
+                    area.ReadInterval = 3000;
+                }
+                Thread.Sleep(area.ReadInterval);
             }
         }
-
+    
+        private void OperationConnect(AreaData area)
+        {
+            while (true)
+            {
+                if (area.Operation.Connect())
+                {
+                    break;
+                }
+                else
+                {
+                    //todo:通知连接失败
+                }
+                Thread.Sleep(3000);
+            }
+           
+        }
         private void TryShowStatus(List<DeviceData> devices, StatusData state )
         {
             if (state == null)

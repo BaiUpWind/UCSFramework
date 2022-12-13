@@ -16,6 +16,8 @@ namespace DisplayConveyer.Model
         public uint ID { get; set; }
         [NickName("区域名称")]
         public string Name { get; set; }
+        [NickName("读取间隔时间(毫秒)")]
+        public int ReadInterval { get; set; } = 3000;
         //[NickName("顺序")]
         //public int Order { get; set; } 
         [NickName("读取方式")]
@@ -26,9 +28,7 @@ namespace DisplayConveyer.Model
         [NickName("设备集合")]
         public List<DeviceData> Devices { get; set; } = new List<DeviceData>();
 
-        [Hide]
-        [NickName("区域标记")]
-        public List<RectData> RectDatas { get; set; } = new List<RectData>();
+      
 
      
     }

@@ -83,9 +83,9 @@ namespace DisplayConveyer.Utilities
             else
             {
                 scale -= 0.2;
-                if (scale < 0.5)
+                if (scale < 0.1)
                 {
-                    scale = 0.5;
+                    scale = 0.1;
                     return;
                 }
 

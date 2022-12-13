@@ -37,8 +37,9 @@ namespace DisplayConveyer.Model
         public double Height { get; set; }
         [NickName("物流方向描述")]
         public string Direction { get; set; } = "•";
+        [Hide]
         public double PosX { get; set; }
-
+        [Hide]
         public double PosY { get; set; }
 
 

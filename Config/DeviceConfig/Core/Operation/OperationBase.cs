@@ -17,7 +17,7 @@ namespace DeviceConfig.Core
         } 
         private ConnectionConfigBase connectConfig;
         private List<object> results = new List<object>();
-
+        
         /// <summary>
         /// 读取信息
         /// </summary>

@@ -1,4 +1,5 @@
 ﻿using CommonApi.Utilitys.Encryption;
+using ControlHelper.Attributes;
 using DeviceConfig;
 using DisplayBorder.Controls;
 using DisplayBorder.View;

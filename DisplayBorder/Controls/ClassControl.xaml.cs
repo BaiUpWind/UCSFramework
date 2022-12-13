@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using CommonApi;
+using ControlHelper.Attributes;
 using DeviceConfig;
 using DisplayBorder.Events;
 using DisplayBorder.View;
