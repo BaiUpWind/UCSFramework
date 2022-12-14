@@ -12,9 +12,9 @@
              Canvas.Left="{Binding Data.PosX}" Canvas.Top="{Binding Data.PosY}" >
 
     <Border  x:Name="mainBorder"   CornerRadius="5">
-        <Border.Effect >
+        <!--<Border.Effect >
             <DropShadowEffect  Color="#FF2225EA" ShadowDepth="2" BlurRadius="9" Opacity="0.55" Direction="570" />
-        </Border.Effect>
+        </Border.Effect>-->
 
         <Grid  >
             <Border  x:Name="borderSelect"  Visibility="Collapsed" BorderThickness="3" BorderBrush="Lime" CornerRadius="5"/>

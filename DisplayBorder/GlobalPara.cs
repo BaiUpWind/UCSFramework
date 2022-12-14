@@ -45,7 +45,7 @@ namespace DisplayBorder
         /// </summary>
         public readonly static string ClassesFilePath = ConfigsPath + "\\Classes.cfg";
         public readonly static string BackImageFilePath = ConfigsPath + "\\背景图片.jpg";
-
+        public readonly static string DisplayImage = ConfigsPath + "\\displayImg.png";
 
 
         private static IList<Group> groups;
@@ -69,7 +69,7 @@ namespace DisplayBorder
                 {
                     try
                     {
-                        groups = JsonHelper.ReadJson<IList<Group>>(SysConfig.GroupsFilePath, true);
+                        groups = JsonHelper.ReadJson<IList<Group>>(GroupsFilePath, true);
                     }
                     catch (Exception ex)
                     {
@@ -85,7 +85,7 @@ namespace DisplayBorder
                 if (value != null   )
                 {
                     groups = value;
-                    JsonHelper.WriteJson(groups, SysConfig.GroupsFilePath);
+                    JsonHelper.WriteJson(groups, GroupsFilePath);
                     EventManager.Fire(null, OnValueChangedArgs.Create(groups));
                 }
             }

@@ -423,6 +423,10 @@ namespace DisplayBorder
         /// <param name="groups"></param>
         private void CreateInfos()
         {
+            if (GlobalPara.Groups == null)
+            {
+                return;
+            }
             var groups = GlobalPara.Groups.ToList().Clone()  ; 
             if (groups == null || groups.Count == 0)
             {

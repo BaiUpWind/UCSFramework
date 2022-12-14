@@ -15,6 +15,22 @@ namespace ControlHelper
         {
             var str = JsonConvert.SerializeObject(obj);
             return (T)JsonConvert.DeserializeObject(str, targetType);
-        } 
+        }
+
+        public static T CastTo<T>(this object value, T defaultValue)
+        {
+            Type typeFromHandle = typeof(T);
+            object obj;
+            try
+            {
+                obj = (typeFromHandle.IsEnum ? Enum.Parse(typeFromHandle, value.ToString()) : Convert.ChangeType(value, typeFromHandle));
+            }
+            catch
+            {
+                obj = defaultValue;
+            }
+
+            return (T)obj;
+        }
     }
 }

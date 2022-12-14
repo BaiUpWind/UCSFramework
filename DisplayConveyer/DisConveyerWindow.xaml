@@ -15,51 +15,94 @@
                 <RowDefinition Height="30"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Grid   Grid.Row="0" Name="topGrid" Background="#3FFFFFFF"   >
+            <Grid   Grid.Row="0" Background="#3FFFFFFF"   >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition Width="8*"></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="250"></ColumnDefinition>
+                    <ColumnDefinition  ></ColumnDefinition>
+                    <ColumnDefinition  Width="100" ></ColumnDefinition>
+               
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="1">
-                    <Rectangle  x:Name="selectRect" HorizontalAlignment="Left" Width="90" Height="Auto" Stroke="Red" StrokeThickness="1" Margin="0,0,0,1"/>
-                    <Canvas x:Name="topCanvas" >
+                <Grid Grid.Column="0"  Background="#3F0000FF">
+                   
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Center"  HorizontalAlignment="Center" Margin=" 0 10 0 0">
+                        <Image Source="/tb7.ico"    Width="50" Height="50" /> 
+                        <TextBlock Text="JSH物流线集显" VerticalAlignment="Center" Foreground="White" FontSize="28"></TextBlock> 
+                    </StackPanel>
+                    <Grid Grid.Row="1"  >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="65"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="1" Visibility="Collapsed" >
+                                <TextBlock x:Name="txtSpeed" Margin="5 0 0 0" FontSize="19">速度</TextBlock>
+                                <Slider  Minimum="55" ValueChanged="sliderChanged"   Maximum="500" Width="Auto"/>
+                              
+                            </StackPanel>
+                        </Grid>
+                  
 
-                    </Canvas>
+
+
+
+                    </Grid>
+
+                    <!--测试代码-->
+                    <StackPanel Orientation="Vertical" Visibility="Collapsed">
+                        <Button Content="调用" Click="btn_TestStatus"></Button>
+                        <TextBox x:Name="txtAreaID" Text="1001" Width="Auto" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBox>
+                        <TextBox x:Name="txtWorkID" Text="A01" Width="Auto"  HorizontalAlignment="Left" VerticalAlignment="Top"></TextBox>
+                        <TextBox x:Name="txtMachineStatus" Text="100" Width="Auto"  HorizontalAlignment="Left" VerticalAlignment="Top"></TextBox>
+                        <TextBox x:Name="txtLoadStatus" Text="1" Width="Auto"  HorizontalAlignment="Left" VerticalAlignment="Top"></TextBox> 
+                    </StackPanel>
+                </Grid>
+                <Grid Grid.Column="2"  Background="#3F0000FF" >
+
+                </Grid>
+                <Grid Grid.Column="1" >
+                    <ScrollViewer x:Name="topSv" VerticalScrollBarVisibility="Disabled"  HorizontalScrollBarVisibility="Visible"  >
+                        <Grid Name="topGrid"  HorizontalAlignment="Left" > 
+                            <Canvas x:Name="topCanvas"   >
+
+                            </Canvas>
+                        </Grid>
+                    </ScrollViewer>
+                    <Rectangle  x:Name="selectRect"   HorizontalAlignment="Left" Width="90" Height="Auto" Stroke="DarkBlue" StrokeThickness="2" Margin="0,0,0,1"/>
+
                 </Grid>
 
             </Grid>
-            <Grid Grid.Row="1" Margin="0 10 0 0" >
+            <Grid Grid.Row="1"  >
+                <ScrollViewer x:Name="mainSv"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
+                    <Grid x:Name="mainGrid">
+                        <Canvas    x:Name="mainCanvas"  HorizontalAlignment="Left"  >
 
-                <ScrollViewer x:Name="sv"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
-                    <Canvas    x:Name="gd" HorizontalAlignment="Left"  >
-
-                    </Canvas>
-                </ScrollViewer>
-
-
+                        </Canvas>
+                    </Grid> 
+                </ScrollViewer> 
             </Grid>
-            <Border Grid.Row="2"  BorderBrush="AliceBlue"  >
-                <Grid Grid.Row="2"  Background="AliceBlue">
+            <Border Grid.Row="2" Background="#3FFFFFFF"  >
+                <Grid Grid.Row="2"   >
                     <StackPanel Orientation="Horizontal" Margin="3" >
-                        <Border Width="55" Background="Lime" Margin="5 2 0 2">
+                        <Border Width="55" Background="Lime" Margin="5 2 0 2" CornerRadius="3">
                             <TextBlock  VerticalAlignment="Center" HorizontalAlignment="Center">自动</TextBlock>
                         </Border>
-                        <Border Width="55" Background="Red" Margin="5 2 0 2">
+                        <Border Width="55" Background="Red" Margin="5 2 0 2" CornerRadius="3">
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">报警</TextBlock>
                         </Border>
-                        <Border Width="55" Background="Gray" Margin="5 2 0 2">
+                        <Border Width="55" Background="Gray" Margin="5 2 0 2" CornerRadius="3">
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">手动</TextBlock>
                         </Border>
-                        <Border Width="55" Background="Yellow" Margin="5 2 0 2">
+                        <Border Width="55" Background="Yellow" Margin="5 2 0 2" CornerRadius="3">
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">有盘</TextBlock>
                         </Border>
-                        <Border Width="55" Background="Blue" Margin="5 2 0 2">
+                        <Border Width="55" Background="Blue" Margin="5 2 0 2" Visibility="Collapsed">
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">未配置</TextBlock>
                         </Border>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                        <TextBlock x:Name="txtInfo" Visibility="Collapsed" Text="qqq" Margin="0,0,15,0" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                        <TextBlock x:Name="txtInfo"   Text="qqq" Margin="0,0,15,0" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                        <Button  x:Name="txtLock"    ToolTip="切换手动操作"  Tag="锁住" Cursor="Hand" Content="🔒" Background="Transparent"  hc:BorderElement.CornerRadius="0" BorderThickness="0"/> 
                         <Button x:Name="btnFullScreen" Click="BtnFullScreen_Click" HorizontalAlignment="Right"  VerticalAlignment="Center" ToolTip="全屏模式"  Tag="全屏"  Background="Transparent"      hc:BorderElement.CornerRadius="0" BorderThickness="0"  >
                             <Button.Content>
                                 <StackPanel>
@@ -68,7 +111,7 @@
                                 </StackPanel>
                             </Button.Content>
                         </Button>
-                        <Button x:Name="btn_OpenConfig" HorizontalAlignment="Right"  VerticalAlignment="Center" ToolTip="打开配置文件" Margin="4" Background="Transparent"  Content="⚙"   hc:BorderElement.CornerRadius="0" BorderThickness="0"  ></Button>
+                        <Button x:Name="btn_OpenConfig"  HorizontalAlignment="Right"  VerticalAlignment="Center" ToolTip="打开配置文件" Margin="4" Background="Transparent"  Content="⚙"   hc:BorderElement.CornerRadius="0" BorderThickness="0"  ></Button>
                         <Button x:Name="btnClose" HorizontalAlignment="Right"  VerticalAlignment="Center" ToolTip="退出系统"  Tag="退出系统"  Background="Transparent"      hc:BorderElement.CornerRadius="0" BorderThickness="0"  >
                             <Button.Content>
                                 <TextBlock Text="&#xE07D;"  FontSize="15"  FontFamily="Segoe UI Symbol"  VerticalAlignment="Center"  />

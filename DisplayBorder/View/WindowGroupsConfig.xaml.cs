@@ -268,8 +268,16 @@ namespace DisplayBorder.View
             var login = new LoginWindow(CommonApi.Utilitys.Encryption.EncryptType.DES, GlobalPara.SysConfig.PassWord);
             if (login.ShowDialog() ?? false)
             {
+                try
+                {
+                    ShowDialog();
+                }
+                catch  
+                {
+                     
+                }
                 //Visibility = Visibility.Visible;
-                ShowDialog();
+            
             }
             else
             {
@@ -278,11 +286,12 @@ namespace DisplayBorder.View
         }
         private void SetImgSource()
         {
-            if (!string.IsNullOrEmpty(GlobalPara.SysConfig.BackImagPath) )
+            string filePath = GlobalPara.DisplayImage;//GlobalPara.SysConfig.BackImagPath
+            if (!string.IsNullOrEmpty(filePath) )
             {
                 try
                 {
-                    img.Source = new BitmapImage(new Uri(GlobalPara.SysConfig.BackImagPath, UriKind.Absolute));
+                    img.Source = new BitmapImage(new Uri(filePath, UriKind.Absolute));
                     if (img.Source is BitmapSource bitmap)
                     {
                         lblresolution.Text = $"分辨率{bitmap.PixelWidth}*{bitmap.PixelHeight}";

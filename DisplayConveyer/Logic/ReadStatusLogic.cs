@@ -13,7 +13,8 @@ namespace DisplayConveyer.Logic
     public class ReadStatusLogic: IMsgShow
     {
         public event Action<string, int> ShowMsg;
-      
+        public event Action<StatusData> OnStatusChanged;
+        
         private readonly List<AreaData> Areas;
         private readonly Thread[] threads;
 

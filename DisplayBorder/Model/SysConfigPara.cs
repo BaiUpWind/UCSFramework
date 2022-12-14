@@ -41,8 +41,8 @@ namespace DisplayBorder.Model
         /// <summary>
         /// 组的文件路径
         /// </summary>
-        [Control("GroupsFilePath", "组配置路径", ControlType.TextBox)]
-        [Control("FileChoose", null, ControlType.FilePathSelector, FieldName: nameof(GroupsFilePath), FileType: "cfg")]
+        //[Control("GroupsFilePath", "组配置路径", ControlType.TextBox)]
+        //[Control("FileChoose", null, ControlType.FilePathSelector, FieldName: nameof(GroupsFilePath), FileType: "cfg")]
         public string GroupsFilePath
         {
             get
@@ -52,7 +52,7 @@ namespace DisplayBorder.Model
                 {
                     groupsFilePath = GlobalPara.GroupsFilePath;
                 }
-                return groupsFilePath;
+                return GlobalPara.GroupsFilePath;
             }
             set => groupsFilePath = value;
         }
@@ -60,8 +60,8 @@ namespace DisplayBorder.Model
         /// <summary>
         /// 显示的图片信息
         /// </summary>
-        [Control("BackImagPath", "图片配置路径", ControlType.TextBox)]
-        [Control("FileChosee2", null, ControlType.FilePathSelector, FieldName: nameof(BackImagPath), FileType: "jpg")]
+        //[Control("BackImagPath", "图片配置路径", ControlType.TextBox)]
+        //[Control("FileChosee2", null, ControlType.FilePathSelector, FieldName: nameof(BackImagPath), FileType: "jpg")]
         public string BackImagPath
         {
             get
@@ -71,7 +71,7 @@ namespace DisplayBorder.Model
                 {
                     backImagPath = GlobalPara.BackImageFilePath;
                 }
-                return backImagPath;
+                return GlobalPara.DisplayImage;
             }
             set => backImagPath = value;
         }

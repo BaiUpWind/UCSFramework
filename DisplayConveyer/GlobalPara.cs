@@ -19,9 +19,7 @@ namespace DisplayConveyer
         public static readonly string ConveyerConfigPath = Directory.GetCurrentDirectory() + @"\ConveyerConfig.cfg";
 
         private static MainConfig config;
-        private static ConveyerConfig conveyerConfig;
-        private static IList<AreaData> areaDatas;
-
+        private static ConveyerConfig conveyerConfig; 
       
         /// <summary>
         /// 系统配置文件
