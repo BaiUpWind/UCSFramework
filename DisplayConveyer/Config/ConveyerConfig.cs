@@ -11,9 +11,9 @@ namespace DisplayConveyer.Config
     public class ConveyerConfig
     {
         [NickName("画布宽")]
-        public double CanvasWidth { get; set; }
+        public double CanvasWidth { get; set; } = 1920;
         [NickName("画布高")]
-        public double CanvasHeight { get; set; }
+        public double CanvasHeight { get; set; } = 1080;
         [NickName("配置信息")] 
         public List<AreaData> Areas { get; set; }= new List<AreaData>();
 

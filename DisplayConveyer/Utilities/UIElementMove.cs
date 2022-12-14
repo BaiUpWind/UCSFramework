@@ -67,30 +67,30 @@ namespace DisplayConveyer.Utilities
             double scale = mymat.M11;
             if (e.Delta > 0)
             {
-                scale += 0.2;
+                scale += 0.1;
                 if (scale > 4)
                 {
                     scale = 4;
                     return;
                 }
 
-                dx = p1.X * (scale - 0.2) - scale * p1.X + mymat.OffsetX;
-                dy = p1.Y * (scale - 0.2) - scale * p1.Y + mymat.OffsetY;//放大本质是 移动和缩放两个步骤 
+                dx = p1.X * (scale - 0.1) - scale * p1.X + mymat.OffsetX;
+                dy = p1.Y * (scale - 0.1) - scale * p1.Y + mymat.OffsetY;//放大本质是 移动和缩放两个步骤 
                                                                          //
                 MatrixChange(dx, dy, scale);
 
             }
             else
             {
-                scale -= 0.2;
+                scale -= 0.1;
                 if (scale < 0.1)
                 {
                     scale = 0.1;
                     return;
                 }
 
-                dx = p1.X * (scale + 0.2) - scale * p1.X + mymat.OffsetX;
-                dy = p1.Y * (scale + 0.2) - scale * p1.Y + mymat.OffsetY;
+                dx = p1.X * (scale + 0.1) - scale * p1.X + mymat.OffsetX;
+                dy = p1.Y * (scale + 0.1) - scale * p1.Y + mymat.OffsetY;
                 MatrixChange(dx, dy, scale);
             }
         }

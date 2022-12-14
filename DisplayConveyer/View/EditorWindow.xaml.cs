@@ -313,7 +313,7 @@ namespace DisplayConveyer.View
                 ID = maxId,
                 Width = 400,
                 Height = 400,
-                StrokeThickness = 1,
+                StrokeThickness = 6,
             };
             AddControl(GetRect(rectData));
             ConvConfig.RectDatas.Add(rectData);
