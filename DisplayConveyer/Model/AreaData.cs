@@ -24,6 +24,7 @@ namespace DisplayConveyer.Model
         [JsonConverter(typeof(PolyConverter))]
         public OperationBase Operation { get; set; }
 
+        [ReadOnly]
         [DataGrid]
         [NickName("设备集合")]
         public List<DeviceData> Devices { get; set; } = new List<DeviceData>();

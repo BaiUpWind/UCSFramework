@@ -6,6 +6,10 @@
              xmlns:local="clr-namespace:ControlHelper.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="400" Loaded="UserControl_Loaded"  Background="White">
+    <UserControl.CommandBindings>
+        <!--<CommandBinding Command="Copy" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute" />-->
+        <CommandBinding    Command="Paste" CanExecute="CommandBinding_CanExecute" />
+    </UserControl.CommandBindings>
     <Grid  >
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>

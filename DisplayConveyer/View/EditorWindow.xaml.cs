@@ -291,6 +291,7 @@ namespace DisplayConveyer.View
         private FrameworkElement GetRect(RectData data)
         {
             var rect = CreateHelper.GetRect(data);
+            
             SetMouseDown(rect);
             return rect;
         }
@@ -501,7 +502,7 @@ namespace DisplayConveyer.View
                 //单个复制 
                 var clone = udb.Data.Clone();
                 clone.Name = $"{clone.Name}Clone";
-                clone.ID = $"{clone.ID}Clone";
+                clone.WorkId = $"{clone.WorkId}Clone";
                 clone.PosX += copyOffset;
                 clone.PosY += copyOffset;
                 AreasAddDevice(clone);
@@ -516,7 +517,7 @@ namespace DisplayConveyer.View
                 {
                     var clone = temp[i];
                     clone.Name = $"{clone.Name}Clone{(i + 1)}";
-                    clone.ID = $"{clone.ID}Clone{(i + 1)}";
+                    clone.WorkId = $"{clone.WorkId}Clone{(i + 1)}";
                     clone.PosX += copyOffset;
                     clone.PosY += copyOffset;
                     AreasAddDevice(clone);

@@ -67,7 +67,7 @@ namespace DisplayConveyer.Controls
 
    
          
-        public string Info => $"区域ID:{Data.AreaID}\r\b WorkID:{Data.ID} \r\n 名称:{Data.Name}\r\n宽：{Data.Width}\r\n高：{Data.Height}\r\n 位置X：{Data.PosX}\r\n位置Y：{Data.PosY} ";
+        public string Info => $"区域ID:{Data.AreaID}\r\b WorkID:{Data.WorkId} \r\n 名称:{Data.Name}\r\n宽：{Data.Width}\r\n高：{Data.Height}\r\n 位置X：{Data.PosX}\r\n位置Y：{Data.PosY} ";
         public UC_DeviceBase(DeviceData data)
         {
             InitializeComponent();

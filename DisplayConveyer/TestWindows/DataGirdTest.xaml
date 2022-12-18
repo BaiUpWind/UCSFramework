@@ -1,0 +1,100 @@
+﻿<Window    x:Class="DisplayConveyer.TestWindows.DataGirdTest"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DisplayConveyer.TestWindows"
+        mc:Ignorable="d"
+        Title="DataGirdTest" Height="450" Width="800">
+    <Window.CommandBindings>
+        <!--<CommandBinding Command="Copy" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute" />-->
+        <CommandBinding    Command="Paste" Executed="CommandBinding_Executed" CanExecute="CommandBinding_CanExecute" />
+    </Window.CommandBindings>
+    <Window.Resources>
+     
+        <!--<Style x:Key="DataGridCellStyle" TargetType="{x:Type DataGridCell}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush EndPoint="0.2,0" MappingMode="RelativeToBoundingBox" StartPoint="0,0">
+                                <GradientStop Color="#FFFEA844" Offset="0.036"/>
+                                <GradientStop Color="#FFFFEEDB" Offset="0.073"/>
+                                <GradientStop Color="#FFFEA844" Offset="0.033"/>
+                                <GradientStop Color="#FFFED09B" Offset="0.047"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+                <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                    <Setter Property="BorderBrush" Value="{DynamicResource {x:Static DataGrid.FocusBorderBrushKey}}"/>
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsSelected" Value="true"/>
+                        <Condition Property="Selector.IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush EndPoint="0.2,0" MappingMode="RelativeToBoundingBox" StartPoint="0,0">
+                                <GradientStop Color="#FFFEA844" Offset="0.025"/>
+                                <GradientStop Color="#FFFFEEDB" Offset="0.033"/>
+                                <GradientStop Color="#FFFEA844" Offset="0.018"/>
+                                <GradientStop Color="#FFFED09B" Offset="0.025"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+
+
+                </MultiTrigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>-->
+        <Style TargetType="DataGrid">
+                 
+        </Style>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="145"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <StackPanel Orientation="Vertical">
+                <Button Content="删除" Margin="0 10 0 0" Click="Button_Click"></Button>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="1">
+            <DataGrid x:Name="dgv" 
+               CanUserAddRows="True"  HeadersVisibility="All"  SelectionUnit="Cell" SelectionMode="Extended"  CanUserSortColumns="False" GridLinesVisibility="All"  >
+               
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="90" CanUserResize="False" >
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button  Content="删除" Click="Button_Click" Cursor="Hand"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn> 
+                    </DataGrid.Columns>
+           
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>

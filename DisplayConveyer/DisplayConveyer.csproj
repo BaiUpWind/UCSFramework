@@ -93,6 +93,9 @@
     <Compile Include="Logic\BeltLogic.cs" />
     <Compile Include="Model\BeltEditor.cs" />
     <Compile Include="Model\BeltReadPlc.cs" />
+    <Compile Include="TestWindows\DataGirdTest.xaml.cs">
+      <DependentUpon>DataGirdTest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TestWindows\StorageLocation.xaml.cs">
       <DependentUpon>StorageLocation.xaml</DependentUpon>
     </Compile>
@@ -129,6 +132,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="TestWindows\AllBeltsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TestWindows\DataGirdTest.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

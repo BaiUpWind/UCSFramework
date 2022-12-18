@@ -232,7 +232,7 @@ namespace DisplayConveyer
                     var ucdevice = CreateHelper.GetDeviceBase(device);
                     canvas.Children.Add(ucdevice);
                     ucdevice.ToolTip = (ucdevice as UC_DeviceBase).Info;
-                    device.StatusChanged?.Invoke(new  StatusData() { MachineState=100 });
+                    //device.StatusChanged?.Invoke(new StatusData() { MachineState = 100 });
                 }
             }
             foreach (var rect in ConvConfig.RectDatas)
@@ -243,8 +243,8 @@ namespace DisplayConveyer
             {
                 canvas.Children.Add(CreateHelper.GetTextBlock(label));
             }
-            //if (logic != null) logic.Stop();
-            //logic = new ReadStatusLogic(ConvConfig.Areas);
+            if (logic != null) logic.Stop();
+            logic = new ReadStatusLogic(ConvConfig.Areas);
         }
         private double GetHeightFactor(FrameworkElement father, FrameworkElement ui) => father.ActualHeight / ((ui.ActualHeight == 0 ? 1 : ui.ActualHeight) + 5);
         private void DisConveyerWindow_Loaded(object sender, RoutedEventArgs e)
@@ -293,7 +293,7 @@ namespace DisplayConveyer
             var areas = ConvConfig.Areas.Find(a => a.ID == areaId);
             if (areas != null)
             {
-                var device = areas.Devices.Find(a => a.ID == workid); 
+                var device = areas.Devices.Find(a => a.WorkId == workid); 
                 device?.StatusChanged?.Invoke(new StatusData()
                 {
                     MachineState = machineState,

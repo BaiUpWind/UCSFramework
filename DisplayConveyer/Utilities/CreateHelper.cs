@@ -25,7 +25,8 @@ namespace DisplayConveyer.Utilities
             };
             rect.DataContext = data;
             rect.SetValue(Canvas.LeftProperty, data.PosX);
-            rect.SetValue(Canvas.TopProperty, data.PosY); 
+            rect.SetValue(Canvas.TopProperty, data.PosY);
+            Panel.SetZIndex(rect, -100);
             return rect;
         }
         public static FrameworkElement GetTextBlock(LabelData data)

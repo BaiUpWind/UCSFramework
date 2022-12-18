@@ -174,7 +174,9 @@ namespace ControlHelper.WPF
         /// 存放 需要重新计算宽的元素
         /// </summary>
         private List<UIElement> childen = new List<UIElement>();
-
+        private Dictionary<int, DataGrid> cacheDataGrids = new Dictionary<int, DataGrid>();
+        private int selectDataGrid =0;
+        private Type dgDataType = null;
         /// <summary>
         /// 存放集合或者数组的子类 
         /// <para>只有在是泛型添加的时才有用</para>
@@ -364,9 +366,75 @@ namespace ControlHelper.WPF
                         if (td.ControlType == ClassControlType.List && td.UseDataGrid)
                         {
                             //网格
-                            control = new  DataGrid();
+                            control = new DataGrid();
                             if(control is DataGrid dataGrid)
                             {
+                                //不要删除 
+                                // < DataGrid.Columns >
+                                //    < DataGridTemplateColumn Width = "90" CanUserResize = "False" >
+                                //        < DataGridTemplateColumn.CellTemplate >
+                                //            < DataTemplate >
+                                //                < Button  Content = "删除" Click = "Button_Click" Cursor = "Hand" />
+                                //            </ DataTemplate >
+                                //        </ DataGridTemplateColumn.CellTemplate >
+                                //    </ DataGridTemplateColumn >
+                                //</ DataGrid.Columns >
+                                cacheDataGrids.Add(dataGrid.GetHashCode(), dataGrid);
+                                dataGrid.SelectionMode = DataGridSelectionMode.Extended;
+                                dataGrid.SelectionUnit = DataGridSelectionUnit.Cell;
+                                dataGrid.CanUserAddRows = true;
+                                dataGrid.CanUserSortColumns = false;
+                                dataGrid.GridLinesVisibility = DataGridGridLinesVisibility.All;
+                                dataGrid.SelectedCellsChanged += (s, e) =>
+                                {
+                                    Type tempType = null;
+                                    if (td.IsList)
+                                    {
+                                        //对泛型 
+                                        if (td.ObjectType.GenericTypeArguments.Length != 1)
+                                        {
+                                            throw new Exception("目前只对单个泛型集合进行处理");
+                                        }
+                                        tempType = td.ObjectType.GenericTypeArguments[0];
+                                    }
+                                   
+                                    dgDataType = tempType;
+                                    selectDataGrid = s.GetHashCode();
+                                };
+                                DataGridTemplateColumn dgtc = new DataGridTemplateColumn();
+                                dgtc.Width = 90;
+                                dgtc.CanUserResize = false; 
+                                FrameworkElementFactory fef = new FrameworkElementFactory(typeof(Button));
+                                DataTemplate dataTemp = new DataTemplate();
+                                fef.SetValue(Button.ContentProperty, "删除");
+                                fef.SetValue(Button.CursorProperty, Cursors.Hand);
+                                fef.AddHandler(Button.ClickEvent, new RoutedEventHandler((s, e) => {
+                                    var cells = dataGrid.SelectedCells;
+                                    if (cells == null || cells.Count == 0) return; 
+                                    var list = dataGrid.ItemsSource as IList;
+                                    list.Remove(cells[0].Item);
+                                    //if (list.Count == 0) return;
+                                    //IList tempList = Activator.CreateInstance(typeof(List<>).MakeGenericType(new Type[] { list[0].GetType() })) as IList;
+
+                                    //for (int k = 0; k < cells.Count; i++)
+                                    //{
+                                    //    var cell = cells[i];
+                                    //    if (tempList != null && !tempList.Contains(cell.Item))
+                                    //    {
+                                    //        tempList.Add(cell.Item);
+                                    //    }
+                                    //}
+                                    //foreach (var item in tempList)
+                                    //{
+                                    //    list.Remove(item);
+                                    //}
+                                    dataGrid.ItemsSource = null;
+                                    dataGrid.ItemsSource = list;
+                                }));
+                                dataTemp.VisualTree = fef;
+                                dgtc.CellTemplate = dataTemp;
+                                dataGrid.Columns.Add(dgtc);
+
                                 var value = GetValue(td.Name);
                                 if(value is IEnumerable ien)
                                 {
@@ -1037,8 +1105,96 @@ namespace ControlHelper.WPF
             OnSetData?.Invoke(orginType, data);
             ClaerSelectItem();
         }
+
         #endregion
 
+        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (e.Command.Equals(ApplicationCommands.Paste))
+            {
+                if (selectDataGrid != 0 && dgDataType != null && cacheDataGrids.TryGetValue(selectDataGrid,out DataGrid dgv))
+                {
+                    PasteDataGird(dgv, dgDataType);
+                    selectDataGrid = 0;
+                    dgDataType = null;
+                }       
+            }
+        }
 
+
+        private void PasteDataGird(DataGrid dgv,Type targetType)
+        {
+            string pasteText = Clipboard.GetText();
+            if (string.IsNullOrEmpty(pasteText))
+                return;
+            var cells = dgv.SelectedCells;
+            if (cells == null || cells.Count == 0) return;
+            var cell = cells.First();
+            int rowIndex = 0, columnIndex = 0;
+            if (!GetCellXY(dgv, ref rowIndex, ref columnIndex)) return;
+            //获取当前所有的内容
+
+            var list = dgv.ItemsSource as IList;
+            //获取集合中元素的类型
+            var type = targetType;// list.Count > 0 ? list[0].GetType() : cell.GetType();
+
+            string[] allRow = pasteText.Trim().Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < allRow.Length; i++)
+            {
+                if (string.IsNullOrEmpty(allRow[i]))
+                {
+                    continue;
+                }
+                if (rowIndex >= list.Count)
+                {
+                    //超过索引就添加新的行数
+                    try
+                    {
+                        var newItem = Activator.CreateInstance(type);
+                        if (newItem != null)
+                            list.Add(newItem);
+                    }
+                    catch (Exception)
+                    {
+                        break;
+                    }
+                }
+
+                var row = allRow[i].Split(new string[] { "\t" }, StringSplitOptions.RemoveEmptyEntries);
+                int tempColumnIndex = 0;
+                for (int j = columnIndex; j < dgv.Columns.Count-1; j++)
+                {
+                    var item = list[rowIndex];
+                    var column = dgv.Columns[j];
+                    var prop = type.GetProperty(column.Header.ToString());
+
+                    try
+                    {
+                        prop.SetValue(item, Convert.ChangeType(row[tempColumnIndex++], prop.PropertyType));
+                    }
+                    catch
+                    {
+
+                    }
+                }
+                rowIndex++;
+            }
+
+
+            dgv.ItemsSource = null;
+            dgv.ItemsSource = list;
+        }
+        private bool GetCellXY(DataGrid dg, ref int rowIndex, ref int columnIndex)
+        {
+            var _cells = dg.SelectedCells;
+            if (_cells.Any())
+            {
+                rowIndex = dg.Items.IndexOf(_cells.First().Item);
+                //这里默认+1是因为有删除这行
+                columnIndex = _cells.First().Column.DisplayIndex  ;
+                return true;
+            }
+            return false;
+        }
     }
 }

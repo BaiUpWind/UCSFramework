@@ -13,7 +13,6 @@ namespace DisplayConveyer.Logic
     public class ReadStatusLogic: IMsgShow
     {
         public event Action<string, int> ShowMsg;
-        public event Action<StatusData> OnStatusChanged;
         
         private readonly List<AreaData> Areas;
         private readonly Thread[] threads;
@@ -23,7 +22,7 @@ namespace DisplayConveyer.Logic
             Areas = areas;
             if (Areas != null && Areas.Any())
             {
-                threads = new Thread[Areas.Count];
+                threads = new Thread[Areas.Where(a=> a.Devices != null && a.Devices.Count() > 0).Count()];
                 for (int i = 0; i < Areas.Count; i++)
                 {
                     var area = Areas[i];
@@ -96,6 +95,10 @@ namespace DisplayConveyer.Logic
             {
                 if (area.Operation.Connect())
                 {
+                    foreach (var item in area.Devices)
+                    {
+                        item.StatusChanged?.Invoke(new StatusData() { MachineState = 101 });
+                    }
                     break;
                 }
                 else
@@ -113,7 +116,7 @@ namespace DisplayConveyer.Logic
                 //todo 将这个为空的信息传出去 出错了
                 return;
             }
-            var device = devices.Find(a => a.ID == state.WorkId);
+            var device = devices.Find(a => a.WorkId == state.WorkId);
             if (device == null)
             {
                 InternalShowMsg($"显示状态时未找到ID为'{state.WorkId}'的设备;状态为'{state}'", 2);

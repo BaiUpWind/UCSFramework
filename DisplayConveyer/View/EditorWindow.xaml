@@ -63,7 +63,7 @@
                             <TextBox Name="txtCanvasHeight" Style="{StaticResource TextBox.Small}" Text="1080" Tag="height" TextChanged="txtInput_Width"   hc:BorderElement.CornerRadius="0" BorderThickness="0" Height="12" ></TextBox>
                         </StackPanel>
                     </Grid>
-                    <Grid x:Name="gOper"  Grid.Row="1" Panel.ZIndex="-1" Background="Red" >
+                    <Grid x:Name="gOper"  Grid.Row="1" Panel.ZIndex="-1"   >
                         <hc:DrawerContainer>
                             <Grid>
                                 <hc:Drawer Name="DrawerTopInContainer"  Dock="Top" ShowMode="Press">

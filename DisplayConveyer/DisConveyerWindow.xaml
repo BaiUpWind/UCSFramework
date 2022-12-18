@@ -96,8 +96,8 @@
                         <Border Width="55" Background="Yellow" Margin="5 2 0 2" CornerRadius="3">
                             <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">有盘</TextBlock>
                         </Border>
-                        <Border Width="55" Background="Blue" Margin="5 2 0 2" Visibility="Collapsed">
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">未配置</TextBlock>
+                        <Border Width="55" Background="White" Margin="5 2 0 2"  CornerRadius="3">
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" >未连接</TextBlock>
                         </Border>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">

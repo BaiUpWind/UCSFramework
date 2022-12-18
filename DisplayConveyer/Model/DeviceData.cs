@@ -13,7 +13,7 @@ using ReadOnlyAttribute = ControlHelper.Attributes.ReadOnlyAttribute;
 
 namespace DisplayConveyer.Model
 {
-    public class DeviceData
+    public class DeviceData:ControlDataBase
     {
         /// <summary>
         /// 区域编号 <see cref="AreaData.ID"/>
@@ -23,7 +23,7 @@ namespace DisplayConveyer.Model
         public uint AreaID { get; set; } = 0;
 
         [NickName("设备编号", "与WorkId对应")]
-        public string ID { get; set; }
+        public string WorkId { get; set; }
         [NickName("设备名称")]
         public string Name { get; set; }
         public Color FontColor { get; set; } = Colors.Black;
@@ -32,17 +32,12 @@ namespace DisplayConveyer.Model
         [NickName("字体大小")]
         public double FontSize { get; set; }
         [NickName("宽度")]
-        public double Width { get; set; }
+        public new double Width { get; set; }
         [NickName("高度")]
-        public double Height { get; set; }
+        public new double Height { get; set; }
         [NickName("物流方向描述")]
         public string Direction { get; set; } = "•";
-        [Hide]
-        public double PosX { get; set; }
-        [Hide]
-        public double PosY { get; set; }
-
-
+  
         [JsonIgnore]
         public Action<StatusData> StatusChanged;
 
