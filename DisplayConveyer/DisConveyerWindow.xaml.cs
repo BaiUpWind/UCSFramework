@@ -86,6 +86,8 @@ namespace DisplayConveyer
                 animation = null;
                 mainSv.ScrollToHorizontalOffset(0);
                 topSv.ScrollToHorizontalOffset(0);
+                logic.Stop();
+                logic = null;
                 ew.ShowDialog(); 
        
                 ReLoad(mainCanvas, mainGrid);

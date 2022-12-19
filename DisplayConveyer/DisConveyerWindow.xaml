@@ -101,7 +101,7 @@
                         </Border>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                        <TextBlock x:Name="txtInfo"   Text="qqq" Margin="0,0,15,0" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                        <TextBlock x:Name="txtInfo"   Text="" Margin="0,0,15,0" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                         <Button  x:Name="txtLock"    ToolTip="切换手动操作"  Tag="锁住" Cursor="Hand" Content="🔒" Background="Transparent"  hc:BorderElement.CornerRadius="0" BorderThickness="0"/> 
                         <Button x:Name="btnFullScreen" Click="BtnFullScreen_Click" HorizontalAlignment="Right"  VerticalAlignment="Center" ToolTip="全屏模式"  Tag="全屏"  Background="Transparent"      hc:BorderElement.CornerRadius="0" BorderThickness="0"  >
                             <Button.Content>
