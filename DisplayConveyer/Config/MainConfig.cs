@@ -5,8 +5,10 @@ using System.Collections.Generic;
 
 namespace DisplayConveyer.Config
 {
+    //测试信息 不使用找机会删掉 2022-12-22
     public class MainConfig
     {
+        
         [NickName("缩放比例")]
         [Hide]
         public double SacleRatio { get; set; } = .5d;

@@ -8,8 +8,7 @@
               x:Class="DisplayConveyer.Controls.UC_DeviceBase"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="200" 
-             Width="{Binding Data.Width}" Height="{Binding Data.Height}" 
-             Canvas.Left="{Binding Data.PosX}" Canvas.Top="{Binding Data.PosY}" >
+              >
 
     <Border  x:Name="mainBorder"   CornerRadius="5">
         <!--<Border.Effect >
@@ -22,11 +21,12 @@
 
                 <Border  x:Name="borderStatus" Background="White"     CornerRadius="3">
                     <StackPanel VerticalAlignment="Center" >
-                        <TextBlock    x:Name="txtTitle"    FontSize="{Binding Data.FontSize}" Foreground="{Binding Data.FontColorBursh}" Text="{Binding Data.Name}"  TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
+                        <!--<TextBlock    x:Name="txtTitle"    FontSize="{Binding Data.FontSize}" Foreground="{Binding Data.FontColorBursh}" Text="{Binding Data.Name}"  TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>-->
+                        <TextBlock    x:Name="txtTitle"    FontSize="16"  Text="xxx"  TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
                         <!--<TextBlock   x:Name="txtTitle" FontSize="36"  
                                      Width="{Binding ElementName=borderStatus,Path=ActualWidth}" 
                                      Text="qwe"  TextAlignment="Center"  TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center"  />-->
-                        <TextBlock x:Name="txtDir"  FontSize="{Binding Data.FontSize}"   Foreground="{Binding Data.FontColorBursh}"  Text="{Binding Data.Direction}"  HorizontalAlignment="Center" VerticalAlignment="Center">  </TextBlock>
+                        <TextBlock x:Name="txtDir"  FontSize="16"    Text="ddd"  HorizontalAlignment="Center" VerticalAlignment="Center">  </TextBlock>
                     </StackPanel>
                 </Border>
 

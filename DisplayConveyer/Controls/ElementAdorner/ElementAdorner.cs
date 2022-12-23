@@ -117,7 +117,9 @@ namespace DisplayConveyer
                 var element = AdornedElement as FrameworkElement;
                 if (element == null)
                     return;
+                if(EnableHorizontal)
                 Canvas.SetLeft(element, Canvas.GetLeft(element) + e.HorizontalChange);
+                if(EnableVertical)
                 Canvas.SetTop(element, Canvas.GetTop(element) + e.VerticalChange);
             };
             return thumb;

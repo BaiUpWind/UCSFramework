@@ -1,49 +1,59 @@
-﻿<Window xmlns:hc="https://handyorg.github.io/handycontrol"  x:Class="DisplayConveyer.View.DeviceDataEditorWindow"
+﻿<Window xmlns:Controls="clr-namespace:DisplayConveyer.Controls"  xmlns:hc="https://handyorg.github.io/handycontrol"  x:Class="DisplayConveyer.View.DeviceDataEditorWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DisplayConveyer.View" 
-        xmlns:viewmodel="clr-namespace:DisplayConveyer.ViewModel" xmlns:wpf="clr-namespace:ControlHelper.WPF;assembly=ControlHelper"
-        d:DataContext="{d:DesignInstance Type=viewmodel:DeviceViewModel}"
+        xmlns:viewmodel="clr-namespace:DisplayConveyer.ViewModel"  
         mc:Ignorable="d"
         Title="DeviceDataEditorWindowxaml" Height="450" Width="600">
-    <Grid Background="#720000FF"> 
+    <Grid Background="#720000FF">
         <Grid >
             <Grid.RowDefinitions>
                 <RowDefinition Height="65"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Margin="5">
-                <Border BorderThickness="1" BorderBrush="White" CornerRadius="3"> </Border>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Border BorderThickness="1" BorderBrush="White" CornerRadius="3"></Border>
+                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                    <TextBlock VerticalAlignment="Center" Margin="5 0 0 0">选择图片</TextBlock>
+                    <hc:ImageSelector Width="50"  Margin="10"/>
+                    <StackPanel Orientation="Horizontal" >
+                        <Button x:Name="btnAddSelector" Content="添加区" HorizontalAlignment="Center" Click="btnAddSelector_Click" ></Button>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"> 
                     <Button Content="关闭"    Margin="0 0 5 0"></Button>
                     <Button Content="保存"    Margin="0 0 5 0" ></Button>
                 </StackPanel>
             </Grid>
-            <Grid Grid.Row="1" Margin="5">
-                <Border BorderThickness="1" BorderBrush="White" CornerRadius="3"></Border>
-                <ScrollViewer  >
-                    <StackPanel>
-                        <!--<TextBox hc:InfoElement.Title="编号" Width="380" Text="{Binding Data.ID}" hc:InfoElement.TitleWidth="140" hc:InfoElement.Placeholder="输入内容" hc:InfoElement.TitlePlacement="Left"   Style="{StaticResource TextBoxExtend.Small}" Margin="0,16,0,0"/>
-                        <TextBox Width="380" Text="{Binding Data.Name}" hc:InfoElement.TitleWidth="140" hc:InfoElement.Placeholder="输入内容" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.Title="名称"  Style="{StaticResource TextBoxExtend.Small}" Margin="0,16,0,0"/>
-                        <Grid  HorizontalAlignment="Center" Margin="0,16,0,0" Width="380">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock   Text="字体颜色" Grid.Column="0"    VerticalAlignment="Center"></TextBlock>
-                            <Button  Grid.Column="1"   Style="{StaticResource  ButtonDefault.Small}" Content="更改颜色" Foreground="{Binding Data.FontColorBursh}"></Button>
-                        </Grid>
-                        <TextBox hc:InfoElement.Title="宽度"   Text="{Binding Data.Width}" Width="380" hc:InfoElement.TitleWidth="140" hc:InfoElement.Placeholder="输入内容" hc:InfoElement.TitlePlacement="Left"   Style="{StaticResource TextBoxExtend.Small}" Margin="0,16,0,0"/>
-                        <TextBox hc:InfoElement.Title="高度"   Text="{Binding Data.Height}" Width="380" hc:InfoElement.TitleWidth="140" hc:InfoElement.Placeholder="输入内容" hc:InfoElement.TitlePlacement="Left"   Style="{StaticResource TextBoxExtend.Small}" Margin="0,16,0,0"/>-->
-                        
-                    </StackPanel>
-               </ScrollViewer>
-            </Grid>
-        </Grid>
-        <StackPanel>
+            <Border Grid.Row="1" Margin="5" BorderThickness="1" BorderBrush="White" CornerRadius="3"></Border>
+            <Grid Grid.Row="1" Margin="8">  
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="255"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0"  > 
+                    <ScrollViewer  Grid.Row="1"   HorizontalScrollBarVisibility="Auto"   VerticalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Canvas Name="canvasMain" Margin="5" Width="{Binding ElementName=imgBack,Path=ActualWidth}" Height="{Binding ElementName=imgBack,Path=ActualHeight}"  HorizontalAlignment="Left"      Background="Gray" >
+                                <Image Name="imgBack" Source="/背景.jpg" />
+                                <!--<Rectangle Name="rectSelector" Fill="#3FFFFFFF"  StrokeThickness="1" Width="150" Stroke="Red" 
+                                    Height="{Binding ElementName=canvasMain,Path=ActualHeight}"  >
             
-        </StackPanel>
+                                </Rectangle>--> 
+                            </Canvas>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+                <Grid Name="gridProp" Grid.Column="1" Background="#44808080">
+                  
+                        
+                    
+                </Grid>
+                
+                 
+            </Grid>
+        </Grid> 
     </Grid>
 </Window>

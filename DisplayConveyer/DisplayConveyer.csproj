@@ -67,6 +67,9 @@
     <Compile Include="Config\ConveyerConfig.cs" />
     <Compile Include="Controls\ElementAdorner\ElementAdorner.cs" />
     <Compile Include="Controls\ElementAdorner\ThumbAngle.cs" />
+    <Compile Include="Controls\UC_RangeSelector.xaml.cs">
+      <DependentUpon>UC_RangeSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UC_DeviceBase.xaml.cs">
       <DependentUpon>UC_DeviceBase.xaml</DependentUpon>
     </Compile>
@@ -81,6 +84,8 @@
     <Compile Include="Model\ControlDataBase.cs" />
     <Compile Include="Model\DeviceData.cs" />
     <Compile Include="Model\LabelData.cs" />
+    <Compile Include="Model\MapPartData.cs" />
+    <Compile Include="Model\RangeData.cs" />
     <Compile Include="Model\RectData.cs" />
     <Compile Include="PulibcEnum\PublicEnums.cs" />
     <Compile Include="TestWindows\AllBeltsWindow.xaml.cs">
@@ -111,7 +116,6 @@
     <Compile Include="Utilities\CreateHelper.cs" />
     <Compile Include="Utilities\Extend.cs" />
     <Compile Include="Utilities\UIElementMove.cs" />
-    <Compile Include="ViewModel\DeviceVeiwModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="View\DeviceDataEditorWindow.xaml.cs">
       <DependentUpon>DeviceDataEditorWindow.xaml</DependentUpon>
@@ -119,6 +123,10 @@
     <Compile Include="View\EditorWindow.xaml.cs">
       <DependentUpon>EditorWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\UC_RangeSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\UC_DeviceBase.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -209,6 +217,7 @@
   <ItemGroup>
     <Content Include="Lib\Microsoft.Office.Interop.Excel.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
+    <Resource Include="主背景.jpg" />
     <Resource Include="背景.jpg" />
   </ItemGroup>
   <ItemGroup>

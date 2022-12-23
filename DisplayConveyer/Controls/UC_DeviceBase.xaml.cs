@@ -39,6 +39,17 @@ namespace DisplayConveyer.Controls
                 txtTitle.Text = value;
             }
         }
+        public string Description
+        {
+            get
+            {
+                return txtDir.Text;
+            }
+            set
+            {
+                txtDir.Text = value;
+            }
+        }
         public Color TitleColor
         {
             get
@@ -60,10 +71,11 @@ namespace DisplayConveyer.Controls
             {
                 if (value <= 0) return;
                 txtTitle.FontSize = value;
+                txtDir.FontSize = value;
             }
         }
-        public DeviceData Data { get; private set; }
-        public DeviceViewModel ViewModel { get; set; }
+        private DeviceData Data { get;  }
+        //public DeviceViewModel ViewModel { get; set; }
 
    
          
@@ -72,9 +84,9 @@ namespace DisplayConveyer.Controls
         {
             InitializeComponent();
             colorHandle = SetColorThreadUnsafe;
-            Data = data; 
-       
-            DataContext = ViewModel = new DeviceViewModel(data);
+            Data = data;
+
+            DataContext = data;// ViewModel = new DeviceViewModel(data);
             //txtDir.Text = GetDri( Data.ArrowDir);
             Data.StatusChanged += StatusSetColor; 
            

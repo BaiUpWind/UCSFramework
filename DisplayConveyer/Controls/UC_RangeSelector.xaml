@@ -1,0 +1,14 @@
+﻿<UserControl x:Class="DisplayConveyer.Controls.UC_RangeSelector"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DisplayConveyer.Controls"
+             mc:Ignorable="d" Width="80" Name="spMain" MouseUp="TextBlock_MouseUp" MouseMove="TextBlock_MouseMove" MouseDown="TextBlock_MouseDown"
+             >
+    <StackPanel Background="Red"  Orientation="Horizontal"   >
+        <TextBlock Text="∨" FontSize="28" Name="tbLeft" MouseUp="TextBlock_MouseUp" MouseMove="TextBlock_MouseMove" MouseDown="TextBlock_MouseDown"  Background="White"  VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+        <TextBlock Text="⇼" WindowChrome.IsHitTestVisibleInChrome="False" FontSize="28" Name="tbMid"  Margin="5 0 5 0" Background="White" Cursor="SizeWE"  VerticalAlignment="Center" HorizontalAlignment="Left"  ></TextBlock>
+        <TextBlock Text="∨" FontSize="28" Name="tbRight" MouseUp="TextBlock_MouseUp" MouseMove="TextBlock_MouseMove" MouseDown="TextBlock_MouseDown" Background="White"  VerticalAlignment="Center" HorizontalAlignment="Left"  ></TextBlock>
+    </StackPanel>
+</UserControl>

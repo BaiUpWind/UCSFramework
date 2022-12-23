@@ -187,16 +187,9 @@ namespace DisplayConveyer.View
             controlList.Add(fe);
             var cacheDataContext = fe.DataContext as ControlDataBase;
             if(cacheDataContext == null)
-            {
-                if(fe.DataContext is ViewModel.DeviceViewModel dvm)
-                {
-                    cacheDataContext = dvm.Data ;
-                }
-                else
-                {
-                    Growl.Error("错误的DataContext,添加控件失败!");
-                    return;
-                }
+            { 
+                Growl.Error("错误的DataContext,添加控件失败!");
+                return; 
             }
             var al = AdornerLayer.GetAdornerLayer(fe);
             var adorner = new ElementAdorner(fe);
@@ -216,6 +209,7 @@ namespace DisplayConveyer.View
                     cacheDataContext.Height = fe.Height;
                 }
             };
+           
 
             adorner.DragStarted += (ds, de) =>
             {
@@ -238,8 +232,9 @@ namespace DisplayConveyer.View
                         Canvas.SetLeft(item, Canvas.GetLeft(item) + e.HorizontalChange);
                         Canvas.SetTop(item, Canvas.GetTop(item) + e.VerticalChange);
                         pos = item.TransformToAncestor(canvas).Transform(new Point(0, 0));
-                        cacheDataContext.PosX = pos.X;
-                        cacheDataContext.PosY = pos.Y; 
+                        var tempDc = item.DataContext as ControlDataBase;
+                        tempDc.PosX = pos.X;
+                        tempDc.PosY = pos.Y; 
                     }
                 }
             };
@@ -300,9 +295,7 @@ namespace DisplayConveyer.View
             var cc = new ClassControl(type, true, data);
             cc.NewData += (o) =>
             {
-                newData?.Invoke(o);
-                if (currentSelected != null && currentSelected is UC_DeviceBase udb)
-                    udb.ViewModel.Data = o as DeviceData;
+                newData?.Invoke(o); 
             };
             if (haveCmb)
             {
@@ -469,9 +462,9 @@ namespace DisplayConveyer.View
                 //todo:提示错误
                 return;
             }
-            if ( dataContext is ViewModel.DeviceViewModel dvm)
+            if ( dataContext is DeviceData dd)
             {
-                CloneDeviceBase(dvm.Data, single);
+                CloneDeviceBase(dd, single);
             }
             else if (dataContext  is RectData rd)
             {
@@ -486,6 +479,43 @@ namespace DisplayConveyer.View
                 //todo:提示错误
             }
         } 
+        private void RemoveControl(FrameworkElement fe)
+        {
+            if (fe == null || fe.DataContext ==null) return;
+            if (fe.DataContext is DeviceData dd)
+            {
+                AreasRemoveDevice(dd);
+            }
+            else if (fe.DataContext is RectData rd)
+            {
+                var rect = ConvConfig.RectDatas.Find(a => a.ID == rd.ID);
+                if (rect == null)
+                {
+                    Growl.Info("未找到对应区域框的数据");
+                    return;
+                }
+                else
+                {
+                    ConvConfig.RectDatas.Remove(rect);
+                }
+            }
+            else if (fe.DataContext is LabelData ld)
+            {
+                var label = ConvConfig.Labels.Find(a => a.ID == ld.ID);
+                if (label == null)
+                {
+                    Growl.Info("未找到对应标签的数据");
+                    return;
+                }
+                else
+                {
+                    ConvConfig.Labels.Remove(label);
+                }
+            }
+            canvas.Children.Remove(fe);
+            controlList.Remove(fe); 
+            fe = null;
+        }
         /// <summary>  检查是否在选择区域内  </summary> >
         private void CheckInSelector(Point startPoint, Point currentPoint)
         {
@@ -545,9 +575,17 @@ namespace DisplayConveyer.View
                 {
                     gOper.Children.Remove(controlDetail);
                 }
-                if (fe is UC_DeviceBase udb)
+                if (fe.DataContext is DeviceData dd)
                 {
-                    controlDetail = CreateDetail(udb.Data.GetType(), udb.Data, true);
+                    controlDetail = CreateDetail(typeof(DeviceData), dd, true, (o) =>
+                    {
+                        if (fe is UC_DeviceBase udb && o is DeviceData newdd)
+                        {
+                            udb.Title = newdd.Name;
+                            udb.FontSize = newdd.FontSize;
+                            udb.Description = newdd.Direction;
+                        }
+                    });
                 }
                 else if (fe.DataContext is LabelData ld)
                 {
@@ -622,7 +660,7 @@ namespace DisplayConveyer.View
                     StrokeThickness = 0.2d
                 };
                 canvas.Children.Add(line);
-                Panel.SetZIndex(line, -100);
+                Panel.SetZIndex(line, -102);
                 allLines.Add(line);
                 currentPosY += scaleY;
                 yCount++;
@@ -642,7 +680,7 @@ namespace DisplayConveyer.View
                     Stroke = gridBrush,
                     StrokeThickness = 0.2d
                 };
-                Panel.SetZIndex(line, -100);
+                Panel.SetZIndex(line, -102);
                 canvas.Children.Add(line);
                 allLines.Add(line);
                 currentPosX += scaleX;
@@ -812,56 +850,22 @@ namespace DisplayConveyer.View
             }
             if (currentSelected != null && selectorList.Count == 0)
             {
-                if (currentSelected is UC_DeviceBase udb)
-                {
-                    AreasRemoveDevice(udb.Data);
-                }
-                else if (currentSelected.DataContext is RectData rd)
-                {
-                    var rect = ConvConfig.RectDatas.Find(a => a.ID == rd.ID);
-                    if (rect == null)
-                    {
-                        Growl.Info("未找到对应区域框的数据");
-                        return;
-                    }
-                    else
-                    {
-                        ConvConfig.RectDatas.Remove(rect);
-                    }
-                }
-                else if (currentSelected.DataContext is LabelData ld)
-                {
-                    var label = ConvConfig.Labels.Find(a => a.ID == ld.ID);
-                    if (label == null)
-                    {
-                        Growl.Info("未找到对应标签的数据");
-                        return;
-                    }
-                    else
-                    {
-                        ConvConfig.Labels.Remove(label);
-                    }
-                }
-                canvas.Children.Remove(currentSelected);
-                controlList.Remove(currentSelected);
-                if (controlDetail != null)
-                {
-                    gOper.Children.Remove(controlDetail);
-                }
-                currentSelected = null;
+                RemoveControl(currentSelected);
             }
             else if (selectorList.Count > 0)
             {
                 foreach (var item in selectorList)
                 {
-                    controlList.Remove(item);
-                    //AreasRemoveDevice(item.Data);
-                    canvas.Children.Remove(item);
+                    RemoveControl(item);
                 }
                 selectorList.Clear();
-                currentSelected = null;
+             
             }
-
+            currentSelected = null;
+            if (controlDetail != null)
+            {
+                gOper.Children.Remove(controlDetail);
+            } 
         }
         private void txtInput_Width(object sender, TextChangedEventArgs e)
         {
@@ -1066,9 +1070,8 @@ namespace DisplayConveyer.View
                 if (point.Y <= 0)
                 {
                     point.Y = 0;
-                }
-                cdc.ViewModel.Data.PosX = point.X  ;
-                cdc.ViewModel.Data.PosY = point.Y;
+                } 
+                AddControl(cdc);
                 HaveNew = false;
                 canvas.Children.Remove(newCreate);
             };

@@ -14,6 +14,13 @@ namespace DisplayConveyer.Config
         public double CanvasWidth { get; set; } = 1920;
         [NickName("画布高")]
         public double CanvasHeight { get; set; } = 1080;
+
+        [NickName("小地图背景图片")]
+        public string MiniMapImagePath { get; set; }
+
+        [NickName("小地图区域数据")]
+        public List<MapPartData> MiniMapData { get; set; } = new List<MapPartData>();
+
         [NickName("配置信息")] 
         public List<AreaData> Areas { get; set; }= new List<AreaData>();
 

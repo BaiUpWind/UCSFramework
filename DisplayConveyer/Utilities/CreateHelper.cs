@@ -41,9 +41,23 @@ namespace DisplayConveyer.Utilities
             //data.EnableThumbHorizontal = false;
             tb.DataContext = data;
             tb.SetValue(Canvas.LeftProperty, data.PosX);
-            tb.SetValue(Canvas.TopProperty, data.PosY); 
+            tb.SetValue(Canvas.TopProperty, data.PosY);
             return tb;
         }
-        public static FrameworkElement GetDeviceBase(DeviceData data) => new UC_DeviceBase(data);
+        public static FrameworkElement GetDeviceBase(DeviceData data)
+        {
+            var udc = new UC_DeviceBase(data)
+            {
+                Width = data.Width,
+                Height = data.Height,
+                Title = data.Name,
+                FontSize = data.FontSize,
+                Description = data.Direction,
+            };
+            udc.DataContext = data;
+            udc.SetValue(Canvas.LeftProperty, data.PosX);
+            udc.SetValue(Canvas.TopProperty, data.PosY);
+            return udc;
+        }
     }
 }

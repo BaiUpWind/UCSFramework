@@ -25,6 +25,7 @@ using System.Net.NetworkInformation;
 using DisplayConveyer.Controls;
 using ControlHelper;
 using ScrollViewer = System.Windows.Controls.ScrollViewer;
+using DisplayConveyer.Model;
 
 namespace DisplayConveyer
 { 
@@ -45,6 +46,8 @@ namespace DisplayConveyer
         private ReadStatusLogic logic;
         private double AnimationSpeed =55d;
         private Storyboard storyboard = new Storyboard();
+        private readonly List<RangeData> rangeDatas = new List<RangeData>();
+        DoubleAnimation animation;
         public DisConveyerWindow()
         {
             InitializeComponent();
@@ -86,7 +89,7 @@ namespace DisplayConveyer
                 animation = null;
                 mainSv.ScrollToHorizontalOffset(0);
                 topSv.ScrollToHorizontalOffset(0);
-                logic.Stop();
+                logic?.Stop();
                 logic = null;
                 ew.ShowDialog(); 
        
@@ -168,7 +171,7 @@ namespace DisplayConveyer
             mainSv.ScrollToHorizontalOffset(mainSv.HorizontalOffset +1.5d);
         }
 
-        DoubleAnimation animation;
+
         private void SvHorizontalOffsetToRight()
         {
             ScrollHorizontalMoveTo(0, mainSv.ScrollableWidth, (s, e) =>
@@ -199,10 +202,6 @@ namespace DisplayConveyer
                 animationCompleted?.Invoke(s, e);
                 storyboard.Children.Remove(animation);
             };
-            //var HorizontalOffsetPropertyKey = DependencyProperty.RegisterReadOnly("HorizontalOffset", typeof(double), typeof(ScrollViewer), new FrameworkPropertyMetadata(0.0));
-
-            //mainSv.BeginAnimation(ScrollViewerBehaviour.HorizontalOffsetProperty, animation);
- 
             storyboard.Children.Add(animation);
             Storyboard.SetTarget(animation,mainSv);
             Storyboard.SetTargetProperty(animation, new PropertyPath(ScrollViewerBehaviour.HorizontalOffsetProperty ));
@@ -216,6 +215,50 @@ namespace DisplayConveyer
             mainCanvas.RenderTransform = new MatrixTransform(factor, 0, 0, factor, x, 0);
             if (!double.IsNaN(grid.Width) && grid.Width > 0) grid.Width = ConvConfig.CanvasWidth * factor; 
 
+        }
+        private void CalculateRange()
+        {
+            rangeDatas.Clear();
+            foreach (var part in ConvConfig.MiniMapData)
+            {
+                var areas = ConvConfig.Areas.Where(a => a.MapPartId == part.ID).ToList();
+                if (areas == null || !areas.Any()) continue;
+                RangeData rd = new RangeData();
+                rd.MapPartId = part.ID;
+                foreach (var area in areas)
+                {
+                    //这里的目的就是为了获取X轴最小和最大值
+                    var tempMin = area.Devices.Min(r => r.PosX);
+                    var tempMax = area.Devices.Max(r => r.PosX);
+                    if(tempMin == tempMax )
+                    {
+                       //当这个区域只有一个设备时，比如：只有一个RGV
+                    }
+                    if (rd.MinPosX >= tempMin)
+                    {
+                        rd.MinPosX = tempMin;
+                    }
+                    if (rd.MaxPosX <= tempMax)
+                    {
+                        rd.MaxPosX = tempMax;
+                    }
+                }
+                rangeDatas.Add(rd);
+            }
+        }
+        private void DrawRange(Panel panel)
+        {
+            if (!rangeDatas.Any()) return;
+            foreach (var rd in rangeDatas)
+            {
+                Rectangle rect = new Rectangle()
+                {
+                    Width = rd.MaxPosX - rd.MinPosX,
+                    RenderTransform = new TranslateTransform(rd.MinPosX,0) ,
+                    Fill = new SolidColorBrush(Color.FromArgb(85,255,255,255)),
+                };
+                panel.Children.Add(rect);
+            }
         }
         private void ReLoad(Canvas canvas,Grid grid)
         {

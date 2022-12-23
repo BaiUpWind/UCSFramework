@@ -73,8 +73,16 @@
 
             </Grid>
             <Grid Grid.Row="1"  >
+                <TextBlock x:Name="tbFlag" Text="👇" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                    <TextBlock.RenderTransform>
+                        <TranslateTransform>
+                            <TranslateTransform.X>200</TranslateTransform.X>
+                        </TranslateTransform>
+                    </TextBlock.RenderTransform>
+                </TextBlock>
+                <Line X1="200" X2="200" Y1="{Binding ElementName=mainSv,Path=ActualHeight}" Stroke="Red" ></Line>
                 <ScrollViewer x:Name="mainSv"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
-                    <Grid x:Name="mainGrid">
+                    <Grid x:Name="mainGrid"> 
                         <Canvas    x:Name="mainCanvas"  HorizontalAlignment="Left"  >
 
                         </Canvas>
