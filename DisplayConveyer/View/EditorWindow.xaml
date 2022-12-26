@@ -11,16 +11,16 @@
     </Window.Resources>
     <Grid Background="#720000FF">
         <Grid.RowDefinitions>
-            <RowDefinition Height="45"></RowDefinition>
+            <RowDefinition Height="60"></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition  Height="45"></RowDefinition>
         </Grid.RowDefinitions>
       
         <Grid Grid.Row="0"  Margin="5 5 5 5" Panel.ZIndex="99">
-            <Border  Background="AliceBlue"     BorderThickness="0" CornerRadius="4"></Border>
+            <Border  Background="White"     BorderThickness="0" ></Border>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
-                <Button x:Name="btnOpenCfg" Tag="open" Content="打开配置" Margin="10 0 0 0" Click="btnOpenCfg_Click"></Button>
-                <Button x:Name="btnSysConfig" Visibility="Hidden" Content="系统配置" Margin="10 0 0 0"></Button>
+                <Button x:Name="btnOpenCfg" Tag="open" Content="打开配置" Height="45" Margin="10 0 0 0" FontSize="16" BorderThickness="0" hc:BorderElement.CornerRadius="0" Click="btnOpenCfg_Click"></Button>
+                <Button x:Name="btnClose" Content="关闭窗口" FontSize="16" Height="45" Margin="10 0 0 0" BorderThickness="0" hc:BorderElement.CornerRadius="0" Click="btnClose_Click"></Button>
             </StackPanel>
         </Grid>
 
@@ -30,18 +30,19 @@
                 <ColumnDefinition Width="8*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0" Margin="5 0 0 0"   Panel.ZIndex="88">
-                <Border  Background="AliceBlue"     BorderThickness="0" CornerRadius="4"></Border>
+                <Border  Background="White"     BorderThickness="0" ></Border>
                 <StackPanel Name="spDeviceOp" Margin="0 5 0 0" Orientation="Vertical">
                     <StackPanel  Margin="3 0 0 0" Orientation="Vertical" >
-                        <Button Name="btnSaveConfig" Content="保存配置" Margin=" 0 5 0 0" Click="btnSaveConfig_Click" ></Button>
-                        <Button Name="btnEditAreas" Content="编辑区域" Margin=" 0 5 0 0" Click="btnEditAreas_Click" ></Button>
-                        <Border BorderBrush="LightGreen" BorderThickness="1" Margin=" 5 10 5 10"></Border>
-                        <Button Name="btnRemoveDevice" Content="删除选中项" ToolTip="删除选定的设备或者控件" Margin=" 0 5 0 0" Click="BtnRemoveDevice_Click"></Button>
-                        <Border BorderBrush="LightGreen" BorderThickness="1" Margin=" 5 10 5 10"></Border>
-                        <Button Name="btnAddDevice" Content="添加设备" Margin=" 0 5 0 0" Click="BtnAddDevice_Click"></Button>
-                        <Button Name="btnAddRect" Content="添加区域框" Margin=" 0 5 0 0" Click="BtnAddRect_Click"></Button>
-                        <Button Name="btnAddLable" Content="添加标签" Margin=" 0 5 0 0" Click="BtnAddLable_Click"></Button>
-                        <Border BorderBrush="LightGreen" BorderThickness="1" Margin="5 10 5 10"></Border>
+                        <Button Name="btnSaveConfig" Content="保存配置" Margin=" 0 0 0 0" Click="btnSaveConfig_Click" FontSize="16"  HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="0" BorderThickness="0" ></Button>
+                        <Button Name="btnEditAreas" Content="编辑区域" HorizontalContentAlignment="Left" Margin=" 0 0 0 0" Click="btnEditAreas_Click" FontSize="16"   HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="0" BorderThickness="0"  ></Button>
+                        <Button Name="btnEditMap" Content="编辑略缩图" HorizontalContentAlignment="Left" Margin=" 0 0 0 0" Click="btnEditMap_Click" FontSize="16"   HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="0" BorderThickness="0"   ></Button>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin=" 5 5 5 10"></Border>
+                        <Button Name="btnRemoveDevice" Content="删除选中项" HorizontalContentAlignment="Left" ToolTip="删除选定的设备或者控件" Margin=" 0 0 0 0" Click="BtnRemoveDevice_Click" FontSize="16"   HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="0" BorderThickness="0" ></Button>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin=" 5 5 5 10"></Border>
+                        <Button Name="btnAddDevice" Content="添加设备" HorizontalContentAlignment="Left" Margin=" 0 0 0 0" Click="BtnAddDevice_Click" FontSize="16"   HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="0" BorderThickness="0" ></Button>
+                        <Button Name="btnAddRect" Content="添加区域框" HorizontalContentAlignment="Left" Margin=" 0 0 0 0" Click="BtnAddRect_Click" FontSize="16"   HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="0" BorderThickness="0" ></Button>
+                        <Button Name="btnAddLable" Content="添加标签" HorizontalContentAlignment="Left" Margin=" 0 0 0 0" Click="BtnAddLable_Click" FontSize="16"   HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="0" BorderThickness="0" ></Button>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="5 5 5 10"></Border>
                         <Button Name="btnTest" Content="test" Margin="0 15 0 0 " Visibility="Collapsed"></Button>
                     </StackPanel>
                 </StackPanel>
@@ -57,13 +58,13 @@
                             <RowDefinition Height="20"></RowDefinition>
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="0"  Background="Aqua"     BorderThickness="0" CornerRadius="4"></Border>
+                        <Border Grid.Row="0"  Background="Aqua"     BorderThickness="0" ></Border>
                         <StackPanel Grid.Row="0"  x:Name="spCanvOp" HorizontalAlignment="Left" VerticalAlignment="Center" Orientation="Horizontal">
                             <TextBlock Text="画布操作："  Margin="5,0,0,0" VerticalAlignment="Center"></TextBlock>
                             <Button x:Name="btnCvReset" BorderThickness="0" Content="复原" ToolTip="将画布复原至原位" Margin="5,0,0,0" Click="btnCvReset_Click"></Button>
                             <Button x:Name="btnCvLock"  BorderThickness="0" Content="锁定" ToolTip="锁定画布让它别不能缩放和移动" Tag="Lock" Margin="5,0,0,0" Click="btnCvLock_Click"></Button>
                             <Button x:Name="btnCopy"  BorderThickness="0" Content="复制" ToolTip="复制当前选中的设备，快捷键(Left Alt)" Tag="Lock" Margin="5,0,0,0" Click="BtnCopy_Click"></Button>
-                            <CheckBox x:Name="cbShowDetail" Margin="5,0,0,0" IsChecked="True" Content="显示信息" ></CheckBox>
+                            <CheckBox x:Name="cbShowDetail" Margin="5,0,0,0" IsChecked="True" Content="显示信息"    ></CheckBox>
                             <CheckBox x:Name="cbShowGrid" Margin="5,0,0,0" IsChecked="True" Content="网格" ></CheckBox>
                             <TextBlock Text="宽：" Margin="15,0,0,0"></TextBlock>
                             <TextBox Name="txtCanvasWidth" Style="{StaticResource TextBox.Small}" Text="1920" Tag="width" TextChanged="txtInput_Width"   hc:BorderElement.CornerRadius="0" BorderThickness="0" Height="12" ></TextBox>
@@ -75,7 +76,7 @@
 
 
                         </StackPanel>
-                        <Border Grid.Row="1"  Background="Aqua"     BorderThickness="0" CornerRadius="4"></Border>
+                        <Border Grid.Row="1"  Background="Aqua"     BorderThickness="0"  ></Border>
                         <StackPanel Grid.Row="1"  Orientation="Horizontal"  >
                             <TextBlock Text="合批操作："  Margin="5,0,0,0" VerticalAlignment="Center"></TextBlock> 
                             <Border BorderThickness="1" Margin="5 5 5 5" BorderBrush="Black"/>
@@ -123,7 +124,7 @@
             </Grid>
         </Grid>
         <Grid Grid.Row="2"  Margin="5 5 5 5">
-            <Border  Background="AliceBlue"     BorderThickness="0" CornerRadius="4"></Border>
+            <Border  Background="White"     BorderThickness="0"  ></Border>
             <TextBlock x:Name="txtInfo" Margin="5 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center">aaaaaa</TextBlock>
         </Grid>
     </Grid>

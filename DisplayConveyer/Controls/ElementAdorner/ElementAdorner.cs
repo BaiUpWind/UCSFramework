@@ -46,10 +46,20 @@ namespace DisplayConveyer
         /// </summary>
         public event Action<object, DragDeltaEventArgs> OnDrage;
         /// <summary>
-        /// 当移动四个角时发生
+        /// 当拖动时发生
+        /// <para>判断是否超过边界,当返回为真时，拖动无效</para>
         /// </summary>
+        public event Func<object, DragDeltaEventArgs, bool> DrageMove;
 
+        /// <summary>
+        /// 当移动四个角时发生
+        /// </summary> 
         public event Action<object, DragDeltaEventArgs> OnMoveDrage;
+        /// <summary>
+        /// 当移动四个角时发生
+        /// <para>判断是否超过边界,当返回为真时，拖动无效</para>
+        /// </summary>
+        public event Func<object, DragDeltaEventArgs,bool> ThumbMove;
         /// <summary>
         /// 当开始移动时发生
         /// <para>UIElement 是被装饰的元素</para>
@@ -114,6 +124,11 @@ namespace DisplayConveyer
             thumb.DragDelta += (s, e) =>
             {
                 OnDrage?.Invoke(AdornedElement, e);
+                var check = DrageMove?.Invoke(AdornedElement, e);
+                if(check != null && (bool)check)
+                {
+                    return;
+                }
                 var element = AdornedElement as FrameworkElement;
                 if (element == null)
                     return;
@@ -156,9 +171,13 @@ namespace DisplayConveyer
             {
                 var element = AdornedElement as FrameworkElement;
                 if (element == null) return;
-
+               
                 Resize(element);
-
+                var check = ThumbMove?.Invoke(AdornedElement, e);
+                if (check != null && (bool)check)
+                {
+                    return;
+                }
                 if (EnableVertical)
                 {
                     switch (thumb.VerticalAlignment)

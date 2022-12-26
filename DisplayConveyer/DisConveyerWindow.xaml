@@ -60,15 +60,32 @@
 
                 </Grid>
                 <Grid Grid.Column="1" >
-                    <ScrollViewer x:Name="topSv" VerticalScrollBarVisibility="Disabled"  HorizontalScrollBarVisibility="Visible"  >
-                        <Grid Name="topGrid"  HorizontalAlignment="Left" > 
-                            <Canvas x:Name="topCanvas"   >
+                    <Grid>
+                        <ScrollViewer x:Name="topSv" VerticalScrollBarVisibility="Disabled"  HorizontalScrollBarVisibility="Visible"  >
+                            <Grid Name="topGrid"  HorizontalAlignment="Left" >
+                                <Canvas x:Name="topCanvas"   
+                                        Width="{Binding ElementName=imgBack,Path=ActualWidth}" 
+                                        Height="{Binding ElementName=imgBack,Path=ActualHeight}"  >
 
-                            </Canvas>
-                        </Grid>
-                    </ScrollViewer>
-                    <Rectangle  x:Name="selectRect"   HorizontalAlignment="Left" Width="90" Height="Auto" Stroke="DarkBlue" StrokeThickness="2" Margin="0,0,0,1"/>
+                                    <Image Name="imgBack"  Stretch="Fill"   Source="主背景.jpg"  HorizontalAlignment="Left" VerticalAlignment="Top"  >
+                                         
+                                    </Image>
+                                </Canvas>
+                            </Grid>
+                        </ScrollViewer> 
+                    </Grid>
+                    <!--暂时保留 2022 12 23-->
+                    <!-- <Grid Visibility="Collapsed"> 
+                       <ScrollViewer x:Name="topSv" VerticalScrollBarVisibility="Disabled"  HorizontalScrollBarVisibility="Visible"  >
+                            <Grid Name="topGrid"  HorizontalAlignment="Left" > 
+                                <Canvas x:Name="topCanvas"   >
 
+                                </Canvas>
+                            </Grid>
+                        </ScrollViewer>
+                        <Rectangle  x:Name="selectRect"   HorizontalAlignment="Left" Width="90" Height="Auto" Stroke="DarkBlue" StrokeThickness="2" Margin="0,0,0,1"/>
+                        
+                    </Grid>-->
                 </Grid>
 
             </Grid>

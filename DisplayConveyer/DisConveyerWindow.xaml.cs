@@ -37,11 +37,12 @@ namespace DisplayConveyer
         /// <summary>
         /// 子滚动 与 主滚动的水平比例系数
         /// </summary>
-        private double ScrollHorizontalOffSetFactor => topSv.ScrollableWidth / mainSv.ScrollableWidth;
+        //private double ScrollHorizontalOffSetFactor => topSv.ScrollableWidth / mainSv.ScrollableWidth;
         /// <summary>
         /// 子gird 与 主gird的宽度比例系数
         /// </summary>
         private double RectWidthFactor => (topGrid.Width / mainGrid.Width);
+
         private ConveyerConfig ConvConfig => GlobalPara.ConveyerConfig;
         private ReadStatusLogic logic;
         private double AnimationSpeed =55d;
@@ -62,9 +63,9 @@ namespace DisplayConveyer
                 txtTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             };
             timer.Start();
-            selectRect.RenderTransform = new TranslateTransform(0, 0);
+            //selectRect.RenderTransform = new TranslateTransform(0, 0);
             ReLoad(mainCanvas, mainGrid);
-            ReLoad(topCanvas, topGrid);
+            //ReLoad(topCanvas, topGrid);
             mainSv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
             btnClose.Click += (s, e) =>
             {
@@ -83,6 +84,7 @@ namespace DisplayConveyer
             btn_OpenConfig.Click += (s, e) =>
             {
                 EditorWindow ew = new EditorWindow();
+                ew.WindowStyle = WindowStyle.None;
                 ew.WindowState = WindowState.Maximized;
                 storyboard.Children.Remove(animation);
                 storyboard.Stop();
@@ -94,7 +96,7 @@ namespace DisplayConveyer
                 ew.ShowDialog(); 
        
                 ReLoad(mainCanvas, mainGrid);
-                ReLoad(topCanvas, topGrid);
+                //ReLoad(topCanvas, topGrid);
                 Calculate(mainCanvas, mainSv, mainGrid);
                 Calculate(topCanvas, topSv, topGrid);
                 SvHorizontalOffsetToRight();
@@ -103,68 +105,47 @@ namespace DisplayConveyer
             {
                 Calculate(mainCanvas, mainSv, mainGrid);
                 Calculate(topCanvas, topSv, topGrid);
-                if (mainCanvas.Width != 0)
-                { 
-                    selectRect.Width = mainSv.ActualWidth * RectWidthFactor; 
-                }
+                //if (mainCanvas.Width != 0)
+                //{ 
+                //    selectRect.Width = mainSv.ActualWidth * RectWidthFactor; 
+                //}
             };
           
             mainSv.ScrollChanged += (s, e) =>
             {
-                var offset = e.HorizontalOffset * RectWidthFactor;
-                if (selectRect.RenderTransform is TranslateTransform t)
-                {
-                    //当前框的位置偏移
-                    var tempOffset = offset ; 
-                    //当前主滚动相对于top滚动已经偏移了多少
-                    var lastOffset = ( mainSv.HorizontalOffset) * ScrollHorizontalOffSetFactor;
-                    //topSv.ScrollToHorizontalOffset(e.HorizontalOffset * ScrollFactor); 
-                    if (tempOffset + selectRect.Width >= topSv.ActualWidth)
-                    {
-                        //如果超过边界
-                        topSv.ScrollToHorizontalOffset(e.HorizontalOffset * ScrollHorizontalOffSetFactor );
-                    }
-                    else
-                    {
+                //var offset = e.HorizontalOffset * RectWidthFactor;
+                //if (selectRect.RenderTransform is TranslateTransform t)
+                //{
+                //    //当前框的位置偏移
+                //    var tempOffset = offset ; 
+                //    //当前主滚动相对于top滚动已经偏移了多少
+                //    var lastOffset = ( mainSv.HorizontalOffset) * ScrollHorizontalOffSetFactor;
+                //    //topSv.ScrollToHorizontalOffset(e.HorizontalOffset * ScrollFactor); 
+                //    if (tempOffset + selectRect.Width >= topSv.ActualWidth)
+                //    {
+                //        //如果超过边界
+                //        topSv.ScrollToHorizontalOffset(e.HorizontalOffset * ScrollHorizontalOffSetFactor );
+                //    }
+                //    else
+                //    {
                     
-                        if (topSv.HorizontalOffset  > 0  && e.HorizontalChange < 0)
-                        {
-                            topSv.ScrollToHorizontalOffset(e.HorizontalOffset * ScrollHorizontalOffSetFactor - lastOffset);
-                        }
-                        else
-                        {
-                            t.X = tempOffset;
-                        }
+                //        if (topSv.HorizontalOffset  > 0  && e.HorizontalChange < 0)
+                //        {
+                //            topSv.ScrollToHorizontalOffset(e.HorizontalOffset * ScrollHorizontalOffSetFactor - lastOffset);
+                //        }
+                //        else
+                //        {
+                //            t.X = tempOffset;
+                //        }
                            
-                    }
-                }
+                //    }
+                //}
             };
-         
-            txtLock.Click += (s, e) =>
-            {
-                if (s is Button txt)
-                { 
-                    if (txt.Tag.ToString() == "锁住")
-                    {
-                        storyboard.Pause();
-                        GlobalPara.Locked = true;
-                        mainSv.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-                        txt.Tag = "解锁";
-                        txt.Content = "🔓";
-                        txt.ToolTip = "切换自动轮播";
-                    }
-                    else if (txt.Tag.ToString() == "解锁")
-                    {
-                        storyboard.Resume();
-                        GlobalPara.Locked = false; 
-                        mainSv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                        txt.Tag = "锁住";
-                        txt.Content = "🔒";
-                        txt.ToolTip = "切换手动轮播";
-                    }
-                }
-            };
+
+            txtLock.Click += TxtLock_Click;
         }
+
+       
 
         private void ScrollTimer_Tick(object sender, EventArgs e)
         {
@@ -297,6 +278,33 @@ namespace DisplayConveyer
 
             BtnFullScreen_Click(btnFullScreen, null);
             SvHorizontalOffsetToRight();
+
+            foreach (var item in GlobalPara.ConveyerConfig.MiniMapData)
+            {
+               
+                Border border = new Border();
+                border.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                border.Width = item.Width;
+                border.Height = item.Height;
+                border.BorderBrush = new SolidColorBrush(Colors.GreenYellow);
+                //border.BorderThickness = new Thickness(1);
+
+                TextBlock tb = new TextBlock()
+                {
+                    Margin = new Thickness(0, 25, 0, 0),
+                    FontSize = 72,
+                    Text = item.Title,
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Top,
+                    Foreground = new SolidColorBrush(Colors.White),
+                };
+                tb.SetValue(TextBlock.IsHitTestVisibleProperty, false);
+                border.SetValue(Canvas.LeftProperty, item.PosX);
+                border.SetValue(Canvas.TopProperty, item.PosY);
+                border.Tag = tb; 
+                border.Child = (tb);
+                topCanvas.Children.Add(border);
+            }
         }
 
         private void BtnFullScreen_Click(object sender, RoutedEventArgs e)
@@ -361,6 +369,30 @@ namespace DisplayConveyer
                     //storyboard.Duration = new Duration(TimeSpan.FromSeconds(mainSv.ScrollableWidth / AnimationSpeed));
                     storyboard.SetValue(DoubleAnimation.DurationProperty, new Duration(TimeSpan.FromSeconds(mainSv.ScrollableWidth / AnimationSpeed)));
                     //animation.Duration = new Duration(TimeSpan.FromSeconds(mainSv.ScrollableWidth / AnimationSpeed));
+                }
+            }
+        }
+        private void TxtLock_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button txt)
+            {
+                if (txt.Tag.ToString() == "锁住")
+                {
+                    storyboard.Pause();
+                    GlobalPara.Locked = true;
+                    mainSv.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    txt.Tag = "解锁";
+                    txt.Content = "🔓";
+                    txt.ToolTip = "切换自动轮播";
+                }
+                else if (txt.Tag.ToString() == "解锁")
+                {
+                    storyboard.Resume();
+                    GlobalPara.Locked = false;
+                    mainSv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    txt.Tag = "锁住";
+                    txt.Content = "🔒";
+                    txt.ToolTip = "切换手动轮播";
                 }
             }
         }

@@ -1127,6 +1127,21 @@ namespace DisplayConveyer.View
             }
            
         }
+        //编辑略缩图
+        private void btnEditMap_Click(object sender, RoutedEventArgs e)
+        {
+            MapDataEditorWindow mdew = new MapDataEditorWindow();
+            mdew.WindowStyle = WindowStyle.None;
+            mdew.WindowState = WindowState.Maximized;
+            mdew.ShowDialog();
+        }
+        //关闭窗口
+        private void btnClose_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
         #endregion
+
+
     }
 }

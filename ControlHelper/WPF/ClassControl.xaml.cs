@@ -852,11 +852,18 @@ namespace ControlHelper.WPF
             TextBox textBox = new TextBox();
             block.Text = textBox.Name = "txt_" + i.ToString();
             textBox.Text = list[i]?.ToString();
-            textBox.PreviewTextInput += (ts, te) =>
+            textBox.TextChanged += (ts, te) =>
             {
                 //todo:异常捕获
-                if (ts is TextBox t && !string.IsNullOrEmpty(t.Text))
-                    list[int.Parse(t.Name.Split('_')[1])] = Convert.ChangeType(t.Text, genericArgument);
+                try
+                {
+                    if (ts is TextBox t && !string.IsNullOrEmpty(t.Text))
+                        list[int.Parse(t.Name.Split('_')[1])] = Convert.ChangeType(t.Text, genericArgument);
+                }
+                catch  
+                {
+                    
+                } 
             };
 
             panel.MouseDown += (s, e) =>

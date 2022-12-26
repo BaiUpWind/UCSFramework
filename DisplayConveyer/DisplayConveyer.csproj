@@ -117,8 +117,8 @@
     <Compile Include="Utilities\Extend.cs" />
     <Compile Include="Utilities\UIElementMove.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
-    <Compile Include="View\DeviceDataEditorWindow.xaml.cs">
-      <DependentUpon>DeviceDataEditorWindow.xaml</DependentUpon>
+    <Compile Include="View\MapDataEditorWindow.xaml.cs">
+      <DependentUpon>MapDataEditorWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\EditorWindow.xaml.cs">
       <DependentUpon>EditorWindow.xaml</DependentUpon>
@@ -175,7 +175,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\DeviceDataEditorWindow.xaml">
+    <Page Include="View\MapDataEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
