@@ -25,7 +25,7 @@ using System.Net.NetworkInformation;
 using DisplayConveyer.Controls;
 using ControlHelper;
 using ScrollViewer = System.Windows.Controls.ScrollViewer;
-using DisplayConveyer.Model;
+using DisplayConveyer.Model;  
 
 namespace DisplayConveyer
 { 
@@ -37,7 +37,7 @@ namespace DisplayConveyer
         /// <summary>
         /// 子滚动 与 主滚动的水平比例系数
         /// </summary>
-        //private double ScrollHorizontalOffSetFactor => topSv.ScrollableWidth / mainSv.ScrollableWidth;
+        private double ScrollHorizontalOffSetFactor => topSv.ScrollableWidth / mainSv.ScrollableWidth;
         /// <summary>
         /// 子gird 与 主gird的宽度比例系数
         /// </summary>
@@ -63,7 +63,7 @@ namespace DisplayConveyer
                 txtTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             };
             timer.Start();
-            //selectRect.RenderTransform = new TranslateTransform(0, 0);
+            selectRect.RenderTransform = new TranslateTransform(0, 0);
             ReLoad(mainCanvas, mainGrid);
             //ReLoad(topCanvas, topGrid);
             mainSv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
@@ -104,32 +104,34 @@ namespace DisplayConveyer
             SizeChanged += (s, e) =>
             {
                 Calculate(mainCanvas, mainSv, mainGrid);
+                //CalcualteTopHeight();
                 Calculate(topCanvas, topSv, topGrid);
-                //if (mainCanvas.Width != 0)
-                //{ 
-                //    selectRect.Width = mainSv.ActualWidth * RectWidthFactor; 
-                //}
+                if (mainCanvas.Width != 0)
+                {
+                    selectRect.Width = mainSv.ActualWidth * RectWidthFactor;
+                }
             };
           
             mainSv.ScrollChanged += (s, e) =>
             {
-                //var offset = e.HorizontalOffset * RectWidthFactor;
+                var offset = e.HorizontalOffset * RectWidthFactor;
+                //if(!double.IsNaN(offset)) topSv.ScrollToHorizontalOffset(e.HorizontalOffset * offset);
                 //if (selectRect.RenderTransform is TranslateTransform t)
                 //{
                 //    //当前框的位置偏移
-                //    var tempOffset = offset ; 
+                //    var tempOffset = offset;
                 //    //当前主滚动相对于top滚动已经偏移了多少
-                //    var lastOffset = ( mainSv.HorizontalOffset) * ScrollHorizontalOffSetFactor;
+                //    var lastOffset = (mainSv.HorizontalOffset) * ScrollHorizontalOffSetFactor;
                 //    //topSv.ScrollToHorizontalOffset(e.HorizontalOffset * ScrollFactor); 
                 //    if (tempOffset + selectRect.Width >= topSv.ActualWidth)
                 //    {
                 //        //如果超过边界
-                //        topSv.ScrollToHorizontalOffset(e.HorizontalOffset * ScrollHorizontalOffSetFactor );
+                //        topSv.ScrollToHorizontalOffset(e.HorizontalOffset * ScrollHorizontalOffSetFactor);
                 //    }
                 //    else
                 //    {
-                    
-                //        if (topSv.HorizontalOffset  > 0  && e.HorizontalChange < 0)
+
+                //        if (topSv.HorizontalOffset > 0 && e.HorizontalChange < 0)
                 //        {
                 //            topSv.ScrollToHorizontalOffset(e.HorizontalOffset * ScrollHorizontalOffSetFactor - lastOffset);
                 //        }
@@ -137,7 +139,7 @@ namespace DisplayConveyer
                 //        {
                 //            t.X = tempOffset;
                 //        }
-                           
+
                 //    }
                 //}
             };
@@ -194,9 +196,10 @@ namespace DisplayConveyer
             double x = 0; 
             var factor = GetHeightFactor(father, mainCanvas);
             mainCanvas.RenderTransform = new MatrixTransform(factor, 0, 0, factor, x, 0);
-            if (!double.IsNaN(grid.Width) && grid.Width > 0) grid.Width = ConvConfig.CanvasWidth * factor; 
+            if (!double.IsNaN(grid.ActualWidth) && grid.ActualWidth > 0) grid.Width = ConvConfig.CanvasWidth * factor; 
 
         }
+      
         private void CalculateRange()
         {
             rangeDatas.Clear();
@@ -241,6 +244,9 @@ namespace DisplayConveyer
                 panel.Children.Add(rect);
             }
         }
+        /// <summary>
+        /// 加载数据生成界面到指定画布上面
+        /// </summary> 
         private void ReLoad(Canvas canvas,Grid grid)
         {
             if (ConvConfig == null)
@@ -249,6 +255,7 @@ namespace DisplayConveyer
                 return;
             }
             canvas.Children.Clear();
+            TryGetBitmapImage();
             grid.Width = canvas.Width = ConvConfig.CanvasWidth;
             grid.Height=  canvas.Height = ConvConfig.CanvasHeight;
             foreach (var area in ConvConfig.Areas)
@@ -269,10 +276,29 @@ namespace DisplayConveyer
             {
                 canvas.Children.Add(CreateHelper.GetTextBlock(label));
             }
-            if (logic != null) logic.Stop();
-            logic = new ReadStatusLogic(ConvConfig.Areas);
+            //if (logic != null) logic.Stop();
+            //logic = new ReadStatusLogic(ConvConfig.Areas);
         }
         private double GetHeightFactor(FrameworkElement father, FrameworkElement ui) => father.ActualHeight / ((ui.ActualHeight == 0 ? 1 : ui.ActualHeight) + 5);
+
+        private void TryGetBitmapImage() => TryGetBitmapImage(GlobalPara.ConveyerConfig.MiniMapImagePath);
+        private void TryGetBitmapImage(string path)
+        {
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                Growl.Error("创建略缩图片失败,路径为空");
+            }
+            try
+            {
+                imgBack.Source = new BitmapImage(new Uri(path, UriKind.Absolute));
+                //topGrid.Width = imgBack.Source.Width;
+            }
+            catch (Exception ex)
+            {
+                Growl.Error($"创建图片失败,'{ex.Message}'");
+            }
+        }
+
         private void DisConveyerWindow_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -292,7 +318,7 @@ namespace DisplayConveyer
                 TextBlock tb = new TextBlock()
                 {
                     Margin = new Thickness(0, 25, 0, 0),
-                    FontSize = 72,
+                    FontSize = 92,
                     Text = item.Title,
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Top,
@@ -301,8 +327,10 @@ namespace DisplayConveyer
                 tb.SetValue(TextBlock.IsHitTestVisibleProperty, false);
                 border.SetValue(Canvas.LeftProperty, item.PosX);
                 border.SetValue(Canvas.TopProperty, item.PosY);
+                //border.RenderTransform = new TranslateTransform(item.PosX, item.PosY);
                 border.Tag = tb; 
                 border.Child = (tb);
+                //topGrid.Children.Add(border);
                 topCanvas.Children.Add(border);
             }
         }

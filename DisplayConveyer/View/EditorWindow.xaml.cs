@@ -129,6 +129,11 @@ namespace DisplayConveyer.View
             canvas.MouseUp += Canvas_MouseUp;
             cbShowGrid.Checked += CbShowGrid_Checked;
             cbShowGrid.Unchecked += CbShowGrid_Checked;
+            RegisterSameEvent(tbSameSize);
+            RegisterSameEvent(tbSameWidth);
+            RegisterSameEvent(tbSameHeight);
+            RegisterSameEvent(tbSameX);
+            RegisterSameEvent(tbSameY);
             this.KeyDown += (s, e) =>
             {
                 if (e.Key == Key.LeftAlt)
@@ -155,6 +160,63 @@ namespace DisplayConveyer.View
         //1.当多选时才启用合批操作下的所有的按钮,或者所选控件集合大于0时这些功能才有效果
         //2.满足第一点后,实现每个功能,具体看每个功能的Tooltip
         //3.拓展;按住Ctrl时单击对应的控件,可以对所选的控件集合添加或者移除对应控件
+
+        private void RegisterSameEvent(TextBlock target)
+        {
+            target.MouseDown += (s, e) =>
+            {
+                if(selectorList.Count <= 1)
+                {
+                    return;
+                }
+                if(s is TextBlock tb)
+                {
+                    var first = selectorList[0].DataContext as ControlDataBase;
+                    if (first == null) return;
+                    if (tb.Name == "tbSameSize")
+                    {
+                        SameSize(first);
+                    }
+                   else if (tb.Name == "tbSameWidth")
+                    {
+                        SameWidth(first);
+                    }
+                    else if (tb.Name == "tbSameHeight")
+                    {
+                        SameHeight(first);
+                    }
+                    else if (tb.Name == "tbSameX")
+                    {
+                        SameX(first);
+                    }
+                    else if (tb.Name == "tbSameY")
+                    {
+                        SameY(first);
+                    }
+                }
+            };
+        }
+
+        private void SameSize(ControlDataBase first) =>
+        selectorList.ForEach(a =>
+        {
+            a.Width = first.Width;
+            a.Height = first.Height;
+        }); 
+        private void SameWidth(ControlDataBase first) => selectorList.ForEach(a => a.Width = first.Width);
+         
+        private void SameHeight (ControlDataBase first) => selectorList.ForEach(a => a.Height = first.Height);
+        
+        private void SameX(ControlDataBase first) => selectorList.ForEach(a =>
+        { 
+            (a.DataContext as ControlDataBase).PosX = first.PosX;
+            a.SetValue(Canvas.LeftProperty, first.PosX); 
+        });
+        private void SameY(ControlDataBase first) => selectorList.ForEach(a => { 
+            (a.DataContext as ControlDataBase).PosY = first.PosY;
+            a.SetValue(Canvas.TopProperty, first.PosY);
+        });
+
         #endregion
         private bool CheckConveyerConfig()
         {
@@ -780,7 +842,7 @@ namespace DisplayConveyer.View
                 }
                 else
                 {
-                    inSelector = true;
+                    inSelector = true; 
                     canvas.Children.Remove(selectorRect);
                     selectorRect = new Rectangle();
                     selectorRect.Fill = new SolidColorBrush(Color.FromArgb(96, 0, 0, 255));
@@ -819,7 +881,7 @@ namespace DisplayConveyer.View
             if (e.LeftButton == MouseButtonState.Released)
             {
                 canvas.Children.Remove(selectorRect);
-                inSelector = false;
+                inSelector = false; 
                 SetTxtInfo(string.Empty);
             }
         }
@@ -1134,6 +1196,8 @@ namespace DisplayConveyer.View
             mdew.WindowStyle = WindowStyle.None;
             mdew.WindowState = WindowState.Maximized;
             mdew.ShowDialog();
+            ConvConfig = null;
+            ConvConfig = GlobalPara.ConveyerConfig.Clone();
         }
         //关闭窗口
         private void btnClose_Click(object sender, RoutedEventArgs e)

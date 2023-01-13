@@ -80,17 +80,17 @@
                         <StackPanel Grid.Row="1"  Orientation="Horizontal"  >
                             <TextBlock Text="合批操作："  Margin="5,0,0,0" VerticalAlignment="Center"></TextBlock> 
                             <Border BorderThickness="1" Margin="5 5 5 5" BorderBrush="Black"/>
-                            <TextBlock FontSize="30" Margin="0 3 0 3"  Cursor="Hand"   Background="Transparent"  ToolTip="以第一选中元素为模板,使其所有元素宽高相同">
+                            <TextBlock x:Name="tbSameSize" FontSize="30" Margin="0 3 0 3"  Cursor="Hand"   Background="Transparent"  ToolTip="以第一选中元素为模板,使其所有元素宽高相同">
                                     <Grid  >
                                         <TextBlock Text="⤧" VerticalAlignment="Center" Padding=" 0 0 0 3" ></TextBlock>
                                         <TextBlock Text="⤩" VerticalAlignment="Center" Padding=" 0 0 0 3" ></TextBlock>
                                     </Grid>
                                 </TextBlock>
-                            <TextBlock FontSize="20" VerticalAlignment="Center" Margin="5 0 0 0"  Cursor="Hand"   Background="Transparent"  Text="⭾" ToolTip="以第一选中元素为模板,使其所有元素宽度相同"     />
-                            <TextBlock FontSize="20" VerticalAlignment="Center" Margin="5 0 0 0"  Cursor="Hand"   Background="Transparent"  Text="⭿" ToolTip="以第一选中元素为模板,使其所有元素高度相同"     />
+                            <TextBlock x:Name="tbSameWidth" FontSize="20" VerticalAlignment="Center" Margin="5 0 0 0"  Cursor="Hand"   Background="Transparent"  Text="⭾" ToolTip="以第一选中元素为模板,使其所有元素宽度相同"     />
+                            <TextBlock x:Name="tbSameHeight" FontSize="20" VerticalAlignment="Center" Margin="5 0 0 0"  Cursor="Hand"   Background="Transparent"  Text="⭿" ToolTip="以第一选中元素为模板,使其所有元素高度相同"     />
                             <Border BorderThickness="1" Margin="5 5 5 5" BorderBrush="Black"/>
-                            <TextBlock FontSize="20" VerticalAlignment="Center" Margin="5 0 0 0"  Cursor="Hand"   Background="Transparent"  Text="⭰" ToolTip="以第一选中元素为模板,使其所有元素X轴对齐"     />
-                            <TextBlock FontSize="20" VerticalAlignment="Center" Margin="5 0 0 0"  Cursor="Hand"   Background="Transparent"  Text="⭱"  ToolTip="以第一选中元素为模板,使其所有元素X轴对齐"      />
+                            <TextBlock Name="tbSameX" FontSize="20" VerticalAlignment="Center" Margin="5 0 0 0"  Cursor="Hand"   Background="Transparent"  Text="⭰" ToolTip="以第一选中元素为模板,使其所有元素X轴对齐"     />
+                            <TextBlock x:Name="tbSameY" FontSize="20" VerticalAlignment="Center" Margin="5 0 0 0"  Cursor="Hand"   Background="Transparent"  Text="⭱"  ToolTip="以第一选中元素为模板,使其所有元素X轴对齐"      />
                         </StackPanel>
                     </Grid>
                     <Grid x:Name="gOper"  Grid.Row="1" Panel.ZIndex="-1"   >
