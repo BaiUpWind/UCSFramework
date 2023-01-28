@@ -12,12 +12,7 @@ namespace DisplayConveyer.Model
 {
     public class AreaData
     {
-        /// <summary>
-        /// 标识属于哪个小地图的
-        /// <see cref="MapPartData"/>
-        /// </summary>
-        [Hide]
-        public int MapPartId { get; set; } = -1;
+        
         [NickName("区域编号")]
         public uint ID { get; set; }
         [NickName("区域名称")]

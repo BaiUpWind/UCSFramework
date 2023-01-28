@@ -76,6 +76,9 @@
     <Compile Include="Controls\UC_RangeTitle.xaml.cs">
       <DependentUpon>UC_RangeTitle.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\UC_ScrollCanvas.xaml.cs">
+      <DependentUpon>UC_ScrollCanvas.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DisConveyerWindow.xaml.cs">
       <DependentUpon>DisConveyerWindow.xaml</DependentUpon>
     </Compile>
@@ -100,6 +103,9 @@
     <Compile Include="Model\BeltReadPlc.cs" />
     <Compile Include="TestWindows\DataGirdTest.xaml.cs">
       <DependentUpon>DataGirdTest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TestWindows\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TestWindows\StorageLocation.xaml.cs">
       <DependentUpon>StorageLocation.xaml</DependentUpon>
@@ -135,6 +141,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\UC_ScrollCanvas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DisConveyerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -151,12 +161,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="TestWindows\OCVWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestWindows\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="TestWindows\OCVWindow.xaml.cs">
+      <DependentUpon>OCVWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="TestWindows\StorageLocation.xaml">
@@ -215,6 +229,7 @@
     <Resource Include="tb7.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="background.jpg" />
     <Content Include="Lib\Microsoft.Office.Interop.Excel.dll" />
     <Content Include="Lib\Newtonsoft.Json.dll" />
     <Resource Include="主背景.jpg" />

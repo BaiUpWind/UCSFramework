@@ -1,0 +1,393 @@
+﻿<Window xmlns:hc="https://handyorg.github.io/handycontrol"  x:Class="DisplayConveyer.OCVWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DisplayConveyer"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="1080" Width="1920" WindowStyle="None">
+
+    <Window.Resources >
+        <ResourceDictionary >
+            <Style  x:Key="NewButton" TargetType="Button" >
+                <Setter Property="Foreground" Value="#303133" />
+                <Setter Property="Padding" Value="3" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="MinWidth" Value="30" />
+                <Setter Property="MinHeight" Value="28" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Grid Background="Transparent">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="MouseOver">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PART_ContentPresenter" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Pressed">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0" To="1" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PART_ContentPresenter" />
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <DoubleAnimation Duration="0" To="0.3" Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PART_ContentPresenter" />
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                    <VisualStateGroup x:Name="FocusStates">
+                                        <VisualState x:Name="Focused" />
+                                        <VisualState x:Name="Unfocused" />
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <Rectangle Fill="Transparent" />
+                                <ContentPresenter x:Name="PART_ContentPresenter" Opacity="0.7" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="DataGrid">
+                <!--网格线颜色-->
+                <Setter Property="CanUserResizeColumns" Value="false"/>
+                <!--<Setter Property="Background" Value="Transparent"/>-->
+                <Setter Property="ColumnWidth" Value="*"/>
+                <Setter Property="HorizontalGridLinesBrush" Value="Transparent"/>
+                <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+                <Setter Property="RowHeaderWidth" Value="0"/>
+                <Setter Property="CanUserAddRows" Value="False"/>
+                <Setter Property="CanUserDeleteRows" Value="False"/>
+                <Setter Property="CanUserResizeColumns" Value="False"/>
+                <Setter Property="CanUserResizeRows"     Value="False"/>
+                <Setter Property="CanUserSortColumns" Value="False"/>
+                <Setter Property="IsReadOnly" Value="True"/>
+                <Setter Property="SelectionMode" Value="Single"/>
+                <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                <Setter Property="IsHitTestVisible" Value="False"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <!--<Setter Property="Margin" Value="2"/>-->
+            </Style>
+            <Style TargetType="DataGridColumnHeader">
+                <Setter Property="SnapsToDevicePixels" Value="True" />
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="FontSize" Value="{DynamicResource TabFontSize}" />
+
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="DataGridColumnHeader">
+                            <Border x:Name="BackgroundBorder"  CornerRadius="10"
+                               Width="Auto" Margin="5">
+                                <Grid Background="#3F0057AD" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter  Margin="0,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                                    <Path x:Name="SortArrow" Visibility="Collapsed" Data="M0,0 L1,0 0.5,1 z" Stretch="Fill"  Grid.Column="2" Width="8" Height="6" Fill="White" Margin="0,0,50,0" 
+                                      VerticalAlignment="Center" RenderTransformOrigin="1,1" />
+                                    <!--<Rectangle Width="1" Fill="#FF7EAFE0" HorizontalAlignment="Right" Grid.ColumnSpan="1" />-->
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+            </Style>
+            <Style TargetType="DataGridRow">
+                <Setter Property="Background" Value="Transparent"/>
+
+            </Style>
+            <Style TargetType="DataGridCell">
+                <Setter Property="FontSize" Value="{DynamicResource GridFontSize}"/>
+                <Setter Property="Margin"   Value="2"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="DataGridCell">
+                            <Border    BorderThickness="2" Background="#265CADFF">
+                                <TextBlock TextAlignment="Center"   VerticalAlignment="Center"  >
+                                <ContentPresenter />
+                                </TextBlock>
+
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+
+            </Style>
+            <Style x:Key="groupTxt" TargetType="TextBox">
+                <Setter Property="Margin" Value="15,0,0,0"></Setter>
+                <Setter Property="hc:BorderElement.CornerRadius" Value="0"/>
+            </Style>
+        </ResourceDictionary >
+    </Window.Resources >
+    
+    <Grid Background="#FF37A9DC">
+        <Border BorderBrush="#FF04D1FF" Margin="11" BorderThickness="4" CornerRadius="15"></Border>
+        <Grid Grid.Row="1"  Margin="25">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="45"></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0 ">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="/tb7.ico" />
+                    <TextBlock FontSize="32" Margin="15,0,0,0" Foreground="White">测试机</TextBlock>
+                </StackPanel>
+
+                <Grid HorizontalAlignment="Right"  >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="1*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" >
+                        <Button Margin="5,0,5,0" Style="{ DynamicResource NewButton}" >
+                            <Button.Content>
+                                <TextBlock Text="&#x1F5D5;" FontSize="15" HorizontalAlignment="Center" VerticalAlignment="Center"  Cursor="Hand" FontFamily="Segoe UI Symbol"></TextBlock>
+                            </Button.Content>
+                        </Button>
+                        <Button Margin="5,0,5,0"   Style="{ DynamicResource NewButton}" Click="Btn_Maxed">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="&#x1F5D6;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
+                                    <TextBlock Text="&#x1F5D7;" Visibility="Collapsed" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
+                        <Button Margin="5,0,5,0" Style="{ DynamicResource NewButton}" >
+                            <Button.Content>
+                                <TextBlock Text="&#x1F5D9;" FontSize="15"  FontFamily="Segoe UI Symbol"></TextBlock>
+                            </Button.Content>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+            </Grid>
+
+            <Grid Grid.Row="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Row="0"  CornerRadius="1" BorderBrush="White" BorderThickness="2"></Border>
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40"></RowDefinition>
+                        <RowDefinition Height="1.2*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <StackPanel Orientation="Horizontal"   >
+                            <TextBlock Foreground="White" Margin="5,0,0,0" FontSize="15" VerticalAlignment="Center" TextAlignment="Center" Text="托盘条码"></TextBlock>
+                            <TextBox Width="100" Margin="5,5,0,5" IsReadOnly="True"></TextBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" >
+                            <TextBox Width="100" Margin="5,5,5,5" ></TextBox>
+                            <Button   Margin="5,5,0,5"    Content=" 重 扫 "></Button>
+                            <Button   Margin="5,5,0,5"   Content=" 手动补码 "></Button>
+                            <TextBlock Text=" 校准托盘 " Margin="10,0,10,0" Background="Yellow" FontSize="22" VerticalAlignment="Center"></TextBlock>
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="1" >
+                        <DataGrid Margin="2,0,2,2" Name="dgv"></DataGrid>
+                    </Grid>
+                </Grid>
+
+                <Grid  Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition  Height="2.5*"></RowDefinition>
+                        <RowDefinition  Height="0.8*"></RowDefinition>
+                        <RowDefinition  Height="1*"></RowDefinition>
+                        <RowDefinition  Height="0.5*"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0"  Margin="15,0,15,15">
+                        <Border CornerRadius="15" Background="White" BorderThickness="5" BorderBrush="Black"></Border>
+                    </Grid>
+                    <Grid Grid.Row="1"  Margin="10,5,15,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Margin="5,0,0,0"  Background="#B2C0D6E0" CornerRadius="15"  BorderThickness="2" BorderBrush="White" >
+                            <Grid Margin="5"   >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height="5"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="32" Margin="0,15,0,15">通  道</TextBlock>
+                                <Border  Grid.Row="1"  Background="White" Opacity="0.6" BorderThickness="1"/>
+                                <TextBlock Grid.Row="2" HorizontalAlignment="Center" FontSize="32" Margin="0,15,0,15">00</TextBlock>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="1" Margin="5,0,0,0"   Background="#B2C0D6E0" CornerRadius="15"  BorderThickness="2" BorderBrush="White"  >
+                            <Grid  Margin="5"   >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height="5"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="32" Margin="0,15,0,15">测 试 条 码</TextBlock>
+                                <Border  Grid.Row="1"  Background="White" Opacity="0.6" BorderThickness="1"/>
+                                <TextBlock Grid.Row="2" HorizontalAlignment="Stretch" VerticalAlignment="Center"   TextWrapping="Wrap"  FontSize="18" Margin="0,15,0,10">1234567890A1234567890BCD</TextBlock>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="2" Margin="5,0,0,0"  Background="#B2C0D6E0" CornerRadius="15"  BorderThickness="2" BorderBrush="White" >
+                            <Grid Margin="5"   >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height="5"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="32" Margin="0,15,0,15">电  压</TextBlock>
+                                <Border  Grid.Row="1"  Background="White" Opacity="0.6" BorderThickness="1"/>
+                                <TextBlock Grid.Row="2" HorizontalAlignment="Center" FontSize="32" Margin="0,15,0,15">00</TextBlock>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="3" Margin="5,0,0,0"  Background="#B2C0D6E0" CornerRadius="15"  BorderThickness="2" BorderBrush="White" >
+                            <Grid Margin="5"   >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height="5"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="32" Margin="0,15,0,15">内  阻</TextBlock>
+                                <Border  Grid.Row="1"  Background="White" Opacity="0.6" BorderThickness="1"/>
+                                <TextBlock Grid.Row="2" HorizontalAlignment="Center" FontSize="32" Margin="0,15,0,15">00</TextBlock>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="4" Margin="5,0,0,0"  Background="#B2C0D6E0" CornerRadius="15"  BorderThickness="2" BorderBrush="White" >
+                            <Grid Margin="5"   >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height="5"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="32" Margin="0,15,0,15">温  度</TextBlock>
+                                <Border  Grid.Row="1"  Background="White" Opacity="0.6" BorderThickness="1"/>
+                                <TextBlock Grid.Row="2" HorizontalAlignment="Center" FontSize="32" Margin="0,15,0,15">00</TextBlock>
+                            </Grid>
+                        </Border>
+                        <Border Grid.Column="5" Margin="5,0,0,0"  Background="#B2C0D6E0" CornerRadius="15"  BorderThickness="2" BorderBrush="White" >
+                            <Grid Margin="5"   >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition></RowDefinition>
+                                    <RowDefinition Height="5"></RowDefinition>
+                                    <RowDefinition></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" HorizontalAlignment="Center" FontSize="32" Margin="0,15,0,15">结  果</TextBlock>
+                                <Border  Grid.Row="1"  Background="White" Opacity="0.6" BorderThickness="1"/>
+                                <TextBlock Grid.Row="2" HorizontalAlignment="Center" FontSize="32" Margin="0,15,0,15">00</TextBlock>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <Border Grid.Row="2" BorderBrush="White"  BorderThickness="2" Margin="15,5,15,5"  >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="4*"></ColumnDefinition>
+                                <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" BorderThickness="0,0,2,0" BorderBrush="White">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition Height="35"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <ScrollViewer Grid.Row="0">
+                                        <GroupBox  Header="数据统计" Background="Transparent" hc:TitleElement.Background="Transparent"   BorderThickness="0.5">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition></ColumnDefinition>
+                                                    <ColumnDefinition></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <StackPanel Margin="15" Grid.Column="0">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="开始时间" VerticalAlignment="Center" Foreground="White"></TextBlock>
+                                                        <DatePicker  Margin="15,5,0,0" Text="2022-11-15 14:00:00"  ></DatePicker>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="OK总数"   VerticalAlignment="Center" Foreground="White"></TextBlock>
+                                                        <TextBox   Margin="15,5,0,0" Width="180" HorizontalAlignment="Right"></TextBox>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="测量总数" VerticalAlignment="Center" Foreground="White"></TextBlock>
+                                                        <TextBox Margin="15,5,0,0" Width="180"></TextBox>
+                                                    </StackPanel>
+
+                                                </StackPanel>
+                                                <StackPanel Margin="15" Grid.Column="1">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="结束时间" VerticalAlignment="Center" Foreground="White"></TextBlock>
+                                                        <DatePicker Margin="15,0,0,0" Text="2022-11-15 14:00:00"  ></DatePicker>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="NG总数" VerticalAlignment="Center" Foreground="White"></TextBlock>
+                                                        <TextBox Margin="15,5,0,0" Width="180"></TextBox>
+                                                    </StackPanel>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="优率" VerticalAlignment="Center" Foreground="White"></TextBlock>
+                                                        <TextBox Margin="15,5,0,0" Width="180"></TextBox>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </Grid>
+                                        </GroupBox>
+                                    </ScrollViewer>
+                                    <StackPanel Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal">
+                                        <TextBox  Margin="5,0,5,0" Width="180"></TextBox>
+                                        <Button  Margin="5,0,5,0" Content=" 登 录 "></Button>
+                                    </StackPanel>
+                                </Grid>
+
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="3" Margin="15,0,15,0" BorderBrush="White" BorderThickness="2">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Border Grid.Row="0" BorderBrush="White" BorderThickness="0,0,0,2">
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content=" 查看校准数据 " Margin="15,5,15,5"     ></Button>
+                                        <Button Content=" 导出校准数据 " Margin="15,5,15,5" ></Button>
+                                        <Button Content=" 提前执行校准 " Margin="15,5,15,5" ></Button>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                        <TextBlock  VerticalAlignment="Center">手动测试通道</TextBlock>
+                                        <ComboBox Width="75" Margin="15,5,15,5"></ComboBox>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <Button Content=" 自 检 " Margin="15,5,5,5" ></Button>
+                                <Button Content=" 运 行 " Margin="15,5,5,5" ></Button>
+                                <Button Content=" 停 止 " Margin="15,5,5,5" ></Button>
+                                <Button Content=" 手动操作 " Margin="15,5,5,5" ></Button>
+                                <Button Content=" 切换通道 " Margin="15,5,5,5" ></Button>
+                                <Button Content=" 手动测试 " Margin="15,5,5,5" ></Button>
+                                <Button Content=" 手动清零 " Margin="15,5,5,5" ></Button>
+
+                            </StackPanel>
+                        </Grid>
+
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+   
+</Window>
