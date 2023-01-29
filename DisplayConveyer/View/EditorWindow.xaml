@@ -43,6 +43,7 @@
                         <Button Name="btnAddRect" Content="添加区域框" HorizontalContentAlignment="Left" Margin=" 0 0 0 0" Click="BtnAddRect_Click" FontSize="16"   HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="0" BorderThickness="0" ></Button>
                         <Button Name="btnAddLable" Content="添加标签" HorizontalContentAlignment="Left" Margin=" 0 0 0 0" Click="BtnAddLable_Click" FontSize="16"   HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="0" BorderThickness="0" ></Button>
                         <Border BorderBrush="Black" BorderThickness="1" Margin="5 5 5 10"></Border>
+                        <Button Name="btnBaseSet" Content="基础配置" HorizontalContentAlignment="Left" Margin=" 0 0 0 0" Click="btnBaseSet_Click" FontSize="16"   HorizontalAlignment="Stretch" hc:BorderElement.CornerRadius="0" BorderThickness="0"   ></Button>
                         <Button Name="btnTest" Content="test" Margin="0 15 0 0 " Visibility="Collapsed"></Button>
                     </StackPanel>
                 </StackPanel>

@@ -33,20 +33,14 @@ namespace DisplayConveyer
     /// </summary>
     public partial class DisConveyerWindow : Window
     { 
-        /// <summary>
-        /// 主gird和画布的缩放比例系数
-        /// </summary>
-        private double CanvasHeightFactor => mainGrid.ActualHeight / ConvConfig.CanvasHeight;
-   
+        
         private ConveyerConfig ConvConfig => GlobalPara.ConveyerConfig;
         private ReadStatusLogic logic;
-        private double AnimationSpeed =55d;  
+        private double AnimationSpeed =2d;  
         private Storyboard storyboard = new Storyboard();
         private FrameworkElement feCacheScale;
         //存放所有的区域数据 小地图用
-        private readonly List<RangeData> listRangeDatas = new List<RangeData>();
-        //存放所有的画布
-        private readonly List<Canvas> listAllCanvas = new List<Canvas>(); 
+        private readonly List<RangeData> listRangeDatas = new List<RangeData>(); 
         //区域判定框
         private readonly List<FrameworkElement> listRangeRect = new List<FrameworkElement>();
         //裁切的所有图像
@@ -67,18 +61,7 @@ namespace DisplayConveyer
                 txtTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             };
             timer.Start();
-
-
-            //DispatcherTimer timer2 = new DispatcherTimer
-            //{
-            //    Interval = TimeSpan.FromMilliseconds(70)
-            //};
-            //timer2.Start();
-            //timer2.Tick += (s, e) =>
-            //{
-            //    mainGrid_MouseWheel(null, new MouseWheelEventArgs(Mouse.PrimaryDevice,200,-88 ) );
-            //}; 
-
+             
             btnClose.Click += (s, e) =>
             {
                 //Close();//调试代码
@@ -104,16 +87,15 @@ namespace DisplayConveyer
                 topSv.ScrollToHorizontalOffset(0);
                 logic?.Stop();
                 logic = null;
-                ew.ShowDialog();
-
+                ew.ShowDialog(); 
                 CreateCanvasDatas();
+                SvHorizontalOffsetToRight();
+                txtLock.Tag = "解锁";
+                TxtLock_Click(txtLock, null);
             };
             SizeChanged += (s, e) =>
-            {
-                CalculateCanvsSclae();
-                Calculate(topCanvas, topSv, topGrid);
-     
-
+            { 
+                Calculate(topCanvas, topSv, topGrid); 
             };
             topGrid.Width = topCanvas.Width = ConvConfig.CanvasWidth;
             topGrid.Height = topCanvas.Height = ConvConfig.CanvasHeight; 
@@ -121,9 +103,9 @@ namespace DisplayConveyer
         }
         private void SvHorizontalOffsetToRight()
         {
-            ScrollHorizontalMoveTo(0, 1920, (s, e) =>
+            ScrollHorizontalMoveTo(0, -1920, (s, e) =>
             {
-                SvHorizontalOffsetToRight();
+                
             });
         } 
 
@@ -133,8 +115,7 @@ namespace DisplayConveyer
             {
                 From = from,
                 To = to,
-                Duration = new Duration(TimeSpan.FromSeconds(ConvConfig.CanvasWidth / AnimationSpeed)),
-                FillBehavior = FillBehavior.Stop 
+                 RepeatBehavior =    RepeatBehavior.Forever 
             };
       
             animation.Completed += (s, e) =>
@@ -143,8 +124,8 @@ namespace DisplayConveyer
                 storyboard.Children.Remove(animation);
             };
             storyboard.Children.Add(animation);
-            //Storyboard.SetTarget(animation,mainSv);
-            Storyboard.SetTargetProperty(animation, new PropertyPath(ScrollViewerBehaviour.HorizontalOffsetProperty ));
+            Storyboard.SetTarget(animation, uc_scMain);
+            Storyboard.SetTargetProperty(animation, new PropertyPath(UC_ScrollCanvas.HorizontalOffsetProperty ));
              
             storyboard.Begin();
         }
@@ -161,8 +142,13 @@ namespace DisplayConveyer
         /// 计算小地图选中框
         /// </summary>
         private void CalculateRange()
-        {  
-            listRangeDatas.Clear();
+        { 
+            listRangeRect.Clear();
+            listRangeDatas.Clear(); 
+            foreach (var item in listCutImg)
+            {
+                topCanvas.Children.Remove(item);
+            }
             listCutImg.Clear();
             foreach (var part in ConvConfig.MiniMapData)
             {
@@ -183,8 +169,8 @@ namespace DisplayConveyer
                     rd.MapPartId = part.ID;
                     foreach (var area in areas)
                     {
-                        var tempMin = area.Devices.Min(r => r.PosX);
-                        var tempMax = area.Devices.Max(r => r.PosX + r.Width);
+                        var tempMin = area.Devices.Min(r => r.PosX - 50);
+                        var tempMax = area.Devices.Max(r => r.PosX + r.Width + 50);
                         if (rd.MinPosX == 0 || rd.MinPosX >= tempMin)
                         {
                             rd.MinPosX = tempMin;
@@ -196,15 +182,15 @@ namespace DisplayConveyer
                     }
                     listRangeDatas.Add(rd);
                 }
-                #endregion 
-                CreateCutImage(part); 
+                #endregion
+                topCanvas.Children.Add(CreateCutImage(part)) ; 
             }
         }
         /// <summary>
         /// 创建剪切之后的图片
         /// </summary> 
         /// <param name="part"></param>
-        private void CreateCutImage(MapPartData part)
+        private FrameworkElement CreateCutImage(MapPartData part)
         {
             var bs = imgBack.Source;
             Grid grid = new Grid();
@@ -212,8 +198,8 @@ namespace DisplayConveyer
             img.Height = ConvConfig.CanvasHeight;
             img.Width = part.Width;
             img.Margin = new Thickness(5);
-            grid.MouseEnter += Img_MouseEnter;
-            grid.MouseLeave += Img_MouseLeave;
+            //grid.MouseEnter += Img_MouseEnter;
+            //grid.MouseLeave += Img_MouseLeave;
             var rect = new Int32Rect(part.PosX.CastTo(0), 0, part.Width.CastTo(50), bs.Height.CastTo(50));
             CroppedBitmap cb = new CroppedBitmap((BitmapSource)bs, rect);
             img.Source = cb;
@@ -232,7 +218,7 @@ namespace DisplayConveyer
             grid.Children.Add(tb);
             grid.Tag = part.ID;
             listCutImg.Add(grid);
-            topCanvas.Children.Add(grid);
+            return grid; 
         }
 
         private void Img_MouseLeave(object sender, MouseEventArgs e)
@@ -300,80 +286,29 @@ namespace DisplayConveyer
             {
                 //todo:提示错误
                 return;
-            }
-            mainGrid.Children.Clear();
-            listRangeRect.Clear(); 
+            }  
             TryGetBitmapImage();
             CalculateRange();
-            //todo : 这里的1,实际为:需要判断当前画布宽度是否小于屏幕尺寸 ,小于则需要额外添加一个canvas
-            for (int i = 0; i < 2; i++)
-            {
-                Canvas canvas = new Canvas(); 
-                canvas.Width = ConvConfig.CanvasWidth;
-                canvas.Height = ConvConfig.CanvasHeight;
-                canvas.RenderTransform = new MatrixTransform(1,0,0,1,canvas.Width * i,0);
-                canvas.Name = "canvas_"+(i+1).ToString();
-                foreach (var area in ConvConfig.Areas)
+            uc_scMain.CreateCanvasDatas(listRangeDatas);
+            uc_scMain.OnScaleCutImage += (s) => {
+                var fe = listCutImg.Find(a => a.Tag.CastTo(0) == s);
+                if (fe != null && feCacheScale != fe)
                 {
-                    foreach (var device in area.Devices)
+                    if (feCacheScale != null)
                     {
-                        var ucdevice = CreateHelper.GetDeviceBase(device);
-                        canvas.Children.Add(ucdevice);
-                        ucdevice.ToolTip = (ucdevice as UC_DeviceBase).Info;
-                        device.StatusChanged?.Invoke(new StatusData() { MachineState = 100 });
+                        ScaleEasingAnimationShow(feCacheScale, 1.5d, 1);
                     }
+                    ScaleEasingAnimationShow(fe, 1, 1.5d);
+                    feCacheScale = fe;
                 }
-                foreach (var rect in ConvConfig.RectDatas)
-                {
-                    canvas.Children.Add(CreateHelper.GetRect(rect));
-                }
-                foreach (var label in ConvConfig.Labels)
-                {
-                    canvas.Children.Add(CreateHelper.GetTextBlock(label));
-                }
-                foreach (var range in listRangeDatas)
-                {
-                    Border border = new Border();
-                    border.Width = range.MaxPosX - range.MinPosX;
-                    border.Height = ConvConfig.CanvasHeight -10;
-                    border.Name = canvas.Name +"_" +range.MapPartId; 
-                    border.BorderBrush = new SolidColorBrush(Colors.Red);
-                    border.BorderThickness = new Thickness(5);
-                    border.Visibility = Visibility.Hidden;
-                    border.SetValue(Canvas.LeftProperty ,range.MinPosX);
-                    border.SetValue(Canvas.TopProperty, 10d);
-                    listRangeRect.Add(border);
-                    canvas.Children.Add(border); 
-                }
-                mainGrid.Children.Add(canvas);
-                listAllCanvas.Add(canvas);
-            }
-            CalculateCanvsSclae();
+            };  
+
+            //逻辑读取代码 暂时屏蔽 2023-01-29  
             //if (logic != null) logic.Stop();
             //logic = new ReadStatusLogic(ConvConfig.Areas);
-        }
-
-        /// <summary>
-        /// 计算所有画布的比例
-        /// </summary>
-        private void CalculateCanvsSclae()
-        {
-            double nextX = 0 ;
-            foreach (var item in listAllCanvas)
-            {
-                var factor = CanvasHeightFactor;
-                if (item.RenderTransform is MatrixTransform matrix)
-                { 
-                    item.RenderTransform = new MatrixTransform(factor, 0, 0, factor, nextX, matrix.Value.OffsetY);
-                    nextX += item.Width * factor;
-                }
-            } 
-        }
+        } 
         private double GetHeightFactor(FrameworkElement father, FrameworkElement ui) => father.ActualHeight / ((ui.ActualHeight == 0 ? 1 : ui.ActualHeight) + 5);
-        private bool CheckInLine(Point pointA, Point pointB, Point pLine)
-        {
-            return pLine.X >= pointA.X && pLine.X <= pointB.X;
-        }
+   
         private void TryGetBitmapImage() => TryGetBitmapImage(GlobalPara.ConveyerConfig.MiniMapImagePath);
         private void TryGetBitmapImage(string path)
         {
@@ -395,8 +330,9 @@ namespace DisplayConveyer
         private void DisConveyerWindow_Loaded(object sender, RoutedEventArgs e)
         { 
             BtnFullScreen_Click(btnFullScreen, null);
+            TxtLock_Click(txtLock, null);
             CreateCanvasDatas();
-       
+            SvHorizontalOffsetToRight();
         }
 
         private void BtnFullScreen_Click(object sender, RoutedEventArgs e)
@@ -447,16 +383,7 @@ namespace DisplayConveyer
             }
         
         }
-
-        private void sliderChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (sender is Slider slider)
-            {
-                if (txtSpeed != null) txtSpeed.Text = $"速度:{slider.Value:#00.0}";
-                if (txtInfo != null) txtInfo.Text = slider.Value.ToString();
-                AnimationSpeed = slider.Value; 
-            }
-        }
+         
         private void TxtLock_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button txt)
@@ -468,6 +395,8 @@ namespace DisplayConveyer
                     txt.Tag = "解锁";
                     txt.Content = "🔓";
                     txt.ToolTip = "切换自动轮播";
+                    uc_scMain.RegisterWhellEvent();
+
                 }
                 else if (txt.Tag.ToString() == "解锁")
                 {
@@ -476,98 +405,13 @@ namespace DisplayConveyer
                     txt.Tag = "锁住";
                     txt.Content = "🔒";
                     txt.ToolTip = "切换手动轮播";
+                    uc_scMain.UnregisterWhellEvent();
+
+
                 }
             }
         }
-
-        private void mainGrid_MouseWheel(object sender, MouseWheelEventArgs e)
-        { 
-            for (int i = 0; i < listAllCanvas.Count; i++)
-            {
-                var current = listAllCanvas[i];
-                if (current == null) continue;
-                if (!(current.RenderTransform is MatrixTransform t))
-                {
-                    current.RenderTransform = t = new MatrixTransform();
-                }
-                var matrix = t.Value; 
-                if (t.Value.OffsetX + ConvConfig.CanvasWidth * CanvasHeightFactor < 0 && e.Delta < 0)
-                {
-                    Canvas last = listAllCanvas[listAllCanvas.Count - 1];
-                    var lastT = last.RenderTransform as MatrixTransform; 
-                    matrix.OffsetX = lastT.Value.OffsetX + (last.Width * CanvasHeightFactor) + 10;
-                    current.RenderTransform = new MatrixTransform(matrix);
-                    listAllCanvas.Remove(current);
-                    listAllCanvas.Add(current);
-                    break;
-                }
-                else if (t.Value.OffsetX > ConvConfig.CanvasWidth * CanvasHeightFactor && e.Delta > 0)
-                {
-                    Canvas first = listAllCanvas[0];
-                    var firstT = first.RenderTransform ; 
-                    matrix.OffsetX = firstT.Value.OffsetX - (first.Width * CanvasHeightFactor) - 10;
-                    current.RenderTransform = new MatrixTransform(matrix);
-                    listAllCanvas.Remove(current);
-                    listAllCanvas.Insert(0, current);
-                    break;
-                }
-                else
-                { 
-                    matrix.OffsetX += e.Delta * 0.8d;
-                    current.RenderTransform = new MatrixTransform(matrix);
-                }  
-            }
-            txtInfo.Text = string.Empty;
-           
-            foreach (var item in listRangeRect)
-            {
-                var pointA = item.TransformToAncestor(gridCore).Transform(new Point(0, 0));
-                Point pointB = new Point(pointA.X + item.ActualWidth * CanvasHeightFactor, pointA.Y);
-
-                if (CheckInLine(pointA, pointB, new Point(mainGrid.ActualWidth / 2, 0)))
-                {
-                    var name = txtInfo.Text = item.Name;
-                    var partId = name.Split('_')[2].CastTo(0);
-                    var fe =  listCutImg.Find(a => a.Tag.CastTo(0) == partId);
-                    if (fe != null && feCacheScale != fe)
-                    {
-                        if (feCacheScale != null)
-                        {
-                            ScaleEasingAnimationShow(feCacheScale, 1.5d, 1);
-                        }
-                        ScaleEasingAnimationShow(fe, 1, 1.5d);
-                        feCacheScale = fe;
-                    }
-                    break;
-                }
-                
-            }
-
-        }
-    }
-    public class ScrollBehaviour
-    {
-        public static readonly DependencyProperty HorizontalOffsetProperty =
-         DependencyProperty.RegisterAttached("Horizontalofset",
-       typeof(double),
-       typeof(ScrollViewerBehaviour),
-       new UIPropertyMetadata(0d, new PropertyChangedCallback(OnHorizontalofsetchanged)));
-
-        public static void SetHorizontalofset(ScrollViewer element, double value)
-        {
-            element.SetValue(HorizontalOffsetProperty, value);
-        }
-        public static double GetHorizontalofset(ScrollViewer element)
-        {
-            return (double)element.GetValue(HorizontalOffsetProperty);
-        }
-
-        public static void OnHorizontalofsetchanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            var scrollviewer = (sender as ScrollViewer);
-            scrollviewer?.ScrollToHorizontalOffset((double)e.NewValue);
-            //scrollviewer.ChangeView((double)e.NewValue, scrollviewer.VerticalOffset, scrollviewer.ZoomFactor);
-        }
+         
     }
     public class ScrollViewerBehaviour
     {

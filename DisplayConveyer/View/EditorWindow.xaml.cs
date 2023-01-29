@@ -1199,13 +1199,30 @@ namespace DisplayConveyer.View
             ConvConfig = null;
             ConvConfig = GlobalPara.ConveyerConfig.Clone();
         }
+        //基础配置
+        private void btnBaseSet_Click(object sender, RoutedEventArgs e)
+        {
+            Window window = new Window();
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            
+            
+            var cc = new ClassControl(typeof(ConveyerConfig), true, ConvConfig);
+
+            cc.NewData += (o) =>
+            {
+                ConvConfig  = o as ConveyerConfig;
+            };
+            window.Content = cc;
+            window.ShowDialog();
+        }
         //关闭窗口
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
+
         #endregion
 
-
+       
     }
 }
