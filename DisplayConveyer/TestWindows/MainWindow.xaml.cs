@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,6 +60,24 @@ namespace WpfTest
 
                 pLine = lineInd.TransformToAncestor(gridMain).Transform(new Point(0, 0));
                 tbInfo.Text = pLine.ToString();
+                //th = new Thread(ProgressMove);
+                //th.Start();
+                Task.Run(async () =>
+                {
+                    while (true)
+                    {
+                        Application.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            progress.Value += 1;
+                            if (progress.Value == 100)
+                            {
+                                progress.Value = 0;
+                            }
+                        }));
+                        await Task.Delay(200);
+                       
+                    } 
+                });
             };
             SizeChanged += (s, e) =>
             {
@@ -78,7 +97,7 @@ namespace WpfTest
         Point pLine;
         List<Border> listTempBorder = new List<Border>();
         List<Canvas> listAllCanvas;
-
+        Thread th;
         private void GridMain_MouseWheel(object sender, MouseWheelEventArgs e)
         { 
             for (int i = 0; i < listAllCanvas.Count; i++)
@@ -127,7 +146,17 @@ namespace WpfTest
                 }
             }
         }
-
+        private void ProgressMove()
+        {
+            while (true)
+            {
+                Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    progress.Value += 1;
+                }));
+                Thread.Sleep(1000);
+            }
+        }
         private void IniChildren(Panel pane)
         {
             double maxWidth = 0;

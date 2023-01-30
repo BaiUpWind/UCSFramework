@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DisplayConveyer.Model
+﻿namespace DisplayConveyer.Model
 {
+    /// <summary>
+    /// 存放小地图的编号
+    /// </summary>
     internal class RangeData
     {
         public int MapPartId { get; set; }

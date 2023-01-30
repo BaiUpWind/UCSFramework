@@ -29,7 +29,7 @@ using Window = System.Windows.Window;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json ;
 using Newtonsoft ;
-
+using System.Threading.Tasks;
 
 namespace DisplayConveyer.View
 {
@@ -646,6 +646,7 @@ namespace DisplayConveyer.View
                             udb.Title = newdd.Name;
                             udb.FontSize = newdd.FontSize;
                             udb.Description = newdd.Direction;
+                            udb.TitleFontSize = newdd.FontSize;
                         }
                     });
                 }
@@ -1035,13 +1036,24 @@ namespace DisplayConveyer.View
             HaveNew = false;
             if (DrawerTopInContainer.IsOpen)
             {
-                svArea.Content = null;
-                var cc = new ClassControl(typeof(List<AreaData>), true, Areas);
-                cc.NewData += (o) =>
+                Task.Run(async () =>
                 {
-                    ConvConfig.Areas = o as List<AreaData>;
-                };
-                svArea.Content = cc;
+                    await Task.Delay(1000);
+                    Application.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                     
+                        svArea.Content = null;
+                        var cc = new ClassControl(typeof(List<AreaData>), true, Areas);
+                        cc.NewData += (o) =>
+                        {
+                            ConvConfig.Areas = o as List<AreaData>;
+                        };
+                        svArea.Content = cc;
+
+                
+                    }));
+
+                }); 
             }
         }
         //添加一个设备

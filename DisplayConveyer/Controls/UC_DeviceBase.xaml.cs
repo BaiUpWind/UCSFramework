@@ -97,7 +97,7 @@ namespace DisplayConveyer.Controls
         /// </summary>
         /// <param name="color"></param>
         public void SetColor(Color color)
-        {
+        { 
             Application.Current?.Dispatcher.BeginInvoke(colorHandle, color);
         }
         /// <summary>

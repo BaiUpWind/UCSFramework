@@ -12,11 +12,18 @@ namespace DisplayConveyer.Config
     {
         [NickName("动画速度")]
         public double AnimationSpeed { get; set; } = 10d;
-        [NickName("动画方向,左往右(真),反之")]
+        [NickName("动画方向,右往左(真),反之")]
         public bool AnimationDircetion { get; set; } = true;
         [Hide]
         [NickName("画布宽")]
         public double CanvasWidth { get; set; } = 1920;
+
+        [Head("演示模式设置")]
+        [NickName("演示模式")]
+        public bool DemoMode { get; set; } = false;
+
+
+
         [Hide]
         [NickName("画布高")]
         public double CanvasHeight { get; set; } = 1080;

@@ -7,6 +7,7 @@ using DisplayConveyer.Utilities;
 using HandyControl.Controls;
 using Microsoft.Win32;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -40,6 +41,8 @@ namespace DisplayConveyer.View
         private List<MapPartData> mapPartDatas = null;
         //物流线配置 
         private ConveyerConfig ConvConfig;
+        //存放所有的区域数据
+        private List<string> listAllAreas;
         public MapDataEditorWindow()
         {
             InitializeComponent();
@@ -58,7 +61,25 @@ namespace DisplayConveyer.View
                 }
 
                 if (ConvConfig.Areas != null && ConvConfig.Areas.Any())
-                    cmbIDs.ItemsSource = ConvConfig.Areas.Select(a => a.Name + "_" + a.ID).ToList();
+                {
+                    //已经被添加过的id不再添加
+                    //获取所有被绑定的ID
+                    List<uint> ids = (from item in ConvConfig.MiniMapData
+                                      from id in item.AreaIDs
+                                      select id).ToList();
+                    var tempAreas = ConvConfig.Areas.Clone();
+                    listAllAreas = tempAreas.Select(a => a.Name + "_" + a.ID).ToList();
+                    foreach (var id in ids)
+                    {
+                        var area = tempAreas.Find(a => a.ID == id);
+                        if (area != null)
+                        {
+                            tempAreas.Remove(area);
+                        }
+                    } 
+                    cmbIDs.ItemsSource = tempAreas.Select(a => a.Name + "_" + a.ID).ToList();
+
+                }
 
                 UIElementMove uI = new UIElementMove(canvasMain, this, UIElementMove.KeyCode.Middle)
                 {
@@ -184,24 +205,18 @@ namespace DisplayConveyer.View
                 if(e.HorizontalChange < 0)
                 {
                     var last = mapPartDatas?.Find(a => a.ID == SelectData.ID - 1);
-                    if (last != null)
+                    if (last != null && leftX <= last.PosX + last.Width)
                     {
-                        if (leftX <= last.PosX + last.Width)
-                        {
-                            result = true;
-                        }
+                        result = true;
                     }
                 }
               
                 if(e.HorizontalChange > 0)
                 {
                     var next = mapPartDatas?.Find(a => a.ID == SelectData.ID + 1);
-                    if (next != null)
+                    if (next != null && rightX >= next.PosX)
                     {
-                        if (rightX >= next.PosX)
-                        {
-                            result = true;
-                        }
+                        result = true;
                     }
                 } 
             }
@@ -372,7 +387,9 @@ namespace DisplayConveyer.View
                     Growl.Info($"已经添加对应的ID,'{id}'");
                     return;
                 }
-                SelectData.AreaIDs.Add(id);
+                SelectData.AreaIDs.Add(id); 
+                (cmbIDs.ItemsSource as IList)?.Remove(cmbIDs.SelectedItem);
+                cmbIDs.Items.Refresh();
                 listIDs.ItemsSource = null;
                 listIDs.ItemsSource = SelectData.AreaIDs;
             }
@@ -380,9 +397,14 @@ namespace DisplayConveyer.View
 
         private void btnRemoveID_Click(object sender, RoutedEventArgs e)
         {
+            if(listIDs.SelectedIndex < 0)
+            {
+                Growl.Info("请选中区域ID");
+                return;
+            }
             if (SelectData != null)
             {
-                var id = TryGetAreaID(cmbIDs.SelectedItem);
+                var id = listIDs.SelectedItem.CastTo<uint>(0);
                 if (id == 0)
                 {
                     return;
@@ -391,7 +413,14 @@ namespace DisplayConveyer.View
                 {
                     Growl.Info($"未找到对应的ID,'{id}'");
                     return;
-                } 
+                }
+
+                var result = listAllAreas.Where(a =>  a.Split('_')[a.Split('_').Length -1].CastTo(0) == id).FirstOrDefault();
+                if(result != null)
+                {
+                    (cmbIDs.ItemsSource as IList)?.Add(result);
+                    cmbIDs.Items.Refresh();
+                }
                 SelectData.AreaIDs.Remove(id);
                 listIDs.ItemsSource = null; 
                 listIDs.ItemsSource = SelectData.AreaIDs;

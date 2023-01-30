@@ -86,7 +86,7 @@ namespace DisplayConveyer.Controls
                         var ucdevice = CreateHelper.GetDeviceBase(device);
                         canvas.Children.Add(ucdevice);
                         ucdevice.ToolTip = (ucdevice as UC_DeviceBase).Info;
-                        device.StatusChanged?.Invoke(new StatusData() { MachineState = 100 });
+                        //device.StatusChanged?.Invoke(new StatusData() { MachineState = 100 });
                     }
                 }
                 foreach (var rect in ConvConfig.RectDatas)

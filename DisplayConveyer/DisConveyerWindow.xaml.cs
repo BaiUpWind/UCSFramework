@@ -35,8 +35,7 @@ namespace DisplayConveyer
     { 
         
         private ConveyerConfig ConvConfig => GlobalPara.ConveyerConfig;
-        private ReadStatusLogic logic;
-        private double AnimationSpeed =2d;  
+        private ReadStatusLogic logic; 
         private Storyboard storyboard = new Storyboard();
         private FrameworkElement feCacheScale;
         //存放所有的区域数据 小地图用
@@ -49,8 +48,7 @@ namespace DisplayConveyer
         DoubleAnimation animation;
         public DisConveyerWindow()
         {
-            InitializeComponent();
-            Loaded += DisConveyerWindow_Loaded;
+            InitializeComponent(); 
             DispatcherTimer timer = new DispatcherTimer
             {
                 Interval = new TimeSpan(0, 0, 1)
@@ -61,7 +59,14 @@ namespace DisplayConveyer
                 txtTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             };
             timer.Start();
-             
+
+            Loaded += (s, e) =>
+            {
+                BtnFullScreen_Click(btnFullScreen, null);
+                TxtLock_Click(txtLock, null);
+                CreateCanvasDatas();
+                SvHorizontalOffsetToRight();
+            };
             btnClose.Click += (s, e) =>
             {
                 //Close();//调试代码
@@ -142,9 +147,15 @@ namespace DisplayConveyer
         /// 计算小地图选中框
         /// </summary>
         private void CalculateRange()
-        { 
+        {
+            if (imgBack.Source == null)
+            {
+                Growl.Error("略缩图未能正常获取,请在[设置-编辑略缩图-选择图片]中进行配置!");
+                return;
+            }
             listRangeRect.Clear();
             listRangeDatas.Clear(); 
+
             foreach (var item in listCutImg)
             {
                 topCanvas.Children.Remove(item);
@@ -192,10 +203,10 @@ namespace DisplayConveyer
         /// <param name="part"></param>
         private FrameworkElement CreateCutImage(MapPartData part)
         {
-            var bs = imgBack.Source;
+            var bs = imgBack.Source; 
             Grid grid = new Grid();
             Image img = new Image();
-            img.Height = ConvConfig.CanvasHeight;
+            img.Height = bs.Height.CastTo(50);
             img.Width = part.Width;
             img.Margin = new Thickness(5);
             //grid.MouseEnter += Img_MouseEnter;
@@ -205,7 +216,7 @@ namespace DisplayConveyer
             img.Source = cb;
             TextBlock tb = new TextBlock()
             {
-                Margin = new Thickness(0, 45, 0, 0),
+                Margin = new Thickness(0, 0, 0, 0),
                 FontSize = 92,
                 Text = part.Title,
                 HorizontalAlignment = HorizontalAlignment.Center,
@@ -215,7 +226,7 @@ namespace DisplayConveyer
             grid.SetValue(Canvas.LeftProperty, part.PosX);
             grid.SetValue(Canvas.TopProperty, part.PosY); 
             grid.Children.Add(img);
-            grid.Children.Add(tb);
+            //grid.Children.Add(tb);
             grid.Tag = part.ID;
             listCutImg.Add(grid);
             return grid; 
@@ -296,16 +307,25 @@ namespace DisplayConveyer
                 {
                     if (feCacheScale != null)
                     {
+                        if(feCacheScale is Grid grid)
+                        {
+                            grid.Background = new SolidColorBrush(Colors.Transparent);
+                        }
                         ScaleEasingAnimationShow(feCacheScale, 1.5d, 1);
                     }
+
+                    if (fe is Grid grid2)
+                    {
+                        grid2.Background = new SolidColorBrush( Color.FromArgb(155,255,255,255));
+                    }
                     ScaleEasingAnimationShow(fe, 1, 1.5d);
+                  
                     feCacheScale = fe;
                 }
-            };  
-
-            //逻辑读取代码 暂时屏蔽 2023-01-29  
-            //if (logic != null) logic.Stop();
-            //logic = new ReadStatusLogic(ConvConfig.Areas);
+            };
+            txtInfo.Text = ConvConfig.DemoMode ? "演示模式" : "";
+            if (logic != null) logic.Stop();
+            logic = new ReadStatusLogic(ConvConfig.Areas);
         } 
         private double GetHeightFactor(FrameworkElement father, FrameworkElement ui) => father.ActualHeight / ((ui.ActualHeight == 0 ? 1 : ui.ActualHeight) + 5);
    
@@ -315,6 +335,7 @@ namespace DisplayConveyer
             if (string.IsNullOrWhiteSpace(path))
             {
                 Growl.Error("创建略缩图片失败,路径为空");
+                return;
             }
             try
             {
@@ -327,13 +348,7 @@ namespace DisplayConveyer
             }
         }
 
-        private void DisConveyerWindow_Loaded(object sender, RoutedEventArgs e)
-        { 
-            BtnFullScreen_Click(btnFullScreen, null);
-            TxtLock_Click(txtLock, null);
-            CreateCanvasDatas();
-            SvHorizontalOffsetToRight();
-        }
+     
 
         private void BtnFullScreen_Click(object sender, RoutedEventArgs e)
         {

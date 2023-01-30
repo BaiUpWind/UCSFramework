@@ -92,5 +92,8 @@
                 </Canvas>
             </Grid>
         </Grid>
+        <Grid Grid.Row="2">
+            <ProgressBar Name="progress" />
+        </Grid>
     </Grid>
 </Window>

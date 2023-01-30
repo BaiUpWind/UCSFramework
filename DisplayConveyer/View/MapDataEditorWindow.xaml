@@ -63,6 +63,7 @@
                         <TextBlock Text="区域名称" Margin="5 0 5 0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" ></TextBlock>
                         <TextBox  x:Name="txtTitle" TextChanged="TextBox_TextChanged"  Width="224" VerticalAlignment="Top"  hc:BorderElement.CornerRadius="0" ></TextBox>
                     </StackPanel>
+                    <TextBlock Margin="6,0,0,0" FontSize="9">区域ID</TextBlock>
                     <ListBox Name="listIDs" Height="200" MaxHeight="300" Margin="5" VerticalAlignment="Top" ></ListBox>
 
 

@@ -10,31 +10,45 @@ using System.Threading;
 
 namespace DisplayConveyer.Logic
 {
-    public class ReadStatusLogic: IMsgShow
+    public class ReadStatusLogic : IMsgShow
     {
         public event Action<string, int> ShowMsg;
-        
+
         private readonly List<AreaData> Areas;
         private readonly Thread[] threads;
+        //调试模式
+        Random demoRd = new Random();
+        List<AreaData> demoAreas = GlobalPara.ConveyerConfig.Areas;
+        Dictionary<uint,List<StatusData>> demoDicStatusDatas = new Dictionary<uint, List<StatusData>>();
 
         public ReadStatusLogic(List<AreaData> areas)
         {
             Areas = areas;
             if (Areas != null && Areas.Any())
             {
-                threads = new Thread[Areas.Where(a=> a.Devices != null && a.Devices.Count() > 0).Count()];
+                threads = new Thread[Areas.Where(a => a.Devices != null && a.Devices.Count() > 0).Count()];
                 for (int i = 0; i < Areas.Count; i++)
                 {
                     var area = Areas[i];
                     threads[i] = new Thread(() => Read(area));
                     threads[i].IsBackground = true;
-                    threads[i].Start();
+                    threads[i].Start(); 
                 }
             }
+            foreach (var item in demoAreas)
+            {
+                demoDicStatusDatas.Add(item.ID, item.Devices.Select(a => new StatusData
+                {
+                    WorkId = a.WorkId,
+                    LoadState = 1,
+                    MachineState = 1
+                }).ToList()); 
+            }
+
         }
         public void Stop()
         {
-           if(threads!= null && threads.Length > 0)
+            if (threads != null && threads.Length > 0)
             {
                 for (int i = 0; i < threads.Length; i++)
                 {
@@ -43,10 +57,17 @@ namespace DisplayConveyer.Logic
             }
         }
         private void Read(AreaData area)
-        {
-            OperationConnect(area);
+        { 
+          if(!GlobalPara.ConveyerConfig.DemoMode)  OperationConnect(area);
             while (true)
             {
+                if (GlobalPara.ConveyerConfig.DemoMode)
+                {
+                    DemoMode(area);
+                    Thread.Sleep(5000);
+                    continue;
+                }
+
                 List<object> results;
                 try
                 {
@@ -81,14 +102,14 @@ namespace DisplayConveyer.Logic
                     }
                 }
                 //限制最低的间隔为3秒
-                if(area.ReadInterval <= 3000)
+                if (area.ReadInterval <= 3000)
                 {
                     area.ReadInterval = 3000;
                 }
                 Thread.Sleep(area.ReadInterval);
             }
         }
-    
+
         private void OperationConnect(AreaData area)
         {
             while (true)
@@ -107,9 +128,9 @@ namespace DisplayConveyer.Logic
                 }
                 Thread.Sleep(3000);
             }
-           
+
         }
-        private void TryShowStatus(List<DeviceData> devices, StatusData state )
+        private void TryShowStatus(List<DeviceData> devices, StatusData state)
         {
             if (state == null)
             {
@@ -124,6 +145,28 @@ namespace DisplayConveyer.Logic
             }
             device.StatusChanged?.Invoke(state);
         }
+
+        private void DemoMode(AreaData area)
+        {  
+            if(demoDicStatusDatas.TryGetValue(area.ID,out var data))
+            {
+                foreach (var state in data)
+                {
+                    state.LoadState = demoRd.Next(1, 100) >= 95 ? 1 : 0;
+                    state.MachineState = GetMachieState(demoRd.Next(1, 100));
+                    TryShowStatus(area.Devices, state);
+                }
+            }   
+        }
+        private int GetMachieState(int probability)
+        {
+            if (probability > 98) return 0;
+            else if (probability > 95) return 55;
+            else if (probability > 90) return 101;
+            else if (probability > 30) return 100; 
+            else return 0; 
+        }
+
 
         private void InternalShowMsg(string msg, int level =1) => ShowMsg?.Invoke(msg,level);
     }
