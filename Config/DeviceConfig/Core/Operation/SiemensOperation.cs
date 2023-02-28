@@ -16,9 +16,8 @@ namespace DeviceConfig.Core
     {
         public SiemensOperation()  
         {
-            if (ConnectConfig is SiemensConnectCfg siemens)
-            {
-                splc = new SiemensPlc( siemens.SiemensSelected, siemens.IP, siemens.Port, siemens.Rack, siemens.Slot);
+            if (ConnectConfig is SiemensConnectCfg  )
+            { 
                 return;
             }
             throw new Exception("错误的PLC配置类型");
@@ -35,6 +34,10 @@ namespace DeviceConfig.Core
         {
             try
             {
+                if (ConnectConfig is SiemensConnectCfg siemens)
+                {
+                    splc = new SiemensPlc(siemens.SiemensSelected, siemens.IP, siemens.Port, siemens.Rack, siemens.Slot); 
+                }
                 return splc != null && splc.Connection();
             }
             catch  
