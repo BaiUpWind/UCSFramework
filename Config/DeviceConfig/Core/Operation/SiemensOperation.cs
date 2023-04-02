@@ -4,7 +4,6 @@ using ControlHelper.Attributes;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace DeviceConfig.Core
 {
@@ -16,8 +15,9 @@ namespace DeviceConfig.Core
     {
         public SiemensOperation()  
         {
-            if (ConnectConfig is SiemensConnectCfg  )
-            { 
+            if (ConnectConfig is SiemensConnectCfg siemens)
+            {
+                splc = new SiemensPlc( siemens.SiemensSelected, siemens.IP, siemens.Port, siemens.Rack, siemens.Slot);
                 return;
             }
             throw new Exception("错误的PLC配置类型");
@@ -35,9 +35,8 @@ namespace DeviceConfig.Core
             try
             {
                 if (ConnectConfig is SiemensConnectCfg siemens)
-                {
-                    splc = new SiemensPlc(siemens.SiemensSelected, siemens.IP, siemens.Port, siemens.Rack, siemens.Slot); 
-                }
+                    splc = new SiemensPlc(siemens.SiemensSelected, siemens.IP, siemens.Port, siemens.Rack, siemens.Slot);
+            
                 return splc != null && splc.Connection();
             }
             catch  
@@ -68,8 +67,8 @@ namespace DeviceConfig.Core
                         if (item is StatusData db)
                         {
                             // 暂时写死为读取short的 2022 12 05
-                            db.MachineState = splc.PlcS7.ReadInt16(db.MachineAddress).Content;
-                            db.LoadState = splc.PlcS7.ReadInt16(db.LoadDBAddress).Content;
+                            db.MachineState = splc.PlcS7.ReadInt16(db.MachineAddress.Trim()).Content;
+                            db.LoadState = splc.PlcS7.ReadInt16(db.LoadDBAddress.Trim()).Content;
                         }
                     }
                     return sieCmd.Result;

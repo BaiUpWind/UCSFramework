@@ -447,10 +447,12 @@ namespace DisplayConveyer.View
             {
                 return;
             }
-            if (area.Devices.Contains(data))
-            {
-                return;
-            }
+            //var device = area.Devices.Where(a => a.ID == data.ID).FirstOrDefault();
+            //if (device != null)
+            //{
+            //    return;
+            //}
+            data.ID = area.Devices.Count > 0 ? area.Devices.Max(a => a.ID) + 1 : 1;
             area.Devices.Add(data);
         }
         private void AreasRemoveDevice(DeviceData data)
@@ -465,11 +467,12 @@ namespace DisplayConveyer.View
             {
                 return;
             }
-            if (!area.Devices.Contains(data))
+            var device = area.Devices.Where(a => a.ID == data.ID).FirstOrDefault();
+            if (device == null)
             {
                 return;
             }
-            area.Devices.Remove(data);
+            area.Devices.Remove(device);
         } 
         private void SetControlSingle(FrameworkElement fe, bool single)
         {
@@ -968,7 +971,7 @@ namespace DisplayConveyer.View
                 if (tag.Equals("open"))
                 {
                     ConvConfig = GlobalPara.ConveyerConfig.Clone();
-                    if (ConvConfig == null) return;
+                    if (ConvConfig == null) return; 
                     CanvasHeight = ConvConfig.CanvasHeight;
                     CanvasWidth = ConvConfig.CanvasWidth;
                     EnableMyStackPanel(true);
@@ -1127,7 +1130,7 @@ namespace DisplayConveyer.View
                     MessageBox.Show("请选择对应的区域", "错误");
                     return;
                 }
-                var cdc = GetDeviceBase(data) as UC_DeviceBase;
+          
                 var point = btnAdd.TransformToAncestor(canvas).Transform(new Point(0, 0));
                 if (point.X > canvas.Width)
                 {
@@ -1144,7 +1147,10 @@ namespace DisplayConveyer.View
                 if (point.Y <= 0)
                 {
                     point.Y = 0;
-                } 
+                }
+                data.PosX = point.X;
+                data.PosY = point.Y;
+                var cdc = GetDeviceBase(data) as UC_DeviceBase;
                 AddControl(cdc);
                 HaveNew = false;
                 canvas.Children.Remove(newCreate);
