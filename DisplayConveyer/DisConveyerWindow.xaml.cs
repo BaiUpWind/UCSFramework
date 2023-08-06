@@ -39,7 +39,7 @@ namespace DisplayConveyer
         private ReadStatusLogic logic; 
         private Storyboard storyboard = new Storyboard();
         private FrameworkElement feCacheScale;
-        //存放所有的区域数据 小地图用
+        //存放所有的区域数据 略缩图用
         private readonly List<RangeData> listRangeDatas = new List<RangeData>(); 
         //区域判定框
         private readonly List<FrameworkElement> listRangeRect = new List<FrameworkElement>();
@@ -67,7 +67,7 @@ namespace DisplayConveyer
                 TxtLock_Click(txtLock, null);
                 CreateCanvasDatas();
                 SvHorizontalOffsetToRight();
-                //DoEvent();
+                DoEvent();
             };
             btnClose.Click += (s, e) =>
             {
@@ -104,8 +104,6 @@ namespace DisplayConveyer
             { 
                 Calculate(topCanvas, topSv, topGrid); 
             };
-            //topGrid.Width = topCanvas.Width = ConvConfig.CanvasWidth;
-            //topGrid.Height = topCanvas.Height = ConvConfig.CanvasHeight; 
             txtLock.Click += TxtLock_Click;
            
         }
@@ -159,7 +157,7 @@ namespace DisplayConveyer
 
         }
         /// <summary>
-        /// 计算小地图选中框
+        /// 计算略缩图选中框
         /// </summary>
         private void CalculateRange()
         {
@@ -218,16 +216,18 @@ namespace DisplayConveyer
         /// <param name="part"></param>
         private FrameworkElement CreateCutImage(MapPartData part)
         {
-            var bs = imgBack.Source; 
+            var bs = imgBack.Source;
             Border border = new Border();
             Image img = new Image();
-            img.Height = bs.Height.CastTo(50);
+            double factor = bs.Height * 0.38;
+            img.Height = bs.Height - factor;
             img.Width = part.Width;
-            img.Margin = new Thickness(5);
-            border.MouseEnter += Img_MouseEnter;
-            border.MouseLeave += Img_MouseLeave;
+            img.Margin = new Thickness(15);
+            //border.MouseEnter += Img_MouseEnter;
+            //border.MouseLeave += Img_MouseLeave;
+            border.Height = bs.Height - factor;
             border.BorderBrush = new SolidColorBrush(Colors.Lime);
-            var rect = new Int32Rect(part.PosX.CastTo(0), 0, part.Width.CastTo(50), bs.Height.CastTo(50));
+            var rect = new Int32Rect(part.PosX.CastTo(0), (int)(factor / 2), part.Width.CastTo(50), (int)(bs.Height - factor));
             CroppedBitmap cb = new CroppedBitmap((BitmapSource)bs, rect);
             img.Source = cb;
             //TextBlock tb = new TextBlock()
@@ -237,24 +237,26 @@ namespace DisplayConveyer
             //    Text = part.Title,
             //    HorizontalAlignment = HorizontalAlignment.Center,
             //    VerticalAlignment = VerticalAlignment.Center,
-            //    Foreground = new SolidColorBrush(Colors.Black),
+            //    Foreground = new SolidColorBrush(Colors.White),
             //};
             border.SetValue(Canvas.LeftProperty, part.PosX);
-            border.SetValue(Canvas.TopProperty, part.PosY); 
+            border.SetValue(Canvas.TopProperty, part.PosY + factor / 2-30 );
             border.Child = (img);
+            border.Visibility = Visibility.Visible;
             //border.Children.Add(tb);
             border.Tag = part.ID;
             listCutImg.Add(border);
-            return border; 
+            return border;
         }
 
         private void Img_MouseLeave(object sender, MouseEventArgs e)
         {
             if(sender is UIElement ele)
             {
-                //ele.SetValue(Panel.ZIndexProperty, -1);
-
-                ScaleEasingAnimationShow(ele, 1.5d, 1);
+                ScaleEasingAnimationShow(ele, 1.5d, 1, (s, ee) =>
+                {
+                    ele.Visibility = Visibility.Hidden;
+                });
             }
         }
 
@@ -262,16 +264,14 @@ namespace DisplayConveyer
         {
             if (sender is UIElement ele)
             {
-                //border.Background = new SolidColorBrush(Colors.Transparent);
-                ////更改放大后的背景颜色
-                //boderNew.Background = new SolidColorBrush(Color.FromArgb(155, 255, 255, 255));
-                //ele.SetValue(Panel.ZIndexProperty, 99);
+                ele.Visibility = Visibility.Visible;
                 ScaleEasingAnimationShow(ele, 1, 1.5d);
             }
         }
    
-        private void ScaleEasingAnimationShow(UIElement ele, double Sizefrom, double Sizeto)
-            => ScaleEasingAnimationShow(ele, 0.5, 0.5, Sizefrom, Sizeto, 5, TimeSpan.FromSeconds(0.2));
+        private void ScaleEasingAnimationShow(UIElement ele, double Sizefrom, double Sizeto
+            , Action<object, EventArgs> onAnimationCompled = null)
+            => ScaleEasingAnimationShow(ele, 0.5, 0.5, Sizefrom, Sizeto, 5, TimeSpan.FromSeconds(0.2), onAnimationCompled);
         /// <summary>
         /// 缩放动画
         /// </summary>
@@ -282,7 +282,8 @@ namespace DisplayConveyer
         /// <param name="Sizeto">结束大小</param>
         /// <param name="power">过渡强度</param>
         /// <param name="time">持续时间，例如3秒： TimeSpan(0,0,3) </param>
-        public void ScaleEasingAnimationShow(UIElement element, double RenderX, double RenderY, double Sizefrom, double Sizeto, int power, TimeSpan time)
+        public void ScaleEasingAnimationShow(UIElement element, double RenderX, double RenderY, double Sizefrom, double Sizeto, int power, TimeSpan time
+            ,Action<object,EventArgs> onAnimationCompled =null)
         {
             ScaleTransform scale = new ScaleTransform();  //旋转
             element.RenderTransform = scale;
@@ -303,6 +304,10 @@ namespace DisplayConveyer
                 Duration = time,                                 //动画播放时间
                 EasingFunction = easeFunction,                   //缓动函数
             };
+            scaleAnimation.Completed += (s, e) =>
+            {
+                onAnimationCompled?.Invoke(s, e);
+            };
             scale.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnimation);
             scale.BeginAnimation(ScaleTransform.ScaleYProperty, scaleAnimation);
         }
@@ -310,7 +315,7 @@ namespace DisplayConveyer
         /// <summary>
         /// 创建画布数据
         /// </summary>
-        private void CreateCanvasDatas( )
+        private void CreateCanvasDatas()
         {
             if (ConvConfig == null)
             {
@@ -321,44 +326,61 @@ namespace DisplayConveyer
             Calculate(topCanvas, topSv, topGrid);
             CalculateRange();
             uc_scMain.CreateCanvasDatas(listRangeDatas);
-            uc_scMain.OnScaleCutImage += (s) => {
-                var fe = listCutImg.Find(a => a.Tag.CastTo(0) == s);
-                if (fe != null && feCacheScale != fe)
+            uc_scMain.OnScaleCutImage += (s) =>
+            {
+                if (s == 0)
                 {
-                    if (feCacheScale != null)
-                    {
-                        if(feCacheScale is Border borderOld)
-                        {
-                            borderOld.Background = new SolidColorBrush(Colors.Transparent);
-                            borderOld.BorderThickness = new Thickness(0);
-                        }
-                        feCacheScale.SetValue(Panel.ZIndexProperty, -1);
-                        ScaleEasingAnimationShow(feCacheScale, 1.5d, 1);
-                    }
-
-                    if (fe is Border boderNew)
-                    {
-                        //更改放大后的背景颜色
-                        boderNew.Background = new SolidColorBrush(Color.FromArgb(145, 255, 255, 255));
-                        boderNew.BorderThickness = new Thickness(10);
-
-                    }
-
-                    if (topSv.ScrollableWidth > 0)
-                    {
-                        //自动定位到略缩图位置
-                        var xposition = fe.TransformToAncestor(topGrid).Transform(new Point(0, 0)).X;
-                        topSv.ScrollToHorizontalOffset(xposition);//- (double.IsNaN( fe.ActualWidth) ? fe.Width : fe.ActualWidth)
-                    } 
-                    fe.SetValue(Panel.ZIndexProperty, 99);
-                    ScaleEasingAnimationShow(fe, 1, 1.5d);
-                    feCacheScale = fe;
+                    SetCurrentCutImgNormal();
+                    feCacheScale = null;
+                    return;
                 }
+                var fe = listCutImg.Find(a => a.Tag.CastTo(0) == s);
+                if (fe == null || feCacheScale == fe)
+                {
+                    return;
+                }
+                SetCurrentCutImgNormal();
+                if (fe is Border boderNew)
+                {
+                    //更改放大后的背景颜色
+                    boderNew.Background = new SolidColorBrush(Color.FromArgb(255, 3, 65, 188));
+                    boderNew.BorderThickness = new Thickness(10);
+                }
+                if (topSv.ScrollableWidth > 0)
+                {
+                    //自动定位到略缩图位置
+                    var xposition = fe.TransformToAncestor(topGrid).Transform(new Point(0, 0)).X;
+                    topSv.ScrollToHorizontalOffset(xposition);
+                }
+
+                fe.SetValue(Panel.ZIndexProperty, 99); 
+                fe.Visibility = Visibility.Visible;
+                ScaleEasingAnimationShow(fe, 1, 1.5d);
+                feCacheScale = fe;
+
             };
             txtInfo.Text = ConvConfig.DemoMode ? "演示模式" : "";
             if (logic != null) logic.Stop();
             logic = new ReadStatusLogic(ConvConfig.Areas);
-        } 
+        }
+
+        private double topFactor => topSv.ActualHeight / topCanvas.Height;
+        /// <summary>
+        /// 设置当前放大的小图片变成正常模样
+        /// </summary>
+        private void SetCurrentCutImgNormal()
+        {
+            if (feCacheScale == null || !(feCacheScale is Border)) return;
+            var borderOld = feCacheScale as Border;  
+            borderOld.Background = new SolidColorBrush(Colors.Transparent);
+            borderOld.BorderThickness = new Thickness(0); 
+            feCacheScale.SetValue(Panel.ZIndexProperty, -1);
+            ScaleEasingAnimationShow(feCacheScale, 1.5d, 1,(s,e) =>
+            {
+                borderOld.Visibility = Visibility.Hidden;
+            });  
+        }
+
         private double GetHeightFactor(FrameworkElement father, FrameworkElement ui) => father.ActualHeight / ((ui.ActualHeight == 0 ? 1 : ui.ActualHeight) + 5);
    
         private void TryGetBitmapImage() => TryGetBitmapImage(GlobalPara.ConveyerConfig.MiniMapImagePath);

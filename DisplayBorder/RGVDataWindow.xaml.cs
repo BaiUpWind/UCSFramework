@@ -447,7 +447,15 @@ namespace DisplayBorder
 
             foreach (var group in groups)
             {
-                CreateTitle(group);
+                try
+                {
+                    CreateTitle(group);
+                }
+                catch (Exception ex)
+                {
+                    Growl.Error($"创建标题时错误，错误信息：'{ex.Message}'");
+                }
+            
             }
 
             //SourceDataView.Claer();

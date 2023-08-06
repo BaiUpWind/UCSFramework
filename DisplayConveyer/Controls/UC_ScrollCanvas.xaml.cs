@@ -193,10 +193,11 @@ namespace DisplayConveyer.Controls
                     var name = item.Name;
                     var partId = name.Split('_')[2].CastTo(0);
                     OnScaleCutImage?.Invoke(partId);
-                    break;
-                }
-
+                    return;
+                } 
             }
+            //当没有任何元素在范围时传出0
+            OnScaleCutImage?.Invoke(0);
         }
 
         //-----事件 

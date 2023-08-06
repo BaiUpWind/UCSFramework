@@ -205,7 +205,7 @@ namespace ControlHelper.Winform
                     control = new CheckBox();
                     var cb = (CheckBox)control;
                     cb.Name = prop.Name;
-                    //cb.Checked = (bool)prop.GetValue(target);
+                    cb.Checked = (bool)prop.GetValue(target);
                     cb.CheckedChanged += (s, e) =>
                     {
                         if (setPropInfo != null && setPropInfo != prop)
