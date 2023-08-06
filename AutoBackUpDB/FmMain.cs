@@ -21,8 +21,8 @@ namespace AutoBackUpDB
     public partial class FmMain : Form
     {
         private readonly string INFO = "1.此软件必须运行装了数据库(MySql)的电脑上,依赖安装目录(Bin)中的'mysqldump.exe'\r\n" +
-            "2.如果数据库连接失败情况，不会进行备份，请注意网络以及目标数据库最大连接数设置\r\n" +
-            "3.目前只支持MySql数据";
+                                       "2.如果数据库连接失败情况，不会进行备份，请注意网络以及目标数据库最大连接数设置\r\n" +
+                                       "3.目前只支持MySql数据";
         /// <summary>
         /// 配置文件读取
         /// </summary>
@@ -216,7 +216,7 @@ namespace AutoBackUpDB
         /// <param name="mysqlPath"></param>
         public void BackupDatabase(string backupPath,string mysqlPath)
         {
-            backupPath = $@"{backupPath}\{Config.DBName}";
+            backupPath = $@"{backupPath}\{Config.Name}";
             if (!Directory.Exists(backupPath))
             {
                 Directory.CreateDirectory(backupPath);
