@@ -2,6 +2,7 @@
 using ControlHelper.Interfaces;
 using ControlHelper.Model;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
@@ -95,8 +96,13 @@ namespace ControlHelper.Winform
                 target = Activator.CreateInstance(type);
             }
             container.Controls.Clear();
+
             var props = type.GetProperties(BindingFlags.Instance | BindingFlags.Public);
             int y = 15;
+
+            HashSet<Control> boolControls = new HashSet<Control>();
+            Dictionary<Control[], string> hideIfMap = new Dictionary<Control[], string>();
+            Dictionary<Control[], string> showIfMap = new Dictionary<Control[], string>();
             for (int i = 0; i < props.Length; i++)
             {
                 var prop = props[i];
@@ -121,7 +127,7 @@ namespace ControlHelper.Winform
                     title.Font = new System.Drawing.Font("宋体", container.Font.Size + 2, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
                     discard.Visible = false;
                     container.Controls.Add(discard);
-                    container.Controls.Add(title); 
+                    container.Controls.Add(title);
                     title.Location = new Point(15, y);
                     y += title.Height + 5;
                 }
@@ -145,7 +151,8 @@ namespace ControlHelper.Winform
                 var superClass = prop.GetCustomAttribute<ComboTypeAttribute>();//是否包号额外的组合框类型
                 var splitAttr = prop.GetCustomAttribute<SplitAttribute>();
                 var setValueAttr = prop.GetCustomAttribute<SetValueAttribute>();
-
+                var hideIf = prop.GetCustomAttribute<HideIFAttribute>();
+                var showIf = prop.GetCustomAttribute<ShowIFAttribute>();
                 bool isSpecial = false;//是否为特殊的
                 Control control = null;
                 PropertyInfo setPropInfo = null;
@@ -154,6 +161,7 @@ namespace ControlHelper.Winform
                     setPropInfo = type.GetProperty(setValueAttr.PropName, BindingFlags.Instance | BindingFlags.Public);
 
                 }
+
 
                 if (superClass != null)
                 {
@@ -196,15 +204,39 @@ namespace ControlHelper.Winform
                 {
                     control = new CheckBox();
                     var cb = (CheckBox)control;
-                    cb.Checked = (bool)prop.GetValue(target);
+                    cb.Name = prop.Name;
+                    //cb.Checked = (bool)prop.GetValue(target);
                     cb.CheckedChanged += (s, e) =>
                     {
                         if (setPropInfo != null && setPropInfo != prop)
                         {
                             prop = setPropInfo;
                         }
+                        var tragetControls = hideIfMap.Keys.Where(a => cb.Name == prop.Name).ToList();
+                        if (tragetControls != null && tragetControls.Count > 0)
+                        {
+                            foreach (var traget in tragetControls)
+                            {
+                                foreach (var item in traget)
+                                {
+                                    item.Visible = !cb.Checked;
+                                }
+                            }
+                        }
+                        tragetControls = showIfMap.Keys.Where(a => cb.Name == prop.Name).ToList();
+                        if (tragetControls != null && tragetControls.Count > 0)
+                        {
+                            foreach (var traget in tragetControls)
+                            {
+                                foreach (var item in traget)
+                                {
+                                    item.Visible = cb.Checked;
+                                }
+                            }
+                        }
                         prop.SetValue(target, cb.Checked);
                     };
+                    boolControls.Add(cb);
                 }
                 else if (typeCode == TypeCode.Object)
                 {
@@ -351,6 +383,20 @@ namespace ControlHelper.Winform
                     control.Enabled = readOnly;
                     container.Controls.Add(label);
                     container.Controls.Add(control);
+                    if (hideIf != null)
+                    {
+                        if (!string.IsNullOrWhiteSpace(hideIf.TargetName))
+                        {
+                            hideIfMap.Add(new Control[] { control, label }, hideIf.TargetName);
+                        }
+                    }
+                    else if (showIf != null)
+                    {
+                        if (!string.IsNullOrWhiteSpace(showIf.TargetName))
+                        {
+                            showIfMap.Add(new Control[] { control, label }, showIf.TargetName);
+                        }
+                    }
                     x = label.Width = label.GetWidth() + 20;
 
                     if (isSpecial)
@@ -368,6 +414,20 @@ namespace ControlHelper.Winform
                     y += control.Height + 10;
                 }
 
+            }
+
+            var hideOrShowGroups = hideIfMap.Values.Select(a => a);
+            var union = hideOrShowGroups.Union(showIfMap.Values.Select(a => a)).GroupBy(a => a).Select(a => a.Key).ToList();
+            foreach (CheckBox cb in boolControls)
+            {
+                if (cb == null) continue;
+                var name = union.Find(a => a == cb.Name);
+                if (string.IsNullOrWhiteSpace(name)) continue;
+                var prop = props.Where(a => a.Name == cb.Name).FirstOrDefault();
+                if (prop == null) continue;
+                var value = (bool)prop.GetValue(target);
+                cb.Checked = !value;
+                cb.Checked = value;
             }
 
             container.SizeChanged += (s, e) =>
@@ -391,7 +451,9 @@ namespace ControlHelper.Winform
                     lastTag = null;
                 }
             };
-        } 
+            container.Width += 1;
+            container.Width -= 1;
+        }
         private static void CreateComboBox(object target, PropertyInfo prop, ComboBox cb, string[] names, ComboTypeAttribute ctAttr = null, PropertyInfo otherInfo = null)
         {
             cb.Items.AddRange(names);
