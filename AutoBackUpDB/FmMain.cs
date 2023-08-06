@@ -20,6 +20,9 @@ namespace AutoBackUpDB
 {
     public partial class FmMain : Form
     {
+        private readonly string INFO = "1.此软件必须运行装了数据库(MySql)的电脑上,依赖安装目录(Bin)中的'mysqldump.exe'\r\n" +
+            "2.如果数据库连接失败情况，不会进行备份，请注意网络以及目标数据库最大连接数设置\r\n" +
+            "3.目前只支持MySql数据";
         /// <summary>
         /// 配置文件读取
         /// </summary>
@@ -35,6 +38,7 @@ namespace AutoBackUpDB
             // 设置右键点击菜单
             ContextMenuStrip contextMenu = new ContextMenuStrip(); 
             ToolStripMenuItem menuItem1 = new ToolStripMenuItem("退出");
+            ToolStripMenuItem menuItem2 = new ToolStripMenuItem("说明");
 
       
             menuItem1.Click += (s, e) =>
@@ -45,7 +49,12 @@ namespace AutoBackUpDB
                     trueExit = true;
                     Close();
                 }
-            }; 
+            };
+            menuItem2.Click += (s, e) =>
+            {
+                MessageBox.Show(INFO);
+            };
+            contextMenu.Items.Add(menuItem2);
             contextMenu.Items.Add(menuItem1);
 
             notifyIcon1.ContextMenuStrip = contextMenu;
@@ -130,7 +139,7 @@ namespace AutoBackUpDB
                 catch (Exception ex)
                 {
 
-                    var dialog = MessageBox.Show($"配位文件错误。\r\n点击[是]关闭程序 \r\n点击[不]跳转配置窗口\r\n点击[取消]继续\r\n 错误信息：{ex.Message}\r\r{ex.StackTrace}", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Error);
+                    var dialog = MessageBox.Show($"配位文件错误。\r\n点击[是]关闭程序 \r\n点击[否]跳转配置窗口\r\n点击[取消]继续\r\n 错误信息：{ex.Message}\r\r{ex.StackTrace}", "", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Error);
                     if(dialog == DialogResult.Yes)
                     { 
                         Invoke(new Action(() =>
