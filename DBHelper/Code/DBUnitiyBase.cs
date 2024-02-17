@@ -91,7 +91,29 @@ namespace DBHelper
                 CloseConnect();
             }
         }
-
+        /// <summary>
+        /// 执行一条指定命令类型(SQL语句或存储过程等)的SQL语句,返回所影响行数
+        /// ，使用事务执行大批量的SQL。
+        /// </summary>
+        public int ExecNonQueryTrans(string sqlText, CommandType cmdType = CommandType.Text, params DbParameter[] param)
+        {
+            try
+            {
+                SetCommandAndOpenConnect(sqlText, cmdType, param);
+                TransStart();
+                var result = DbCommandObj.ExecuteNonQuery();
+                TransCommit();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                CloseConnect();
+            }
+        }
         /// <summary>
         /// 关闭连接,如果没有开始事务或连接打开时才关闭
         /// </summary>

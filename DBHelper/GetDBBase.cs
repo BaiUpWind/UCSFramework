@@ -35,9 +35,9 @@ namespace DBHelper
                 case DBType.SqlServer:
                     db = new SQLServerHelp(connStr);
                     break;
-                //case DBType.Sqllite:
-                //    db = new SqliteHelp(connStr);
-                //    break;
+                case DBType.Sqllite:
+                    db = new SqliteHelp(connStr);
+                    break;
             }
         }
 

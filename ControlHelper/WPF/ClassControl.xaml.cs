@@ -453,6 +453,7 @@ namespace ControlHelper.WPF
                         {
                             dc.Background = new SolidColorBrush(Colors.Tan);
                             dc.Title = td.Name + (td.IsList ? "_{0}" : "");
+                            SetValue(td.Name, dc.Data);
                         }
                         break;
                     case ClassControlType.ComboBox:

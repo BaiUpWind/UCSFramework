@@ -49,6 +49,10 @@ namespace DisplayConveyer.Controls
         /// 当检测到在指定区域时发出事件
         /// </summary>
         public event Action<int> OnScaleCutImage;
+        /// <summary>
+        /// 当工位状态发生变化时
+        /// </summary>
+        public event Action<int, DeviceData> OnStatusChanged;
         public UC_ScrollCanvas()
         {
             InitializeComponent();
@@ -85,7 +89,14 @@ namespace DisplayConveyer.Controls
                     {
                         var ucdevice = CreateHelper.GetDeviceBase(device);
                         canvas.Children.Add(ucdevice);
-                        ucdevice.ToolTip = (ucdevice as UC_DeviceBase).Info;
+                        if (ucdevice is UC_DeviceBase uc_device)
+                        {
+                            ucdevice.ToolTip = uc_device.Info;
+                            uc_device.OnAlarm += (sender, args) =>
+                            {
+                                OnStatusChanged?.Invoke(sender, args);
+                            };
+                        } 
                         //device.StatusChanged?.Invoke(new StatusData() { MachineState = 100 });
                     }
                 }

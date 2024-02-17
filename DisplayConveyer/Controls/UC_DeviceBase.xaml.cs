@@ -75,11 +75,14 @@ namespace DisplayConveyer.Controls
             }
         }
         private DeviceData Data { get;  }
+        private int currentStatus = 0;
         //public DeviceViewModel ViewModel { get; set; }
-
-   
-         
-        public string Info => $"区域ID:{Data.AreaID}\r\b WorkID:{Data.WorkId} \r\n 名称:{Data.Name}\r\n宽：{Data.Width}\r\n高：{Data.Height}\r\n 位置X：{Data.PosX}\r\n位置Y：{Data.PosY} ";
+        /// <summary>
+        /// 当状态
+        /// </summary>
+        public event  Action<int, DeviceData> OnAlarm;
+        private bool toggle;
+        public string Info => $"区域ID:{Data.AreaID} {Data.ID} \r\b WorkID:{Data.WorkId} \r\n 名称:{Data.Name}\r\n宽：{Data.Width}\r\n高：{Data.Height}\r\n 位置X：{Data.PosX}\r\n位置Y：{Data.PosY} ";
         public UC_DeviceBase(DeviceData data)
         {
             InitializeComponent();
@@ -88,8 +91,19 @@ namespace DisplayConveyer.Controls
 
             DataContext = data;// ViewModel = new DeviceViewModel(data);
             //txtDir.Text = GetDri( Data.ArrowDir);
-            Data.StatusChanged += StatusSetColor; 
-           
+            Data.StatusChanged += StatusSetColor;
+            mainBorder.MouseDown += (s, e) =>
+            {
+                if (toggle)
+                {
+                    SetColor(100);
+                }
+                else
+                {
+                    SetColor(1); 
+                }
+                toggle ^= true;
+            };
         }
          
         /// <summary>
@@ -105,6 +119,11 @@ namespace DisplayConveyer.Controls
         /// </summary>  
         public void SetColor(int status)
         {
+            if (status > 0 && currentStatus != status)
+            {
+                OnAlarm?.Invoke(status, Data);
+                currentStatus = status;
+            }
             SetColor(GetColor(status));
         }
         /// <summary>

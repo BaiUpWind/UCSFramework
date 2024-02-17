@@ -32,9 +32,13 @@ namespace DisplayConveyer.Logic
                     var area = Areas[i];
                     threads[i] = new Thread(() => Read(area));
                     threads[i].IsBackground = true;
-                    threads[i].Start(); 
+                    threads[i].Start();
+                    if (i >= 2)
+                    {
+                        break;
+                    }
                 }
-            }
+            } 
             foreach (var item in demoAreas)
             {
                 demoDicStatusDatas.Add(item.ID, item.Devices.Select(a => new StatusData
@@ -52,19 +56,20 @@ namespace DisplayConveyer.Logic
             {
                 for (int i = 0; i < threads.Length; i++)
                 {
-                    threads[i].Abort();
+                    threads[i]?.Abort();
                 }
             }
         }
         private void Read(AreaData area)
         { 
           if(!GlobalPara.ConveyerConfig.DemoMode)  OperationConnect(area);
+            Random random = new Random();
             while (true)
             {
                 if (GlobalPara.ConveyerConfig.DemoMode)
                 {
                     DemoMode(area);
-                    Thread.Sleep(5000);
+                    Thread.Sleep(random.Next(1000,5000));
                     continue;
                 }
 
@@ -160,8 +165,8 @@ namespace DisplayConveyer.Logic
         }
         private int GetMachieState(int probability)
         {
-            if (probability > 98) return 0;
-            else if (probability > 95) return 55;
+            if (probability > 100) return 0;
+            else if (probability > 100) return 55;
             else if (probability > 90) return 101;
             else if (probability > 30) return 100; 
             else return 0; 

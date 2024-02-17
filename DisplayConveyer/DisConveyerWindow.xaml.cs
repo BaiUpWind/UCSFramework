@@ -26,6 +26,8 @@ using ControlHelper;
 using ScrollViewer = System.Windows.Controls.ScrollViewer;
 using DisplayConveyer.Model;
 using System.Security.Permissions;
+using System.ComponentModel;
+using System.Media;
 
 namespace DisplayConveyer
 { 
@@ -34,10 +36,24 @@ namespace DisplayConveyer
     /// </summary>
     public partial class DisConveyerWindow : Window
     { 
-        
+        class AlarmInfoData
+        {
+            public AlarmInfoData(string info, DoubleAnimation animation, TextBlock textBlock, Storyboard storyboard)
+            {
+                Info = info;
+                Animation = animation;
+                TextBlock = textBlock;
+                Storyboard = storyboard;
+            }
+
+            public string Info { get; private set; }
+            public DoubleAnimation Animation { get; private set; }
+            public TextBlock TextBlock { get; private set; }
+            public Storyboard Storyboard { get; private set; }
+        }
         private ConveyerConfig ConvConfig => GlobalPara.ConveyerConfig;
         private ReadStatusLogic logic; 
-        private Storyboard storyboard = new Storyboard();
+        private Storyboard sb = new Storyboard(); 
         private FrameworkElement feCacheScale;
         //存放所有的区域数据 略缩图用
         private readonly List<RangeData> listRangeDatas = new List<RangeData>(); 
@@ -45,8 +61,13 @@ namespace DisplayConveyer
         private readonly List<FrameworkElement> listRangeRect = new List<FrameworkElement>();
         //裁切的所有图像
         private readonly List<FrameworkElement> listCutImg = new List<FrameworkElement>();
-        
-        DoubleAnimation animation;
+        //存放报警信息
+        private readonly Dictionary<string, AlarmInfoData> dicAlarmInfo = new Dictionary<string, AlarmInfoData>();
+        DoubleAnimation animation; 
+        private double textBlockOffset = 0;
+        double animationSpeed = GlobalPara.ConveyerConfig.AnimationSpeed;
+        object lockobject = new object(); 
+        double x = 0;
         public DisConveyerWindow()
         {
             InitializeComponent(); 
@@ -54,10 +75,27 @@ namespace DisplayConveyer
             {
                 Interval = new TimeSpan(0, 0, 1)
             };
+            DispatcherTimer scrollTimer = new DispatcherTimer();
+             scrollTimer.Interval = TimeSpan.FromMilliseconds(20); // 调整滚动间隔
+            scrollTimer.Tick += (s, e) =>
+            {
+                TranslateTransform transform = new TranslateTransform(textBlockOffset, 0);
+                //alarmMsg.RenderTransform = transform;
+
+                // 更新文本块的偏移量
+                textBlockOffset -= animationSpeed;
+
+                // 当文本块完全移出窗口时，将其重置到窗口的右侧
+                if (textBlockOffset < - ActualWidth)
+                {
+                    textBlockOffset = ActualWidth;
+                }
+            };
+            scrollTimer.Start();
             timer.Start();
             timer.Tick += (s, e) =>
             {
-                txtTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                txtTime.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); 
             };
             timer.Start();
 
@@ -68,6 +106,8 @@ namespace DisplayConveyer
                 CreateCanvasDatas();
                 SvHorizontalOffsetToRight();
                 DoEvent();
+                
+               
             };
             btnClose.Click += (s, e) =>
             {
@@ -88,8 +128,8 @@ namespace DisplayConveyer
                 EditorWindow ew = new EditorWindow();
                 ew.WindowStyle = WindowStyle.None;
                 ew.WindowState = WindowState.Maximized;
-                storyboard.Children.Remove(animation);
-                storyboard.Stop();
+                sb.Children.Remove(animation);
+                sb.Stop();
                 animation = null; 
                 topSv.ScrollToHorizontalOffset(0);
                 logic?.Stop();
@@ -105,8 +145,10 @@ namespace DisplayConveyer
                 Calculate(topCanvas, topSv, topGrid); 
             };
             txtLock.Click += TxtLock_Click;
-           
+           //TextBlockHorizontalMoveTo(0,1920, btest);
         }
+  
+ 
         private void SvHorizontalOffsetToRight()
         {
             ScrollHorizontalMoveTo(0, -1920, (s, e) =>
@@ -129,6 +171,7 @@ namespace DisplayConveyer
         }
         private void ScrollHorizontalMoveTo(double from, double to, Action<object, EventArgs> animationCompleted = null)
         {
+
             animation = new DoubleAnimation()
             {
                 From = from,
@@ -139,13 +182,38 @@ namespace DisplayConveyer
             animation.Completed += (s, e) =>
             {
                 animationCompleted?.Invoke(s, e);
-                storyboard.Children.Remove(animation);
+                sb.Children.Remove(animation);
             };
-            storyboard.Children.Add(animation);
+            sb.Children.Add(animation);
             Storyboard.SetTarget(animation, uc_scMain);
             Storyboard.SetTargetProperty(animation, new PropertyPath(UC_ScrollCanvas.HorizontalOffsetProperty));
 
-            storyboard.Begin();
+            sb.Begin();
+        }
+        private DoubleAnimation TextBlockHorizontalMoveTo(double from, double to, DependencyObject target,
+            out Storyboard sb, Action<object, EventArgs> animationCompleted = null)
+        { 
+            sb = new Storyboard();
+            double distance = Math.Abs(to - from); // 计算起点和终点之间的距离
+            double speed = animationSpeed * 5; // 设置速度，可以根据需要调整 
+            Duration duration = TimeSpan.FromSeconds(distance * 0.1 / speed);
+            DoubleAnimation animation = new DoubleAnimation()
+            {
+                From = from,
+                To = to,
+                Duration = duration,
+                RepeatBehavior = RepeatBehavior.Forever
+            }; 
+            animation.Completed += (s, e) =>
+            {
+                animationCompleted?.Invoke(s, e);
+            };
+            Storyboard.SetTarget(animation, target);
+            Storyboard.SetTargetProperty(animation, new PropertyPath(Canvas.LeftProperty));
+            sb.Children.Add(animation);
+
+            sb.Begin();
+            return animation;
         }
         //重新计算缩放比例
         private void Calculate(Canvas mainCanvas,FrameworkElement father,Grid grid)
@@ -353,18 +421,58 @@ namespace DisplayConveyer
                     topSv.ScrollToHorizontalOffset(xposition);
                 }
 
-                fe.SetValue(Panel.ZIndexProperty, 99); 
+                fe.SetValue(Panel.ZIndexProperty, 99);
                 fe.Visibility = Visibility.Visible;
                 ScaleEasingAnimationShow(fe, 1, 1.5d);
                 feCacheScale = fe;
 
             };
+            uc_scMain.OnStatusChanged += (status, data) =>
+            { 
+                lock (lockobject)
+                { 
+                    var key = data.AreaID + data.Name;
+                    if (status >= 100 && dicAlarmInfo.ContainsKey(key))
+                    {
+                        //当工位状态 为自动，并且包含键的时候移除
+                        var value = dicAlarmInfo[key];
+                        //AlarmInfo = AlarmInfo.Replace(value, string.Empty);
+                        x -= value.TextBlock.ActualWidth;
+                        Application.Current?.Dispatcher.Invoke(new Action(() =>
+                        {
+                            value.Storyboard.Children.Remove(value.Animation);
+                            runCanvas.Children.Remove(value.TextBlock);
+                        })); 
+                        dicAlarmInfo.Remove(key);
+                        return;
+                    }
+                    if (dicAlarmInfo.ContainsKey(key) || status >= 100) return;
+                
+                    var areaName = GlobalPara.ConveyerConfig.Areas.Where(a => a.ID == data.AreaID).FirstOrDefault()?.Name;
+                    string info = $"[{areaName}工位{data.Name}]报警中，报警代码[{status.ToString().PadLeft(3,'0')}]"; 
+                    SystemSounds.Beep.Play(); 
+                    Application.Current?.Dispatcher.Invoke(new Action(() =>
+                    { 
+                        TextBlock tb = new TextBlock
+                        {
+                            Text = info,
+                            Foreground = new SolidColorBrush(Colors.Red),
+                            FontSize = 24,
+                        };
+                        runCanvas.Children.Add(tb);
+                        runCanvas.UpdateLayout();
+                        x += tb.ActualWidth;
+                        var sb = new Storyboard();
+                        var animation = TextBlockHorizontalMoveTo(-x, 1920, tb, out sb);
+                        dicAlarmInfo.Add(key, new AlarmInfoData(info, animation, tb, sb));
+                    }));
+                }
+            };
             txtInfo.Text = ConvConfig.DemoMode ? "演示模式" : "";
             if (logic != null) logic.Stop();
             logic = new ReadStatusLogic(ConvConfig.Areas);
         }
-
-        private double topFactor => topSv.ActualHeight / topCanvas.Height;
+         
         /// <summary>
         /// 设置当前放大的小图片变成正常模样
         /// </summary>
@@ -461,7 +569,7 @@ namespace DisplayConveyer
             {
                 if (txt.Tag.ToString() == "锁住")
                 {
-                    storyboard.Pause();
+                    sb.Pause();
                     GlobalPara.Locked = true; 
                     txt.Tag = "解锁";
                     txt.Content = "🔓";
@@ -471,7 +579,7 @@ namespace DisplayConveyer
                 }
                 else if (txt.Tag.ToString() == "解锁")
                 {
-                    storyboard.Resume();
+                    sb.Resume();
                     GlobalPara.Locked = false; 
                     txt.Tag = "锁住";
                     txt.Content = "🔒";
@@ -483,6 +591,7 @@ namespace DisplayConveyer
             }
         }
          
+     
     }
     public class ScrollViewerBehaviour
     {
